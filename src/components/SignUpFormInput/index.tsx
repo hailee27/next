@@ -2,6 +2,7 @@
 import { ErrorMessage } from '@hookform/error-message';
 import { FieldErrors, FieldValues, Path, UseFormRegister } from 'react-hook-form';
 
+import clsx from 'clsx';
 import styles from './styles.module.css';
 
 function SignUpFormInput<FormData extends FieldValues>({
@@ -21,15 +22,15 @@ function SignUpFormInput<FormData extends FieldValues>({
   const formRegister = register && name ? register(name) : {};
 
   return (
-    <div>
+    <div className="w-full">
       <div className={styles.inputContainer}>
         <input
-          // className="w-full h-full  rounded-[8px] border-[1px] border-solid border-[#E3E5E5] text-[16px] pb-[-8px] "
-          className={styles.inputContent}
+          className={clsx('inputContent', name && errors?.[name] ? 'content-error' : '')}
           {...formRegister}
+          required
           type={type}
         />
-        <span className={styles.inputLabel}>{label}</span>
+        <span className={clsx('inputLabel', name && errors?.[name] ? 'label-error' : '')}>{label}</span>
       </div>
       <ErrorMessage
         errors={errors}
