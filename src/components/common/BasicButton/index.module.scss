@@ -1,0 +1,17 @@
+.btnDefault {
+  button:hover {
+    border-color: rgba(45, 54, 72, 0.2) !important;
+    // color: #2d3648 !important;
+    color: white !important;
+  }
+  button {
+    background-color: #2d3648 !important;
+    border-radius: 6px !important;
+    height: 100% !important;
+    width: 100% !important;
+    // border-color: var(--tertiary);
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+  }
+}
