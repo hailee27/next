@@ -29,7 +29,6 @@ export default function CampaignCreatorSignin() {
     register,
     handleSubmit,
     watch,
-    setValue,
     formState: { errors },
   } = useForm<FormData>({
     resolver: yupResolver(schema),
@@ -46,8 +45,6 @@ export default function CampaignCreatorSignin() {
   }
 
   const onSubmit = (data: FormData) => {
-    console.log('login form: ', data);
-
     const body = {
       email: data.email,
       password: data.password,
@@ -63,11 +60,6 @@ export default function CampaignCreatorSignin() {
       setIsDisableSubmit(true);
     }
   }, [password, email, hasCaptchaToken]);
-
-  useEffect(() => {
-    setValue('email', '');
-    setValue('password', '');
-  }, []);
 
   return (
     <div className="bg-white border-[1px] border-solid border-border-base  p-[24px_12px] flex item-center justify-center">
