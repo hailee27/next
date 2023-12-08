@@ -51,7 +51,10 @@ const MegaHead = (props: MegaHeadProps) => {
           <meta content={author} name="copyright" />
         </>
       ) : (
-        <meta content="noindex, nofollow, noarchive" name="robots" />
+        <>
+          <meta content="noindex, nofollow, noarchive" name="robots" />
+          <meta content="noindex" name="googlebot" />
+        </>
       )}
     </Head>
   );
