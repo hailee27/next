@@ -29,8 +29,21 @@
   color: red !important;
 }
 
-.inputContainer :global(input:valid ~ span),
-.inputContainer :global(input:focus ~ span) {
+.inputContainer :global(input:-webkit-autofill) {
+  animation-name: onAutoFillStart;
+}
+.inputContainer :global(input:not(:-webkit-autofill)) {
+  animation-name: onAutoFillCancel;
+}
+
+.inputContainer :global(input:valid + span),
+.inputContainer :global(input:focus + span),
+.inputContainer :global(input:-webkit-autofill + span),
+.inputContainer :global(input:autofill + span) {
   transform: translateY(-8px);
   font-size: 12px;
+}
+
+.inputContainer :global(input:-webkit-autofill) {
+  -webkit-box-shadow: 0 0 0px 1000px #e8f0fe inset !important;
 }

@@ -3,7 +3,7 @@ import { ErrorMessage } from '@hookform/error-message';
 import { FieldErrors, FieldValues, Path, UseFormRegister } from 'react-hook-form';
 
 import clsx from 'clsx';
-import styles from './styles.module.css';
+import styles from './styles.module.scss';
 
 function SignUpFormInput<FormData extends FieldValues>({
   name,

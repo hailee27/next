@@ -1,13 +1,13 @@
 /* eslint-disable no-console */
-import React, { useEffect, useState } from 'react';
-import ReCAPTCHA from 'react-google-recaptcha';
-import { REGEX_EMAIL } from '@/utils/constant/regex';
-import * as yup from 'yup';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 import SignUpFormInput from '@/components/SignUpFormInput';
-import clsx from 'clsx';
 import { FORM_FIELD_ERROR_FEEDBACK } from '@/utils/constant/feedback-message';
+import { REGEX_EMAIL } from '@/utils/constant/regex';
+import { yupResolver } from '@hookform/resolvers/yup';
+import clsx from 'clsx';
+import { useEffect, useState } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
 
 const schema = yup.object({
   email: yup
@@ -29,6 +29,7 @@ export default function CampaignCreatorSignin() {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = useForm<FormData>({
     resolver: yupResolver(schema),
@@ -61,26 +62,36 @@ export default function CampaignCreatorSignin() {
     } else {
       setIsDisableSubmit(true);
     }
-    console.log(password, email, hasCaptchaToken);
   }, [password, email, hasCaptchaToken]);
+
+  useEffect(() => {
+    setValue('email', '');
+    setValue('password', '');
+  }, []);
 
   return (
     <div className="bg-white border-[1px] border-solid border-border-base  p-[24px_12px] flex item-center justify-center">
-      <div className="flex justify-center items-center gap-[26px] flex-col text-text-dark max-w-[400px]">
+      <div className="md:flex-1 flex justify-center items-center gap-[26px] flex-col text-text-dark max-w-[400px] px-[8px]">
         <p className="text-center py-[15px] text-[18px] leading-[18px]">Log in</p>
         <div className="h-[1px] w-full bg-border-base" />
-        <form className="flex flex-col gap-[26px] px-[11px] items-center" onSubmit={handleSubmit(onSubmit)}>
+        <form
+          autoComplete="off"
+          className="flex flex-col gap-[26px] max-w-[327px] mx-auto items-center"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <SignUpFormInput errors={errors} label="Email" name="email" register={register} />
           <SignUpFormInput errors={errors} label="Password" name="password" register={register} type="password" />
-          <p className="w-full text-primary-base text-[16px] leading-[16px]">パスワードを忘れた方</p>
+          <p className="w-full text-primary-base text-[16px] leading-[16px] cursor-pointer">パスワードを忘れた方</p>
 
           {/* eslint-disable-next-line react/jsx-no-bind */}
           <ReCAPTCHA onChange={onChange} sitekey={process?.env?.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? ''} />
-          <p>続行することにより、利用規約およびプライバシーポリシーに同意したものとみなされます。</p>
+          <p className=" text-[16px] leading-[16px] ">
+            続行することにより、利用規約およびプライバシーポリシーに同意したものとみなされます。
+          </p>
 
           <button
             className={clsx(
-              'w-full bg-primary-base text-white text-[16px] font-medium h-[48px] rounded-full max-w-[327px]  hover:opacity-80 transition-all duration-100',
+              'w-full   text-white text-[16px] font-medium h-[48px] rounded-full max-w-[327px]  hover:opacity-80 transition-all duration-100',
               isDisableSubmit ? 'pointer-events-none bg-[#00000014]' : 'bg-primary-base'
             )}
             disabled={isDisableSubmit}
@@ -90,7 +101,7 @@ export default function CampaignCreatorSignin() {
           </button>
         </form>
         <div className="h-[1px] w-full bg-border-base" />
-        <div className="text-center">
+        <div className="text-center text-[16px] leading-[16px]">
           メールアドレス・パスワード・2段階認証を <br />
           未設定の方
         </div>
@@ -101,7 +112,7 @@ export default function CampaignCreatorSignin() {
           ログイン
         </button>
         <div className="h-[1px] w-full bg-border-base" />
-        <p>アカウントをお持ちでない方</p>
+        <p className=" text-[16px] leading-[16px] ">アカウントをお持ちでない方</p>
         <button
           className="w-full bg-primary-base text-white text-[16px] font-medium h-[48px] rounded-full max-w-[327px]  hover:opacity-80 transition-all duration-100"
           type="button"
