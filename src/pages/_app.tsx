@@ -1,10 +1,13 @@
-import CampainLayout from '@/components/layout/CampainLayout';
-import MainLayout from '@/components/layout/MainLayout';
-import '@/styles/globals.css';
 import { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import { ReactElement } from 'react';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import CampainLayout from '@/components/layout/CampainLayout';
+import MainLayout from '@/components/layout/MainLayout';
+import { persistor, store } from '@/redux/store';
+import '@/styles/globals.css';
 
 export type NextPageWithLayout<P = Record<string, never>, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => JSX.Element;
@@ -19,5 +22,11 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   if (router.pathname.startsWith('/campain')) {
     getLayout = (page) => <CampainLayout>{page}</CampainLayout>;
   }
-  return getLayout(<Component {...pageProps} />);
+  return (
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        {getLayout(<Component {...pageProps} />)}
+      </PersistGate>
+    </Provider>
+  );
 }
