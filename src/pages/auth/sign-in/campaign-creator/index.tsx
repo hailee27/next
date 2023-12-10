@@ -4,7 +4,6 @@ import { FORM_FIELD_ERROR_FEEDBACK } from '@/utils/constant/feedback-message';
 import { REGEX_EMAIL } from '@/utils/constant/regex';
 import { yupResolver } from '@hookform/resolvers/yup';
 import clsx from 'clsx';
-import { signIn, useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useForm } from 'react-hook-form';
@@ -24,7 +23,6 @@ const schema = yup.object({
 type FormData = yup.InferType<typeof schema>;
 
 export default function CampaignCreatorSignin() {
-  const { data: session } = useSession();
   const [hasCaptchaToken, setHasCaptchaToken] = useState(false);
   const [isDisableSubmit, setIsDisableSubmit] = useState(true);
   const {
@@ -62,15 +60,10 @@ export default function CampaignCreatorSignin() {
     }
   }, [password, email, hasCaptchaToken]);
 
-  console.log('session', session);
-
   return (
     <div className="bg-white border-[1px] border-solid border-border-base  p-[24px_12px] flex item-center justify-center">
       <div className="md:flex-1 flex justify-center items-center gap-[26px] flex-col text-text-dark max-w-[400px] px-[8px]">
         <p className="text-center py-[15px] text-[18px] leading-[18px]">Log in</p>
-        <button onClick={() => signIn()} type="button">
-          Sign in
-        </button>
         <div className="h-[1px] w-full bg-border-base" />
         <form
           autoComplete="off"
