@@ -58,7 +58,7 @@ export const LoginSocialTwitter = ({
     const stateee = popupWindowURL.searchParams.get('state');
     if (stateee?.includes('_twitter') && code) {
       localStorage.setItem('twitter', code);
-      window.close();
+      // window.close();
     }
   }, []);
 

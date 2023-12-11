@@ -8,7 +8,7 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { signIn, useSession } from 'next-auth/react';
-import LoginSocialTwitter from '@/components/auth/LoginSocialTwitter';
+import LoginSocialTwitter, { ObjectType } from '@/components/auth/LoginSocialTwitter';
 
 export default function Login() {
   const { data: session } = useSession();
@@ -38,13 +38,35 @@ export default function Login() {
       `menubar=no,location=no,resizable=no,scrollbars=no,status=no, width=${width}, height=${height}, top=${top}, left=${left}`
     );
   }
+
+  // const popupSignin = (url: string, title: string) => {
+  //   const dualScreenLeft = window.screenLeft ?? window.screenX;
+  //   const dualScreenTop = window.screenTop ?? window.screenY;
+  //   const width = window.innerWidth ?? document.documentElement.clientWidth ?? 450;
+
+  //   const height = window.innerHeight ?? document.documentElement.clientHeight ?? 730;
+
+  //   const systemZoom = width / window.screen.availWidth;
+
+  //   const left = (width - 500) / 2 / systemZoom + dualScreenLeft;
+  //   const top = (height - 550) / 2 / systemZoom + dualScreenTop;
+
+  //   const newWindow = window.open(
+  //     url,
+  //     title,
+  //     `width=${500 / systemZoom},height=${550 / systemZoom},top=${top},left=${left}`
+  //   );
+
+  //   newWindow?.focus();
+  // };
+
   console.log('session, provider, profile', session, provider, profile);
   return (
     <div>
       <div onClick={getTwitterOauthUrl}>
         <p>{' twitter'}</p>
       </div>
-      <button onClick={() => signIn()} type="button">
+      <button onClick={() => signIn('twitter')} type="button">
         Sign in
       </button>
       <LoginSocialTwitter
@@ -64,7 +86,7 @@ export default function Login() {
           setProfile(data);
         }}
         // client_secret={process.env.REACT_APP_TWITTER_V2_APP_SECRET || ''}
-        redirect_uri="https%3A%2F%2Fff04-2405-4802-248e-48e0-497b-1417-d2d-8689.ngrok-free.app%2Fapi%2Fauth%2Fcallback%2Ftwitter"
+        redirect_uri="https%3A%2F%2Fa9dd-14-248-82-148.ngrok-free.app%2Flogin"
       >
         login with tw
       </LoginSocialTwitter>
