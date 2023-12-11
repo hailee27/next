@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import SignUpFormInput from '@/components/SignUpFormInput';
+import { useLoginMutation } from '@/redux/endpoints/auth';
 import { FORM_FIELD_ERROR_FEEDBACK } from '@/utils/constant/feedback-message';
 import { REGEX_EMAIL } from '@/utils/constant/regex';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -37,6 +38,9 @@ export default function CampaignCreatorSignin() {
   } = useForm<FormData>({
     resolver: yupResolver(schema),
   });
+
+  const [login] = useLoginMutation();
+
   const password = watch('password');
   const email = watch('email');
   function onChange(token: string | null) {
@@ -47,13 +51,17 @@ export default function CampaignCreatorSignin() {
     }
   }
 
-  const onSubmit = (data: FormData) => {
-    const body = {
-      email: data.email,
-      password: data.password,
-    };
-
-    console.log(body);
+  const onSubmit = async (formValue: FormData) => {
+    try {
+      const body = {
+        email: formValue.email,
+        password: formValue.password,
+      };
+      const data = await login(body).unwrap();
+      console.log('data', data);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
