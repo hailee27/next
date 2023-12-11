@@ -1,7 +1,6 @@
 .btnDefault {
   button:hover {
     border-color: rgba(45, 54, 72, 0.2) !important;
-    // color: #2d3648 !important;
     color: white !important;
   }
   button {
@@ -9,9 +8,24 @@
     border-radius: 6px !important;
     height: 100% !important;
     width: 100% !important;
-    // border-color: var(--tertiary);
     color: white;
     font-size: 16px;
     font-weight: 700;
+  }
+}
+.btnPrimary {
+  button:hover {
+    border-color: rgba(45, 54, 72, 0.2) !important;
+    color: #2d3648 !important;
+  }
+  button {
+    background-color: white !important;
+    border-radius: 6px !important;
+    height: 100% !important;
+    width: 100% !important;
+    color: #2d3648;
+    font-size: 16px;
+    font-weight: 700;
+    border: 2px solid #2d3648 !important;
   }
 }
