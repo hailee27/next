@@ -7,6 +7,7 @@ const config: Config = {
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  safelist: ['rounded-full'],
   theme: {
     extend: {
       fontFamily: {
@@ -17,6 +18,7 @@ const config: Config = {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'gradient-blue-to-green': 'linear-gradient(90deg, #20FFFF 4.58%, #71FF6F 97.94%)',
       },
       colors: {
         'primary-base': '#6B4EFF',

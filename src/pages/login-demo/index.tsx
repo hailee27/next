@@ -9,6 +9,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { signIn, useSession } from 'next-auth/react';
 import LoginSocialTwitter, { ObjectType } from '@/components/auth/LoginSocialTwitter';
+import CButtonShadow from '@/components/common/CButtonShadow';
 
 export default function Login() {
   const { data: session } = useSession();
@@ -90,6 +91,9 @@ export default function Login() {
       >
         login with tw
       </LoginSocialTwitter>
+      <div className="w-[300px] h-[66px]">
+        <CButtonShadow />
+      </div>
     </div>
   );
 }
