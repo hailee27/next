@@ -1,0 +1,7 @@
+.input {
+  @apply w-[48px] h-[48px] min-w-[48px] min-h-[48px] rounded-full text-center border-[1px] border-[#E3E5E5] focus:outline-[#6B4EFF];
+}
+
+.moreAuthLink {
+  @apply relative before:absolute before:w-1 before:h-1 before:top-[50%] before:translate-y-[-50%] before:left-[-8px] before:bg-black before:rounded-full ml-[10px] text-[12px] leading-[16px] inline-block border-b-[1px] border-[#4158D0] text-[#4158D0] w-fit;
+}

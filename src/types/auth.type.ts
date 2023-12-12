@@ -4,12 +4,22 @@ export interface User {
 }
 
 export interface LoginData {
-  accessToken: string;
-  refreshToken: string;
-  userData: User;
+  totpToken: string;
+  code?: string;
 }
 
 export interface LoginRequest {
   email: string;
   password: string;
+}
+
+export interface SMSLoginAuthRequest {
+  token: string;
+  code?: string;
+}
+
+export interface SMSLoginAuthResponse {
+  accessToken: string;
+  refeshToken: string;
+  user: User;
 }

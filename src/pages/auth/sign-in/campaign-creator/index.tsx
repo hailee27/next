@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useForm } from 'react-hook-form';
-
+import { useRouter } from 'next/router';
 /*
 dvhai@yopmail.com
 12345678
@@ -24,11 +24,12 @@ export default function CampaignCreatorSigninPage() {
   } = useForm<LoginFormData>({
     resolver: yupResolver(loginSchema),
   });
-
+  const router = useRouter();
   const [login] = useLoginMutation();
 
   const password = watch('password');
   const email = watch('email');
+
   function onChange(token: string | null) {
     if (token) {
       setHasCaptchaToken(true);
@@ -44,7 +45,16 @@ export default function CampaignCreatorSigninPage() {
         password: formValue.password,
       };
       const data = await login(body).unwrap();
-      console.log('data', data);
+
+      if (data?.totpToken && data?.code) {
+        router.push({
+          pathname: '/auth/sign-in/campaign-creator/sms-authentication',
+          query: {
+            totpToken: data?.totpToken,
+            code: data?.code,
+          },
+        });
+      }
     } catch (err) {
       console.log(err);
     }

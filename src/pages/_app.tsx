@@ -31,7 +31,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
   if (router.pathname.startsWith('/campain')) {
     getLayout = (page) => <CampainLayout>{page}</CampainLayout>;
   }
-  if (router.pathname === '/auth/sign-in/campaign-creator') {
+  if (router.pathname.startsWith('/auth/sign-in/campaign-creator')) {
     getLayout = (page) => <SignInLayout>{page}</SignInLayout>;
   }
   return (
