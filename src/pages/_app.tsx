@@ -7,13 +7,15 @@ import '@/styles/globals.css';
 import { NextPage } from 'next';
 import { SessionProvider } from 'next-auth/react';
 import type { AppProps } from 'next/app';
-import { DM_Sans } from 'next/font/google';
+import { DM_Sans, Inter, M_PLUS_1 } from 'next/font/google';
 import { useRouter } from 'next/router';
 import { ReactElement } from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
-const dmSans = DM_Sans({ subsets: ['latin'] });
+const dmSans = DM_Sans({ subsets: ['latin'], variable: '--font-dm-sans', display: 'swap' });
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
+const mPlus1 = M_PLUS_1({ subsets: ['latin'], variable: '--font-m-plus-1', display: 'swap' });
 
 export type NextPageWithLayout<P = Record<string, never>, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => JSX.Element;
@@ -29,7 +31,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
   if (router.pathname.startsWith('/campain')) {
     getLayout = (page) => <CampainLayout>{page}</CampainLayout>;
   }
-  if (router.pathname.startsWith('/auth')) {
+  if (router.pathname.startsWith('/auth/sign-in/campaign-creator')) {
     getLayout = (page) => <SignInLayout>{page}</SignInLayout>;
   }
   return (
@@ -37,7 +39,9 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
       <MegaHead />
       <Provider store={store}>
         <PersistGate loading={null} persistor={store.persistorData}>
-          <main className={dmSans.className}>{getLayout(<Component {...props} />)}</main>
+          <main className={`${inter.className} ${dmSans.variable} ${inter.variable}  ${mPlus1.variable} font-sans`}>
+            {getLayout(<Component {...props} />)}
+          </main>
         </PersistGate>
       </Provider>
     </SessionProvider>

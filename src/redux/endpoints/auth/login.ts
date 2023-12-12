@@ -5,7 +5,7 @@ export default function login(build: EndpointBuilder<BaseQueryFn, string, string
   return build.mutation<LoginData, LoginRequest>({
     query(body) {
       return {
-        url: 'auth/login',
+        url: 'auth/login/email',
         method: 'POST',
         body,
       };

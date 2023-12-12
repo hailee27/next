@@ -9,7 +9,7 @@ const mutex = new Mutex();
 
 const baseQuery = fetchBaseQuery({
   baseUrl: process.env.NEXT_PUBLIC_API_URL,
-  credentials: 'include',
+  // credentials: 'include',
   prepareHeaders: (headers, { getState, endpoint }) => {
     const isServer = typeof window === 'undefined';
 

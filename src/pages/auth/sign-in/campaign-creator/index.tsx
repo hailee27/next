@@ -1,33 +1,19 @@
 /* eslint-disable no-console */
 import SignUpFormInput from '@/components/SignUpFormInput';
 import { useLoginMutation } from '@/redux/endpoints/auth';
-import { FORM_FIELD_ERROR_FEEDBACK } from '@/utils/constant/feedback-message';
-import { REGEX_EMAIL } from '@/utils/constant/regex';
+import { LoginFormData, loginSchema } from '@/utils/schema/login-email';
 import { yupResolver } from '@hookform/resolvers/yup';
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
-
+import { useRouter } from 'next/router';
 /*
 dvhai@yopmail.com
 12345678
 */
-const schema = yup.object({
-  email: yup
-    .string()
-    .required(FORM_FIELD_ERROR_FEEDBACK.emailRequired)
-    .email(FORM_FIELD_ERROR_FEEDBACK.emailInvalid)
-    .matches(REGEX_EMAIL, FORM_FIELD_ERROR_FEEDBACK.emailInvalid),
-  password: yup
-    .string()
-    .required(FORM_FIELD_ERROR_FEEDBACK.passwordRequied)
-    .min(8, FORM_FIELD_ERROR_FEEDBACK.passwordShortLength),
-});
-type FormData = yup.InferType<typeof schema>;
 
-export default function CampaignCreatorSignin() {
+export default function CampaignCreatorSigninPage() {
   const [hasCaptchaToken, setHasCaptchaToken] = useState(false);
   const [isDisableSubmit, setIsDisableSubmit] = useState(true);
   const {
@@ -35,14 +21,15 @@ export default function CampaignCreatorSignin() {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<FormData>({
-    resolver: yupResolver(schema),
+  } = useForm<LoginFormData>({
+    resolver: yupResolver(loginSchema),
   });
-
+  const router = useRouter();
   const [login] = useLoginMutation();
 
   const password = watch('password');
   const email = watch('email');
+
   function onChange(token: string | null) {
     if (token) {
       setHasCaptchaToken(true);
@@ -51,14 +38,23 @@ export default function CampaignCreatorSignin() {
     }
   }
 
-  const onSubmit = async (formValue: FormData) => {
+  const onSubmit = async (formValue: LoginFormData) => {
     try {
       const body = {
         email: formValue.email,
         password: formValue.password,
       };
       const data = await login(body).unwrap();
-      console.log('data', data);
+
+      if (data?.totpToken && data?.code) {
+        router.push({
+          pathname: '/auth/sign-in/campaign-creator/sms-authentication',
+          query: {
+            totpToken: data?.totpToken,
+            code: data?.code,
+          },
+        });
+      }
     } catch (err) {
       console.log(err);
     }
@@ -112,7 +108,7 @@ export default function CampaignCreatorSignin() {
           className="w-full bg-primary-base text-white text-[16px] font-medium h-[48px] rounded-full max-w-[327px]  hover:opacity-80 transition-all duration-100"
           type="button"
         >
-          ログイン
+          マイページで設定
         </button>
         <div className="h-[1px] w-full bg-border-base" />
         <p className=" text-[16px] leading-[16px] ">アカウントをお持ちでない方</p>
