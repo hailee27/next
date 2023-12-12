@@ -33,6 +33,6 @@ body {
 @layer base {
   html,
   body {
-    font-family: var(--font-inter), sans-serif;
+    font-family: var(--font-noto-san-jp), sans-serif;
   }
 }

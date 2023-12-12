@@ -7,13 +7,14 @@ const config: Config = {
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
-  safelist: ['rounded-full'],
+  safelist: ['rounded-full', 'bg-gradient-blue-to-green'],
   theme: {
     extend: {
       fontFamily: {
         dmSans: ['var(--font-dm-sans)'],
         inter: ['var(--font-inter)'],
         mPlus1: ['var(--font-m-plus-1)'],
+        notoSans: ['var(--font-noto-san-jp)'],
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

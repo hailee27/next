@@ -67,9 +67,13 @@ export default function Login() {
       <div onClick={getTwitterOauthUrl}>
         <p>{' twitter'}</p>
       </div>
-      <button onClick={() => signIn('twitter')} type="button">
-        Sign in
-      </button>
+      <div className="h-6" />
+
+      <div className="w-[300px] h-[66px]">
+        <CButtonShadow onClick={() => signIn('twitter')} title=" Sign in twitter NextAuth" type="button" />
+      </div>
+
+      <div className="h-6" />
       <LoginSocialTwitter
         client_id={process?.env?.NEXT_PUBLIC_TWITTER_CLIENT_ID_KEY || ''}
         onLoginStart={() => {
@@ -89,11 +93,35 @@ export default function Login() {
         // client_secret={process.env.REACT_APP_TWITTER_V2_APP_SECRET || ''}
         redirect_uri="https%3A%2F%2Fa9dd-14-248-82-148.ngrok-free.app%2Flogin"
       >
-        login with tw
+        <div className="w-[300px] h-[66px]">
+          <CButtonShadow title="custom login with tw" />
+        </div>
       </LoginSocialTwitter>
+      <div className="h-6" />
       <div className="w-[300px] h-[66px]">
-        <CButtonShadow />
+        <CButtonShadow
+          classBgColor="bg-[#fff]"
+          classShadowColor="bg-[#333]"
+          textClass="text-[#333] text-[14px]  font-inner"
+          title="Demo 1"
+        />
+      </div>
+      <div className="h-6" />
+
+      <div className="w-[300px] h-[66px]">
+        <CButtonShadow
+          classBgColor="bg-gradient-blue-to-green"
+          classShadowColor="bg-[#333]"
+          textClass="text-[#333] text-[16px] font-dmSans"
+          title="Demo 2"
+        />
       </div>
     </div>
   );
 }
+
+// Twitter
+// Tik Tok
+// Discord
+// LINE
+// Telegram

@@ -7,7 +7,7 @@ import '@/styles/globals.css';
 import { NextPage } from 'next';
 import { SessionProvider } from 'next-auth/react';
 import type { AppProps } from 'next/app';
-import { DM_Sans, Inter, M_PLUS_1 } from 'next/font/google';
+import { DM_Sans, Inter, M_PLUS_1, Noto_Sans_JP } from 'next/font/google';
 import { useRouter } from 'next/router';
 import { ReactElement } from 'react';
 import { Provider } from 'react-redux';
@@ -16,7 +16,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 const dmSans = DM_Sans({ subsets: ['latin'], variable: '--font-dm-sans', display: 'swap' });
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 const mPlus1 = M_PLUS_1({ subsets: ['latin'], variable: '--font-m-plus-1', display: 'swap' });
-
+const notoSans = Noto_Sans_JP({ subsets: ['latin'], variable: '--font-noto-san-jp', display: 'swap' });
 export type NextPageWithLayout<P = Record<string, never>, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => JSX.Element;
 };
@@ -39,7 +39,9 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
       <MegaHead />
       <Provider store={store}>
         <PersistGate loading={null} persistor={store.persistorData}>
-          <main className={`${inter.className} ${dmSans.variable} ${inter.variable}  ${mPlus1.variable} font-sans`}>
+          <main
+            className={`${notoSans.className} ${dmSans.variable} ${inter.variable}  ${mPlus1.variable} ${notoSans.variable} font-sans`}
+          >
             {getLayout(<Component {...props} />)}
           </main>
         </PersistGate>
