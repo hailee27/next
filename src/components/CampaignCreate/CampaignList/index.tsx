@@ -11,7 +11,7 @@ const ListTab = ({ title }: { title: string }) => (
     <span className="text-[16px] font-bold">{title}</span>
   </div>
 );
-function CampainList() {
+function CampaignList() {
   const items: TabsProps['items'] = [
     {
       key: '1',
@@ -57,4 +57,4 @@ function CampainList() {
   );
 }
 
-export default CampainList;
+export default CampaignList;

@@ -6,7 +6,7 @@ interface Props {
   children: JSX.Element;
 }
 
-function CampainLayout({ children }: Props) {
+function CampaignLayout({ children }: Props) {
   return (
     <main className="min-h-screen flex flex-col bg-white text-[#2D3648]">
       <header className="h-[96px] ">
@@ -22,4 +22,4 @@ function CampainLayout({ children }: Props) {
   );
 }
 
-export default CampainLayout;
+export default CampaignLayout;

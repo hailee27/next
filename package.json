@@ -17,7 +17,8 @@
     "react-dom": "^18",
     "react-quill": "^2.0.0",
     "react-redux": "^9.0.2",
-    "redux-persist": "^6.0.0"
+    "redux-persist": "^6.0.0",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/node": "^20",

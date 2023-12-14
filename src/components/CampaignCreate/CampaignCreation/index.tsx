@@ -1,13 +1,15 @@
 import BasicTabs from '@/components/common/BasicTabs';
-import React from 'react';
+import React, { useState } from 'react';
 import type { TabsProps } from 'antd';
 import BasicButton from '@/components/common/BasicButton';
-import Setup from './Setup';
-import Task from './Task';
+import { Form } from 'antd';
+
 import ReWard from './ReWard';
 import Confirmation from './Confirmation';
+import Setup from './Setup';
+import Task from './Task';
 
-function CampainCreation() {
+function CampaignCreation() {
   const items: TabsProps['items'] = [
     {
       key: '1',
@@ -30,8 +32,15 @@ function CampainCreation() {
       children: <Confirmation />,
     },
   ];
+  const [tab, setTab] = useState<string>('1');
   return (
-    <div>
+    <Form.Provider
+    // onFormFinish={(name, { value, forms }) => {
+    //   setTab((prev) => String(Number(prev) + 1));
+    //   window.scrollTo({ behavior: 'smooth', top: 0 });
+    //   console.log(forms[name].getFieldsValue());
+    // }}
+    >
       <div className="flex px-[80px] py-[32px] w-full justify-between border-b-2 border-[#2D3648] max-h-[112px]">
         <span className="text-[32px] font-bold">キャンペーン作成</span>
         <div className="flex space-x-[16px]">
@@ -44,11 +53,11 @@ function CampainCreation() {
           <BasicButton className="h-[48px]">下書き保存</BasicButton>
         </div>
       </div>
-      <div className="px-[48px] pt-[28px]">
-        <BasicTabs items={items} />
+      <div className="px-[48px] pt-[28px] pb-[55px]">
+        <BasicTabs activeKey={tab} items={items} onChange={(e) => setTab(e)} />
       </div>
-    </div>
+    </Form.Provider>
   );
 }
 
-export default CampainCreation;
+export default CampaignCreation;

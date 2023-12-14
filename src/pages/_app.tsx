@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { ReactElement } from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import CampainLayout from '@/components/layout/CampainLayout';
+import CampaignLayout from '@/components/layout/CampaignLayout';
 import MainLayout from '@/components/layout/MainLayout';
 import { persistor, store } from '@/redux/store';
 import '@/styles/globals.css';
@@ -19,8 +19,8 @@ type AppPropsWithLayout = AppProps & {
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const router = useRouter();
   let getLayout = Component.getLayout ?? ((page) => <MainLayout>{page}</MainLayout>);
-  if (router.pathname.startsWith('/campain')) {
-    getLayout = (page) => <CampainLayout>{page}</CampainLayout>;
+  if (router.pathname.startsWith('/campaign')) {
+    getLayout = (page) => <CampaignLayout>{page}</CampaignLayout>;
   }
   return (
     <Provider store={store}>

@@ -18,18 +18,18 @@ function SideBar() {
         <div className="py-[12px] px-[16px] flex items-center space-x-[10px]">
           <span className="text-[11px] font-medium">キャンペーン</span>
         </div>
-        <ListItem title="キャンペーン一覧" to="/campain/list" />
-        <ListItem title="キャンペーン新規作成" to="/campain/create" />
-        <ListItem title="完了済みのキャンペーン" to="/campain/" />
+        <ListItem title="キャンペーン一覧" to="/campaign/list" />
+        <ListItem title="キャンペーン新規作成" to="/campaign/create" />
+        <ListItem title="完了済みのキャンペーン" to="/campaign/" />
         <div className="py-[12px] px-[16px] flex items-center space-x-[10px]">
           <span className="text-[11px] font-medium">管理</span>
         </div>
-        <ListItem title="権限管理" to="/campain/" />
-        <ListItem title="デポジット残高" to="/campain/" />
+        <ListItem title="権限管理" to="/campaign/" />
+        <ListItem title="デポジット残高" to="/campaign/" />
       </div>
       <div className="h-[120px] border-t-2 border-[#2D3648] flex flex-col justify-end">
-        <ListItem title="組織情報" to="/campain/" />
-        <ListItem title="アカウント情報" to="/campain/" />
+        <ListItem title="組織情報" to="/campaign/" />
+        <ListItem title="アカウント情報" to="/campaign/" />
       </div>
     </div>
   );
