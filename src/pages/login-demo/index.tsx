@@ -8,6 +8,7 @@
 import CampaignItem from '@/components/CampaignItem';
 import CButtonShadow from '@/components/common/CShadowButton';
 import CShadowCard from '@/components/common/CShadowCard';
+import MainFooter from '@/components/layout/_core/MainFooter';
 import { tiktokProvider } from '@/utils/social-provider-configs/tiktok.provider';
 import { signIn, useSession } from 'next-auth/react';
 import { useCallback, useEffect, useState } from 'react';
@@ -166,7 +167,7 @@ export default function Login() {
 
       <div className="w-[300px] h-[66px]">
         <CButtonShadow
-          classBgColor="bg-gradient-blue-to-green"
+          classBgColor="bg-btn-gradation"
           classShadowColor="bg-[#333]"
           textClass="text-[#333] text-[16px] font-dmSans"
           title="Demo 2"
@@ -194,6 +195,8 @@ export default function Login() {
       <div className="flex gap-[16px] ">
         <CampaignItem />
       </div>
+      <div className="h-6" />
+      <MainFooter />
     </div>
   );
 }

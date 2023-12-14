@@ -1,10 +1,12 @@
 import React from 'react';
 import CShadowCard from '../common/CShadowCard';
+import CButtonShadow from '../common/CShadowButton';
+import ArrowDown from '../common/icons/ArrowDown';
 
 export default function CampaignItem() {
   return (
     <CShadowCard>
-      <div className="font-notoSans px-[24px] py-[32px] flex flex-col gap-[16px] ">
+      <div className="font-notoSans px-[24px] py-[32px] flex flex-col gap-[16px]   ">
         <div className=" flex gap-[10px] items-center  ">
           <div className="w-[32px] h-[32px] rounded-full bg-gray-2  overflow-hidden" />
           <p className="font-bold text-[14px] tracking-[0.42px] leading-[21px] text-main-text ">組織名</p>
@@ -19,6 +21,20 @@ export default function CampaignItem() {
             <p className="text-[13px] tracking-[0.4px] ">当選者枠：100名</p>
             <p className="text-[13px] tracking-[0.4px] ">期限：12/10 11:00 〜 12/30 15:00</p>
           </div>
+        </div>
+        <div className="min-w-[279px] h-[47px]">
+          <CButtonShadow
+            classBgColor="bg-btn-gradation"
+            isShadowStyle={false}
+            tagLabel="即時抽選"
+            textClass="text-[14px] text-main-text"
+            title="キャンペーンの詳細をみる"
+            withIcon={{
+              position: 'right',
+              parentJustify: 'justify-center',
+              icon: <ArrowDown className="rotate-[-90deg]" />,
+            }}
+          />
         </div>
       </div>
     </CShadowCard>

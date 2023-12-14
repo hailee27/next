@@ -35,7 +35,7 @@ export default function CButtonShadow({
       <div className="relative w-full h-full">
         <button
           className={clsx(
-            ' w-full h-full  group-hover:cursor-pointer transition-all duration-200 rounded-full border-[2px] border-[#333] flex items-center  overflow-hidden font-bold',
+            'w-full h-full group-hover:cursor-pointer transition-all duration-200 rounded-full border-[2px] border-[#333] flex items-center gap-[4px]  overflow-hidden font-bold',
             isShadowStyle
               ? 'absolute left-[-6px] top-[-6px] group-hover:top-0 group-hover:left-0'
               : 'group-hover:opacity-90',
@@ -47,7 +47,7 @@ export default function CButtonShadow({
           type={type}
         >
           {tagLabel ? (
-            <span className="bg-[#333] rounded-sm overflow-hidden text-[10px] font-bold leading-[15px] ">
+            <span className="bg-[#333] rounded-sm overflow-hidden text-[10px] font-bold leading-[15px] text-white px-[5px] py-[3px] ">
               {tagLabel}
             </span>
           ) : (
