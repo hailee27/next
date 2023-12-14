@@ -6,10 +6,11 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { signIn, useSession } from 'next-auth/react';
 import LoginSocialTwitter, { ObjectType } from '@/components/auth/LoginSocialTwitter';
 import CButtonShadow from '@/components/common/CButtonShadow';
+import { tiktokProvider } from '@/utils/social-provider-configs/tiktok.provider';
 
 export default function Login() {
   const { data: session } = useSession();
@@ -27,6 +28,29 @@ export default function Login() {
       code_challenge_method: 'S256',
       scope: ['users.read', 'tweet.read', 'follows.read', 'follows.write'].join(' '), // add/remove scopes as needed
     };
+    const qs = new URLSearchParams(options).toString();
+    const url = `${rootUrl}?${qs}`;
+    const width = 450;
+    const height = 730;
+    const left = window.screen.width / 2 - width / 2;
+    const top = window.screen.height / 2 - height / 2;
+    window.open(
+      url,
+      'twitter',
+      `menubar=no,location=no,resizable=no,scrollbars=no,status=no, width=${width}, height=${height}, top=${top}, left=${left}`
+    );
+  }
+
+  function getTiktokOauthUrl() {
+    const rootUrl = 'https://www.tiktok.com/v2/auth/authorize/';
+    const options = {
+      client_key: tiktokProvider?.clientKey,
+      scope: ['user.info.basic', 'user.info.profile'].join(','),
+      redirect_uri: 'https://example.com/auth/callback/tiktok',
+      state: 'state_tiktok',
+      response_type: 'code',
+    };
+
     const qs = new URLSearchParams(options).toString();
     const url = `${rootUrl}?${qs}`;
     const width = 450;
@@ -62,12 +86,36 @@ export default function Login() {
   // };
 
   console.log('session, provider, profile', session, provider, profile);
+
+  const onChangeLocalStorage = useCallback(() => {
+    window.removeEventListener('storage', onChangeLocalStorage, false);
+    const code = localStorage.getItem('test_callback');
+    if (code) {
+      console.log('code', code);
+      // localStorage.removeItem('test_callback');
+    }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('storage', onChangeLocalStorage, false);
+  }, []);
+
   return (
     <div>
       <div onClick={getTwitterOauthUrl}>
         <p>{' twitter'}</p>
       </div>
       <div className="h-6" />
+
+      <div className="w-[300px] h-[66px]">
+        <CButtonShadow
+          onClick={(e) => {
+            getTiktokOauthUrl();
+          }}
+          title=" Sign in tiktok"
+          type="button"
+        />
+      </div>
 
       <div className="w-[300px] h-[66px]">
         <CButtonShadow onClick={() => signIn('twitter')} title=" Sign in twitter NextAuth" type="button" />
@@ -115,6 +163,24 @@ export default function Login() {
           textClass="text-[#333] text-[16px] font-dmSans"
           title="Demo 2"
         />
+      </div>
+      <div>
+        <button
+          onClick={() => {
+            const width = 450;
+            const height = 730;
+            const left = window.screen.width / 2 - width / 2;
+            const top = window.screen.height / 2 - height / 2;
+            window.open(
+              'http://www.localhost:3000/login-demo/callback',
+              'twitter',
+              `width=${width}, height=${height}, top=${top}, left=${left}`
+            );
+          }}
+          type="button"
+        >
+          implement
+        </button>
       </div>
     </div>
   );
