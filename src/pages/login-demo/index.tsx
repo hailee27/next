@@ -5,12 +5,12 @@
 /* eslint-disable no-console */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import axios from 'axios';
-import React, { useCallback, useEffect, useState } from 'react';
-import { signIn, useSession } from 'next-auth/react';
-import LoginSocialTwitter, { ObjectType } from '@/components/auth/LoginSocialTwitter';
-import CButtonShadow from '@/components/common/CButtonShadow';
+import CampaignItem from '@/components/CampaignItem';
+import CButtonShadow from '@/components/common/CShadowButton';
+import CShadowCard from '@/components/common/CShadowCard';
 import { tiktokProvider } from '@/utils/social-provider-configs/tiktok.provider';
+import { signIn, useSession } from 'next-auth/react';
+import { useCallback, useEffect, useState } from 'react';
 
 export default function Login() {
   const { data: session } = useSession();
@@ -46,7 +46,7 @@ export default function Login() {
     const options = {
       client_key: tiktokProvider?.clientKey,
       scope: ['user.info.basic', 'user.info.profile'].join(','),
-      redirect_uri: 'https://example.com/auth/callback/tiktok',
+      redirect_uri: 'https://www.youtube.com/',
       state: 'state_tiktok',
       response_type: 'code',
     };
@@ -102,11 +102,23 @@ export default function Login() {
 
   return (
     <div>
-      <div onClick={getTwitterOauthUrl}>
-        <p>{' twitter'}</p>
+      <div className="h-6" />
+      <div className="w-[300px] h-[66px]">
+        <CButtonShadow onClick={() => signIn('tiktok')} title=" Sign in Tiktok NextAuth" type="button" />
       </div>
       <div className="h-6" />
-
+      <div className="w-[300px] h-[66px]">
+        <CButtonShadow onClick={() => signIn('discord')} title=" Sign in discord NextAuth" type="button" />
+      </div>
+      <div className="h-6" />
+      <div className="w-[300px] h-[66px]">
+        <CButtonShadow onClick={() => signIn('twitter')} title=" Sign in twitter NextAuth" type="button" />
+      </div>
+      <div className="h-6" />
+      <div className="w-[300px] h-[66px]">
+        <CButtonShadow onClick={() => signIn('line')} title=" Sign in LINE NextAuth" type="button" />
+      </div>
+      <div className="h-6" />
       <div className="w-[300px] h-[66px]">
         <CButtonShadow
           onClick={(e) => {
@@ -117,12 +129,8 @@ export default function Login() {
         />
       </div>
 
-      <div className="w-[300px] h-[66px]">
-        <CButtonShadow onClick={() => signIn('twitter')} title=" Sign in twitter NextAuth" type="button" />
-      </div>
-
       <div className="h-6" />
-      <LoginSocialTwitter
+      {/* <LoginSocialTwitter
         client_id={process?.env?.NEXT_PUBLIC_TWITTER_CLIENT_ID_KEY || ''}
         onLoginStart={() => {
           console.log('start auth');
@@ -144,7 +152,7 @@ export default function Login() {
         <div className="w-[300px] h-[66px]">
           <CButtonShadow title="custom login with tw" />
         </div>
-      </LoginSocialTwitter>
+      </LoginSocialTwitter> */}
       <div className="h-6" />
       <div className="w-[300px] h-[66px]">
         <CButtonShadow
@@ -164,7 +172,7 @@ export default function Login() {
           title="Demo 2"
         />
       </div>
-      <div>
+      {/* <div>
         <button
           onClick={() => {
             const width = 450;
@@ -181,6 +189,10 @@ export default function Login() {
         >
           implement
         </button>
+      </div> */}
+      <div className="h-6" />
+      <div className="flex gap-[16px] ">
+        <CampaignItem />
       </div>
     </div>
   );

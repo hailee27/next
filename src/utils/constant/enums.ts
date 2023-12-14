@@ -8,3 +8,5 @@ export const ErrorCode: { [key: string]: string } = {
   '404001': 'User not found',
   '400033': 'Incorrect password',
 };
+
+export const PREVENT_CORS_URL = 'https://cors.bridged.cc';

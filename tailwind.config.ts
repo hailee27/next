@@ -19,7 +19,7 @@ const config: Config = {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-        'gradient-blue-to-green': 'linear-gradient(90deg, #20FFFF 4.58%, #71FF6F 97.94%)',
+        'btn-gradation': 'linear-gradient(90deg, #20FFFF 4.58%, #71FF6F 97.94%)',
       },
       colors: {
         'primary-base': '#6B4EFF',
@@ -27,6 +27,10 @@ const config: Config = {
         'text-dark': '#090A0A',
         'text-light': '#72777A',
         'text-error': '#FF0000',
+        'main-text': '#333',
+        'gray-1': '#777',
+        'gray-2': '#aaa',
+        'base-color': '#D5FFFF',
       },
       screens: {
         sm: { min: '640px' },
