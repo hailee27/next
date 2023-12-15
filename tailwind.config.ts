@@ -7,7 +7,17 @@ const config: Config = {
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
-  safelist: ['rounded-full', 'bg-gradient-blue-to-green'],
+  safelist: [
+    'rounded-full',
+    'pl-[2px]',
+    'pl-[6px]',
+    'pt-[2px]',
+    'pt-[6px]',
+    'top-[-2px]',
+    'top-[-6px]',
+    'left-[-2px]',
+    'left-[-6px]',
+  ],
   theme: {
     extend: {
       fontFamily: {
@@ -15,6 +25,7 @@ const config: Config = {
         inter: ['var(--font-inter)'],
         mPlus1: ['var(--font-m-plus-1)'],
         notoSans: ['var(--font-noto-san-jp)'],
+        montserrat: ['var(--font-montserrat)'],
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

@@ -15,7 +15,9 @@ interface ICButtonShadow {
   textClass?: string;
   classBgColor?: string;
   classShadowColor?: string;
+  classRounded?: string;
   isShadowStyle?: boolean;
+  shadowWidth?: number;
   tagLabel?: string;
 }
 
@@ -27,21 +29,31 @@ export default function CButtonShadow({
   textClass,
   classBgColor,
   classShadowColor,
+  classRounded,
   isShadowStyle,
+  shadowWidth,
   tagLabel,
 }: ICButtonShadow) {
   return (
-    <div className={clsx(' w-full h-full group', isShadowStyle ? 'pl-[6px] pt-[6px]' : ' ')}>
+    <div className={clsx(' w-full h-full group', isShadowStyle ? `pl-[${shadowWidth}px] pt-[${shadowWidth}px]` : ' ')}>
       <div className="relative w-full h-full">
+        <div
+          className={clsx(
+            isShadowStyle ? 'absolute left-0 top-0   h-full w-full  border-[2px] border-[#333]' : '!hidden',
+            classShadowColor,
+            classRounded
+          )}
+        />
         <button
           className={clsx(
-            'w-full h-full group-hover:cursor-pointer transition-all duration-200 rounded-full border-[2px] border-[#333] flex items-center gap-[4px]  overflow-hidden font-bold',
+            'w-full h-full group-hover:cursor-pointer transition-all duration-200  border-[2px] border-[#333] flex items-center gap-[6px]  overflow-hidden font-bold',
             isShadowStyle
-              ? 'absolute left-[-6px] top-[-6px] group-hover:top-0 group-hover:left-0'
+              ? `absolute left-[-${shadowWidth}px] top-[-${shadowWidth}px] group-hover:top-0 group-hover:left-0`
               : 'group-hover:opacity-90',
             withIcon?.parentJustify ? withIcon?.parentJustify : 'justify-center',
             textClass,
-            classBgColor
+            classBgColor,
+            classRounded
           )}
           onClick={onClick}
           type={type}
@@ -67,14 +79,6 @@ export default function CButtonShadow({
             title
           )}
         </button>
-        <div
-          className={clsx(
-            isShadowStyle
-              ? 'absolute left-0 top-0 z-[-1]   h-full w-full rounded-full border-[2px] border-[#333]'
-              : '!hidden',
-            classShadowColor
-          )}
-        />
       </div>
     </div>
   );
@@ -88,6 +92,8 @@ CButtonShadow.defaultProps = {
   textClass: 'text-white text-[16px]',
   classBgColor: 'bg-[#333]',
   classShadowColor: 'bg-white',
+  classRounded: 'rounded-full',
   isShadowStyle: true,
+  shadowWidth: 6,
   tagLabel: undefined,
 };

@@ -3,7 +3,7 @@ import CShadowCard from '../common/CShadowCard';
 import CButtonShadow from '../common/CShadowButton';
 import ArrowDown from '../common/icons/ArrowDown';
 
-export default function CampaignItem() {
+export default function CampaignCardItem() {
   return (
     <CShadowCard>
       <div className="font-notoSans px-[24px] py-[32px] flex flex-col gap-[16px]   ">

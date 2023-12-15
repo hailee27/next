@@ -68,7 +68,7 @@ export default function MainFooter() {
           width="0"
         />
       </div>
-      <div className="flex flex-wrap gap-[16px]">
+      <div className="flex flex-wrap gap-[16px] items-center justify-center">
         {FooterNavigation.map((i) => (
           <a className="text-[16px] font-medium" href={i.to} key={i.to}>
             {i.text}
@@ -82,7 +82,7 @@ export default function MainFooter() {
           </a>
         ))}
       </div>
-      <div className=" w-full border-t-solid border-t-[2px] border-t-[#333] pt-[16px] text-[13px] text-center !font-[350]">
+      <div className=" w-full border-t-solid border-t-[2px] border-t-[#333] pt-[16px] text-[13px] text-center text-gray-2 font-[350]">
         Copyright © 2024 clout All Rights Reserved
       </div>
     </div>

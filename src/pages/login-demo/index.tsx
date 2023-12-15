@@ -5,10 +5,12 @@
 /* eslint-disable no-console */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import CampaignItem from '@/components/CampaignItem';
+import CampaignCardItem from '@/components/CampaignCardItem';
+import CampaignRewardCardItem from '@/components/CampaignRewardCardItem';
 import CButtonShadow from '@/components/common/CShadowButton';
 import CShadowCard from '@/components/common/CShadowCard';
 import MainFooter from '@/components/layout/_core/MainFooter';
+import MainHeader from '@/components/layout/_core/MainHeader';
 import { tiktokProvider } from '@/utils/social-provider-configs/tiktok.provider';
 import { signIn, useSession } from 'next-auth/react';
 import { useCallback, useEffect, useState } from 'react';
@@ -103,6 +105,7 @@ export default function Login() {
 
   return (
     <div>
+      <MainHeader />
       <div className="h-6" />
       <div className="w-[300px] h-[66px]">
         <CButtonShadow onClick={() => signIn('tiktok')} title=" Sign in Tiktok NextAuth" type="button" />
@@ -193,8 +196,10 @@ export default function Login() {
       </div> */}
       <div className="h-6" />
       <div className="flex gap-[16px] ">
-        <CampaignItem />
+        <CampaignCardItem />
       </div>
+      <div className="h-6" />
+      <CampaignRewardCardItem />
       <div className="h-6" />
       <MainFooter />
     </div>

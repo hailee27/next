@@ -36,3 +36,7 @@ body {
     font-family: var(--font-noto-san-jp), sans-serif;
   }
 }
+
+.stop-scrolling {
+  overflow: hidden;
+}

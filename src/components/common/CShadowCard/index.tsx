@@ -16,6 +16,7 @@ export default function CShadowCard({ onClickCard, children }: ICShadowCardProps
       }}
     >
       <div className="relative w-full h-full ">
+        <div className="absolute w-full h-full top-[0px] left-[0px] bg-[#333] rounded-[16px] " />
         <div
           className={clsx(
             'border-[2px] border-[#333] rounded-[16px]    bg-white translate-x-[-8px] translate-y-[-8px] group-hover:translate-x-0 group-hover:translate-y-0 group-hover:cursor-pointer transition-all duration-200 overflow-hidden'
@@ -23,7 +24,6 @@ export default function CShadowCard({ onClickCard, children }: ICShadowCardProps
         >
           {children}
         </div>
-        <div className="absolute w-full h-full top-[0px] left-[0px] bg-[#333] rounded-[16px] z-[-1]" />
       </div>
     </div>
   );
