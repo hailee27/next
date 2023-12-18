@@ -1,5 +1,7 @@
+/* eslint-disable no-console */
 import clsx from 'clsx';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import styles from './styles.module.scss';
 
 interface ICShadowCardProps {
   onClickCard?: () => void;
@@ -7,22 +9,38 @@ interface ICShadowCardProps {
 }
 
 export default function CShadowCard({ onClickCard, children }: ICShadowCardProps) {
+  const cardRef = useRef<HTMLDivElement | null>(null);
+
+  const onTouchStart = () => {
+    cardRef?.current?.classList.add('shadow-card--tounched');
+  };
+  const onTouchEnd = () => {
+    cardRef?.current?.classList.remove('shadow-card--tounched');
+  };
+  useEffect(() => {
+    if (cardRef && cardRef?.current) {
+      cardRef?.current?.addEventListener('touchstart', onTouchStart);
+      cardRef?.current?.addEventListener('touchend', onTouchEnd);
+    }
+    return () => {
+      cardRef?.current?.removeEventListener('touchstart', onTouchStart);
+      cardRef?.current?.removeEventListener('touchend', onTouchEnd);
+    };
+  }, [cardRef]);
   return (
     <div
       aria-hidden="true"
-      className="pl-[8px] pt-[8px] group"
+      className={clsx(styles.shadowCardContainer)}
       onClick={() => {
         onClickCard?.();
       }}
     >
-      <div className="relative w-full h-full ">
-        <div className="absolute w-full h-full top-[0px] left-[0px] bg-[#333] rounded-[16px] " />
-        <div
-          className={clsx(
-            'border-[2px] border-[#333] rounded-[16px]    bg-white translate-x-[-8px] translate-y-[-8px] group-hover:translate-x-0 group-hover:translate-y-0 group-hover:cursor-pointer transition-all duration-200 overflow-hidden'
-          )}
-        >
-          {children}
+      <div className="shadowCardInner">
+        <div className="card-inner">
+          <div className="card-shadow" />
+          <div className="card-content" ref={cardRef}>
+            {children}
+          </div>
         </div>
       </div>
     </div>

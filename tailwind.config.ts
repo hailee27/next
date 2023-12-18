@@ -17,6 +17,7 @@ const config: Config = {
     'top-[-6px]',
     'left-[-2px]',
     'left-[-6px]',
+    'border-[#333]',
   ],
   theme: {
     extend: {
@@ -31,6 +32,8 @@ const config: Config = {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
         'btn-gradation': 'linear-gradient(90deg, #20FFFF 4.58%, #71FF6F 97.94%)',
+        'campaign-detail-bg-1':
+          'linear-gradient(2deg, rgba(160, 255, 158, 0.50) 1.61%, rgba(166, 255, 255, 0.50) 98.38%)',
       },
       colors: {
         'primary-base': '#6B4EFF',

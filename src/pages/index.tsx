@@ -1,24 +1,26 @@
 import CampaignCardItem from '@/components/CampaignCardItem';
 import CButtonShadow from '@/components/common/CShadowButton';
 import ArrowDown from '@/components/common/icons/ArrowDown';
+import FileIcon from '@/components/common/icons/FileIcon';
+import SearchIcon from '@/components/common/icons/SearchIcon';
 
 export default function Home() {
   return (
     <div className="font-notoSans bg-white">
-      <div className="flex justify-between flex-col min-h-[600px]">
+      <div className="flex justify-between flex-col min-h-[600px] bg-[#AAAAAA]">
         <div className="flex-1" />
-        <div className="px-[20px] flex flex-col gap-[8px]">
+        <div className="px-[20px] flex flex-col gap-[8px] mb-[66px]">
           <div className="h-[66px]">
             <CButtonShadow
               classBgColor="bg-[#333]"
               classShadowColor="bg-[#fff]"
               textClass="text-white text-[16px] font-bold"
               title="キャンペーンの一覧をみる"
-              // withIcon={{
-              //   position: 'left',
-              //   parentJustify: 'justify-center',
-              //   icon: <ArrowDown className="rotate-[-90deg]" />,
-              // }}
+              withIcon={{
+                position: 'left',
+                parentJustify: 'justify-center',
+                icon: <SearchIcon />,
+              }}
             />
           </div>
           <div className="h-[66px]">
@@ -27,11 +29,11 @@ export default function Home() {
               classShadowColor="bg-[#333]"
               textClass="text-main-text text-[16px] font-bold"
               title="キャンペーンの一覧をみる"
-              // withIcon={{
-              //   position: 'left',
-              //   parentJustify: 'justify-center',
-              //   icon: <ArrowDown className="rotate-[-90deg]" />,
-              // }}
+              withIcon={{
+                position: 'left',
+                parentJustify: 'justify-center',
+                icon: <FileIcon />,
+              }}
             />
           </div>
         </div>
