@@ -20,6 +20,6 @@ export interface SMSLoginAuthRequest {
 
 export interface SMSLoginAuthResponse {
   accessToken: string;
-  refeshToken: string;
+  refreshToken: string;
   user: User;
 }
