@@ -6,10 +6,13 @@ import { useSmsAuthMutation } from '@/redux/endpoints/auth';
 import { SMS_CASE } from '@/utils/constant/enums';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import toastMessage from '@/utils/func/toastMessage';
+import { useDispatch } from 'react-redux';
+import { setAuth } from '@/redux/slices/auth.slice';
 
 export default function SMSVerification() {
-  const { query } = useRouter();
+  const { query, push } = useRouter();
   const [smsAuth] = useSmsAuthMutation();
+  const dispatch = useDispatch();
   const handleSubmitSMS = async (code: string) => {
     try {
       if (query?.code && query?.totpToken) {
@@ -18,7 +21,11 @@ export default function SMSVerification() {
             code,
             token: typeof query?.totpToken === 'string' ? query?.totpToken : '',
           }).unwrap();
-          console.log(data);
+          console.log(data?.accessToken, data?.refreshToken, data?.user);
+          if (data?.accessToken && data?.refreshToken && data?.user) {
+            dispatch(setAuth(data));
+            push('/');
+          }
         }
       }
     } catch (err) {
