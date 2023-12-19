@@ -1,14 +1,19 @@
 /* eslint-disable no-console */
 /* eslint-disable react/require-default-props */
+import { useLoginMutation, useTwitterAuthMutation } from '@/redux/endpoints/auth';
+import { RootState } from '@/redux/store';
+import { getErrorMessage } from '@/utils/func/getErrorMessage';
+import toastMessage from '@/utils/func/toastMessage';
 import { LoginFormData, loginSchema } from '@/utils/schema/login-email';
-import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useLoginMutation } from '@/redux/endpoints/auth';
-import ReCAPTCHA from 'react-google-recaptcha';
-import clsx from 'clsx';
 import { ErrorMessage } from '@hookform/error-message';
-import { signIn, useSession } from 'next-auth/react';
+import { yupResolver } from '@hookform/resolvers/yup';
+import clsx from 'clsx';
+import { signOut, useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
+import { useEffect, useLayoutEffect, useState } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
+import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 
 export default function CampaignImplementerSigninPage() {
   const {
@@ -19,10 +24,17 @@ export default function CampaignImplementerSigninPage() {
   } = useForm<LoginFormData>({
     resolver: yupResolver(loginSchema),
   });
+
+  const router = useRouter();
+
+  const { accessToken } = useSelector((store: RootState) => store.auth);
+
   const [hasCaptchaToken, setHasCaptchaToken] = useState(false);
   const [isDisableSubmit, setIsDisableSubmit] = useState(true);
+  const [isUserClickedLoginTwitter, setIsUserClickedLoginTwitter] = useState(false);
 
   const [login] = useLoginMutation();
+  const [twitterAuth] = useTwitterAuthMutation();
 
   const password = watch('password');
   const email = watch('email');
@@ -48,6 +60,37 @@ export default function CampaignImplementerSigninPage() {
       setHasCaptchaToken(false);
     }
   }
+
+  const handleRedirectTwitterAuth = async () => {
+    setIsUserClickedLoginTwitter(true);
+    const width = 450;
+    const height = 730;
+    const left = window.screen.width / 2 - width / 2;
+    const top = window.screen.height / 2 - height / 2;
+
+    const newWindow = window.open(
+      '/auth/popup/twitter',
+      'Twitter Signin',
+      `menubar=no,location=no,resizable=no,scrollbars=no,status=no, width=${width}, height=${height}, top=${top}, left=${left}`
+    );
+
+    newWindow?.focus();
+  };
+
+  const handleTwitterAuthCallback = async (twitterId: string, userEmail: string) => {
+    try {
+      const data = await twitterAuth({ twitterId, email: userEmail }).unwrap();
+      console.log(data);
+    } catch (error) {
+      toastMessage(getErrorMessage(error), 'error');
+    }
+  };
+  useLayoutEffect(() => {
+    if (accessToken) {
+      router.push('/');
+    }
+  }, []);
+
   useEffect(() => {
     if (password && email && hasCaptchaToken) {
       setIsDisableSubmit(false);
@@ -55,19 +98,35 @@ export default function CampaignImplementerSigninPage() {
       setIsDisableSubmit(true);
     }
   }, [password, email, hasCaptchaToken]);
+
   useEffect(() => {
-    console.log('session', session);
-  }, [session]);
+    if (isUserClickedLoginTwitter === false && session) {
+      signOut();
+    }
+    if (session?.user?.userProfile?.id && session?.user?.userProfile?.email && isUserClickedLoginTwitter) {
+      console.log('session?.user?.userProfile?.id', session?.user?.userProfile?.id);
+      handleTwitterAuthCallback(session?.user?.userProfile?.id, session?.user?.userProfile?.email);
+    }
+  }, [session, isUserClickedLoginTwitter]);
+
   return (
     <div className="bg-white w-full py-[48px] font-mPlus1 ">
       <h3 className="text-[18px] font-medium leading-[18px] text-center">ログイン</h3>
       <div className="my-[32px] border-solid border-[1px] border-[#646464] p-[40px_16px] flex flex-col gap-[29px] items-center">
         <button
           className="bg-[#D9D9D9] w-[303px] h-[40px] text-[15px] font-medium"
-          onClick={() => signIn('twitter')}
+          onClick={() => handleRedirectTwitterAuth()}
           type="button"
         >
           X（twitter）でログイン
+        </button>
+        <button
+          onClick={() => {
+            signOut();
+          }}
+          type="button"
+        >
+          signOut
         </button>
         <p className=" text-[12px] leading-[16px] text-center">※ キャンペーンに参加するにはXでの連携が必要です</p>
         <form autoComplete="off" className="flex flex-col gap-[29px] items-center" onSubmit={handleSubmit(onSubmit)}>

@@ -31,3 +31,14 @@ export interface SMSVerifyResponse {
   refreshToken: string;
   user: User;
 }
+
+export interface TwitterAuthRequest {
+  twitterId: string;
+  email: string;
+}
+
+export interface TwitterAuthResponse {
+  accessToken: string;
+  refreshToken: string;
+  user: User;
+}

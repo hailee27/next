@@ -7,7 +7,7 @@ import { discordProvider } from '@/utils/social-provider-configs/discord.provide
 import LineProvider from 'next-auth/providers/line';
 
 export const authOptions = {
-  secret: process?.env?.NEXTAUTH_SECRET,
+  secret: 'developer_clout',
   site: process?.env?.NEXTAUTH_URL,
   providers: [
     TwitterProvider({
@@ -25,12 +25,13 @@ export const authOptions = {
   ],
   callbacks: {
     async jwt({ token, account, profile }: any) {
+      if (!token.account) token.account = account;
       if (!token.userProfile) token.userProfile = profile;
       return Promise.resolve(token);
     },
     async session({ session, token, user }: any) {
       session.user.userProfile = token?.userProfile ?? null;
-
+      session.user.provider = token?.account?.provider ?? '';
       return session;
     },
   },
