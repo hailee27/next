@@ -1,13 +1,15 @@
 import { api } from '@/redux/api';
 import login from './login';
-import smsAuth from './sms-auth';
+import smsVerify from './sms-verify';
+import recaptchaVerify from './recaptcha-verify';
 
 export const authApi = api.injectEndpoints({
   endpoints: (build) => ({
     login: login(build),
-    smsAuth: smsAuth(build),
+    smsVerify: smsVerify(build),
+    recaptchaVerify: recaptchaVerify(build),
   }),
   overrideExisting: false,
 });
 
-export const { useLoginMutation, useSmsAuthMutation } = authApi;
+export const { useLoginMutation, useSmsVerifyMutation, useRecaptchaVerifyMutation } = authApi;

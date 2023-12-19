@@ -13,12 +13,20 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface SMSLoginAuthRequest {
+export interface RecaptchaVerifyRequest {
+  token: string;
+}
+
+export interface RecaptchaVerifyResponse {
+  status: string;
+}
+
+export interface SMSVerifyRequest {
   token: string;
   code?: string;
 }
 
-export interface SMSLoginAuthResponse {
+export interface SMSVerifyResponse {
   accessToken: string;
   refreshToken: string;
   user: User;

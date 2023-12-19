@@ -8,6 +8,7 @@ import { useLoginMutation } from '@/redux/endpoints/auth';
 import ReCAPTCHA from 'react-google-recaptcha';
 import clsx from 'clsx';
 import { ErrorMessage } from '@hookform/error-message';
+import { signIn, useSession } from 'next-auth/react';
 
 export default function CampaignImplementerSigninPage() {
   const {
@@ -25,6 +26,8 @@ export default function CampaignImplementerSigninPage() {
 
   const password = watch('password');
   const email = watch('email');
+
+  const { data: session } = useSession();
 
   const onSubmit = async (formValue: LoginFormData) => {
     try {
@@ -52,11 +55,18 @@ export default function CampaignImplementerSigninPage() {
       setIsDisableSubmit(true);
     }
   }, [password, email, hasCaptchaToken]);
+  useEffect(() => {
+    console.log('session', session);
+  }, [session]);
   return (
     <div className="bg-white w-full py-[48px] font-mPlus1 ">
       <h3 className="text-[18px] font-medium leading-[18px] text-center">ログイン</h3>
       <div className="my-[32px] border-solid border-[1px] border-[#646464] p-[40px_16px] flex flex-col gap-[29px] items-center">
-        <button className="bg-[#D9D9D9] w-[303px] h-[40px] text-[15px] font-medium" type="button">
+        <button
+          className="bg-[#D9D9D9] w-[303px] h-[40px] text-[15px] font-medium"
+          onClick={() => signIn('twitter')}
+          type="button"
+        >
           X（twitter）でログイン
         </button>
         <p className=" text-[12px] leading-[16px] text-center">※ キャンペーンに参加するにはXでの連携が必要です</p>

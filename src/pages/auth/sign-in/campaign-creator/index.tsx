@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import SignUpFormInput from '@/components/SignUpFormInput';
-import { useLoginMutation } from '@/redux/endpoints/auth';
+import { useLoginMutation, useRecaptchaVerifyMutation } from '@/redux/endpoints/auth';
 import { LoginFormData, loginSchema } from '@/utils/schema/login-email';
 import { yupResolver } from '@hookform/resolvers/yup';
 import clsx from 'clsx';
@@ -29,14 +29,18 @@ export default function CampaignCreatorSigninPage() {
   });
   const router = useRouter();
   const [login] = useLoginMutation();
-
+  const [recaptchaVerify, { data: recaptchaVerifyData, isSuccess: isRecaptchaVerifySuccess }] =
+    useRecaptchaVerifyMutation();
   const password = watch('password');
   const email = watch('email');
 
-  function onChange(token: string | null) {
+  async function onChange(token: string | null) {
     if (token) {
       console.log('token', token);
       setHasCaptchaToken(true);
+      await recaptchaVerify({
+        token,
+      });
     } else {
       setHasCaptchaToken(false);
     }
@@ -66,12 +70,12 @@ export default function CampaignCreatorSigninPage() {
   };
 
   useEffect(() => {
-    if (password && email && hasCaptchaToken) {
+    if (password && email && hasCaptchaToken && recaptchaVerifyData?.status && isRecaptchaVerifySuccess) {
       setIsDisableSubmit(false);
     } else {
       setIsDisableSubmit(true);
     }
-  }, [password, email, hasCaptchaToken]);
+  }, [password, email, hasCaptchaToken, isRecaptchaVerifySuccess]);
 
   return (
     <div className="bg-white border-[1px] border-solid border-border-base  p-[24px_12px] flex item-center justify-center">

@@ -8,10 +8,11 @@ import LineProvider from 'next-auth/providers/line';
 
 export const authOptions = {
   secret: process?.env?.NEXTAUTH_SECRET,
+  site: process?.env?.NEXTAUTH_URL,
   providers: [
     TwitterProvider({
-      clientId: process?.env?.NEXT_PUBLIC_TWITTER_API_KEY ?? '',
-      clientSecret: process?.env?.NEXT_PUBLIC_TWITTER_API_SECRET_KEY ?? '',
+      clientId: 'INGuSX5GyqypSrHclokya8WdT',
+      clientSecret: 'BXv2Fi8DyVvCkKctIjDOtVM4XoviMVyS7WfYA80pjSgEjRQFBB',
     }),
     DiscordProvider({
       clientId: discordProvider.clientKey,
@@ -21,39 +22,6 @@ export const authOptions = {
       clientId: '2002221153',
       clientSecret: '4190208119fdc2fbe69fb5d746d2c587',
     }),
-    // {
-    //   id: 'tiktok',
-    //   name: 'TikTok',
-    //   type: 'oauth',
-    //   version: '2.0',
-    //   clientId: 'awbyzlzclli6x43d',
-    //   clientSecret: 'iz0zIpESP9JpRxueGqypBzTIO5xbLyfM',
-    //   authorization: {
-    //     url: 'https://www.tiktok.com/auth/authorize/',
-    //     params: {
-    //       scope: 'user.info.basic,video.list',
-    //       response_type: 'code',
-    //       client_key: 'awbyzlzclli6x43d',
-    //       redirect_uri: 'https://03a9-14-248-82-148.ngrok-free.app/api/auth/callback/tiktok',
-    //     },
-    //   },
-    //   token: {
-    //     url: 'https://open-api.tiktok.com/oauth/access_token/',
-    //     params: {
-    //       client_key: 'awbyzlzclli6x43d',
-    //       client_secret: 'iz0zIpESP9JpRxueGqypBzTIO5xbLyfM',
-    //       grant_type: 'authorization_code',
-    //     },
-    //   },
-    //   userinfo: 'https://open-api.tiktok.com/user/info/',
-    //   profile(profile: any) {
-    //     return {
-    //       profile,
-    //       id: profile.open_id,
-    //     };
-    //   },
-    //   checks: ['state'],
-    // },
   ],
   callbacks: {
     async jwt({ token, account, profile }: any) {
