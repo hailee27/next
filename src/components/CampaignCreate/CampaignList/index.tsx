@@ -3,6 +3,7 @@ import BasicTabs from '@/components/common/BasicTabs';
 import React from 'react';
 import type { TabsProps } from 'antd';
 import { Image } from 'antd';
+import { useRouter } from 'next/router';
 import TableAll from './TableAll';
 
 const ListTab = ({ title }: { title: string }) => (
@@ -44,11 +45,14 @@ function CampaignList() {
       children: 'Content of Tab Pane 3',
     },
   ];
+  const router = useRouter();
   return (
     <div>
       <div className="flex px-[80px] py-[32px] w-full justify-between border-b-2 border-[#2D3648] max-h-[112px]">
         <span className="text-[32px] font-bold">キャンペーン一覧</span>
-        <BasicButton className="w-[104px] h-[48px]">新規作成</BasicButton>
+        <BasicButton className="w-[104px] h-[48px]" onClick={() => router.push('/campaign/create')}>
+          新規作成
+        </BasicButton>
       </div>
       <div className="px-[48px] pt-[28px]">
         <BasicTabs items={items} />

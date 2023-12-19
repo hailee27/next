@@ -1,21 +1,25 @@
 import React from 'react';
-import { Input, InputProps } from 'antd';
+import { Input, InputNumber, InputNumberProps, InputProps } from 'antd';
 import styles from './index.module.scss';
 
-function BasicInput(props: InputProps) {
+function BasicInput(props: InputProps & InputNumberProps) {
   const { type, ...rest } = props;
   return (
     <div className={styles.customInput}>
-      <Input
-        {...rest}
-        onKeyDown={(event) => {
-          if (type === 'number' && /\+|-/.test(event.key)) {
-            event.preventDefault();
-          }
-        }}
-        onWheel={(e) => e.currentTarget.blur()}
-        type={type}
-      />
+      {type === 'currency' ? (
+        <InputNumber {...rest} formatter={(e) => `${e}円`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} />
+      ) : (
+        <Input
+          {...rest}
+          onKeyDown={(event) => {
+            if (type === 'number' && /\+|-/.test(event.key)) {
+              event.preventDefault();
+            }
+          }}
+          onWheel={(e) => e.currentTarget.blur()}
+          type={type}
+        />
+      )}
     </div>
   );
 }

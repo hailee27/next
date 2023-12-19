@@ -4,6 +4,7 @@ import type { TabsProps } from 'antd';
 import BasicButton from '@/components/common/BasicButton';
 import { Form } from 'antd';
 
+import { useRouter } from 'next/router';
 import ReWard from './ReWard';
 import Confirmation from './Confirmation';
 import Setup from './Setup';
@@ -33,13 +34,19 @@ function CampaignCreation() {
     },
   ];
   const [tab, setTab] = useState<string>('1');
+  const router = useRouter();
   return (
     <Form.Provider
-    // onFormFinish={(name, { value, forms }) => {
-    //   setTab((prev) => String(Number(prev) + 1));
-    //   window.scrollTo({ behavior: 'smooth', top: 0 });
-    //   console.log(forms[name].getFieldsValue());
-    // }}
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      onFormFinish={(name, { values, forms }) => {
+        setTab((prev) => String(Number(prev) + 1));
+        window.scrollTo({ behavior: 'smooth', top: 0 });
+        // console.log(forms[name].getFieldsValue());
+        // console.log(values);
+        if (name === 'reWard') {
+          router.push({ query: { query: JSON.stringify({ typeWinner: forms[name].getFieldValue('typeWinner') }) } });
+        }
+      }}
     >
       <div className="flex px-[80px] py-[32px] w-full justify-between border-b-2 border-[#2D3648] max-h-[112px]">
         <span className="text-[32px] font-bold">キャンペーン作成</span>

@@ -19,8 +19,8 @@ function ListReWard({ index, onDelete }: { index: number; onDelete: () => void }
       <div className="flex space-x-[24px] w-full justify-between mb-[24px]">
         <div className="flex space-y-[8px] flex-col w-full">
           <span className="text-[14px] font-semibold">金額</span>
-          <Form.Item name={['reWard', `reWard${index}`, 'money']}>
-            <BasicInput />
+          <Form.Item initialValue="円" name={['reWard', `reWard${index}`, 'money']}>
+            <BasicInput type="currency" />
           </Form.Item>
         </div>
         <div className="flex space-y-[8px] flex-col w-full">

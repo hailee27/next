@@ -19,7 +19,7 @@ function SideBar() {
           <span className="text-[11px] font-medium">キャンペーン</span>
         </div>
         <ListItem title="キャンペーン一覧" to="/campaign/list" />
-        <ListItem title="キャンペーン新規作成" to="/campaign/create" />
+        <ListItem title="キャンペーン新規作成" to="/campaign/" />
         <ListItem title="完了済みのキャンペーン" to="/campaign/" />
         <div className="py-[12px] px-[16px] flex items-center space-x-[10px]">
           <span className="text-[11px] font-medium">管理</span>

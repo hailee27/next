@@ -11,10 +11,12 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.0.1",
     "antd": "^5.11.1",
+    "antd-img-crop": "^4.18.0",
     "eslint-config-airbnb": "^19.0.4",
     "next": "14.0.2",
     "react": "^18",
     "react-dom": "^18",
+    "react-easy-crop": "^5.0.3",
     "react-quill": "^2.0.0",
     "react-redux": "^9.0.2",
     "redux-persist": "^6.0.0",

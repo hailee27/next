@@ -5,10 +5,14 @@ import SelectLabel from '@/components/common/BasicSelect/SelectLabel';
 import BasicButton from '@/components/common/BasicButton';
 import BasicDatePicker from '@/components/common/BasicDatePicker';
 import BasicSwitch from '@/components/common/BasicSwitch';
+import UploadButton from '@/components/common/UploadButton';
+import type { CropperProps } from 'react-easy-crop';
 import ExplanatoryText from './ExplanatoryText';
 
 function Setup() {
   const [form] = Form.useForm();
+  const noDateWatch = Form.useWatch('noDate', form);
+
   return (
     <div className="mt-[36px] border-2 border-[#2D3648] rounded-[4px] p-[40px]">
       <Form form={form} name="setUp" scrollToFirstError={{ behavior: 'smooth', inline: 'center', block: 'center' }}>
@@ -44,7 +48,11 @@ function Setup() {
           <span>※必須</span>
         </div>
         <Form.Item name="thumbnail" noStyle>
-          <BasicButton className="w-[175px] h-[48px]">画像を選択する</BasicButton>
+          <UploadButton
+            className="w-[175px]"
+            props={{ cropperProps: { cropSize: { height: 279, width: 279 } } as CropperProps }}
+          />
+          {/* <BasicButton className="w-[175px] h-[48px]">画像を選択する</BasicButton> */}
         </Form.Item>
         <div className="text-[14px] font-semibold mb-[5px] mt-[24px]">説明文</div>
         <Form.Item name="explanatoryText" noStyle>
@@ -60,7 +68,7 @@ function Setup() {
               <BasicDatePicker placeholder="開始日時" />
             </Form.Item>
             <Form.Item className="!flex-1" name="endDate">
-              <BasicDatePicker placeholder="終了日時" />
+              <BasicDatePicker disabled={noDateWatch} placeholder="終了日時" />
             </Form.Item>
           </div>
         </div>
