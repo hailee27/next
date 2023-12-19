@@ -9,12 +9,18 @@ import TableReWard from './TableReWard';
 function Confirmation() {
   const [form] = Form.useForm();
   const { query } = useRouter();
-  const queryParams = useMemo(() => JSON.parse((query?.query as string) ?? ''), [query]);
+  const queryParams = useMemo(() => {
+    try {
+      return JSON.parse((query?.query as string) ?? '');
+    } catch (e) {
+      return undefined;
+    }
+  }, [query]);
   // console.log(queryParams.typeWinner);
 
   return (
     <div className="border-2 border-[#2D3648] rounded-[4px] mt-[36px] p-[40px]">
-      <Form form={form}>
+      <Form form={form} name="confirm">
         <BasicButton className="w-[138px] h-[56px]" type="primary">
           プレビュー
         </BasicButton>
@@ -45,7 +51,7 @@ function Confirmation() {
           </div>
         </div>
         <div className="w-full mt-[24px]">
-          {queryParams.typeWinner === 'instantWin' ? (
+          {queryParams?.typeWinner === 'instantWin' ? (
             <>
               <div className="text-[14px] font-semibold mb-[8px]">報酬</div>
               <TableReWard />

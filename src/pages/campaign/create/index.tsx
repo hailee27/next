@@ -1,8 +1,9 @@
-// import CampainCreation from '@/components/CampainCreate/CampainCreation';
-
-import CampaignCreation from '@/components/CampaignCreate/CampaignCreation';
 import React from 'react';
+import dynamic from 'next/dynamic';
 
+const CampaignCreation = dynamic(() => import('@/components/CampaignCreate/CampaignCreation'), {
+  ssr: false,
+});
 function CampaignCreatePage() {
   return <CampaignCreation />;
 }

@@ -4,7 +4,16 @@ import { Image, Modal, Upload } from 'antd';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import styles from './index.module.scss';
 
-const UploadButton = ({ className, props }: { className?: string; props?: Omit<ImgCropProps, 'children'> }) => {
+const UploadButton = ({
+  onChange,
+  className,
+  props,
+}: {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onChange?: (value: any) => void;
+  className?: string;
+  props?: Omit<ImgCropProps, 'children'>;
+}) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [fileList, setFileList] = useState<UploadFile[]>([]);
@@ -16,8 +25,9 @@ const UploadButton = ({ className, props }: { className?: string; props?: Omit<I
       reader.onerror = (error) => reject(error);
     });
 
-  const onChange: UploadProps['onChange'] = ({ fileList: newlist }) => {
+  const handleChange: UploadProps['onChange'] = ({ fileList: newlist }) => {
     setFileList(newlist);
+    onChange?.(newlist);
   };
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
@@ -33,7 +43,7 @@ const UploadButton = ({ className, props }: { className?: string; props?: Omit<I
   return (
     <div className={`${combinedClassName}`}>
       <ImgCrop {...props}>
-        <Upload fileList={fileList} listType="picture-card" onChange={onChange} onPreview={handlePreview}>
+        <Upload fileList={fileList} listType="picture-card" onChange={handleChange} onPreview={handlePreview}>
           {fileList.length > 0 ? '' : <span className="text-[16px] font-semibold text-white">画像を選択する</span>}
         </Upload>
       </ImgCrop>
@@ -46,5 +56,6 @@ const UploadButton = ({ className, props }: { className?: string; props?: Omit<I
 UploadButton.defaultProps = {
   className: undefined,
   props: undefined,
+  onChange: undefined,
 };
 export default UploadButton;

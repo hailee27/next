@@ -1,9 +1,9 @@
 import InputLabel from '@/components/common/BasicInput/InputLabel';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import BasicButton from '@/components/common/BasicButton';
 import { Form } from 'antd';
 import BasicSwitch from '@/components/common/BasicSwitch';
-import { formatNumber } from '@/utils/formatNumber';
+// import { formatNumber } from '@/utils/formatNumber';
 import ListReWard from '../ListReWard';
 
 interface TypeReWard {
@@ -14,6 +14,15 @@ interface TypeReWard {
     paypay: boolean;
   };
 }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const FlagItem = ({ onChange, value }: { onChange?: (value: number | string) => void; value?: string | number }) => (
+  <span>{value}</span>
+);
+
+FlagItem.defaultProps = {
+  onChange: undefined,
+  value: undefined,
+};
 function InstantWin() {
   const [reWard, setReWard] = useState<number[]>([1]);
   const form = Form.useFormInstance();
@@ -35,6 +44,10 @@ function InstantWin() {
     return 0;
   }, [reWardWatch]);
 
+  useEffect(() => {
+    form.setFieldValue('totalReWard', totalReWard);
+    form.setFieldValue('totalTicket', totalTicket);
+  }, [totalReWard, totalTicket]);
   return (
     <>
       <InputLabel
@@ -67,14 +80,24 @@ function InstantWin() {
               <span className="text-[14px] font-semibold">合計金額</span>
               <div className="px-[16px] py-[12px]">
                 <span className="text-[16px]">
-                  {!Number.isNaN(totalReWard) ? formatNumber(totalReWard, true, 1) : 0}円
+                  <Form.Item name="totalReWard" noStyle>
+                    <FlagItem />
+                    {/* {!Number.isNaN(totalReWard) ? formatNumber(totalReWard, true, 1) : 0}円 */}
+                  </Form.Item>
+                  <span>円</span>
                 </span>
               </div>
             </div>
             <div className="flex-1">
               <span className="text-[14px] font-semibold">合計当選本数</span>
               <div className="px-[16px] py-[12px]">
-                <span className="text-[16px]">{totalTicket}</span>
+                <span className="text-[16px]">
+                  <Form.Item name="totalTicket" noStyle>
+                    <FlagItem />
+                    {/* {!Number.isNaN(totalReWard) ? formatNumber(totalReWard, true, 1) : 0}円 */}
+                  </Form.Item>
+                  {/* {totalTicket} */}
+                </span>
               </div>
             </div>
           </div>
