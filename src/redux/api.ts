@@ -12,7 +12,7 @@ const baseQuery = fetchBaseQuery({
   // credentials: 'include',
   prepareHeaders: (headers, { getState, endpoint }) => {
     const isServer = typeof window === 'undefined';
-
+    headers.set('Access-Control-Allow-Origin', '*');
     if (!isServer) {
       const { auth } = getState() as RootState;
       if (auth && auth?.accessToken && endpoint !== 'refresh') {

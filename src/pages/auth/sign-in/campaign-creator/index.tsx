@@ -53,7 +53,7 @@ export default function CampaignCreatorSigninPage() {
 
       if (data?.totpToken && data?.code) {
         router.push({
-          pathname: '/auth/sms-verification',
+          pathname: '/auth/sign-in/campaign-creator/sms-verification',
           query: {
             totpToken: data?.totpToken,
             code: data?.code,
