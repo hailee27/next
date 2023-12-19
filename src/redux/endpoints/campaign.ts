@@ -6,7 +6,6 @@ const injectedRtkApi = api.injectEndpoints({
       query: (queryArg) => {
         const body = new FormData();
         Object.entries(queryArg).forEach(([key, value]) => body.append(key, value));
-
         return {
           url: '/quests',
           method: 'POST',
