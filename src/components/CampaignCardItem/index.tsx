@@ -1,7 +1,7 @@
 import React from 'react';
 import CShadowCard from '../common/CShadowCard';
-import CButtonShadow from '../common/CShadowButton';
 import ArrowDown from '../common/icons/ArrowDown';
+import CButtonClassic from '../common/CButtonClassic';
 
 export default function CampaignCardItem() {
   return (
@@ -23,15 +23,12 @@ export default function CampaignCardItem() {
           </div>
         </div>
         <div className="min-w-[279px] h-[47px]">
-          <CButtonShadow
-            classBgColor="bg-btn-gradation"
-            isShadowStyle={false}
+          <CButtonClassic
+            customClassName="!bg-btn-gradation !text-[14px] !text-main-text"
             tagLabel="即時抽選"
-            textClass="text-[14px] text-main-text"
             title="キャンペーンの詳細をみる"
             withIcon={{
               position: 'right',
-              parentJustify: 'justify-center',
               icon: <ArrowDown className="rotate-[-90deg]" />,
             }}
           />

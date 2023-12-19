@@ -1,6 +1,5 @@
 import CampaignCardItem from '@/components/CampaignCardItem';
 import CampaignRewardCardItem from '@/components/CampaignRewardCardItem';
-import CButtonShadow from '@/components/common/CShadowButton';
 import CShadowCard from '@/components/common/CShadowCard';
 import ArrowDown from '@/components/common/icons/ArrowDown';
 import ArrowUpRightFormIcon from '@/components/common/icons/ArrowUpRightFormIcon';
@@ -8,6 +7,7 @@ import CalendarIcon from '@/components/common/icons/CalendarIcon';
 import YenIcon from '@/components/common/icons/YenIcon';
 import Image from 'next/image';
 import { useState } from 'react';
+import CButtonShadow from '@/components/common/CButtonShadow';
 import CampaignRewardModal from './CampaignRewardModal';
 
 // eslint-disable-next-line max-lines-per-function
@@ -116,7 +116,6 @@ export default function CampaignDetail() {
                 title="報酬一覧をみる"
                 withIcon={{
                   position: 'right',
-                  parentJustify: 'justify-center',
                   icon: <ArrowDown className="rotate-[-90deg]" />,
                 }}
               />
@@ -204,7 +203,6 @@ export default function CampaignDetail() {
               title="報酬を受け取る"
               withIcon={{
                 position: 'right',
-                parentJustify: 'justify-center',
                 icon: <ArrowDown className="rotate-[-90deg]" />,
               }}
             />
@@ -234,7 +232,6 @@ export default function CampaignDetail() {
               title="キャンペーンの一覧をみる"
               withIcon={{
                 position: 'right',
-                parentJustify: 'justify-center',
                 icon: <ArrowDown className="rotate-[-90deg]" />,
               }}
             />

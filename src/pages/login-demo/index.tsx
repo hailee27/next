@@ -7,7 +7,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import CampaignCardItem from '@/components/CampaignCardItem';
 import CampaignRewardCardItem from '@/components/CampaignRewardCardItem';
-import CButtonShadow from '@/components/common/CShadowButton';
+import CButtonShadow from '@/components/common/CButtonShadow';
 import CShadowCard from '@/components/common/CShadowCard';
 import MainFooter from '@/components/layout/_core/MainFooter';
 import MainHeader from '@/components/layout/_core/MainHeader';
@@ -105,7 +105,6 @@ export default function Login() {
 
   return (
     <div>
-      <MainHeader />
       <div className="h-6" />
       <div className="w-[300px] h-[66px]">
         <CButtonShadow onClick={() => signIn('tiktok')} title=" Sign in Tiktok NextAuth" type="button" />
@@ -201,7 +200,6 @@ export default function Login() {
       <div className="h-6" />
       <CampaignRewardCardItem />
       <div className="h-6" />
-      <MainFooter />
     </div>
   );
 }

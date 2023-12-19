@@ -53,6 +53,7 @@ const config: Config = {
         xl: { min: '1280px' },
         xxl: { min: '1512px' },
         fhd: { min: '1920px' },
+        'mb-h': { raw: '(max-height: 767px)' },
       },
     },
   },

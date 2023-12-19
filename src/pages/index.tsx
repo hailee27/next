@@ -1,5 +1,5 @@
 import CampaignCardItem from '@/components/CampaignCardItem';
-import CButtonShadow from '@/components/common/CShadowButton';
+import CButtonShadow from '@/components/common/CButtonShadow';
 import ArrowDown from '@/components/common/icons/ArrowDown';
 import FileIcon from '@/components/common/icons/FileIcon';
 import SearchIcon from '@/components/common/icons/SearchIcon';
@@ -18,7 +18,6 @@ export default function Home() {
               title="キャンペーンの一覧をみる"
               withIcon={{
                 position: 'left',
-                parentJustify: 'justify-center',
                 icon: <SearchIcon />,
               }}
             />
@@ -31,7 +30,6 @@ export default function Home() {
               title="キャンペーンの一覧をみる"
               withIcon={{
                 position: 'left',
-                parentJustify: 'justify-center',
                 icon: <FileIcon />,
               }}
             />
@@ -68,7 +66,6 @@ export default function Home() {
               title="キャンペーンの一覧をみる"
               withIcon={{
                 position: 'right',
-                parentJustify: 'justify-center',
                 icon: <ArrowDown className="rotate-[-90deg]" />,
               }}
             />

@@ -1,10 +1,10 @@
-import CButtonShadow from '@/components/common/CShadowButton';
 import BarIcon from '@/components/common/icons/BarIcon';
 import XIcon from '@/components/common/icons/XIcon';
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 
 import Image from 'next/image';
+import CButtonShadow from '@/components/common/CButtonShadow';
 
 const MainNavigation = [
   {
@@ -53,8 +53,8 @@ export default function MainHeader() {
     }
   }, [isOpenMenu]);
   return (
-    <div className="font-notoSans sticky z-[100] top-0 bg-white">
-      <div className="h-[64px] px-[20px] flex justify-between items-center w-full  border-t-[2px] border-b-[2px] border-[#333] border-solid ">
+    <div className="font-notoSans sticky z-[999] top-0 bg-white">
+      <div className="h-[64px] px-[20px] flex justify-between items-center w-full  border-t-[2px] border-b-[2px] border-[#333] border-solid">
         <div className="w-[81px] h-[24px]">
           <Image
             alt="footer logo"
@@ -65,7 +65,7 @@ export default function MainHeader() {
             width="0"
           />
         </div>
-        <div className="w-[42px] h-[42px]  ">
+        <div className="w-[42px] h-[42px]">
           <CButtonShadow
             classBgColor="bg-white"
             classRounded="rounded-[4px]"
@@ -73,7 +73,7 @@ export default function MainHeader() {
             onClick={() => {
               setIsOpenMenu(true);
             }}
-            shadowWidth={2}
+            shadowSize="small"
             withIcon={{
               position: 'right',
               icon: <BarIcon />,
@@ -101,13 +101,13 @@ export default function MainHeader() {
         <div
           aria-hidden="true"
           className={clsx(
-            ' bg-white  w-[302px] border-[2px] border-[#333] border-r-[0px] absolute z-[1001]  duration-500 transition-all',
+            ' bg-white  w-[302px]  mb-h:h-[100vh] h-[75vh] border-[2px] border-[#333] border-r-[0px] absolute z-[1001]  duration-500 transition-all  py-[88px] pb-[10px] px-[48px]',
             isOpenMenu ? ' right-0 top-0' : ' right-[-500px] top-0'
           )}
           onClick={(e) => e.stopPropagation()}
         >
-          <div className=" py-[88px] px-[48px]">
-            <div className="w-[42px] h-[42px] absolute right-[20px] top-[11px] ">
+          <div className="w-full h-full overflow-y-auto pb-[70px]">
+            <div className="w-[42px] h-[42px] absolute right-[20px] top-[11px] z-[1111] ">
               <CButtonShadow
                 classBgColor="bg-white"
                 classRounded="rounded-[4px]"
@@ -115,7 +115,7 @@ export default function MainHeader() {
                 onClick={() => {
                   setIsOpenMenu(false);
                 }}
-                shadowWidth={2}
+                shadowSize="small"
                 withIcon={{
                   position: 'right',
                   icon: <XIcon />,
@@ -137,7 +137,7 @@ export default function MainHeader() {
               ))}
             </div>
             <div className="my-[40px] h-[53px]">
-              <CButtonShadow onClick={() => {}} title="ログイン" type="button" />
+              <CButtonShadow onClick={() => {}} title="ログイン" />
             </div>
             <div className="flex flex-col gap-[16px]">
               {SubNavigation.map((i) => (

@@ -1,9 +1,9 @@
 import CampaignRewardCardItem from '@/components/CampaignRewardCardItem';
-import CButtonShadow from '@/components/common/CShadowButton';
 import XCricleIcon from '@/components/common/icons/XCricleIcon';
 import XMarkIcon from '@/components/common/icons/XMarkIcon';
 import { Modal } from 'antd';
 import { useEffect } from 'react';
+import CButtonClassic from '@/components/common/CButtonClassic';
 import styles from './styles.module.scss';
 
 interface CampaignRewardModalProps {
@@ -44,15 +44,13 @@ export default function CampaignRewardModal({ isOpen, onCancel }: CampaignReward
         <div className="h-[40px]" />
         <div className="flex justify-center">
           <div className="w-[139px] h-[47px]">
-            <CButtonShadow
-              classBgColor="bg-[#FFF]"
-              isShadowStyle={false}
+            <CButtonClassic
+              customClassName="!bg-[#FFF] !text-main-text !text-[14px] 
+              !font-bold"
               onClick={onCancel}
-              textClass="text-main-text text-[14px] font-bold"
               title="閉じる"
               withIcon={{
                 position: 'left',
-                parentJustify: 'justify-center',
                 icon: <XMarkIcon />,
               }}
             />
