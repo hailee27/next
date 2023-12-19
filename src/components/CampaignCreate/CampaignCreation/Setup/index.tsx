@@ -15,6 +15,7 @@ function Setup() {
 
   return (
     <div className="mt-[36px] border-2 border-[#2D3648] rounded-[4px] p-[40px]">
+      {/* <input type="file" onChange={(e) => console.log(e.target.value)} /> */}
       <Form form={form} name="setUp" scrollToFirstError={{ behavior: 'smooth', inline: 'center', block: 'center' }}>
         <InputLabel
           label={

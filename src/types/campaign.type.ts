@@ -72,15 +72,11 @@ export type TypeResponseFormCampaign = {
   startDate?: string;
   endDate?: string;
   noDate?: boolean;
-  requireTask?: {
-    platForm?: string;
-    type?: string;
-    userFollow?: string;
-  };
+  requireTask?: TaskType;
   optionTasks?: {
     task1: TaskType;
   };
-  typeWinner?: string;
+  typeWinner?: 'AUTO_PRIZEE_DRAW' | 'MANUAL_SELECTION';
   numberOfParticipants?: number;
   compensationSummary?: string;
   reWard?: {
