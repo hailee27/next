@@ -1,0 +1,24 @@
+.shadowCardContainer {
+  :global {
+    .shadowCardInner {
+      @apply pl-[6px] pt-[6px];
+    }
+    .card-inner {
+      @apply relative w-full h-full;
+    }
+    .card-shadow {
+      @apply absolute w-full h-full top-[0px] left-[0px] bg-[#333] rounded-[16px];
+    }
+    .card-content {
+      @apply border-[2px] border-[#333] rounded-[16px] bg-white translate-x-[-6px] translate-y-[-6px] transition-all duration-200 overflow-hidden;
+    }
+    @media (hover: hover) {
+      .shadowCardInner:hover .card-content {
+        @apply cursor-pointer translate-x-0 -translate-y-0;
+      }
+    }
+    .shadowCardInner .card-content.shadow-card--tounched {
+      @apply cursor-pointer translate-x-0 -translate-y-0;
+    }
+  }
+}

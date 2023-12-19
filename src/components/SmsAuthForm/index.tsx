@@ -35,11 +35,25 @@ export default function SmsAuthForm({ onSubmitCode }: IComponentProps) {
           <Form.Item key={i} name={`sms-item-${i}`} noStyle>
             <Input
               className={styles.input}
+              id={`smsVerifyFormItem-${i}`}
               maxLength={1}
+              onChange={(event) => {
+                const { maxLength, id, value } = event.target;
+                const inputIndex = id.split('-')?.[1];
+                if (value?.length >= maxLength) {
+                  if (parseInt(inputIndex, 10) < 4) {
+                    const nextInput = document.getElementById(`smsVerifyFormItem-${parseInt(inputIndex, 10) + 1}`);
+
+                    if (nextInput !== null) {
+                      nextInput.focus();
+                    }
+                  }
+                }
+              }}
               onKeyDown={(event) => {
                 const { key } = event;
                 const numberKey = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
-                if ([...numberKey, 'Backspace'].find((item) => item === key) === undefined) {
+                if ([...numberKey, 'Backspace', 'Tab'].find((item) => item === key) === undefined) {
                   event.preventDefault();
                 }
               }}

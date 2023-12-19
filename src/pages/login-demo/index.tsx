@@ -5,10 +5,15 @@
 /* eslint-disable no-console */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import axios from 'axios';
-import React, { useState } from 'react';
+import CampaignCardItem from '@/components/CampaignCardItem';
+import CampaignRewardCardItem from '@/components/CampaignRewardCardItem';
+import CButtonShadow from '@/components/common/CButtonShadow';
+import CShadowCard from '@/components/common/CShadowCard';
+import MainFooter from '@/components/layout/_core/MainFooter';
+import MainHeader from '@/components/layout/_core/MainHeader';
+import { tiktokProvider } from '@/utils/social-provider-configs/tiktok.provider';
 import { signIn, useSession } from 'next-auth/react';
-import LoginSocialTwitter, { ObjectType } from '@/components/auth/LoginSocialTwitter';
+import { useCallback, useEffect, useState } from 'react';
 
 export default function Login() {
   const { data: session } = useSession();
@@ -26,6 +31,29 @@ export default function Login() {
       code_challenge_method: 'S256',
       scope: ['users.read', 'tweet.read', 'follows.read', 'follows.write'].join(' '), // add/remove scopes as needed
     };
+    const qs = new URLSearchParams(options).toString();
+    const url = `${rootUrl}?${qs}`;
+    const width = 450;
+    const height = 730;
+    const left = window.screen.width / 2 - width / 2;
+    const top = window.screen.height / 2 - height / 2;
+    window.open(
+      url,
+      'twitter',
+      `menubar=no,location=no,resizable=no,scrollbars=no,status=no, width=${width}, height=${height}, top=${top}, left=${left}`
+    );
+  }
+
+  function getTiktokOauthUrl() {
+    const rootUrl = 'https://www.tiktok.com/v2/auth/authorize/';
+    const options = {
+      client_key: tiktokProvider?.clientKey,
+      scope: ['user.info.basic', 'user.info.profile'].join(','),
+      redirect_uri: 'https://www.youtube.com/',
+      state: 'state_tiktok',
+      response_type: 'code',
+    };
+
     const qs = new URLSearchParams(options).toString();
     const url = `${rootUrl}?${qs}`;
     const width = 450;
@@ -61,15 +89,51 @@ export default function Login() {
   // };
 
   console.log('session, provider, profile', session, provider, profile);
+
+  const onChangeLocalStorage = useCallback(() => {
+    window.removeEventListener('storage', onChangeLocalStorage, false);
+    const code = localStorage.getItem('test_callback');
+    if (code) {
+      console.log('code', code);
+      // localStorage.removeItem('test_callback');
+    }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('storage', onChangeLocalStorage, false);
+  }, []);
+
   return (
     <div>
-      <div onClick={getTwitterOauthUrl}>
-        <p>{' twitter'}</p>
+      <div className="h-6" />
+      <div className="w-[300px] h-[66px]">
+        <CButtonShadow onClick={() => signIn('tiktok')} title=" Sign in Tiktok NextAuth" type="button" />
       </div>
-      <button onClick={() => signIn('twitter')} type="button">
-        Sign in
-      </button>
-      <LoginSocialTwitter
+      <div className="h-6" />
+      <div className="w-[300px] h-[66px]">
+        <CButtonShadow onClick={() => signIn('discord')} title=" Sign in discord NextAuth" type="button" />
+      </div>
+      <div className="h-6" />
+      <div className="w-[300px] h-[66px]">
+        <CButtonShadow onClick={() => signIn('twitter')} title=" Sign in twitter NextAuth" type="button" />
+      </div>
+      <div className="h-6" />
+      <div className="w-[300px] h-[66px]">
+        <CButtonShadow onClick={() => signIn('line')} title=" Sign in LINE NextAuth" type="button" />
+      </div>
+      <div className="h-6" />
+      <div className="w-[300px] h-[66px]">
+        <CButtonShadow
+          onClick={(e) => {
+            getTiktokOauthUrl();
+          }}
+          title=" Sign in tiktok"
+          type="button"
+        />
+      </div>
+
+      <div className="h-6" />
+      {/* <LoginSocialTwitter
         client_id={process?.env?.NEXT_PUBLIC_TWITTER_CLIENT_ID_KEY || ''}
         onLoginStart={() => {
           console.log('start auth');
@@ -88,8 +152,60 @@ export default function Login() {
         // client_secret={process.env.REACT_APP_TWITTER_V2_APP_SECRET || ''}
         redirect_uri="https%3A%2F%2Fa9dd-14-248-82-148.ngrok-free.app%2Flogin"
       >
-        login with tw
-      </LoginSocialTwitter>
+        <div className="w-[300px] h-[66px]">
+          <CButtonShadow title="custom login with tw" />
+        </div>
+      </LoginSocialTwitter> */}
+      <div className="h-6" />
+      <div className="w-[300px] h-[66px]">
+        <CButtonShadow
+          classBgColor="bg-[#fff]"
+          classShadowColor="bg-[#333]"
+          textClass="text-[#333] text-[14px]  font-inner"
+          title="Demo 1"
+        />
+      </div>
+      <div className="h-6" />
+
+      <div className="w-[300px] h-[66px]">
+        <CButtonShadow
+          classBgColor="bg-btn-gradation"
+          classShadowColor="bg-[#333]"
+          textClass="text-[#333] text-[16px] font-dmSans"
+          title="Demo 2"
+        />
+      </div>
+      {/* <div>
+        <button
+          onClick={() => {
+            const width = 450;
+            const height = 730;
+            const left = window.screen.width / 2 - width / 2;
+            const top = window.screen.height / 2 - height / 2;
+            window.open(
+              'http://www.localhost:3000/login-demo/callback',
+              'twitter',
+              `width=${width}, height=${height}, top=${top}, left=${left}`
+            );
+          }}
+          type="button"
+        >
+          implement
+        </button>
+      </div> */}
+      <div className="h-6" />
+      <div className="flex gap-[16px] ">
+        <CampaignCardItem />
+      </div>
+      <div className="h-6" />
+      <CampaignRewardCardItem />
+      <div className="h-6" />
     </div>
   );
 }
+
+// Twitter
+// Tik Tok
+// Discord
+// LINE
+// Telegram

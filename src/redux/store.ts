@@ -11,8 +11,7 @@ import {
   REGISTER,
   REHYDRATE,
 } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
-
+import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
 import { createWrapper } from 'next-redux-wrapper';
 import { api } from './api';
 import testSlice from './slices/test.slice';
@@ -43,7 +42,7 @@ const makeStore = () => {
   }
   const persistConfig = {
     key: 'root',
-    storage,
+    storage: createWebStorage('local'),
     whitelist: ['auth'],
   };
 

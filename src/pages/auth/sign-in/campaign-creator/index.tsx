@@ -8,6 +8,9 @@ import { useEffect, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
+import { SMS_CASE } from '@/utils/constant/enums';
+import { getErrorMessage } from '@/utils/func/getErrorMessage';
+import toastMessage from '@/utils/func/toastMessage';
 /*
 dvhai@yopmail.com
 12345678
@@ -32,6 +35,7 @@ export default function CampaignCreatorSigninPage() {
 
   function onChange(token: string | null) {
     if (token) {
+      console.log('token', token);
       setHasCaptchaToken(true);
     } else {
       setHasCaptchaToken(false);
@@ -48,15 +52,16 @@ export default function CampaignCreatorSigninPage() {
 
       if (data?.totpToken && data?.code) {
         router.push({
-          pathname: '/auth/sign-in/campaign-creator/sms-authentication',
+          pathname: '/auth/sms-verification',
           query: {
             totpToken: data?.totpToken,
             code: data?.code,
+            case: SMS_CASE.LOGIN_VERIFICATION,
           },
         });
       }
     } catch (err) {
-      console.log(err);
+      toastMessage(getErrorMessage(err), 'error');
     }
   };
 

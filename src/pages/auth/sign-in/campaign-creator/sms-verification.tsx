@@ -3,17 +3,26 @@ import SmsAuthForm from '@/components/SmsAuthForm';
 import React from 'react';
 import { useRouter } from 'next/router';
 import { useSmsAuthMutation } from '@/redux/endpoints/auth';
+import { SMS_CASE } from '@/utils/constant/enums';
+import { getErrorMessage } from '@/utils/func/getErrorMessage';
+import toastMessage from '@/utils/func/toastMessage';
 
-export default function SMSAuthentication() {
+export default function SMSVerification() {
   const { query } = useRouter();
   const [smsAuth] = useSmsAuthMutation();
   const handleSubmitSMS = async (code: string) => {
-    if (code === query?.code && query?.totpToken) {
-      const data = await smsAuth({
-        code,
-        token: typeof query?.totpToken === 'string' ? query?.totpToken : '',
-      }).unwrap();
-      console.log(data);
+    try {
+      if (query?.code && query?.totpToken) {
+        if (query?.case === SMS_CASE.LOGIN_VERIFICATION) {
+          const data = await smsAuth({
+            code,
+            token: typeof query?.totpToken === 'string' ? query?.totpToken : '',
+          }).unwrap();
+          console.log(data);
+        }
+      }
+    } catch (err) {
+      toastMessage(getErrorMessage(err), 'error');
     }
   };
   return (
