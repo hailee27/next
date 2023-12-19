@@ -1,0 +1,21 @@
+.customeTextEditor {
+  :global {
+    .ql-toolbar.ql-snow {
+      padding: 0;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      border: 2px solid #cbd2e0;
+      border-radius: 6px 6px 0 0;
+    }
+    .ql-container.ql-snow {
+      height: 380px;
+      border: 2px solid #cbd2e0;
+      border-radius: 0 0 6px 6px;
+      border-top: none;
+    }
+
+    // .quill {
+    // }
+  }
+}

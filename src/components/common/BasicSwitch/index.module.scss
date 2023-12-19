@@ -1,0 +1,29 @@
+.customeSwitch {
+  :global {
+    .ant-switch {
+      height: 24px !important;
+      min-width: 40px !important;
+    }
+    .ant-switch .ant-switch-inner {
+      border: 2px solid #2d3648;
+    }
+    .ant-switch .ant-switch-handle {
+      width: 16px;
+      height: 16px;
+      top: 4px;
+      inset-inline-start: 4px;
+    }
+    .ant-switch .ant-switch-handle::before {
+      background-color: #2d3648;
+    }
+    .ant-switch.ant-switch-checked .ant-switch-handle {
+      inset-inline-start: calc(100% - 20px);
+    }
+    .ant-switch.ant-switch-checked {
+      background: #71ff6f !important;
+    }
+    .ant-switch:hover:not(.ant-switch-disabled) {
+      background-color: #fff;
+    }
+  }
+}

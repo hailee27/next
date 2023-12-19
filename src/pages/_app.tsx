@@ -1,9 +1,8 @@
 import MegaHead from '@/components/MegaHead';
-import CampainLayout from '@/components/layout/CampainLayout';
 import MainLayout from '@/components/layout/MainLayout';
+import CampaignLayout from '@/components/layout/CampaignLayout';
 import SignInLayout from '@/components/layout/SignInLayout';
 import { wrapper } from '@/redux/store';
-import '@/styles/globals.css';
 import { NextPage } from 'next';
 import { SessionProvider } from 'next-auth/react';
 import type { AppProps } from 'next/app';
@@ -12,6 +11,8 @@ import { useRouter } from 'next/router';
 import { ReactElement } from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+
+import '@/styles/globals.css';
 
 const dmSans = DM_Sans({ subsets: ['latin'], variable: '--font-dm-sans', display: 'swap' });
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
@@ -29,8 +30,8 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
   const router = useRouter();
   const { store, props } = wrapper.useWrappedStore(pageProps);
   let getLayout = Component.getLayout ?? ((page) => <MainLayout>{page}</MainLayout>);
-  if (router.pathname.startsWith('/campain')) {
-    getLayout = (page) => <CampainLayout>{page}</CampainLayout>;
+  if (router.pathname.startsWith('/campaign')) {
+    getLayout = (page) => <CampaignLayout>{page}</CampaignLayout>;
   }
   if (router.pathname.startsWith('/auth/sign-in/campaign-creator')) {
     getLayout = (page) => <SignInLayout>{page}</SignInLayout>;
