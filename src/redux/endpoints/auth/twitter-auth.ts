@@ -5,7 +5,7 @@ export default function twitterAuth(build: EndpointBuilder<BaseQueryFn, string, 
   return build.mutation<TwitterAuthResponse, TwitterAuthRequest>({
     query(body) {
       return {
-        url: 'auth/login/email',
+        url: 'auth/login/twitter',
         method: 'POST',
         body,
       };

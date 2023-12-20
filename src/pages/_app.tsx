@@ -45,7 +45,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
       <Provider store={store}>
         <PersistGate loading={null} persistor={store.persistorData}>
           <main
-            className={`${notoSans.className} ${dmSans.variable} ${inter.variable}  ${mPlus1.variable} ${notoSans.variable} ${montserrat.variable} font-sans`}
+            className={`${notoSans.className}  ${dmSans.variable} ${inter.variable}  ${mPlus1.variable} ${notoSans.variable} ${montserrat.variable}`}
           >
             {getLayout(<Component {...props} />)}
           </main>

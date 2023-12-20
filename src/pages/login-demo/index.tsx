@@ -11,7 +11,10 @@ import CButtonShadow from '@/components/common/CButtonShadow';
 import CShadowCard from '@/components/common/CShadowCard';
 import MainFooter from '@/components/layout/_core/MainFooter';
 import MainHeader from '@/components/layout/_core/MainHeader';
+import { useTwitterAuthMutation } from '@/redux/endpoints/auth';
+import toastMessage from '@/utils/func/toastMessage';
 import { tiktokProvider } from '@/utils/social-provider-configs/tiktok.provider';
+import axios from 'axios';
 import { signIn, useSession } from 'next-auth/react';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -19,6 +22,8 @@ export default function Login() {
   const { data: session } = useSession();
   const [provider, setProvider] = useState('');
   const [profile, setProfile] = useState<any>();
+  const [twitterAuth] = useTwitterAuthMutation();
+
   function getTwitterOauthUrl() {
     const rootUrl = 'https://twitter.com/i/oauth2/authorize';
     const options = {
@@ -88,23 +93,85 @@ export default function Login() {
   //   newWindow?.focus();
   // };
 
-  console.log('session, provider, profile', session, provider, profile);
+  const handleClickAuthTwitter = async () => {
+    try {
+      const resp = await axios.get('http://localhost:8080/auth/twitter');
+      if (resp?.data?.redirectUrl) {
+        localStorage.setItem('oauthRequestTokenSecret', resp?.data?.oauthRequestTokenSecret);
+        localStorage.setItem('oauthRequestToken', resp?.data?.oauthRequestToken);
+        const width = 576;
+        const height = 730;
+        const left = window.screen.width / 2 - width / 2;
+        const top = window.screen.height / 2 - height / 2;
+        window.open(
+          resp?.data?.redirectUrl,
+          'Twitter Authentication',
+          ` width=${width}, height=${height}, top=${top}, left=${left}`
+        );
 
-  const onChangeLocalStorage = useCallback(() => {
-    window.removeEventListener('storage', onChangeLocalStorage, false);
-    const code = localStorage.getItem('test_callback');
-    if (code) {
-      console.log('code', code);
-      // localStorage.removeItem('test_callback');
+        // menubar=no,location=no,resizable=no,scrollbars=no,status=no,
+      } else {
+        console.log('auth faield');
+      }
+      // localStorage.setItem('test', '!2312313');
+      // window.open(
+      //   '/auth/callback/twitter',
+      //   'Twitter Authentication',
+      //   ` width=${width}, height=${height}, top=${top}, left=${left}`
+      // );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const onChangeLocalStorage = useCallback(async () => {
+    try {
+      const storageData = JSON.parse(localStorage.getItem('twitter_callback_data') || '{}');
+      if (storageData?.error) {
+        toastMessage('Something went wrong', 'error');
+        return;
+      }
+      if (storageData?.data) {
+        window.removeEventListener('storage', onChangeLocalStorage, false);
+        console.log('twitter data', storageData?.data);
+        if (storageData?.data?.id && storageData?.data?.email) {
+          const data = await twitterAuth({
+            twitterId: storageData?.data?.id?.toString(),
+            email: storageData?.data?.email,
+          }).unwrap();
+          console.log(data);
+        }
+      }
+    } catch (error) {
+      console.log(error);
     }
   }, []);
+  // finally {
+  //   localStorage.removeItem('twitter_callback_data');
+  //   localStorage.removeItem('oauthRequestToken');
+  //   localStorage.removeItem('oauthRequestTokenSecret');
+  // }
 
   useEffect(() => {
     window.addEventListener('storage', onChangeLocalStorage, false);
+    return () => {
+      window.removeEventListener('storage', onChangeLocalStorage, false);
+    };
   }, []);
 
   return (
     <div>
+      <div className="h-6" />
+      <div className="w-[300px] h-[66px]">
+        <CButtonShadow
+          onClick={() => {
+            handleClickAuthTwitter?.();
+          }}
+          title="Sign in 3 legged auth twitter"
+          type="button"
+        />
+      </div>
+
       <div className="h-6" />
       <div className="w-[300px] h-[66px]">
         <CButtonShadow onClick={() => signIn('tiktok')} title=" Sign in Tiktok NextAuth" type="button" />

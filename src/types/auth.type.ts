@@ -1,3 +1,5 @@
+import { UserRole } from './user.type';
+
 export interface User {
   id: number;
   email: string;
@@ -41,4 +43,10 @@ export interface TwitterAuthResponse {
   accessToken: string;
   refreshToken: string;
   user: User;
+}
+
+export interface TwitterSignupRequest {
+  twitterId: string;
+  email: string;
+  role: UserRole;
 }
