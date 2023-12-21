@@ -13,19 +13,19 @@ function ReWard() {
     <div className="border-2 border-[#2D3648] rounded-[4px] mt-[36px] p-[40px]">
       <Form form={form} name="reWard">
         <SelectLabel
-          initialValue="instantWin"
+          initialValue="AUTO_PRIZEE_DRAW"
           label="当選者選定方法 ※必須"
           name="typeWinner"
           options={[
-            { value: 'instantWin', label: 'インスタントウィン' },
-            { value: 'manuallyInform', label: '手動で参加者に報酬を案内する' },
+            { value: 'AUTO_PRIZEE_DRAW', label: 'インスタントウィン' },
+            { value: 'MANUAL_SELECTION', label: '手動で参加者に報酬を案内する' },
           ]}
           rules={[{ required: true, message: '' }]}
         />
-        {typeWinnerWatch === 'instantWin' && <InstantWin />}
+        {typeWinnerWatch === 'AUTO_PRIZEE_DRAW' && <InstantWin />}
         {/* <ListReWard /> */}
         <div className="flex flex-col space-y-[24px] border-t-2 border-[#2D3648] mt-[24px]">
-          {typeWinnerWatch === 'manuallyInform' && (
+          {typeWinnerWatch === 'MANUAL_SELECTION' && (
             <div className="mt-[24px] py-[24px]">
               <span className="font-semibold pb-[8px] block">報酬要約文 ※必須。全角100文字以内</span>
               <Form.Item name="compensationSummary" rules={[{ required: true, message: '' }]}>
@@ -33,7 +33,7 @@ function ReWard() {
               </Form.Item>
             </div>
           )}
-          <div className={`flex space-x-[24px] ${typeWinnerWatch === 'instantWin' && 'pt-[48px]'}`}>
+          <div className={`flex space-x-[24px] ${typeWinnerWatch === 'AUTO_PRIZEE_DRAW' && 'pt-[48px]'}`}>
             <BasicButton className="w-[84px] h-[56px]" type="primary">
               戻る
             </BasicButton>

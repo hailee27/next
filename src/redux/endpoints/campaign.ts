@@ -5,12 +5,14 @@ const injectedRtkApi = api.injectEndpoints({
     postQuests: build.mutation<QuestsResponse, QuestsParams>({
       query: (queryArg) => {
         const body = new FormData();
-        Object.entries(queryArg).forEach(([key, value]) => body.append(key, value));
-
+        Object.entries(queryArg).forEach(([key, value]) => body.append(`${key}`, value));
         return {
           url: '/quests',
           method: 'POST',
           body,
+          // headers: {
+          //   'Content-Type': 'multipart/form-data;',
+          // },
         };
       },
     }),

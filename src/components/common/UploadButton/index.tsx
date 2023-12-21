@@ -25,9 +25,9 @@ const UploadButton = ({
       reader.onerror = (error) => reject(error);
     });
 
-  const handleChange: UploadProps['onChange'] = ({ fileList: newlist }) => {
+  const handleChange: UploadProps['onChange'] = ({ fileList: newlist, file }) => {
     setFileList(newlist);
-    onChange?.(newlist);
+    onChange?.(file.originFileObj);
   };
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
@@ -43,7 +43,13 @@ const UploadButton = ({
   return (
     <div className={`${combinedClassName}`}>
       <ImgCrop {...props}>
-        <Upload fileList={fileList} listType="picture-card" onChange={handleChange} onPreview={handlePreview}>
+        <Upload
+          fileList={fileList}
+          listType="picture-card"
+          onChange={handleChange}
+          onPreview={handlePreview}
+          onRemove={() => onChange?.(null)}
+        >
           {fileList.length > 0 ? '' : <span className="text-[16px] font-semibold text-white">画像を選択する</span>}
         </Upload>
       </ImgCrop>

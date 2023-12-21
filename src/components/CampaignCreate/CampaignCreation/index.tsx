@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import type { TabsProps } from 'antd';
-import { Form } from 'antd';
+import { Form, Spin } from 'antd';
 import { useRouter } from 'next/router';
 import BasicTabs from '@/components/common/BasicTabs';
 import BasicButton from '@/components/common/BasicButton';
 import { usePostQuestsMutation } from '@/redux/endpoints/campaign';
 import { TypeResponseFormCampaign } from '@/types/campaign.type';
+import toastMessage from '@/utils/func/toastMessage';
 import ReWard from './ReWard';
 import Confirmation from './Confirmation';
 import Setup from './Setup';
@@ -36,13 +37,16 @@ const items: TabsProps['items'] = [
 function CampaignCreation() {
   const router = useRouter();
   const [tab, setTab] = useState<string>('1');
-  const [trigger] = usePostQuestsMutation();
+  const [trigger, { isLoading }] = usePostQuestsMutation();
 
   return (
     <Form.Provider
       onFormFinish={(name, { forms }) => {
         let queryParams: TypeResponseFormCampaign = {};
         setTab((prev) => String(Number(prev) + 1));
+        if (tab === '4') {
+          setTab('4');
+        }
         window.scrollTo({ behavior: 'smooth', top: 0 });
         if (name === 'reWard') {
           router.push({ query: { query: JSON.stringify({ typeWinner: forms[name].getFieldValue('typeWinner') }) } });
@@ -53,41 +57,53 @@ function CampaignCreation() {
             ...forms?.tasks?.getFieldsValue(),
             ...forms?.reWard?.getFieldsValue(),
           };
-
           trigger({
             title: queryParams.campainName ?? '',
             category: queryParams.category ?? '',
             dontSetExpiredTime: String(queryParams.noDate) ?? false,
             startTime: queryParams.startDate ?? '',
-            expiredTime: queryParams.endDate ?? '',
+            expiredTime: queryParams.endDate ?? ' ',
             tasks: JSON.stringify(
               Object.values(queryParams?.optionTasks ?? {}).map((e) => ({
                 type: e.platForm,
                 taskActionType: e?.type ?? 'NONE',
                 taskTemplate: { name: e },
               }))
-              // .concat({
-              //   type: 'twitter',
-              //   taskActionType: queryParams.requireTask?.type,
-              //   taskTemplate: { name: queryParams.requireTask },
-              // })
             ),
-            methodOfselectWinners: queryParams.typeWinner ?? '',
+            methodOfselectWinners: queryParams.typeWinner ?? 'AUTO_PRIZEE_DRAW',
             totalNumberOfUsersAllowedToWork: String(queryParams.numberOfParticipants),
             questReward: JSON.stringify(
-              Object.values(queryParams?.reWard ?? {}).map((e) => ({
-                type: e.receivingMethod.amazon ? 'AMAZON_GIFT' : 'PAYPAY_GIFT',
-                numbers: e.money,
-                order: e.tiketWinning,
-              }))
+              [
+                {
+                  type: queryParams.requireTask?.platForm,
+                  taskActionType: queryParams.requireTask?.type,
+                  taskTemplate: { name: queryParams.requireTask },
+                },
+              ].concat(
+                Object.values(queryParams?.optionTasks ?? {}).map((e) => ({
+                  type: e.platForm,
+                  taskActionType: e?.type ?? 'NONE',
+                  taskTemplate: { name: e },
+                }))
+              )
             ),
             numberOfPrizes: String(queryParams.totalTicket),
             totalPrizeValue: String(queryParams.totalReWard),
             settingForNotWin: String(queryParams.statusCampaign) ?? false,
             description: queryParams.explanatoryText ?? '',
-            note: 'NONE',
-            questImage: queryParams.thumbnail[0],
-          });
+            note: queryParams.compensationSummary ?? 'NONE',
+            questImage: queryParams.thumbnail,
+          })
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            .then((res: any) => {
+              if (res?.error?.status === 400) {
+                toastMessage(res?.error?.data?.error, 'error');
+              } else {
+                router.push('/campaign/list');
+                toastMessage('succses', 'success');
+              }
+            })
+            .catch((err) => toastMessage(err.message, 'error'));
         }
       }}
     >
@@ -104,7 +120,9 @@ function CampaignCreation() {
         </div>
       </div>
       <div className="px-[48px] pt-[28px] pb-[55px]">
-        <BasicTabs activeKey={tab} items={items} onChange={(e) => setTab(e)} />
+        <Spin spinning={isLoading}>
+          <BasicTabs activeKey={tab} items={items} onChange={(e) => setTab(e)} />
+        </Spin>
       </div>
     </Form.Provider>
   );
