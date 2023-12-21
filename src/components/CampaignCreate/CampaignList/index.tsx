@@ -1,9 +1,10 @@
-import BasicButton from '@/components/common/BasicButton';
 import BasicTabs from '@/components/common/BasicTabs';
 import React from 'react';
 import type { TabsProps } from 'antd';
 import { Image } from 'antd';
 import { useRouter } from 'next/router';
+import CButtonShadow from '@/components/common/CButtonShadow';
+import FileIcon from '@/components/common/icons/FileIcon';
 import TableAll from './TableAll';
 
 const ListTab = ({ title }: { title: string }) => (
@@ -47,14 +48,26 @@ function CampaignList() {
   ];
   const router = useRouter();
   return (
-    <div>
-      <div className="flex px-[80px] py-[32px] w-full justify-between border-b-2 border-[#2D3648] max-h-[112px]">
+    <div className="px-[48px] pb-[77px]">
+      <div className="flex py-[32px] w-full justify-between border-b-2 border-[#2D3648] max-h-[112px]">
         <span className="text-[32px] font-bold">キャンペーン一覧</span>
-        <BasicButton className="w-[104px] h-[48px]" onClick={() => router.push('/campaign/create')}>
+        {/* <CButtonShadow title="新規作成" /> */}
+        <div className="w-[165px]  h-[56px]">
+          <CButtonShadow
+            classBgColor="bg-main-text"
+            classRounded="rounded-[6px]"
+            classShadowColor="bg-white"
+            onClick={() => router.push('/campaign/create')}
+            shadowSize="normal"
+            title="新規作成"
+            withIcon={{ position: 'left', icon: <FileIcon color="#fff" /> }}
+          />
+        </div>
+        {/* <BasicButton className="w-[104px] h-[48px]" onClick={() => router.push('/campaign/create')}>
           新規作成
-        </BasicButton>
+        </BasicButton> */}
       </div>
-      <div className="px-[48px] pt-[28px]">
+      <div className="pt-[28px]">
         <BasicTabs items={items} />
       </div>
     </div>
