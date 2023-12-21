@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 import { SMS_CASE } from '@/utils/constant/enums';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import toastMessage from '@/utils/func/toastMessage';
+
 /*
 dvhai@yopmail.com
 12345678
@@ -29,7 +30,6 @@ export default function CampaignCreatorSigninPage() {
   });
   const router = useRouter();
   const [login] = useLoginMutation();
-
   const password = watch('password');
   const email = watch('email');
 
@@ -52,6 +52,7 @@ export default function CampaignCreatorSigninPage() {
       console.log(data);
 
       if (data?.totpToken && data?.code) {
+        console.log(data?.code);
         router.push({
           pathname: '/auth/sign-in/campaign-creator/sms-verification',
           query: {
