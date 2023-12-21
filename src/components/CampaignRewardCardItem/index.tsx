@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import CShadowCard from '../common/CShadowCard';
+import CShadowCard from '../common/CCardShadow';
 import ArrowDown from '../common/icons/ArrowDown';
 
 export default function CampaignRewardCardItem() {

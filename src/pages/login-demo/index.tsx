@@ -8,7 +8,7 @@
 import CampaignCardItem from '@/components/CampaignCardItem';
 import CampaignRewardCardItem from '@/components/CampaignRewardCardItem';
 import CButtonShadow from '@/components/common/CButtonShadow';
-import CShadowCard from '@/components/common/CShadowCard';
+import CShadowCard from '@/components/common/CCardShadow';
 import MainFooter from '@/components/layout/_core/MainFooter';
 import MainHeader from '@/components/layout/_core/MainHeader';
 import { useTwitterAuthMutation } from '@/redux/endpoints/auth';

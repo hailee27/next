@@ -3,12 +3,12 @@ import clsx from 'clsx';
 import React, { useEffect, useRef } from 'react';
 import styles from './styles.module.scss';
 
-interface ICShadowCardProps {
+interface ICCardShadowProps {
   onClickCard?: () => void;
   children: JSX.Element;
 }
 
-export default function CShadowCard({ onClickCard, children }: ICShadowCardProps) {
+export default function CCardShadow({ onClickCard, children }: ICCardShadowProps) {
   const cardRef = useRef<HTMLDivElement | null>(null);
 
   const onTouchStart = () => {
@@ -47,6 +47,6 @@ export default function CShadowCard({ onClickCard, children }: ICShadowCardProps
   );
 }
 
-CShadowCard.defaultProps = {
+CCardShadow.defaultProps = {
   onClickCard: () => {},
 };

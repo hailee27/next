@@ -1,14 +1,14 @@
 import CampaignCardItem from '@/components/CampaignCardItem';
 import CampaignRewardCardItem from '@/components/CampaignRewardCardItem';
-import CShadowCard from '@/components/common/CShadowCard';
+import CButtonShadow from '@/components/common/CButtonShadow';
+import CModalWapper from '@/components/common/CModalWapper';
+import CShadowCard from '@/components/common/CCardShadow';
 import ArrowDown from '@/components/common/icons/ArrowDown';
 import ArrowUpRightFormIcon from '@/components/common/icons/ArrowUpRightFormIcon';
 import CalendarIcon from '@/components/common/icons/CalendarIcon';
 import YenIcon from '@/components/common/icons/YenIcon';
 import Image from 'next/image';
 import { useState } from 'react';
-import CButtonShadow from '@/components/common/CButtonShadow';
-import CampaignRewardModal from './CampaignRewardModal';
 
 // eslint-disable-next-line max-lines-per-function
 export default function CampaignDetail() {
@@ -239,7 +239,19 @@ export default function CampaignDetail() {
         </div>
       </div>
       <div className="h-[56px]" />
-      <CampaignRewardModal isOpen={isModalOpen} onCancel={handleCancel} />
+
+      <CModalWapper isOpen={isModalOpen} onCancel={handleCancel}>
+        <div className="h-[60vh] overflow-hidden">
+          <div className="h-full overflow-y-auto flex flex-col gap-[8px] pr-[8px] custom-scroll">
+            <CampaignRewardCardItem />
+            <CampaignRewardCardItem />
+            <CampaignRewardCardItem />
+            <CampaignRewardCardItem />
+            <CampaignRewardCardItem />
+            <CampaignRewardCardItem />
+          </div>
+        </div>
+      </CModalWapper>
     </div>
   );
 }

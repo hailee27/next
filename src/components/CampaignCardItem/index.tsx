@@ -1,5 +1,5 @@
 import React from 'react';
-import CShadowCard from '../common/CShadowCard';
+import CShadowCard from '../common/CCardShadow';
 import ArrowDown from '../common/icons/ArrowDown';
 import CButtonClassic from '../common/CButtonClassic';
 
