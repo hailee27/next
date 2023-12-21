@@ -91,7 +91,7 @@ function CampaignCreation() {
         }
       }}
     >
-      <div className="flex px-[80px] py-[32px] w-full justify-between border-b-2 border-[#2D3648] max-h-[112px]">
+      <div className="flex px-[80px] py-[32px] w-full justify-between border-b-2 border-[#2D3648] max-h-[112px] font-notoSans">
         <span className="text-[32px] font-bold">キャンペーン作成</span>
         <div className="flex space-x-[16px]">
           <BasicButton className="h-[48px]" type="primary">

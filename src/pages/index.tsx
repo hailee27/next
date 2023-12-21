@@ -3,8 +3,10 @@ import CButtonShadow from '@/components/common/CButtonShadow';
 import ArrowDown from '@/components/common/icons/ArrowDown';
 import FileIcon from '@/components/common/icons/FileIcon';
 import SearchIcon from '@/components/common/icons/SearchIcon';
+import { useRouter } from 'next/router';
 
 export default function Home() {
+  const router = useRouter();
   return (
     <div className="font-notoSans bg-white">
       <div className="flex justify-between flex-col min-h-[600px] bg-[#AAAAAA]">
@@ -26,6 +28,7 @@ export default function Home() {
             <CButtonShadow
               classBgColor="bg-btn-gradation"
               classShadowColor="bg-[#333]"
+              onClick={() => router.push('/campaign')}
               textClass="text-main-text text-[16px] font-bold"
               title="キャンペーンの一覧をみる"
               withIcon={{

@@ -2,6 +2,10 @@
   :global {
     .ant-tabs .ant-tabs-tab + .ant-tabs-tab {
       margin: 0 !important;
+      font-family: var(--font-noto-san-jp) !important;
+    }
+    .ant-table-wrapper .ant-table {
+      font-family: var(--font-noto-san-jp) !important;
     }
     .ant-tabs-nav .ant-tabs-nav-list {
       width: 100%;
