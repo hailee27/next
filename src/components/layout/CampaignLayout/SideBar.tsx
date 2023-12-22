@@ -41,7 +41,7 @@ function SideBar() {
         <ListItem icon={<YenIcon color="#fff" />} title="デポジット残高" to="/campaign" />
       </div>
       <div className="h-[120px]  border-[#2D3648] flex flex-col justify-end">
-        <ListItem title="組織情報" to="/campaign" />
+        <ListItem title="組織情報" to="/campaign/organize-information" />
         <ListItem title="アカウント情報" to="/campaign" />
       </div>
     </div>

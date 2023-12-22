@@ -8,11 +8,13 @@ import { SessionProvider } from 'next-auth/react';
 import type { AppProps } from 'next/app';
 // import { DM_Sans, Inter, M_PLUS_1, Montserrat, Noto_Sans_JP } from 'next/font/google';
 import { useRouter } from 'next/router';
-import { ReactElement } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
 import '@/styles/globals.css';
+import Loading from '@/components/Loading';
+import { PopUpProvider } from '@/context/PopUpContext';
 
 // const dmSans = DM_Sans({ subsets: ['latin'], variable: '--font-dm-sans', display: 'swap' });
 // const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
@@ -28,7 +30,7 @@ type AppPropsWithLayout = AppProps & {
 };
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLayout) => {
   const router = useRouter();
-
+  const [loading, setLoading] = useState<boolean>(false);
   const { store, props } = wrapper.useWrappedStore(pageProps);
   let getLayout = Component.getLayout ?? ((page) => <MainLayout>{page}</MainLayout>);
   if (router.pathname.startsWith('/campaign')) {
@@ -40,6 +42,25 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
   if (router.pathname === '/') {
     getLayout = (page) => <MainLayout>{page}</MainLayout>;
   }
+
+  useEffect(() => {
+    const start = () => {
+      setLoading(true);
+    };
+    const end = () => {
+      setLoading(false);
+    };
+    router.events.on('routeChangeStart', start);
+    router.events.on('routeChangeComplete', end);
+    router.events.on('routeChangeError', end);
+
+    return () => {
+      router.events.off('routeChangeStart', start);
+      router.events.off('routeChangeComplete', end);
+      router.events.off('routeChangeError', end);
+    };
+  }, []);
+
   return (
     <SessionProvider session={session}>
       <MegaHead />
@@ -48,7 +69,10 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
           {/* <main
             className={` ${dmSans.variable} ${inter.variable}  ${mPlus1.variable} ${notoSans.variable} ${montserrat.variable}`}
           > */}
-          {getLayout(<Component {...props} />)}
+          <PopUpProvider>
+            {loading && <Loading />}
+            {getLayout(<Component {...props} />)}
+          </PopUpProvider>
           {/* </main> */}
         </PersistGate>
       </Provider>
