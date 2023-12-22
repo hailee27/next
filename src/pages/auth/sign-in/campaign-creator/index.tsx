@@ -49,6 +49,7 @@ export default function CampaignCreatorSigninPage() {
         password: formValue.password,
       };
       const data = await login(body).unwrap();
+      console.log(data);
 
       if (data?.totpToken && data?.code) {
         console.log(data?.code);
