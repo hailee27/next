@@ -7,7 +7,7 @@ const injectedRtkApi = api.injectEndpoints({
         const body = new FormData();
         Object.entries(queryArg).forEach(([key, value]) => body.append(`${key}`, value));
         return {
-          url: '/quests',
+          url: '/campaigns',
           method: 'POST',
           body,
           // headers: {
@@ -32,10 +32,27 @@ export type QuestsParams = {
   totalNumberOfUsersAllowedToWork: string;
   numberOfPrizes: string;
   totalPrizeValue: string;
-  questReward: string;
+  campaignReward: string;
   note: string;
   settingForNotWin: string;
-  questImage: string;
+  campaignImage: string;
+};
+export type Type = {
+  title: string;
+  category: string;
+  description: string;
+  startTime: string;
+  expiredTime: string;
+  dontSetExpiredTime: string;
+  tasks: string;
+  methodOfselectWinners: string;
+  totalNumberOfUsersAllowedToWork: string;
+  numberOfPrizes: string;
+  totalPrizeValue: string;
+  campaignReward: string;
+  note: string;
+  settingForNotWin: string;
+  campaignImage: string;
 };
 
 export { injectedRtkApi as CampaignApi };

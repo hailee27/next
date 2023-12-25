@@ -15,22 +15,22 @@ import Task from './Task';
 const items: TabsProps['items'] = [
   {
     key: '1',
-    label: 'Set up',
+    label: 'セットアップ',
     children: <Setup />,
   },
   {
     key: '2',
-    label: 'Tasks',
+    label: 'タスク',
     children: <Task />,
   },
   {
     key: '3',
-    label: 'ReWard',
+    label: '報酬',
     children: <ReWard />,
   },
   {
     key: '4',
-    label: 'Confirmation',
+    label: '確認',
     children: <Confirmation />,
   },
 ];
@@ -72,7 +72,7 @@ function CampaignCreation() {
             ),
             methodOfselectWinners: queryParams.typeWinner ?? 'AUTO_PRIZEE_DRAW',
             totalNumberOfUsersAllowedToWork: String(queryParams.numberOfParticipants),
-            questReward: JSON.stringify(
+            campaignReward: JSON.stringify(
               [
                 {
                   type: queryParams.requireTask?.platForm,
@@ -92,8 +92,9 @@ function CampaignCreation() {
             settingForNotWin: String(queryParams.statusCampaign) ?? false,
             description: queryParams.explanatoryText ?? '',
             note: queryParams.compensationSummary ?? 'NONE',
-            questImage: queryParams.thumbnail,
+            campaignImage: queryParams.thumbnail,
           })
+            .unwrap()
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             .then((res: any) => {
               if (res?.error?.status === 400) {
@@ -103,7 +104,7 @@ function CampaignCreation() {
                 toastMessage('succses', 'success');
               }
             })
-            .catch((err) => toastMessage(err.message, 'error'));
+            .catch((err) => toastMessage(err.message || 'error', 'error'));
         }
       }}
     >
