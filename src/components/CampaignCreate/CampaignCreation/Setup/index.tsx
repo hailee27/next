@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Form } from 'antd';
 import InputLabel from '@/components/common/BasicInput/InputLabel';
 import SelectLabel from '@/components/common/BasicSelect/SelectLabel';
@@ -7,11 +7,21 @@ import BasicDatePicker from '@/components/common/BasicDatePicker';
 import BasicSwitch from '@/components/common/BasicSwitch';
 import UploadButton from '@/components/common/UploadButton';
 import type { CropperProps } from 'react-easy-crop';
+import { useGetMasterDataQuery } from '@/redux/endpoints/masterData';
 import ExplanatoryText from './ExplanatoryText';
 
 function Setup() {
   const [form] = Form.useForm();
   const noDateWatch = Form.useWatch('noDate', form);
+  const { data } = useGetMasterDataQuery();
+  const dataCategory = useMemo(
+    () =>
+      data?.CATEGORY_CAMPAIGN.map((e) => ({
+        value: e.value,
+        label: e.label,
+      })),
+    [data?.CATEGORY_CAMPAIGN]
+  );
 
   return (
     <div className="mt-[8px]  bg-white rounded-[4px] p-[40px]">
@@ -35,11 +45,7 @@ function Setup() {
             </div>
           }
           name="category"
-          options={[
-            { value: 'jack', label: 'Jack' },
-            { value: 'lucy', label: 'Lucy' },
-            { value: 'Yiminghe', label: 'yiminghe' },
-          ]}
+          options={dataCategory}
           placeholder="Select"
           rules={[{ required: true, message: '' }]}
         />
@@ -48,7 +54,7 @@ function Setup() {
           <span>サムネイル</span>
           <span>※必須</span>
         </div>
-        <Form.Item name="thumbnail" noStyle>
+        <Form.Item name="thumbnail" rules={[{ required: true, message: '' }]}>
           <UploadButton
             className="w-[175px]"
             props={{ cropperProps: { cropSize: { height: 279, width: 279 } } as CropperProps }}
@@ -65,10 +71,10 @@ function Setup() {
             <span>※必須</span>
           </div>
           <div className="flex w-full space-x-[16px]">
-            <Form.Item className="!flex-1" name="startDate">
+            <Form.Item className="!flex-1" name="startDate" rules={[{ required: true, message: '' }]}>
               <BasicDatePicker placeholder="開始日時" />
             </Form.Item>
-            <Form.Item className="!flex-1" name="endDate">
+            <Form.Item className="!flex-1" name="endDate" rules={[{ required: !noDateWatch, message: '' }]}>
               <BasicDatePicker disabled={noDateWatch} placeholder="終了日時" />
             </Form.Item>
           </div>

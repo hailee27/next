@@ -1,21 +1,29 @@
-export type TypePlatForm = 'web' | 'line' | 'tiktok' | 'telegram' | 'discord' | 'question' | 'twitter';
-export function renderDataPlatform(platForm: TypePlatForm) {
+import { MasterDataResponse } from '@/redux/endpoints/masterData';
+
+export type TypePlatForm = 'TWITTER' | 'TIKTOK' | 'LINE' | 'TELEGRAM' | 'DISCORD' | 'VISIT_PAGE' | 'CUSTOM';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function renderDataPlatform(platForm: TypePlatForm, data?: MasterDataResponse | undefined) {
   switch (platForm) {
-    case 'web':
+    case 'VISIT_PAGE':
       return [
         {
           label: null,
-          content: [{ id: 1, title: 'WebサイトURL', type: 'input', require: true, name: 'websiteURL' }],
+          content: [{ id: 1, title: 'WebサイトURL', type: 'input', require: true, name: 'url' }],
         },
       ];
-    case 'line':
+    case 'LINE':
       return [
         {
           label: null,
-          content: [{ id: 1, title: 'リンク', type: 'input', require: true, name: 'linkLine' }],
+          content: [{ id: 1, title: 'リンク', type: 'input', require: true, name: 'url' }],
         },
       ];
-    case 'tiktok':
+    case 'TIKTOK':
+      // return data?.TIKTOK_ACTION.map((e) => ({
+      //   value: e.value,
+      //   label: e.label,
+      //   content: [{ id: e.id, title: 'リンク', type: 'input', require: true, name: 'url' }],
+      // }));
       return [
         {
           value: 'letThemWatch',
@@ -28,7 +36,12 @@ export function renderDataPlatform(platForm: TypePlatForm) {
           content: [{ id: 1, title: 'リンク', type: 'input', require: true, name: 'linkFollow' }],
         },
       ];
-    case 'telegram':
+    case 'TELEGRAM':
+      // return data?.TELEGRAM_ACTION.map((e) => ({
+      //   value: e.value,
+      //   label: e.label,
+      //   content: [{ id: 1, title: 'リンク', type: 'input', require: true, name: 'link' }],
+      // }));
       return [
         {
           value: 'joinChannel',
@@ -41,15 +54,20 @@ export function renderDataPlatform(platForm: TypePlatForm) {
           content: [{ id: 1, title: 'リンク', type: 'input', require: true, name: 'linkPost' }],
         },
       ];
-    case 'discord':
+    case 'DISCORD':
+      // return data?.DISCORD_ACTION.map((e) => ({
+      //   value: e.value,
+      //   label: e.label,
+      //   content: [{ id: 1, title: 'Invite link', type: 'input', require: true, name: 'link' }],
+      // }));
       return [
         {
-          value: 'joinServer',
+          value: 'discord_invite',
           label: 'サーバーにJoinする',
           content: [{ id: 1, title: 'Invite link', type: 'input', require: true, name: 'inviteLink' }],
         },
       ];
-    case 'question':
+    case 'CUSTOM':
       return [
         { value: 'selectionFormat', label: '選択形式' },
         { value: 'freeAnswer', label: '自由回答' },
@@ -57,17 +75,17 @@ export function renderDataPlatform(platForm: TypePlatForm) {
     default:
       return [
         {
-          value: 'follow',
+          value: 'twitter_follow',
           label: 'フォローさせる',
           content: [{ id: 1, title: 'ユーザーネーム', type: 'input', name: 'userFollow' }],
         },
         {
-          value: 'retweet',
+          value: 'twitter_repost',
           label: 'リツイートさせる',
           content: [{ id: 1, title: 'Post URL', type: 'input', name: 'postURL' }],
         },
         {
-          value: 'retweetTheQuote',
+          value: 'twitter_repost_quote',
           label: '引用リツイートさせる',
           content: [
             {
@@ -80,7 +98,7 @@ export function renderDataPlatform(platForm: TypePlatForm) {
           ],
         },
         {
-          value: 'postsWithSpecifiedHashtags',
+          value: 'twitter_make_post_with_hashtags',
           label: '指定ハッシュタグ付きの投稿をさせる',
           content: [
             { id: 1, title: 'タスクタイトル ※必須', type: 'input', require: true, name: 'taskTitle' },
@@ -89,7 +107,7 @@ export function renderDataPlatform(platForm: TypePlatForm) {
           ],
         },
         {
-          value: 'postSpecifiedText',
+          value: 'twitter_make_post',
           label: '指定文言を投稿させる',
           content: [{ id: 1, title: '指定文言', type: 'input', name: 'designatedClassicalChinese' }],
         },

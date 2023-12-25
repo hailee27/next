@@ -1,66 +1,66 @@
 export type TaskType =
   | {
       platForm: 'web';
-      websiteURL: string;
-      type?: 'NONE';
+      websiteURL?: string;
+      type: 'NONE' | string;
     }
   | {
       platForm: 'line';
-      linkLine: string;
-      type?: 'NONE';
+      linkLine?: string;
+      type: 'NONE' | string;
     }
   | {
       platForm: 'tiktok';
-      type: 'letThemWatch';
-      linkWatch: string;
+      type: 'letThemWatch' | string;
+      linkWatch?: string;
     }
   | {
       platForm: 'tiktok';
-      type: 'makeYouFollow';
-      linkFollow: string;
+      type: 'makeYouFollow' | string;
+      linkFollow?: string;
     }
   | {
       platForm: 'telegram';
-      type: 'joinChannel';
-      linkChannel: string;
+      type: 'joinChannel' | string;
+      linkChannel?: string;
     }
   | {
       platForm: 'telegram';
-      type: 'viewPost';
-      linkPost: string;
+      type: 'viewPost' | string;
+      linkPost?: string;
     }
   | {
       platForm: 'discord';
-      type: 'joinServer';
-      inviteLink: string;
+      type: 'joinServer' | string;
+      inviteLink?: string;
     }
   | {
       platForm: 'twitter';
-      type: 'follow';
-      userFollow: string;
+      type: 'follow' | string;
+      userFollow?: string;
     }
   | {
       platForm: 'twitter';
-      type: 'retweet';
-      postURL: string;
+      type: 'retweet' | string;
+      postURL?: string;
     }
   | {
       platForm: 'twitter';
-      type: 'retweetTheQuote';
-      quotePost: string;
-      postURLQuote: string;
+      type: 'retweetTheQuote' | string;
+      quotePost?: string;
+      postURLQuote?: string;
     }
   | {
       platForm: 'twitter';
-      type: 'postsWithSpecifiedHashtags';
-      taskTitle: string;
-      taskDescription: string;
+      type: 'postsWithSpecifiedHashtags' | string;
+      taskTitle?: string;
+      taskDescription?: string;
       defaultPostText?: string;
     }
   | {
       platForm: 'twitter';
-      type: 'postSpecifiedText';
-      designatedClassicalChinese: string;
+      type: 'postSpecifiedText' | string;
+      designatedClassicalChinese?: string;
     };
 
 export type TypeResponseFormCampaign = {

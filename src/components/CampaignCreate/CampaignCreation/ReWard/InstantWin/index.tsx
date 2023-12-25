@@ -45,9 +45,10 @@ function InstantWin() {
   }, [reWardWatch]);
 
   useEffect(() => {
-    form.setFieldValue('totalReWard', totalReWard);
+    form.setFieldValue('totalReWard', Number.isNaN(totalReWard) ? 0 : totalReWard);
     form.setFieldValue('totalTicket', totalTicket);
   }, [totalReWard, totalTicket]);
+
   return (
     <>
       <InputLabel

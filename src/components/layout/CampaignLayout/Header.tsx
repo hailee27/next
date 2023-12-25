@@ -1,11 +1,20 @@
 import CButtonClassic from '@/components/common/CButtonClassic';
 import { Image } from 'antd';
+import { useRouter } from 'next/router';
 import React from 'react';
 
 function Header() {
+  const router = useRouter();
   return (
     <div className=" border-[#2D3648] h-full flex items-center justify-between px-[40px]">
-      <Image alt="logo" height={30} src="/assets/images/logo 1.png" />
+      <Image
+        alt="logo"
+        className="cursor-pointer"
+        height={30}
+        onClick={() => router.push('/campaign')}
+        preview={false}
+        src="/assets/images/logo 1.png"
+      />
 
       <div className="flex space-x-[40px] text-[14px] text-[#333] font-medium items-center ">
         <div className="flex space-x-[16px] h-[21px]">

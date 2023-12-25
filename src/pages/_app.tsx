@@ -39,9 +39,9 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
   if (router.pathname.startsWith('/auth/sign-in/campaign-creator')) {
     getLayout = (page) => <SignInLayout>{page}</SignInLayout>;
   }
-  if (router.pathname === '/') {
-    getLayout = (page) => <MainLayout>{page}</MainLayout>;
-  }
+  // if (router.pathname === '/') {
+  //   getLayout = (page) => <MainLayout>{page}</MainLayout>;
+  // }
 
   useEffect(() => {
     const start = () => {

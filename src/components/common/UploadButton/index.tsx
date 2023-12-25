@@ -25,9 +25,9 @@ const UploadButton = ({
       reader.onerror = (error) => reject(error);
     });
 
-  const handleChange: UploadProps['onChange'] = ({ fileList: newlist, file }) => {
+  const handleChange: UploadProps['onChange'] = ({ fileList: newlist }) => {
     setFileList(newlist);
-    onChange?.(file.originFileObj);
+    onChange?.(newlist?.[0]?.originFileObj ?? null);
   };
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {

@@ -4,6 +4,7 @@ import { usePopUpContext } from '@/context/PopUpContext';
 import BasicButton from '../common/BasicButton';
 import BasicInput from '../common/BasicInput';
 import UploadButton from '../common/UploadButton';
+import PopUpCreditOrDebitCard from './PopUpCreditOrDebitCard';
 
 function OrganizeInformation() {
   const [isEdit, setIsEdit] = useState<boolean>(false);
@@ -57,15 +58,17 @@ function OrganizeInformation() {
               <span>Mastercard</span>
               <span>末尾が•••• 7274のクレジットカード</span>
             </div>
-            <span
-              className="text-[14px] text-[#4158D0] cursor-pointer "
-              onClick={() => openPopUp()}
-              onKeyPress={undefined}
-              role="button"
-              tabIndex={0}
-            >
-              編集
-            </span>
+            {isEdit && (
+              <span
+                className="text-[14px] text-[#4158D0] cursor-pointer "
+                onClick={() => openPopUp({ contents: <PopUpCreditOrDebitCard /> })}
+                onKeyPress={undefined}
+                role="button"
+                tabIndex={0}
+              >
+                編集
+              </span>
+            )}
           </div>
           <div className="border-t-2 border-[#2D3648] pt-[48px]  h-full flex space-x-[24px]">
             {isEdit && (

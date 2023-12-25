@@ -1,0 +1,12 @@
+.customModal {
+  :global {
+    .ant-modal .ant-modal-content {
+      padding: 0 !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+    }
+    .ant-modal .ant-modal-footer {
+      margin: 0;
+    }
+  }
+}
