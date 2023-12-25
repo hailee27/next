@@ -16,7 +16,7 @@ interface Props {
   showDelete: boolean;
 }
 
-interface DataPlatFormType {
+export interface DataPlatFormType {
   value?: string;
   label: string | null;
   content?: {
@@ -52,16 +52,16 @@ const TaskCampain = ({ item, onDelete, showDelete }: Props) => {
       </div>
       <div className="flex justify-between space-x-[24px] w-full">
         <SelectLabel
-          initialValue="twitter"
+          initialValue="TWITTER"
           name={['optionTasks', `task${item.id}`, 'platForm']}
           options={[
-            { label: ' X (twitter)', value: 'twitter' },
-            { label: ' Webサイトを訪問させる', value: 'web' },
-            { label: ' LINE友達登録させる', value: 'line' },
-            { label: ' TikTok', value: 'tiktok' },
-            { label: ' Telegram', value: 'telegram' },
-            { label: ' Discord', value: 'discord' },
-            { label: ' 自由形式で質問する', value: 'question' },
+            { label: ' X (twitter)', value: 'TWITTER' },
+            { label: ' Webサイトを訪問させる', value: 'VISIT_PAGE' },
+            { label: ' LINE友達登録させる', value: 'LINE' },
+            { label: ' TikTok', value: 'TIKTOK' },
+            { label: ' Telegram', value: 'TELEGRAM' },
+            { label: ' Discord', value: 'DISCORD' },
+            { label: ' 自由形式で質問する', value: 'CUSTOM' },
           ]}
         />
         {dataPlatForm?.[0].value && platFormWatch !== 'question' ? (

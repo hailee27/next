@@ -1,14 +1,18 @@
 import BasicButton from '@/components/common/BasicButton';
 import { Form } from 'antd';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import SelectLabel from '@/components/common/BasicSelect/SelectLabel';
 import BasicInput from '@/components/common/BasicInput';
-import TaskCampain from './TaskCampain';
+import { renderDataPlatform } from '@/utils/renderDataPlatform';
+import BasicTextArea from '@/components/common/BasicTextArea';
+import TaskCampain, { DataPlatFormType } from './TaskCampain';
 import { TypeTasks } from './type';
 
 function Task() {
   const [form] = Form.useForm();
   const [numberTask, setNumberTask] = useState<TypeTasks[]>([]);
+  const optionTasksWath = Form.useWatch(['requireTask', 'type'], form);
+  const dataPlatForm = useMemo<DataPlatFormType[] | undefined>(() => renderDataPlatform('TWITTER'), []);
 
   return (
     <div className="border-2 border-[#2D3648] rounded-[4px] mt-[36px] p-[40px]">
@@ -51,36 +55,54 @@ function Task() {
           </span>
           <div className="flex justify-between space-x-[24px] w-full">
             <SelectLabel
-              initialValue="twitter"
+              // disabled
+              initialValue="TWITTER"
               name={['requireTask', 'platForm']}
               options={[
-                { label: ' X (twitter)', value: 'twitter' },
-                { label: ' Webサイトを訪問させる', value: 'web' },
-                { label: ' LINE友達登録させる', value: 'line' },
-                { label: ' Telegram', value: 'telegram' },
-                { label: ' Discord', value: 'discord' },
-                { label: ' 自由形式で質問する', value: 'question' },
+                { label: ' X (twitter)', value: 'TWITTER' },
+                // { label: ' Webサイトを訪問させる', value: 'web' },
+                // { label: ' LINE友達登録させる', value: 'line' },
+                // { label: ' Telegram', value: 'telegram' },
+                // { label: ' Discord', value: 'discord' },
+                // { label: ' 自由形式で質問する', value: 'question' },
               ]}
             />
 
-            <SelectLabel
-              initialValue="follow"
-              name={['requireTask', 'type']}
-              options={[
-                { value: 'follow', label: 'フォローさせる' },
-                { value: 'retweet', label: 'リツイートさせる' },
-                { value: 'retweetTheQuote', label: '引用リツイートさせる' },
-                { value: 'postsWithSpecifiedHashtags', label: '指定ハッシュタグ付きの投稿をさせる' },
-                { value: 'postSpecifiedText', label: '指定文言を投稿させる' },
-              ]}
-            />
+            <SelectLabel initialValue="twitter_follow" name={['requireTask', 'type']} options={dataPlatForm} />
           </div>
-          <div className="w-full ">
+          <div className="flex flex-col space-y-[24px]">
+            {dataPlatForm
+              ?.find((e) => e.value === optionTasksWath)
+              ?.content?.map(
+                (e) =>
+                  (e.type === 'input' && (
+                    <div className="w-full" key={e.id}>
+                      <div className="text-[14px] font-semibold mb-[5px]">{e.title}</div>
+                      <Form.Item
+                        className="!mb-0"
+                        name={['requireTask', `${e.name}`]}
+                        rules={[{ required: e.require, message: '' }]}
+                      >
+                        <BasicInput />
+                      </Form.Item>
+                    </div>
+                  )) ||
+                  (e.type === 'textArea' && (
+                    <div className="w-full" key={e.id}>
+                      <div className="text-[14px] font-semibold mb-[5px]">{e.title}</div>
+                      <Form.Item className="!mb-0" name={['requireTask', `${e.name}`]}>
+                        <BasicTextArea style={{ height: 145, resize: 'none' }} />
+                      </Form.Item>
+                    </div>
+                  ))
+              )}
+          </div>
+          {/* <div className="w-full ">
             <div className="text-[14px] font-semibold mb-[5px]">ユーザーネーム</div>
             <Form.Item initialValue="@clout" name={['requireTask', 'userFollow']} noStyle>
               <BasicInput />
             </Form.Item>
-          </div>
+          </div> */}
         </div>
       </Form>
 

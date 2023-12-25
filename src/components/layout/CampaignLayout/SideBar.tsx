@@ -32,17 +32,17 @@ function SideBar() {
           <span className="text-[11px] font-medium">キャンペーン</span>
         </div>
         <ListItem icon={<ListIcon />} title="キャンペーン一覧" to="/campaign/list" />
-        <ListItem icon={<FileIcon color="#fff" />} title="キャンペーン新規作成" to="/campaign" />
-        <ListItem icon={<CheckIcon />} title="完了済みのキャンペーン" to="/campaign" />
+        <ListItem icon={<FileIcon color="#fff" />} title="キャンペーン新規作成" to="/campaign/create" />
+        <ListItem icon={<CheckIcon />} title="完了済みのキャンペーン" to="/campaign/completed" />
         <div className="py-[12px]  flex items-center space-x-[10px]">
           <span className="text-[11px] font-medium">管理</span>
         </div>
-        <ListItem icon={<BriefcaseIcon />} title="権限管理" to="/campaign" />
-        <ListItem icon={<YenIcon color="#fff" />} title="デポジット残高" to="/campaign" />
+        <ListItem icon={<BriefcaseIcon />} title="権限管理" to="/campaign/Authority-management" />
+        <ListItem icon={<YenIcon color="#fff" />} title="デポジット残高" to="/campaign/Deposit-balance" />
       </div>
       <div className="h-[120px]  border-[#2D3648] flex flex-col justify-end">
         <ListItem title="組織情報" to="/campaign/organize-information" />
-        <ListItem title="アカウント情報" to="/campaign" />
+        <ListItem title="アカウント情報" to="/campaign/account-information" />
       </div>
     </div>
   );
