@@ -16,6 +16,7 @@ export default function Home() {
             <CButtonShadow
               classBgColor="bg-[#333]"
               classShadowColor="bg-[#fff]"
+              onClick={() => router.push('/auth/sign-in/campaign-implementer')}
               textClass="text-white text-[16px] font-bold"
               title="キャンペーンの一覧をみる"
               withIcon={{

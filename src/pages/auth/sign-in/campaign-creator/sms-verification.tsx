@@ -2,7 +2,7 @@
 import SmsAuthForm from '@/components/SmsAuthForm';
 import React from 'react';
 import { useRouter } from 'next/router';
-import { useSmsAuthMutation } from '@/redux/endpoints/auth';
+import { useSmsVerifyMutation } from '@/redux/endpoints/auth';
 import { SMS_CASE } from '@/utils/constant/enums';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import toastMessage from '@/utils/func/toastMessage';
@@ -11,7 +11,7 @@ import { setAuth } from '@/redux/slices/auth.slice';
 
 export default function SMSVerification() {
   const { query, push } = useRouter();
-  const [smsAuth] = useSmsAuthMutation();
+  const [smsAuth] = useSmsVerifyMutation();
   const dispatch = useDispatch();
   const handleSubmitSMS = async (code: string) => {
     try {

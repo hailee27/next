@@ -1,3 +1,5 @@
+import { UserRole } from './user.type';
+
 export interface User {
   id: number;
   email: string;
@@ -13,13 +15,38 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface SMSLoginAuthRequest {
+export interface RecaptchaVerifyRequest {
+  token: string;
+}
+
+export interface RecaptchaVerifyResponse {
+  status: string;
+}
+
+export interface SMSVerifyRequest {
   token: string;
   code?: string;
 }
 
-export interface SMSLoginAuthResponse {
+export interface SMSVerifyResponse {
   accessToken: string;
   refreshToken: string;
   user: User;
+}
+
+export interface TwitterAuthRequest {
+  twitterId: string;
+  email: string;
+}
+
+export interface TwitterAuthResponse {
+  accessToken: string;
+  refreshToken: string;
+  user: User;
+}
+
+export interface TwitterSignupRequest {
+  twitterId: string;
+  email: string;
+  role: UserRole;
 }

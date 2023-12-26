@@ -241,7 +241,7 @@ export default function CampaignDetail() {
       <div className="h-[56px]" />
 
       <CModalWapper isOpen={isModalOpen} onCancel={handleCancel}>
-        <div className="h-[60vh] overflow-hidden">
+        <div className="h-[50vh] overflow-hidden">
           <div className="h-full overflow-y-auto flex flex-col gap-[8px] pr-[8px] custom-scroll">
             <CampaignRewardCardItem />
             <CampaignRewardCardItem />

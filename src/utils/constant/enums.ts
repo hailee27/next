@@ -10,3 +10,8 @@ export const ErrorCode: { [key: string]: string } = {
 };
 
 export const PREVENT_CORS_URL = 'https://cors.bridged.cc';
+
+export const USER_ROLE = {
+  QUESTER: 'QUESTER',
+  CREATOR: 'CREATOR',
+};
