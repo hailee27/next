@@ -51,7 +51,7 @@ function Confirmation() {
           </div>
         </div>
         <div className="w-full mt-[24px]">
-          {queryParams?.typeWinner === 'instantWin' ? (
+          {queryParams?.typeWinner === 'AUTO_PRIZEE_DRAW' ? (
             <>
               <div className="text-[14px] font-semibold mb-[8px]">報酬</div>
               <TableReWard />

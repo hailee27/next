@@ -2,6 +2,10 @@
   :global {
     .ant-tabs .ant-tabs-tab + .ant-tabs-tab {
       margin: 0 !important;
+      font-family: var(--font-noto-san-jp) !important;
+    }
+    .ant-table-wrapper .ant-table {
+      font-family: var(--font-noto-san-jp) !important;
     }
     .ant-tabs-nav .ant-tabs-nav-list {
       width: 100%;
@@ -17,6 +21,7 @@
     }
     .ant-tabs .ant-tabs-ink-bar {
       background: #2d3648 !important;
+      height: 3px;
     }
     .ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
       color: #2d3648 !important;
@@ -25,7 +30,7 @@
       text-shadow: none;
     }
     .ant-tabs-nav::before {
-      border-bottom: 2px solid #edf0f7 !important;
+      border-bottom: 1px solid #333 !important;
     }
     .ant-tabs > .ant-tabs-nav .ant-tabs-nav-operations,
     .ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-operations {

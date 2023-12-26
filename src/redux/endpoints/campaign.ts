@@ -5,12 +5,28 @@ const injectedRtkApi = api.injectEndpoints({
     postQuests: build.mutation<QuestsResponse, QuestsParams>({
       query: (queryArg) => {
         const body = new FormData();
-        Object.entries(queryArg).forEach(([key, value]) => body.append(key, value));
-
+        Object.entries(queryArg).forEach(([key, value]) => body.append(`${key}`, value));
         return {
-          url: '/quests',
+          url: '/campaigns',
           method: 'POST',
           body,
+          // headers: {
+          //   'Content-Type': 'multipart/form-data;',
+          // },
+        };
+      },
+    }),
+    postCampaignDraft: build.mutation<QuestsResponse, QuestsParams>({
+      query: (queryArg) => {
+        const body = new FormData();
+        Object.entries(queryArg).forEach(([key, value]) => body.append(`${key}`, value));
+        return {
+          url: '/campaigns/draft',
+          method: 'POST',
+          body,
+          // headers: {
+          //   'Content-Type': 'multipart/form-data;',
+          // },
         };
       },
     }),
@@ -19,22 +35,22 @@ const injectedRtkApi = api.injectEndpoints({
 
 export type QuestsResponse = void;
 export type QuestsParams = {
-  title: string;
-  category: string;
-  description: string;
-  startTime: string;
-  expiredTime: string;
-  dontSetExpiredTime: string;
-  tasks: string;
-  methodOfselectWinners: string;
-  totalNumberOfUsersAllowedToWork: string;
-  numberOfPrizes: string;
-  totalPrizeValue: string;
-  questReward: string;
-  note: string;
-  settingForNotWin: string;
-  questImage: string;
+  title?: string;
+  category?: string;
+  description?: string;
+  startTime?: string;
+  expiredTime?: string;
+  dontSetExpiredTime?: string;
+  tasks?: string;
+  methodOfselectWinners?: string;
+  totalNumberOfUsersAllowedToWork?: string;
+  numberOfPrizes?: string;
+  totalPrizeValue?: string;
+  campaignReward?: string;
+  noteReward?: string;
+  settingForNotWin?: string;
+  campaignImage?: string;
 };
 
 export { injectedRtkApi as CampaignApi };
-export const { usePostQuestsMutation } = injectedRtkApi;
+export const { usePostQuestsMutation, usePostCampaignDraftMutation } = injectedRtkApi;
