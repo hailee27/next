@@ -25,7 +25,15 @@ export default function CModalWapper({ isOpen, onCancel, children }: IComponentP
 
   return (
     <div className={styles.cModalWapper}>
-      <Modal closeIcon={false} destroyOnClose footer={false} getContainer={false} onCancel={onCancel} open={isOpen}>
+      <Modal
+        closeIcon={false}
+        destroyOnClose
+        footer={false}
+        getContainer={false}
+        onCancel={onCancel}
+        open={isOpen}
+        style={{ top: 60 }}
+      >
         <div className="flex justify-end">
           <div aria-hidden="true" className="cursor-pointer" onClick={onCancel}>
             <XCricleIcon />

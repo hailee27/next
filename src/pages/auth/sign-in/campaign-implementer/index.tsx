@@ -3,14 +3,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import CButtonShadow from '@/components/common/CButtonShadow';
 import CFormInputShadow from '@/components/common/CFormInputShadow';
-import { useLoginMutation, useRecaptchaVerifyMutation } from '@/redux/endpoints/auth';
+import { useLoginMutation, useRecaptchaVerifyMutation, useTwitterAuthMutation } from '@/redux/endpoints/auth';
 import { SMS_CASE } from '@/utils/constant/enums';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import toastMessage from '@/utils/func/toastMessage';
 import { LoginFormData, loginSchema } from '@/utils/schema/login-email';
 import { yupResolver } from '@hookform/resolvers/yup';
+import axios from 'axios';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useForm } from 'react-hook-form';
 
@@ -25,6 +26,8 @@ export default function CampaignImplementerSignin() {
   } = useForm<LoginFormData>({
     resolver: yupResolver(loginSchema),
   });
+  const [twitterAuth] = useTwitterAuthMutation();
+
   const router = useRouter();
   const [login] = useLoginMutation();
   const [recaptchaVerify, { data: recaptchaVerifyData, isSuccess: isRecaptchaVerifySuccess }] =
@@ -66,6 +69,73 @@ export default function CampaignImplementerSignin() {
       toastMessage(getErrorMessage(err), 'error');
     }
   };
+
+  const handleClickAuthTwitter = async () => {
+    try {
+      const resp = await axios.post(`${process?.env?.NEXT_PUBLIC_API_URL}auth/connect/twitter`);
+
+      if (resp?.data?.redirectUrl) {
+        localStorage.setItem('oauthRequestTokenSecret', resp?.data?.oauthRequestTokenSecret);
+        localStorage.setItem('oauthRequestToken', resp?.data?.oauthRequestToken);
+        const width = 576;
+        const height = 730;
+        const left = window.screen.width / 2 - width / 2;
+        const top = window.screen.height / 2 - height / 2;
+        window.open(
+          resp?.data?.redirectUrl,
+          'Twitter Authentication',
+          ` width=${width}, height=${height}, top=${top}, left=${left}`
+        );
+
+        // menubar=no,location=no,resizable=no,scrollbars=no,status=no,
+      } else {
+        console.log('auth faield');
+      }
+      // localStorage.setItem('test', '!2312313');
+      // window.open(
+      //   '/auth/callback/twitter',
+      //   'Twitter Authentication',
+      //   ` width=${width}, height=${height}, top=${top}, left=${left}`
+      // );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const onChangeLocalStorage = useCallback(async () => {
+    try {
+      const storageData = JSON.parse(localStorage.getItem('twitter_callback_data') || '{}');
+      if (storageData?.error) {
+        toastMessage('Something went wrong', 'error');
+        return;
+      }
+      if (storageData?.data) {
+        window.removeEventListener('storage', onChangeLocalStorage, false);
+        console.log('twitter data', storageData?.data);
+        if (storageData?.data?.id && storageData?.data?.email) {
+          const data = await twitterAuth({
+            twitterId: storageData?.data?.id?.toString(),
+            email: storageData?.data?.email,
+          }).unwrap();
+          console.log(data);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+  // finally {
+  //   localStorage.removeItem('twitter_callback_data');
+  //   localStorage.removeItem('oauthRequestToken');
+  //   localStorage.removeItem('oauthRequestTokenSecret');
+  // }
+
+  useEffect(() => {
+    window.addEventListener('storage', onChangeLocalStorage, false);
+    return () => {
+      window.removeEventListener('storage', onChangeLocalStorage, false);
+    };
+  }, []);
+
   useEffect(() => {
     if (password && email && hasCaptchaToken && recaptchaVerifyData?.status && isRecaptchaVerifySuccess) {
       setIsDisableSubmit(false);
@@ -83,7 +153,13 @@ export default function CampaignImplementerSignin() {
         </div>
         <div className="border-[2px] border-[#333] rounded-b-[16px] px-[22px] py-[38px]">
           <div className="h-[53px]">
-            <CButtonShadow onClick={() => {}} title="X（twitter）でログインする" type="button" />
+            <CButtonShadow
+              onClick={() => {
+                handleClickAuthTwitter?.();
+              }}
+              title="X（twitter）でログインする"
+              type="button"
+            />
           </div>
           <div className="h-[16px]" />
           <p className="text-gray-1 text-[13px] leading-[22px] tracking-[0.39px]">

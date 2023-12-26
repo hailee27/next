@@ -15,7 +15,7 @@ export default function TwitterAuthCallBack() {
 
       if (oauthTokenParam === localReqToken && oauthTokenVerifierParam) {
         const response = await axios.get(
-          `http://localhost:8080/auth/twitter/callback/${localReqToken}/${localReqTokenSecret}/${oauthTokenVerifierParam}`
+          `${process?.env?.NEXT_PUBLIC_API_URL}auth/redirect/${localReqToken}/${localReqTokenSecret}/${oauthTokenVerifierParam}`
         );
         if (response?.data?.user) {
           localStorage.setItem(

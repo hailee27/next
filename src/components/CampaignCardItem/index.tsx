@@ -1,11 +1,13 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import CShadowCard from '../common/CCardShadow';
 import ArrowDown from '../common/icons/ArrowDown';
 import CButtonClassic from '../common/CButtonClassic';
 
 export default function CampaignCardItem() {
+  const router = useRouter();
   return (
-    <CShadowCard>
+    <CShadowCard onClickCard={() => router.push('/campaigns/1')}>
       <div className="font-notoSans px-[24px] py-[32px] flex flex-col gap-[16px]   ">
         <div className=" flex gap-[10px] items-center  ">
           <div className="w-[32px] h-[32px] rounded-full bg-gray-2  overflow-hidden" />
