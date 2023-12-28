@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
-import type { TabsProps } from 'antd';
-import { Form, Spin } from 'antd';
+import React, { useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
+import moment from 'moment';
+import { Form, Spin } from 'antd';
+import type { TabsProps } from 'antd';
 import BasicTabs from '@/components/common/BasicTabs';
 import BasicButton from '@/components/common/BasicButton';
 import { usePostCampaignDraftMutation, usePostQuestsMutation } from '@/redux/endpoints/campaign';
 import { TypeResponseFormCampaign } from '@/types/campaign.type';
 import toastMessage from '@/utils/func/toastMessage';
 import adapterCampaignParams from '@/utils/func/adapterCampaignParams';
+import { StepContext, TypeTabContext } from '@/context/TabContext';
+import { useGetMasterDataQuery } from '@/redux/endpoints/masterData';
 import ReWard from './ReWard';
 import Confirmation from './Confirmation';
 import Setup from './Setup';
@@ -18,28 +21,44 @@ const items: TabsProps['items'] = [
     key: '1',
     label: 'セットアップ',
     children: <Setup />,
+    forceRender: true,
+    destroyInactiveTabPane: true,
   },
   {
     key: '2',
     label: 'タスク',
     children: <Task />,
+    forceRender: true,
+    destroyInactiveTabPane: true,
   },
   {
     key: '3',
     label: '報酬',
     children: <ReWard />,
+    forceRender: true,
+    destroyInactiveTabPane: true,
   },
   {
     key: '4',
     label: '確認',
     children: <Confirmation />,
+    forceRender: true,
+    destroyInactiveTabPane: true,
   },
 ];
+
 function CampaignCreation() {
   const router = useRouter();
   const [tab, setTab] = useState<string>('1');
   const [trigger, { isLoading }] = usePostQuestsMutation();
   const [triggerCampaignDraft] = usePostCampaignDraftMutation();
+  const { data: dataMaster } = useGetMasterDataQuery();
+  const valueContext = useMemo<TypeTabContext>(
+    () => ({
+      prevTab: () => setTab((prev) => String(Number(prev) - 1)),
+    }),
+    [setTab]
+  );
 
   return (
     <Form.Provider
@@ -57,15 +76,34 @@ function CampaignCreation() {
           setTab('4');
         }
 
-        window.scrollTo({ behavior: 'smooth', top: 0 });
-        if (name === 'reWard') {
-          router.push({ query: { query: JSON.stringify({ typeWinner: forms[name].getFieldValue('typeWinner') }) } });
-        }
         if (name === 'saveDraft') {
           triggerCampaignDraft(adapterCampaignParams(queryParams, queryParams.typeWinner))
             .unwrap()
-            .then(() => toastMessage('save draft succses', 'success'));
+            .then(() => toastMessage('save draft succses', 'success'))
+            .catch(() => toastMessage('failed', 'error'));
         }
+
+        forms?.confirm?.setFieldsValue({
+          nameCampagin: queryParams.campainName,
+          typeCampagin: dataMaster?.CATEGORY_CAMPAIGN.find((e) => e.value === queryParams.category)?.label,
+          dateCampagin: queryParams.noDate
+            ? moment(String(queryParams.startDate)).format('YYYY/MM/DD')
+            : // eslint-disable-next-line no-irregular-whitespace
+              `${moment(String(queryParams.startDate)).format('YYYY/MM/DD')}　〜　${moment(
+                String(queryParams.endDate)
+              ).format('YYYY/MM/DD')} `,
+          typeWinner: queryParams.typeWinner ?? 'AUTO_PRIZEE_DRAW',
+          // status: String(queryParams.statusCampaign),
+          status: '下書き',
+          campaginCreator: 'halie',
+          // tableReward: { ...queryParams.reWard },
+        });
+        if (queryParams.typeWinner === 'AUTO_PRIZEE_DRAW') {
+          forms?.confirm?.setFieldValue('tableReward', queryParams?.reWard);
+        } else {
+          forms?.confirm?.setFieldValue('compensationSummary', queryParams?.compensationSummary);
+        }
+
         if (name === 'confirm') {
           trigger(adapterCampaignParams(queryParams, queryParams.typeWinner))
             .unwrap()
@@ -80,6 +118,7 @@ function CampaignCreation() {
             })
             .catch((err) => toastMessage(err.message || 'error', 'error'));
         }
+        window.scrollTo({ behavior: 'smooth', top: 0 });
       }}
     >
       <div className="flex px-[80px] py-[32px] w-full justify-between border-b-2 border-[#2D3648] max-h-[112px] font-notoSans">
@@ -104,7 +143,9 @@ function CampaignCreation() {
       </div>
       <div className="px-[48px] pt-[28px] pb-[55px]">
         <Spin spinning={isLoading}>
-          <BasicTabs activeKey={tab} items={items} onChange={(e) => setTab(e)} />
+          <StepContext.Provider value={valueContext}>
+            <BasicTabs activeKey={tab} items={items} onChange={(e) => setTab(e)} />
+          </StepContext.Provider>
         </Spin>
       </div>
     </Form.Provider>
