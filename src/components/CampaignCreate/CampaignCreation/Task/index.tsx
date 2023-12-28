@@ -1,10 +1,11 @@
 import BasicButton from '@/components/common/BasicButton';
 import { Form } from 'antd';
-import React, { useMemo, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import SelectLabel from '@/components/common/BasicSelect/SelectLabel';
 import BasicInput from '@/components/common/BasicInput';
 import { renderDataPlatform } from '@/utils/renderDataPlatform';
 import BasicTextArea from '@/components/common/BasicTextArea';
+import { StepContext, TypeTabContext } from '@/context/TabContext';
 import TaskCampain, { DataPlatFormType } from './TaskCampain';
 import { TypeTasks } from './type';
 
@@ -13,6 +14,7 @@ function Task() {
   const [numberTask, setNumberTask] = useState<TypeTasks[]>([]);
   const optionTasksWath = Form.useWatch(['requireTask', 'type'], form);
   const dataPlatForm = useMemo<DataPlatFormType[] | undefined>(() => renderDataPlatform('TWITTER'), []);
+  const { prevTab } = useContext<TypeTabContext>(StepContext);
 
   return (
     <div className="border-2 border-[#2D3648] rounded-[4px] mt-[36px] p-[40px]">
@@ -107,7 +109,7 @@ function Task() {
       </Form>
 
       <div className="flex space-x-[24px] border-t-2 border-[#2D3648] mt-[24px] pt-[48px]">
-        <BasicButton className="w-[84px] h-[56px]" type="primary">
+        <BasicButton className="w-[84px] h-[56px]" onClick={() => prevTab?.()} type="primary">
           戻る
         </BasicButton>
         <BasicButton className="w-[191px] h-[56px]" onClick={() => form.submit()}>

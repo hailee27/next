@@ -4,9 +4,10 @@ import BasicButton from '@/components/common/BasicButton';
 import { Form } from 'antd';
 import BasicSwitch from '@/components/common/BasicSwitch';
 // import { formatNumber } from '@/utils/formatNumber';
+import FlagItem from '@/components/common/FlagItem';
 import ListReWard from '../ListReWard';
 
-interface TypeReWard {
+export interface TypeReWard {
   money: string;
   tiketWinning: string;
   receivingMethod: {
@@ -14,19 +15,11 @@ interface TypeReWard {
     paypay: boolean;
   };
 }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const FlagItem = ({ onChange, value }: { onChange?: (value: number | string) => void; value?: string | number }) => (
-  <span>{value}</span>
-);
 
-FlagItem.defaultProps = {
-  onChange: undefined,
-  value: undefined,
-};
 function InstantWin() {
   const [reWard, setReWard] = useState<number[]>([1]);
   const form = Form.useFormInstance();
-  const reWardWatch = Form.useWatch('reWard', form);
+  const reWardWatch = Form.useWatch(['reWard'], form);
   const totalReWard = useMemo(() => {
     if (reWardWatch) {
       const listReWard: TypeReWard[] = Object.values(reWardWatch ?? {});
@@ -43,7 +36,6 @@ function InstantWin() {
     }
     return 0;
   }, [reWardWatch]);
-
   useEffect(() => {
     form.setFieldValue('totalReWard', Number.isNaN(totalReWard) ? 0 : totalReWard);
     form.setFieldValue('totalTicket', totalTicket);
@@ -64,8 +56,10 @@ function InstantWin() {
             index={i + 1}
             key={e}
             onDelete={() => {
+              const newReWard = form.getFieldValue(['reWard']);
+              delete newReWard[`reWard${i + 1}`];
+              form.setFieldValue(['reWard'], newReWard);
               setReWard((prev) => prev.filter((v) => v !== e));
-              form.setFieldValue(['reWard', `reWard${i + 1}`], {});
             }}
           />
         ))}
@@ -80,12 +74,11 @@ function InstantWin() {
             <div className="flex-1">
               <span className="text-[14px] font-semibold">合計金額</span>
               <div className="px-[16px] py-[12px]">
-                <span className="text-[16px]">
+                <span className="text-[16px] flex">
                   <Form.Item name="totalReWard" noStyle>
                     <FlagItem />
-                    {/* {!Number.isNaN(totalReWard) ? formatNumber(totalReWard, true, 1) : 0}円 */}
                   </Form.Item>
-                  <span>円</span>
+                  <span>&nbsp;円</span>
                 </span>
               </div>
             </div>
@@ -95,9 +88,7 @@ function InstantWin() {
                 <span className="text-[16px]">
                   <Form.Item name="totalTicket" noStyle>
                     <FlagItem />
-                    {/* {!Number.isNaN(totalReWard) ? formatNumber(totalReWard, true, 1) : 0}円 */}
                   </Form.Item>
-                  {/* {totalTicket} */}
                 </span>
               </div>
             </div>

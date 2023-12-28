@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import styles from './index.module.scss';
+import { TypeReWard } from '../ReWard/InstantWin';
 
 interface DataType {
   key: string;
@@ -30,50 +31,58 @@ const columns: ColumnsType<DataType> = [
   },
 ];
 
-const data: DataType[] = [
-  {
-    key: '0',
-    equalNumber: '等数',
-    amountOfMoney: '金額',
-    numberOfWinners: '当選者本数',
-    probabilityOfWinning: '当選確率',
-  },
-  {
-    key: '1',
-    equalNumber: '1等',
-    amountOfMoney: '10,000円',
-    numberOfWinners: '1本',
-    probabilityOfWinning: '1%',
-  },
-  {
-    key: '2',
-    equalNumber: '2等',
-    amountOfMoney: '5,000円',
-    numberOfWinners: '5本',
-    probabilityOfWinning: '5%',
-  },
-  {
-    key: '3',
-    equalNumber: '3等',
-    amountOfMoney: '1,000円',
-    numberOfWinners: '10本',
-    probabilityOfWinning: '10%',
-  },
-  {
-    key: '4',
-    equalNumber: 'はずれ',
-    amountOfMoney: '0円',
-    numberOfWinners: '-',
-    probabilityOfWinning: '84%',
-  },
-];
-
-function TableReWard() {
+interface Props {
+  // onChange?: () => void;
+  value?: {
+    reWard0: TypeReWard;
+  };
+}
+function TableReWard({ value }: Props) {
+  const data = useMemo<DataType[]>(
+    () =>
+      [
+        {
+          key: '0',
+          equalNumber: '等数',
+          amountOfMoney: '金額',
+          numberOfWinners: '当選者本数',
+          probabilityOfWinning: '当選確率',
+        },
+      ]
+        .concat(
+          Object.values(value ?? {}).map((e, i) => ({
+            key: String(i + 1),
+            equalNumber: `${i + 1}等`,
+            amountOfMoney: `${e.money}円`,
+            numberOfWinners: `${e.tiketWinning}本`,
+            probabilityOfWinning: `${e.tiketWinning}%`,
+          }))
+        )
+        .concat([
+          {
+            key: String(Object.values(value ?? {}).length + 1),
+            equalNumber: 'はずれ',
+            amountOfMoney: '0円',
+            numberOfWinners: '-',
+            probabilityOfWinning: `${
+              100 -
+              Number(
+                Object.values(value ?? {})
+                  ?.map((e) => Number(e.tiketWinning))
+                  ?.reduce((prev, cur) => prev + cur, 0)
+              )
+            }%`,
+          },
+        ]),
+    [value]
+  );
   return (
     <div className={styles.customeTable}>
       <Table bordered columns={columns} dataSource={data} pagination={false} showHeader={false} tableLayout="fixed" />
     </div>
   );
 }
-
+TableReWard.defaultProps = {
+  value: undefined,
+};
 export default TableReWard;

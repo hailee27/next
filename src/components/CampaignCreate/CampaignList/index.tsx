@@ -23,29 +23,30 @@ function CampaignList() {
     {
       key: '2',
       label: <ListTab title="購入申請中" />,
-      children: 'Content of Tab Pane 2',
+      children: <TableAll />,
     },
     {
       key: '3',
       label: <ListTab title="公開待ち" />,
-      children: 'Content of Tab Pane 3',
+      children: <TableAll />,
     },
     {
       key: '4',
       label: <ListTab title="公開中" />,
-      children: 'Content of Tab Pane 3',
+      children: <TableAll />,
     },
     {
       key: '5',
       label: <ListTab title="完了" />,
-      children: 'Content of Tab Pane 3',
+      children: <TableAll />,
     },
     {
       key: '6',
       label: <ListTab title="下書き" />,
-      children: 'Content of Tab Pane 3',
+      children: <TableAll />,
     },
   ];
+
   const router = useRouter();
   return (
     <div className="px-[48px] pb-[77px]">
