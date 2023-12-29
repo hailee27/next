@@ -43,7 +43,7 @@ const injectedRtkApi = api.injectEndpoints({
   }),
 });
 
-export type DetailCampaignResponse = void;
+export type DetailCampaignResponse = TypeCampaign;
 export type DetailCampaignParams = {
   campaignId: string;
 };

@@ -13,7 +13,7 @@ const ListItem = ({ title, to, icon }: { title: string; to: string; icon?: JSX.E
   const router = useRouter();
   return (
     <Link href={to}>
-      <div className={`${styles.sideBar}  ${router.pathname === to && styles.active}`}>
+      <div className={`${styles.sideBar}  ${router.pathname.startsWith(to) && styles.active}`}>
         {icon || <Image alt="" preview={false} src="/icons/icon-placeholder.svg" />}
         <span className="text-[14px] font-bold">{title}</span>
       </div>
