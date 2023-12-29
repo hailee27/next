@@ -7,7 +7,10 @@
       margin-inline-end: 0 !important;
       border-radius: 6px !important;
       border: none !important;
-      background-color: #2d3648 !important;
+      background-color: #333 !important;
+      &:hover {
+        opacity: 0.8;
+      }
     }
     .reactEasyCrop_CropArea {
       width: 300px !important;

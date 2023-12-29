@@ -64,9 +64,6 @@ function CampaignList() {
             withIcon={{ position: 'left', icon: <FileIcon color="#fff" /> }}
           />
         </div>
-        {/* <BasicButton className="w-[104px] h-[48px]" onClick={() => router.push('/campaign/create')}>
-          新規作成
-        </BasicButton> */}
       </div>
       <div className="pt-[28px]">
         <BasicTabs items={items} />

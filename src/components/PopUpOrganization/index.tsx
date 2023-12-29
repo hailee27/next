@@ -4,10 +4,12 @@ import React from 'react';
 import { Form } from 'antd';
 import { usePostCompaniesMutation } from '@/redux/endpoints/companies';
 import toastMessage from '@/utils/func/toastMessage';
-import BasicButton from '../common/BasicButton';
 import InputLabel from '../common/BasicInput/InputLabel';
 import PopUpCreditOrDebitCard from '../OrganizeInformation/PopUpCreditOrDebitCard';
 import UploadButton from '../common/UploadButton';
+import CButtonClassic from '../common/CButtonClassic';
+import CButtonShadow from '../common/CButtonShadow';
+import SearchoOganizationID from './SearchoOganizationID';
 
 function PopUpOrganization() {
   const { openPopUp, closePopUp } = usePopUpContext();
@@ -16,7 +18,7 @@ function PopUpOrganization() {
   const [trigger] = usePostCompaniesMutation();
 
   return (
-    <div className="p-[40px] w-[1156px]">
+    <div className="p-[64px] w-[928px] max-h-[829px] overflow-y-auto">
       <Form
         form={form}
         onFinish={(e) =>
@@ -29,49 +31,63 @@ function PopUpOrganization() {
             .catch(() => toastMessage('error', 'error'))
         }
       >
-        <InputLabel label="組織名 ※必須" name="name" rules={[{ required: true, message: '' }]} />
-        <InputLabel label="組織ID ※必須" name="code" rules={[{ required: true, message: '' }]} />
-        <InputLabel label="組織 代表メールアドレス ※必須" name="email" rules={[{ required: true, message: '' }]} />
-        <div className="flex flex-col space-y-[8px] mb-[24px]">
-          <span className="font-semibold">ロゴ ※必須</span>
+        <InputLabel
+          label="組織名"
+          name="name"
+          placeholder="記入してください"
+          required
+          rules={[{ required: true, message: 'ご入力いただいた組織名は既に使用されています。' }]}
+        />
+        <InputLabel
+          label="組織ID"
+          name="code"
+          placeholder="選択してください"
+          required
+          rules={[{ required: true, message: 'ご入力いただいた組織IDは既に使用されています。' }]}
+        />
+        <InputLabel
+          label="組織 代表メールアドレス"
+          name="email"
+          placeholder="記入してください"
+          required
+          rules={[{ required: true, message: 'ご入力いただいた組織 代表メールアドレスは既に使用されています。' }]}
+        />
+
+        <div className="flex flex-col space-y-[10px] mb-[24px]">
+          <span className="font-bold">ロゴ </span>
           <Form.Item name="companyImage" noStyle rules={[{ required: true, message: '' }]}>
-            <UploadButton className="w-[175px]" />
+            <UploadButton className="w-[149px]" />
           </Form.Item>
         </div>
-        <div className="flex flex-col space-y-[8px]">
-          <span className="font-semibold">お支払い方法 ※必須</span>
-          <BasicButton
-            className="w-[355px] h-[48px]"
+        <div className="flex flex-col space-y-[10px]">
+          <span className="font-bold">お支払い方法</span>
+          <CButtonClassic
+            customClassName="!rounded-[6px] !w-[290px] !h-[47px] !text-[14px]"
             onClick={() => openPopUp({ contents: <PopUpCreditOrDebitCard /> })}
-          >
-            クレジットまたはデビットカードを追加
-          </BasicButton>
+            title="クレジットまたはデビットカードを追加"
+          />
         </div>
-        <div className="flex space-y-[24px] flex-col border-t-2 border-[#2D3648] mt-[48px] pt-[48px]">
-          <BasicButton
-            className="w-[191px] h-[56px]"
-            onClick={() => {
-              // router.push('/campaign/list');
-              // closePopUp();
-              form.submit();
-            }}
-          >
-            組織を作成する
-          </BasicButton>
+        <div className="flex space-y-[16px] items-center flex-col border-t border-[#AAA] mt-[32px] pt-[40px]">
+          <div className="w-[195px]  h-[56px]">
+            <CButtonShadow
+              classBgColor="bg-main-text"
+              classRounded="rounded-[6px]"
+              classShadowColor="bg-white"
+              onClick={() => {
+                // router.push('/campaign/list');
+                // closePopUp();
+                form.submit();
+              }}
+              shadowSize="normal"
+              title="組織を作成する"
+            />
+          </div>
+
           <span
-            className="text-[16px] font-semibold underline underline-offset-2 cursor-pointer w-max"
+            className="text-[12px] font-medium underline underline-offset-2 cursor-pointer w-max text-[#333]"
             onClick={() =>
               openPopUp({
-                contents: (
-                  <div className="p-[40px] w-[1156px]">
-                    <InputLabel label="組織ID ※必須" />
-                    <div className="flex space-y-[24px] flex-col border-t-2 border-[#2D3648] mt-[48px] pt-[48px]">
-                      <BasicButton className="w-[249px] h-[56px]" onClick={() => closePopUp()}>
-                        アクセス権限をリクエストする
-                      </BasicButton>
-                    </div>
-                  </div>
-                ),
+                contents: <SearchoOganizationID />,
               })
             }
             onKeyPress={undefined}

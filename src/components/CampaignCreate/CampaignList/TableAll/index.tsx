@@ -3,11 +3,11 @@ import { Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import ArrowDown from '@/components/common/icons/ArrowDown';
 import CircleArrow from '@/components/common/icons/CircleArrow';
-import { useGetListCampaignQuery, useLazyGetDetailCampaignQuery } from '@/redux/endpoints/campaign';
+import { useGetListCampaignQuery } from '@/redux/endpoints/campaign';
 import moment from 'moment';
 import { formatNumber } from '@/utils/formatNumber';
 import { useRouter } from 'next/router';
-import styles from './index.module.scss';
+import styles from '@/components/common/BasicTable/index.module.scss';
 
 interface DataType {
   key: React.Key;
@@ -75,7 +75,6 @@ const columns: ColumnsType<DataType> = [
 ];
 
 function TableAll() {
-  const [trigger, { data: dataDetail }] = useLazyGetDetailCampaignQuery();
   const [pageTable, setPageTable] = useState<number>(0);
   const { push, query, isReady } = useRouter();
   const { data: dataTable, isLoading } = useGetListCampaignQuery(
@@ -88,9 +87,6 @@ function TableAll() {
       setPageTable(Number(Number(query.page) - 1) * 10);
     }
   }, [isReady, query?.page]);
-
-  // eslint-disable-next-line no-console
-  console.log(dataDetail);
 
   const data = useMemo<DataType[] | undefined>(() => {
     if (dataTable) {
@@ -115,7 +111,8 @@ function TableAll() {
         loading={isLoading}
         onRow={(record) => ({
           onClick: () => {
-            trigger({ campaignId: String(record.key) }); // click row
+            push(`/campaign/list/${record.key}`);
+            // trigger({ campaignId: String(record.key) }); // click row
           },
         })}
         pagination={{

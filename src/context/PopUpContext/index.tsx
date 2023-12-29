@@ -4,23 +4,25 @@ import styles from './modal.module.scss';
 
 interface PropsOpenPopUp {
   contents: JSX.Element | string;
+  classNameWrapperPopup?: string;
 }
 interface TypePopUpContext {
   openPopUp: ({ contents }: PropsOpenPopUp) => void;
   closePopUp: () => void;
 }
 const PopUpContext = createContext<TypePopUpContext | undefined>(undefined);
-const ModalRender = (node: React.ReactNode) => (
-  <div className="bg-white border-2 border-[#2D3648] w-full "> {node}</div>
+const ModalRender = (node: React.ReactNode, classNameWrapper?: string) => (
+  <div className={` ${classNameWrapper} bg-white border-2 border-[#333] w-full rounded-[16px] `}> {node}</div>
 );
 
 export const PopUpProvider = ({ children }: { children: React.ReactNode }) => {
   const [open, setOpen] = useState<boolean>(false);
   const [contentPopUp, setContentPopUp] = useState<JSX.Element | string>('');
-
+  const [classNameWrapper, setClassNameWrapper] = useState<string>('');
   const openPopUp = useCallback(
-    ({ contents }: PropsOpenPopUp) => {
+    ({ contents, classNameWrapperPopup }: PropsOpenPopUp) => {
       setContentPopUp(contents);
+      setClassNameWrapper(classNameWrapperPopup ?? '');
       setOpen(true);
     },
     [contentPopUp]
@@ -44,9 +46,10 @@ export const PopUpProvider = ({ children }: { children: React.ReactNode }) => {
           centered
           closeIcon={false}
           footer={false}
-          modalRender={ModalRender}
+          modalRender={(node) => ModalRender(node, classNameWrapper)}
           onCancel={() => setOpen(false)}
           open={open}
+          styles={{ mask: { background: '#333', opacity: 0.9 } }}
           width="max-content"
           wrapClassName={styles.customModal}
         >
