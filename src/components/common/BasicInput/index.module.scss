@@ -5,11 +5,12 @@
     .ant-input-number {
       width: 100%;
       min-height: 48px;
+      max-height: 53px;
       border-width: 2px;
       border-style: solid;
       border-color: #333;
       border-radius: 6px;
-      padding: 16px 24px;
+      padding: 16px 48px 16px 24px;
       font-weight: 400;
       font-size: 14px;
       line-height: 0;

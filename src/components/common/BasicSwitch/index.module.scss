@@ -5,7 +5,7 @@
       min-width: 40px !important;
     }
     .ant-switch .ant-switch-inner {
-      border: 2px solid #2d3648;
+      border: 2px solid #ddd;
     }
     .ant-switch .ant-switch-handle {
       width: 16px;
@@ -14,16 +14,19 @@
       inset-inline-start: 4px;
     }
     .ant-switch .ant-switch-handle::before {
-      background-color: #2d3648;
+      background-color: #fff;
+    }
+    .ant-switch.ant-switch-checked .ant-switch-inner {
+      border: 2px solid #04afaf;
     }
     .ant-switch.ant-switch-checked .ant-switch-handle {
       inset-inline-start: calc(100% - 20px);
     }
     .ant-switch.ant-switch-checked {
-      background: #71ff6f !important;
+      background: #04afaf !important;
     }
-    .ant-switch:hover:not(.ant-switch-disabled) {
-      background-color: #fff;
+    .ant-switch:not(.ant-switch-disabled) {
+      background: #ddd;
     }
   }
 }

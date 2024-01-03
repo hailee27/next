@@ -1,15 +1,13 @@
 import FlagItem from '@/components/common/FlagItem';
 import React from 'react';
-import { useRouter } from 'next/router';
-import { useGetDetailCampaignQuery } from '@/redux/endpoints/campaign';
+
+import { TypeCampaign } from '@/redux/endpoints/campaign';
 import moment from 'moment';
 import { useGetMasterDataQuery } from '@/redux/endpoints/masterData';
 import { formatNumber } from '@/utils/formatNumber';
 import TableReWard from '../../CampaignCreation/Confirmation/TableReWard';
 
-function Detail() {
-  const { query } = useRouter();
-  const { data } = useGetDetailCampaignQuery({ campaignId: String(query?.id) });
+function Detail({ data }: { data?: TypeCampaign }) {
   const { data: masterData } = useGetMasterDataQuery();
 
   return (
@@ -78,5 +76,7 @@ function Detail() {
     </div>
   );
 }
-
+Detail.defaultProps = {
+  data: undefined,
+};
 export default Detail;
