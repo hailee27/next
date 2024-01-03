@@ -7,7 +7,7 @@ function BasicInput(props: InputProps & InputNumberProps) {
   return (
     <div className={styles.customInput}>
       {type === 'currency' ? (
-        <InputNumber {...rest} formatter={(e) => `${e}円`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} />
+        <InputNumber {...rest} formatter={(e) => `${e}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} />
       ) : (
         <Input
           {...rest}

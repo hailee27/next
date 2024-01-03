@@ -1,10 +1,25 @@
 import CButtonClassic from '@/components/common/CButtonClassic';
+import { logout } from '@/redux/slices/auth.slice';
+import { RootState } from '@/redux/store';
+// import { useLogoutMutation } from '@/redux/endpoints/auth';
+// import { wrapper } from '@/redux/store';
 import { Image } from 'antd';
+
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 function Header() {
   const router = useRouter();
+  const dispatch = useDispatch();
+  const { accessToken } = useSelector((state: RootState) => state.auth);
+  // const [logout] = useLogoutMutation();
+  useEffect(() => {
+    if (!accessToken) {
+      router.push('/auth/sign-in/campaign-creator');
+    }
+  }, [accessToken]);
+
   return (
     <div className=" border-[#2D3648] h-full flex items-center justify-between px-[40px]">
       <Image
@@ -25,6 +40,7 @@ function Header() {
         <div>
           <CButtonClassic
             customClassName="px-[32px] !py-[13px] h-[44px] bg-white !text-[#333] !text-[12px]"
+            onClick={() => dispatch(logout())}
             title="ログアウト"
             withIcon={{
               position: 'left',

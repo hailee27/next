@@ -4,6 +4,9 @@ import React from 'react';
 import { Form } from 'antd';
 import { usePostCompaniesMutation } from '@/redux/endpoints/companies';
 import toastMessage from '@/utils/func/toastMessage';
+import { useLazyMeQuery } from '@/redux/endpoints/auth';
+import { setUser } from '@/redux/slices/auth.slice';
+import { useDispatch } from 'react-redux';
 import InputLabel from '../common/BasicInput/InputLabel';
 import PopUpCreditOrDebitCard from '../OrganizeInformation/PopUpCreditOrDebitCard';
 import UploadButton from '../common/UploadButton';
@@ -16,6 +19,8 @@ function PopUpOrganization() {
   // const router = useRouter();
   const [form] = Form.useForm();
   const [trigger] = usePostCompaniesMutation();
+  const [getMe] = useLazyMeQuery();
+  const dispatch = useDispatch();
 
   return (
     <div className="p-[64px] w-[928px] max-h-[829px] overflow-y-auto">
@@ -25,6 +30,9 @@ function PopUpOrganization() {
           trigger(e)
             .unwrap()
             .then(() => {
+              getMe()
+                .unwrap()
+                .then((res) => dispatch(setUser(res)));
               toastMessage('success', 'success');
               closePopUp();
             })

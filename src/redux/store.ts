@@ -34,7 +34,7 @@ const makeConfiguredStore = (reducer: Reducer) =>
       }).concat(api.middleware),
   });
 
-const makeStore = () => {
+export const makeStore = () => {
   const isServer = typeof window === 'undefined';
 
   if (isServer) {
