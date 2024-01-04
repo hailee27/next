@@ -66,3 +66,44 @@
     }
   }
 }
+.customPopup {
+  :global {
+    padding: 0 !important;
+
+    .ant-select-item {
+      padding: 12px 40px !important;
+      height: 41px;
+      // display: flex;
+      // align-items: center;
+      // justify-content: center;
+      // text-align: center;
+      color: #333;
+      font-size: 14px;
+      line-height: 20px;
+      font-weight: 700;
+    }
+
+    .ant-select-item.ant-select-item-option {
+      line-height: var(--input-element-height);
+      height: var(--input-element-height);
+    }
+
+    .ant-select-item-option-content {
+      align-self: center;
+    }
+
+    // .ant-select-item.ant-select-item-option.ant-select-item-option-active {
+    //   background-color: #f2faf8 !important;
+    //   // border: 1px !important;
+    //   // border-color: #009b75 !important;
+    // }
+    .ant-select-item.ant-select-item-option.ant-select-item-option-selected {
+      background-color: #f2f2f2 !important;
+      // border: 1px solid #009b75 !important;
+      box-shadow: #f2f2f2;
+      // border-radius: 5px;
+      // border: 1px !important;
+      // border-color: #009b75 !important;
+    }
+  }
+}

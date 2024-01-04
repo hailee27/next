@@ -180,7 +180,7 @@ function CampaignCreation() {
                   classRounded="rounded-[6px]"
                   classShadowColor="bg-white"
                   shadowSize="normal"
-                  title="新規作成"
+                  title="下書き保存"
                   type="submit"
                   withIcon={{
                     position: 'left',

@@ -1,15 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Select, SelectProps } from 'antd';
 import styles from './index.module.scss';
 
 function BasicSelect(props: SelectProps & { type?: 'default' | 'primary' }) {
   const { type, suffixIcon, ...rest } = props;
+  const [selected, setSelected] = useState<string>('');
   const combinedClassName = [type === 'primary' && styles.selectPrimary, type === 'default' && styles.defaultSelect]
     .filter((e) => e)
     .join(' ');
   return (
     <div className={combinedClassName}>
       <Select
+        dropdownAlign={{ offset: [0, 8] }}
+        dropdownStyle={{ border: '2px solid #333', borderRadius: '6px' }}
+        onSelect={(e) => setSelected(e)}
+        // eslint-disable-next-line react/no-unstable-nested-components
+        optionRender={(option) => (
+          <div className="flex items-center space-x-[10px]">
+            <div className="w-[10px]">
+              {option.value === selected && (
+                <svg fill="none" height="9" viewBox="0 0 12 9" width="12" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1 4.5L3.5 7.5L11 1.5" stroke="#333333" strokeLinecap="round" strokeWidth="2" />
+                </svg>
+              )}
+            </div>
+            <span>{option.label}</span>
+          </div>
+        )}
+        popupClassName={styles.customPopup}
         suffixIcon={
           suffixIcon || (
             <svg fill="none" height="15" viewBox="0 0 14 15" width="14" xmlns="http://www.w3.org/2000/svg">
