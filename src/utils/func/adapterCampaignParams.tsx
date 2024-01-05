@@ -12,7 +12,7 @@ export default function adapterCampaignParams(
         category: data.category ?? '',
         dontSetExpiredTime: String(data.noDate) ?? false,
         startTime: data.startDate ?? '',
-        expiredTime: data.endDate ?? 'none',
+        expiredTime: data.endDate ?? data.startDate,
         tasks: JSON.stringify(
           [
             {
@@ -51,7 +51,7 @@ export default function adapterCampaignParams(
         category: data.category ?? '',
         dontSetExpiredTime: String(data.noDate) ?? false,
         startTime: data.startDate ?? '',
-        expiredTime: data.endDate ?? ' ',
+        expiredTime: data.endDate ?? data.startDate,
         tasks: JSON.stringify(
           [
             {

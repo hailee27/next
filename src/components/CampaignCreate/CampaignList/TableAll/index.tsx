@@ -101,7 +101,7 @@ function TableAll() {
       }));
     }
     return undefined;
-  }, [dataTable]);
+  }, [dataTable?.campaigns]);
 
   return (
     <div className={styles.customTable}>
@@ -129,7 +129,7 @@ function TableAll() {
           onChange: (page) => {
             push({ query: { page } }, undefined, { shallow: true, scroll: true });
           },
-          current: pageTable,
+          // current: pageTable,
         }}
         tableLayout="fixed"
       />

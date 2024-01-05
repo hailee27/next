@@ -42,7 +42,7 @@ const UploadButton = ({
 
   return (
     <div className={`${combinedClassName}`}>
-      <ImgCrop {...props}>
+      <ImgCrop modalProps={{ okButtonProps: { className: 'bg-[#333]' } }} {...props}>
         <Upload
           fileList={fileList}
           listType="picture-card"

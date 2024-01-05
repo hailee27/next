@@ -28,14 +28,14 @@ export const PopUpProvider = ({ children }: { children: React.ReactNode }) => {
     [contentPopUp]
   );
   const closePopUp = () => {
-    setOpen(!open);
+    setOpen(false);
   };
   const contextvalue = useMemo<TypePopUpContext>(
     () => ({
       openPopUp,
       closePopUp,
     }),
-    [openPopUp]
+    []
   );
   return (
     <PopUpContext.Provider value={contextvalue}>

@@ -3,11 +3,12 @@ import { Select, SelectProps } from 'antd';
 import styles from './index.module.scss';
 
 function BasicSelect(props: SelectProps & { type?: 'default' | 'primary' }) {
-  const { type, suffixIcon, ...rest } = props;
-  const [selected, setSelected] = useState<string>('');
+  const { type, suffixIcon, value, ...rest } = props;
+  const [selected, setSelected] = useState<string>(value);
   const combinedClassName = [type === 'primary' && styles.selectPrimary, type === 'default' && styles.defaultSelect]
     .filter((e) => e)
     .join(' ');
+
   return (
     <div className={combinedClassName}>
       <Select
@@ -38,6 +39,7 @@ function BasicSelect(props: SelectProps & { type?: 'default' | 'primary' }) {
             </svg>
           )
         }
+        value={value}
         {...rest}
       />
     </div>
