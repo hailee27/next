@@ -1,7 +1,9 @@
+/* eslint-disable no-console */
 import CButtonShadow from '@/components/common/CButtonShadow';
 import CModalWapper from '@/components/common/CModalWapper';
 import TwitterLogo from '@/components/common/icons/TwitterLogo';
-import { useState } from 'react';
+import toastMessage from '@/utils/func/toastMessage';
+import { useCallback, useState } from 'react';
 
 interface ConnectXModalProps {
   buttonLabel: string;
@@ -18,7 +20,25 @@ export default function ConnectXModal({ buttonLabel, actionType }: ConnectXModal
     setIsModalOpen(false);
   };
 
+  const onChangeLocalStorage = useCallback(async () => {
+    try {
+      window.removeEventListener('storage', onChangeLocalStorage, false);
+      const storageData = JSON.parse(localStorage.getItem('twitter_callback_data') || '{}');
+      console.log(storageData);
+      if (storageData?.error) {
+        toastMessage(storageData?.error, 'error');
+        return;
+      }
+      if (storageData?.data) {
+        console.log('twitter data', storageData?.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
   function getTwitterOauthUrl() {
+    window.addEventListener('storage', onChangeLocalStorage, false);
     const rootUrl = 'https://twitter.com/i/oauth2/authorize';
     const options = {
       redirect_uri: 'http://localhost:3000/auth/callback/twitter',
