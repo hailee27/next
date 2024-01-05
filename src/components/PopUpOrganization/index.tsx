@@ -26,7 +26,7 @@ function PopUpOrganization() {
     <div className="p-[64px] w-[928px] max-h-[829px] overflow-y-auto">
       <Form
         form={form}
-        onFinish={(e) =>
+        onFinish={(e) => {
           trigger(e)
             .unwrap()
             .then(() => {
@@ -36,8 +36,8 @@ function PopUpOrganization() {
               toastMessage('success', 'success');
               closePopUp();
             })
-            .catch(() => toastMessage('error', 'error'))
-        }
+            .catch(() => toastMessage('error', 'error'));
+        }}
       >
         <InputLabel
           label="組織名"

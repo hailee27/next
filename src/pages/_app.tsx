@@ -13,6 +13,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import type { AppProps } from 'next/app';
 import '@/styles/globals.css';
+import AuthCheck from '@/components/AuthCheck';
 
 // import { DM_Sans, Inter, M_PLUS_1, Montserrat, Noto_Sans_JP } from 'next/font/google';
 // const dmSans = DM_Sans({ subsets: ['latin'], variable: '--font-dm-sans', display: 'swap' });
@@ -33,7 +34,11 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
   const { store, props } = wrapper.useWrappedStore(pageProps);
   let getLayout = Component.getLayout ?? ((page) => <MainLayout>{page}</MainLayout>);
   if (router.pathname.startsWith('/campaign')) {
-    getLayout = (page) => <CampaignLayout>{page}</CampaignLayout>;
+    getLayout = (page) => (
+      <AuthCheck>
+        <CampaignLayout>{page}</CampaignLayout>
+      </AuthCheck>
+    );
   }
 
   if (router.pathname.startsWith('/campaigns')) {
@@ -42,9 +47,9 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
   if (router.pathname.startsWith('/auth/sign-in/campaign-creator')) {
     getLayout = (page) => <SignInLayout>{page}</SignInLayout>;
   }
-  // if (router.pathname === '/') {
-  //   getLayout = (page) => <MainLayout>{page}</MainLayout>;
-  // }
+  if (router.pathname === '/') {
+    getLayout = (page) => <MainLayout>{page}</MainLayout>;
+  }
 
   useEffect(() => {
     const start = () => {

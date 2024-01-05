@@ -3,8 +3,8 @@ import { Form } from 'antd';
 import React, { useContext, useMemo, useState } from 'react';
 import SelectLabel from '@/components/common/BasicSelect/SelectLabel';
 import BasicInput from '@/components/common/BasicInput';
-import { renderDataPlatform } from '@/utils/renderDataPlatform';
-import BasicTextArea from '@/components/common/BasicTextArea';
+// import { renderDataPlatform } from '@/utils/renderDataPlatform';
+// import BasicTextArea from '@/components/common/BasicTextArea';
 import { StepContext, TypeTabContext } from '@/context/TabContext';
 import TaskCampain, { DataPlatFormType } from './TaskCampain';
 import { TypeTasks } from './type';
@@ -12,8 +12,16 @@ import { TypeTasks } from './type';
 function Task() {
   const [form] = Form.useForm();
   const [numberTask, setNumberTask] = useState<TypeTasks[]>([]);
-  const optionTasksWath = Form.useWatch(['requireTask', 'type'], form);
-  const dataPlatForm = useMemo<DataPlatFormType[] | undefined>(() => renderDataPlatform('TWITTER'), []);
+  // const optionTasksWath = Form.useWatch(['requireTask', 'type'], form);
+  const dataPlatForm = useMemo<DataPlatFormType[] | undefined>(
+    () => [
+      {
+        value: 'twitter_follow',
+        label: 'フォローさせる',
+      },
+    ],
+    []
+  );
   const { prevTab } = useContext<TypeTabContext>(StepContext);
 
   return (
@@ -57,7 +65,6 @@ function Task() {
           </span>
           <div className="flex justify-between space-x-[24px] w-full">
             <SelectLabel
-              // disabled
               initialValue="TWITTER"
               name={['requireTask', 'platForm']}
               options={[
@@ -72,39 +79,13 @@ function Task() {
 
             <SelectLabel initialValue="twitter_follow" name={['requireTask', 'type']} options={dataPlatForm} />
           </div>
-          <div className="flex flex-col space-y-[24px]">
-            {dataPlatForm
-              ?.find((e) => e.value === optionTasksWath)
-              ?.content?.map(
-                (e) =>
-                  (e.type === 'input' && (
-                    <div className="w-full" key={e.id}>
-                      <div className="text-[14px] font-semibold mb-[5px]">{e.title}</div>
-                      <Form.Item
-                        className="!mb-0"
-                        name={['requireTask', `${e.name}`]}
-                        rules={[{ required: e.require, message: '' }]}
-                      >
-                        <BasicInput />
-                      </Form.Item>
-                    </div>
-                  )) ||
-                  (e.type === 'textArea' && (
-                    <div className="w-full" key={e.id}>
-                      <div className="text-[14px] font-semibold mb-[5px]">{e.title}</div>
-                      <Form.Item className="!mb-0" name={['requireTask', `${e.name}`]}>
-                        <BasicTextArea style={{ height: 145, resize: 'none' }} />
-                      </Form.Item>
-                    </div>
-                  ))
-              )}
-          </div>
-          {/* <div className="w-full ">
+
+          <div className="w-full ">
             <div className="text-[14px] font-semibold mb-[5px]">ユーザーネーム</div>
             <Form.Item initialValue="@clout" name={['requireTask', 'userFollow']} noStyle>
               <BasicInput />
             </Form.Item>
-          </div> */}
+          </div>
         </div>
       </Form>
 
