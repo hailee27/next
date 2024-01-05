@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import CButtonShadow from '@/components/common/CButtonShadow';
 import CFormInputShadow from '@/components/common/CFormInputShadow';
+import ArrowDown from '@/components/common/icons/ArrowDown';
 import { useLoginMutation, useRecaptchaVerifyMutation, useTwitterAuthMutation } from '@/redux/endpoints/auth';
 import { SMS_CASE } from '@/utils/constant/enums';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
@@ -10,6 +11,7 @@ import toastMessage from '@/utils/func/toastMessage';
 import { LoginFormData, loginSchema } from '@/utils/schema/login-email';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
@@ -211,6 +213,16 @@ export default function CampaignImplementerSignin() {
             </p>
           </form>
         </div>
+      </div>
+      <div className="h-[32px]" />
+      <div className="flex items-center justify-center">
+        <Link
+          className="flex items-center justify-center gap-[4px] text-[13px] font-bold pb-[6px] border-b-[2px] border-b-[#333] cursor-pointer"
+          href="/auth/sign-up/campaign-implementer"
+        >
+          新規会員登録の方はこちら
+          <ArrowDown className="rotate-[-90deg]" />
+        </Link>
       </div>
     </div>
   );

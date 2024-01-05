@@ -4,59 +4,25 @@ import axios from 'axios';
 import { useEffect } from 'react';
 
 export default function TwitterAuthCallBack() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const oauthTokenParam = urlParams.get('oauth_token');
-  const oauthTokenVerifierParam = urlParams.get('oauth_verifier');
-
-  const handleTwitterAuth = async () => {
+  const { query } = useRouter();
+  const handleTwitterAuth = useCallback(async () => {
     try {
-      const localReqToken = localStorage.getItem('oauthRequestToken');
-      const localReqTokenSecret = localStorage.getItem('oauthRequestTokenSecret');
-
-      if (oauthTokenParam === localReqToken && oauthTokenVerifierParam) {
+      if (query?.state?.includes('clout') && query?.code) {
         const response = await axios.get(
-          `${process?.env?.NEXT_PUBLIC_API_URL}auth/redirect/${localReqToken}/${localReqTokenSecret}/${oauthTokenVerifierParam}`
+          `http://localhost:8000/api/auth/twitter?code=${query?.code}&state=${query?.state}`
         );
-        if (response?.data?.user) {
-          localStorage.setItem(
-            'twitter_callback_data',
-            JSON.stringify({
-              data: response?.data?.user,
-            })
-          );
-        } else {
-          localStorage.setItem(
-            'twitter_callback_data',
-            JSON.stringify({
-              error: 'Auth Failed: failed to get user',
-            })
-          );
-        }
-      } else {
-        localStorage.setItem(
-          'twitter_callback_data',
-          JSON.stringify({
-            error: 'Auth Failed: Token not matching',
-          })
-        );
+        console.log(response);
       }
     } catch (err) {
-      localStorage.setItem(
-        'twitter_callback_data',
-        JSON.stringify({
-          error: err || {},
-        })
-      );
+      console.log(err);
     } finally {
-      window.close();
+      //   window.close();
+      console.log('done');
     }
-  };
+  }, [query?.state, query?.code]);
 
   useEffect(() => {
-    if (oauthTokenParam && oauthTokenVerifierParam) {
-      console.log('call', oauthTokenParam, oauthTokenVerifierParam);
-      handleTwitterAuth();
-    }
-  }, []);
+    handleTwitterAuth();
+  }, [handleTwitterAuth]);
   return <div className="w-full h-full mt-[300px] text-center">Waiting a moment ...</div>;
 }
