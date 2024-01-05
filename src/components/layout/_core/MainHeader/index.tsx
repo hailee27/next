@@ -25,7 +25,7 @@ const MainNavigation = [
   },
   {
     text: 'お問い合わせ',
-    to: '/',
+    to: '/inquiry',
   },
 ];
 const SubNavigation = [
