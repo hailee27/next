@@ -1,50 +1,55 @@
 import BarIcon from '@/components/common/icons/BarIcon';
 import XIcon from '@/components/common/icons/XIcon';
 import clsx from 'clsx';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import Image from 'next/image';
 import CButtonShadow from '@/components/common/CButtonShadow';
 
-const MainNavigation = [
-  {
-    text: 'Home',
-    to: '/',
-  },
-  {
-    text: 'キャンペーン一覧',
-    to: '/',
-  },
-  {
-    text: 'マイページ',
-    to: '/',
-  },
-  {
-    text: 'キャンペーン作成',
-    to: '/',
-  },
-  {
-    text: 'お問い合わせ',
-    to: '/inquiry',
-  },
-];
-const SubNavigation = [
-  {
-    text: '利用規約',
-    to: '/',
-  },
-  {
-    text: '特定商取引法に基づく表示',
-    to: '/',
-  },
-  {
-    text: 'プライバシーポリシー',
-    to: '/',
-  },
-];
 export default function MainHeader() {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
-
+  const MainNavigation = useMemo(
+    () => [
+      {
+        text: 'Home',
+        to: '/',
+      },
+      {
+        text: 'キャンペーン一覧',
+        to: '/',
+      },
+      {
+        text: 'マイページ',
+        to: '/',
+      },
+      {
+        text: 'キャンペーン作成',
+        to: '/',
+      },
+      {
+        text: 'お問い合わせ',
+        to: '/inquiry',
+      },
+    ],
+    []
+  );
+  const SubNavigation = useMemo(
+    () => [
+      {
+        text: '利用規約',
+        to: '/terms-of-service',
+      },
+      {
+        text: '特定商取引法に基づく表示',
+        to: '/specified-commercial-transactions-law',
+      },
+      {
+        text: 'プライバシーポリシー',
+        to: '/privacy-policy',
+      },
+    ],
+    []
+  );
   useEffect(() => {
     if (isOpenMenu) {
       document.body.classList.add('stop-scrolling');
