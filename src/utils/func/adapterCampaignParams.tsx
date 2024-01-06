@@ -12,7 +12,7 @@ export default function adapterCampaignParams(
         category: data.category ?? '',
         dontSetExpiredTime: String(data.noDate) ?? false,
         startTime: data.startDate ?? '',
-        expiredTime: data.endDate ?? ' ',
+        expiredTime: data.endDate ?? data.startDate,
         tasks: JSON.stringify(
           [
             {
@@ -34,7 +34,7 @@ export default function adapterCampaignParams(
           Object.values(data?.reWard ?? {}).map((e, i) => ({
             type: e.receivingMethod.amazon ? 'AMAZON_GIFT' : 'PAYPAY_GIFT',
             index: i + 1,
-            amountOfMoney: e.money,
+            amountOfMoney: Number(e.money),
             numberOfWinningTicket: Number(e.tiketWinning),
           }))
         ),
@@ -51,7 +51,7 @@ export default function adapterCampaignParams(
         category: data.category ?? '',
         dontSetExpiredTime: String(data.noDate) ?? false,
         startTime: data.startDate ?? '',
-        expiredTime: data.endDate ?? ' ',
+        expiredTime: data.endDate ?? data.startDate,
         tasks: JSON.stringify(
           [
             {

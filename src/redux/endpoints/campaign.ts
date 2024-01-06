@@ -16,6 +16,16 @@ const injectedRtkApi = api.injectEndpoints({
         };
       },
     }),
+    getListCampaign: build.query<ListCampaignResponse, ListCampaignParams>({
+      query: (queryArg) => ({
+        url: '/campaigns',
+        method: 'GET',
+        params: queryArg,
+      }),
+    }),
+    getDetailCampaign: build.query<DetailCampaignResponse, DetailCampaignParams>({
+      query: (queryArg) => ({ url: `/campaigns/${queryArg.campaignId}`, method: 'GET' }),
+    }),
     postCampaignDraft: build.mutation<QuestsResponse, QuestsParams>({
       query: (queryArg) => {
         const body = new FormData();
@@ -33,6 +43,93 @@ const injectedRtkApi = api.injectEndpoints({
   }),
 });
 
+export type DetailCampaignResponse = TypeCampaign;
+export type DetailCampaignParams = {
+  campaignId: string;
+};
+
+export type TypeCampaignReward = {
+  id: string | null;
+  title: string | null;
+  type: string;
+  campaignId: string;
+  index: number;
+  amountOfMoney: number;
+  numberOfWinningTicket: number;
+  updatedAt: string;
+  deleteAt: string | null;
+  createdAt: string;
+};
+export type TypeTask = {
+  id: number;
+  campaignId: string;
+  type: string;
+  taskActionType: string;
+  taskTemplateId: number;
+  updatedAt: string;
+  createdAt: string;
+  taskTemplate: {
+    id: number;
+    userName: string;
+    extra: string | null;
+    config: {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      name: any;
+    };
+    link: string;
+    quote: string | null;
+    required: boolean;
+    updatedAt: string;
+    createdAt: string;
+  };
+};
+
+export type TypeCampaign = {
+  id: string;
+  category: string;
+  title: string;
+  description: string;
+  imageId: number;
+  priority: number;
+  createdUserId: number;
+  maxTimeUserClaim: number;
+  claimEndTime: string | null;
+  expiredTime: string;
+  startTime: string;
+  dontSetExpiredTime: boolean;
+  methodOfselectWinners: string;
+  totalNumberOfUsersAllowedToWork: number;
+  numberOfPrizes: number;
+  totalPrizeValue: number;
+  settingForNotWin: boolean;
+  noteReward: string | null;
+  updatedAt: string;
+  createdAt: string;
+  communityId: string | null;
+  image: {
+    id: number;
+    uploadedBy: string | null;
+    uploadAt: string;
+    deleteFlg: boolean;
+    createdAt: string;
+    updatedAt: string;
+    imageUrl: string;
+  };
+  CampaignReward: TypeCampaignReward[];
+  Task: TypeTask[];
+};
+export type ListCampaignResponse = {
+  campaigns: TypeCampaign[];
+  total: number;
+};
+export type ListCampaignParams = {
+  skip: number;
+  take: number;
+  where?: string;
+  orderBy?: string;
+  q?: string;
+  include?: string;
+};
 export type QuestsResponse = void;
 export type QuestsParams = {
   title?: string;
@@ -53,4 +150,11 @@ export type QuestsParams = {
 };
 
 export { injectedRtkApi as CampaignApi };
-export const { usePostQuestsMutation, usePostCampaignDraftMutation } = injectedRtkApi;
+export const {
+  usePostQuestsMutation,
+  usePostCampaignDraftMutation,
+  useGetListCampaignQuery,
+  useLazyGetListCampaignQuery,
+  useGetDetailCampaignQuery,
+  useLazyGetDetailCampaignQuery,
+} = injectedRtkApi;

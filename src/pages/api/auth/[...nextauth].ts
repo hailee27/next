@@ -5,10 +5,12 @@ import TwitterProvider from 'next-auth/providers/twitter';
 import DiscordProvider from 'next-auth/providers/discord';
 import { discordProvider } from '@/utils/social-provider-configs/discord.provider';
 import LineProvider from 'next-auth/providers/line';
+import type { NextAuthOptions } from 'next-auth';
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   secret: 'developer_clout',
-  site: process?.env?.NEXTAUTH_URL,
+  // site: process?.env?.NEXTAUTH_URL || 'http://localhost:3000',
+  pages: { signIn: '/auth/signin' },
   providers: [
     TwitterProvider({
       clientId: 'INGuSX5GyqypSrHclokya8WdT',

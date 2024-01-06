@@ -1,10 +1,25 @@
 import CButtonClassic from '@/components/common/CButtonClassic';
+import { logout } from '@/redux/slices/auth.slice';
+import { RootState } from '@/redux/store';
+// import { useLogoutMutation } from '@/redux/endpoints/auth';
+// import { wrapper } from '@/redux/store';
 import { Image } from 'antd';
+
 import { useRouter } from 'next/router';
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 function Header() {
   const router = useRouter();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state: RootState) => state.auth);
+  // const [logout] = useLogoutMutation();
+  // useEffect(() => {
+  //   if (!accessToken) {
+  //     router.push('/auth/sign-in/campaign-creator');
+  //   }
+  // }, [accessToken]);
+
   return (
     <div className=" border-[#2D3648] h-full flex items-center justify-between px-[40px]">
       <Image
@@ -20,11 +35,15 @@ function Header() {
         <div className="flex space-x-[16px] h-[21px]">
           <span>ONE.course</span>
           <span className="border-x-[1px] border-[#AAA] px-[16px]">管理者</span>
-          <span>ikeyama@one-stone.co.jp</span>
+          <span>{user?.email.email}</span>
         </div>
         <div>
           <CButtonClassic
             customClassName="px-[32px] !py-[13px] h-[44px] bg-white !text-[#333] !text-[12px]"
+            onClick={() => {
+              dispatch(logout());
+              router.push('/auth/sign-in/campaign-creator');
+            }}
             title="ログアウト"
             withIcon={{
               position: 'left',
