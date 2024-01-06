@@ -11,7 +11,7 @@ export default function login(build: EndpointBuilder<BaseQueryFn, string, string
   >({
     query(body) {
       return {
-        url: 'auth/register/email',
+        url: 'register/email',
         method: 'POST',
         body,
       };

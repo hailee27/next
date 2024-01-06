@@ -1,0 +1,33 @@
+.customRewardCollapse {
+  :global {
+    .ant-collapse-header,
+    .ant-collapse-content-box {
+      background-color: white;
+      padding-left: 0px !important;
+      padding-bottom: 0px !important;
+      padding-top: 0px !important;
+    }
+    .ant-collapse-content-box {
+      padding-top: 8px !important;
+    }
+    .ant-collapse-header-text {
+      color: #333;
+      font-family: Noto Sans JP;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+      letter-spacing: 0.42px;
+    }
+    .reward-item {
+      color: #777;
+      font-family: Noto Sans JP;
+      font-size: 13px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+      letter-spacing: 0.39px;
+      text-decoration-line: underline;
+    }
+  }
+}

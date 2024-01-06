@@ -1,0 +1,23 @@
+.customSwitch {
+  width: 40px !important;
+  height: 24px !important;
+  &,
+  &:hover {
+    background-color: #dddddd;
+  }
+  &.ant-switch-checked {
+    background-color: #04afaf !important;
+  }
+  :global {
+    .ant-switch-handle {
+      top: 50%;
+      width: 16px;
+      height: 16px;
+      transform: translateY(-50%);
+      inset-inline-start: 4px;
+    }
+  }
+}
+.customSwitch:global(.ant-switch-checked) {
+  background-color: #04afaf !important;
+}
