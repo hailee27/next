@@ -1,4 +1,7 @@
 /* eslint-disable no-console */
+
+'use client';
+
 import CButtonShadow from '@/components/common/CButtonShadow';
 import CModalWapper from '@/components/common/CModalWapper';
 import TwitterLogo from '@/components/common/icons/TwitterLogo';
@@ -24,13 +27,13 @@ export default function ConnectXModal({ buttonLabel, actionType }: ConnectXModal
     try {
       window.removeEventListener('storage', onChangeLocalStorage, false);
       const storageData = JSON.parse(localStorage.getItem('twitter_callback_data') || '{}');
-      console.log(storageData);
+
       if (storageData?.error) {
         toastMessage(storageData?.error, 'error');
         return;
       }
       if (storageData?.data) {
-        console.log('twitter data', storageData?.data);
+        console.log('twitter data', storageData);
       }
     } catch (error) {
       console.log(error);
@@ -41,7 +44,7 @@ export default function ConnectXModal({ buttonLabel, actionType }: ConnectXModal
     window.addEventListener('storage', onChangeLocalStorage, false);
     const rootUrl = 'https://twitter.com/i/oauth2/authorize';
     const options = {
-      redirect_uri: 'http://localhost:3000/auth/callback/twitter',
+      redirect_uri: `${window.location?.origin}/auth/callback/twitter`,
       client_id: 'UjZfREtGZlVIelpvS1NrbVhrRkY6MTpjaQ',
       state: actionType,
       response_type: 'code',

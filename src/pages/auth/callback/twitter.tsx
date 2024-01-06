@@ -1,24 +1,39 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-console */
+
+'use client';
+
 import axios from 'axios';
-import { useRouter } from 'next/router';
 import { useCallback, useEffect } from 'react';
 
 export default function TwitterAuthCallBack() {
-  const { query } = useRouter();
+  const searchParams = new URLSearchParams(window.location.search);
+  const state = searchParams.get('state');
+  const code = searchParams.get('code');
+
   const handleTwitterAuth = useCallback(async () => {
     try {
-      if ((query?.state === 'SIGNUP' || query?.state === 'SIGNIN') && query?.code) {
+      if ((state === 'SIGNUP' || state === 'SIGNIN') && code) {
         const response = await axios.get(
-          `${process?.env?.NEXT_PUBLIC_API_URL}auth/connect/twitter?code=${query?.code}&state=${query?.state}`
+          `${process?.env?.NEXT_PUBLIC_API_URL}auth/connect/twitter?code=${code}&state=${state}`
         );
-        localStorage.setItem(
-          'twitter_callback_data',
-          JSON.stringify({
-            data: JSON.stringify(response || {}),
-          })
-        );
+
+        if (response?.data) {
+          localStorage.setItem(
+            'twitter_callback_data',
+            JSON.stringify({
+              data: response?.data,
+            })
+          );
+        } else {
+          localStorage.setItem(
+            'twitter_callback_data',
+            JSON.stringify({
+              error: 'twitter connect failed',
+            })
+          );
+        }
       } else {
         localStorage.setItem(
           'twitter_callback_data',
@@ -37,7 +52,7 @@ export default function TwitterAuthCallBack() {
     } finally {
       window.close();
     }
-  }, [query?.state, query?.code]);
+  }, []);
 
   useEffect(() => {
     handleTwitterAuth();
