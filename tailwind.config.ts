@@ -35,6 +35,11 @@ const config: Config = {
         'campaign-detail-bg-1':
           'linear-gradient(2deg, rgba(160, 255, 158, 0.50) 1.61%, rgba(166, 255, 255, 0.50) 98.38%)',
       },
+      listStyleType: {
+        square: 'square',
+        roman: 'upper-roman',
+        'lower-alpha': 'lower-alpha',
+      },
       colors: {
         'primary-base': '#6B4EFF',
         'border-base': '#2D3648',
