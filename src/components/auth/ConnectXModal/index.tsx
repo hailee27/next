@@ -5,8 +5,12 @@
 import CButtonShadow from '@/components/common/CButtonShadow';
 import CModalWapper from '@/components/common/CModalWapper';
 import TwitterLogo from '@/components/common/icons/TwitterLogo';
+import { setSession } from '@/redux/slices/auth.slice';
+import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import toastMessage from '@/utils/func/toastMessage';
+import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 interface ConnectXModalProps {
   buttonLabel: string;
@@ -22,31 +26,46 @@ export default function ConnectXModal({ buttonLabel, actionType }: ConnectXModal
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+  const router = useRouter();
+
+  const dispatch = useDispatch();
 
   const onChangeLocalStorage = useCallback(async () => {
     try {
-      window.removeEventListener('storage', onChangeLocalStorage, false);
       const storageData = JSON.parse(localStorage.getItem('twitter_callback_data') || '{}');
 
+      localStorage.removeItem('twitter_callback_data');
+      if (storageData?.data || storageData?.error) {
+        window.removeEventListener('storage', onChangeLocalStorage, false);
+      }
       if (storageData?.error) {
         toastMessage(storageData?.error, 'error');
         return;
       }
-      if (storageData?.data) {
+      if (storageData?.data?.accessToken && storageData?.data?.refreshToken && storageData?.data?.user) {
         console.log('twitter data', storageData);
+        dispatch(setSession({ ...storageData?.data }));
+        toastMessage('Signup successful');
+        if (actionType === 'SIGNUP') {
+          router.replace('/my-page/settings');
+        } else {
+          router.replace('/');
+        }
       }
     } catch (error) {
       console.log(error);
+      toastMessage(getErrorMessage(error), 'error');
     }
   }, []);
 
   function getTwitterOauthUrl() {
+    localStorage.removeItem('twitter_callback_data');
     window.addEventListener('storage', onChangeLocalStorage, false);
     const rootUrl = 'https://twitter.com/i/oauth2/authorize';
     const options = {
       redirect_uri: `${window.location?.origin}/auth/callback/twitter`,
       client_id: 'UjZfREtGZlVIelpvS1NrbVhrRkY6MTpjaQ',
-      state: actionType,
+      state: `${window.location?.origin}/auth/callback/twitter+++${actionType}`,
       response_type: 'code',
       code_challenge: 'challenge',
       code_challenge_method: 'plain',

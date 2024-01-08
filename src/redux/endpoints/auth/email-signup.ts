@@ -1,9 +1,9 @@
-import { LoginData } from '@/types/auth.type';
+import { SignupResponse } from '@/types/auth.type';
 import { BaseQueryFn, EndpointBuilder } from '@reduxjs/toolkit/query';
 
-export default function login(build: EndpointBuilder<BaseQueryFn, string, string>) {
+export default function signupEmail(build: EndpointBuilder<BaseQueryFn, string, string>) {
   return build.mutation<
-    LoginData,
+    SignupResponse,
     {
       email: string;
       password: string;
@@ -11,7 +11,7 @@ export default function login(build: EndpointBuilder<BaseQueryFn, string, string
   >({
     query(body) {
       return {
-        url: 'register/email',
+        url: 'auth/register',
         method: 'POST',
         body,
       };

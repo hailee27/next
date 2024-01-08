@@ -4,26 +4,33 @@
 
 'use client';
 
-import axios from 'axios';
+import { useLazyAuthTwitterQuery } from '@/redux/endpoints/auth';
+
 import { useCallback, useEffect } from 'react';
 
 export default function TwitterAuthCallBack() {
   const searchParams = new URLSearchParams(window.location.search);
-  const state = searchParams.get('state');
+  const stateQuery = searchParams.get('state');
   const code = searchParams.get('code');
-
+  const [triggerAuthTwitter] = useLazyAuthTwitterQuery();
   const handleTwitterAuth = useCallback(async () => {
     try {
-      if ((state === 'SIGNUP' || state === 'SIGNIN') && code) {
-        const response = await axios.get(
-          `${process?.env?.NEXT_PUBLIC_API_URL}auth/connect/twitter?code=${code}&state=${state}`
-        );
+      const stateUrl = stateQuery?.split('+++');
+      const redirectUri = stateUrl?.[0];
+      const state = stateUrl?.[1];
 
-        if (response?.data) {
+      if (redirectUri && (state === 'SIGNUP' || state === 'SIGNIN') && code) {
+        const resp = await triggerAuthTwitter({
+          code,
+          state,
+          redirect_uri: redirectUri,
+        }).unwrap();
+        console.log(resp);
+        if (resp?.accessToken && resp?.refreshToken && resp?.user) {
           localStorage.setItem(
             'twitter_callback_data',
             JSON.stringify({
-              data: response?.data,
+              data: resp,
             })
           );
         } else {
@@ -42,11 +49,11 @@ export default function TwitterAuthCallBack() {
           })
         );
       }
-    } catch (err) {
+    } catch (err: any) {
       localStorage.setItem(
         'twitter_callback_data',
         JSON.stringify({
-          error: (err as any)?.message ?? 'Something went wrong',
+          error: err?.data?.message || err?.message || 'Something went wrong',
         })
       );
     } finally {

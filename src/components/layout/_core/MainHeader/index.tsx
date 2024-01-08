@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import Image from 'next/image';
 import CButtonShadow from '@/components/common/CButtonShadow';
+import Link from 'next/link';
 
 export default function MainHeader() {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
@@ -60,7 +61,7 @@ export default function MainHeader() {
   return (
     <div className="font-notoSans sticky z-[999] top-0 bg-white">
       <div className="h-[64px] px-[20px] flex justify-between items-center w-full  border-t-[2px] border-b-[2px] border-[#333] border-solid">
-        <div className="w-[81px] h-[24px]">
+        <Link className="w-[81px] h-[24px] hover:cursor-pointer" href="/">
           <Image
             alt="footer logo"
             className="w-full h-full object-cover"
@@ -69,7 +70,7 @@ export default function MainHeader() {
             src="/assets/images/logo 1.png"
             width="0"
           />
-        </div>
+        </Link>
         <div className="w-[42px] h-[42px]">
           <CButtonShadow
             classBgColor="bg-white"

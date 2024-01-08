@@ -1,5 +1,3 @@
-import { UserRole } from './user.type';
-
 export type TypeCompanyRole = {
   companyId: number;
   userId: number;
@@ -66,8 +64,11 @@ export interface User {
 }
 
 export interface LoginData {
-  totpToken: string;
+  totpToken?: string;
   code?: string;
+  accessToken?: string;
+  refreshToken?: string;
+  user?: User;
 }
 
 export interface LoginRequest {
@@ -75,17 +76,10 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface RecaptchaVerifyRequest {
-  token: string;
-}
-
-export interface RecaptchaVerifyResponse {
-  status: string;
-}
-
 export interface SMSVerifyRequest {
   token: string;
   code?: string;
+  user?: User;
 }
 
 export interface SMSVerifyResponse {
@@ -94,19 +88,8 @@ export interface SMSVerifyResponse {
   user: User;
 }
 
-export interface TwitterAuthRequest {
-  twitterId: string;
-  email: string;
-}
-
-export interface TwitterAuthResponse {
+export interface SignupResponse {
   accessToken: string;
   refreshToken: string;
   user: User;
-}
-
-export interface TwitterSignupRequest {
-  twitterId: string;
-  email: string;
-  role: UserRole;
 }

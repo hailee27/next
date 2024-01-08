@@ -1,24 +1,44 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ConnectXModal from '@/components/auth/ConnectXModal';
 import CButtonShadow from '@/components/common/CButtonShadow';
 import CFormInputShadow from '@/components/common/CFormInputShadow';
 import ArrowDown from '@/components/common/icons/ArrowDown';
-import { useLoginMutation, useRecaptchaVerifyMutation, useTwitterAuthMutation } from '@/redux/endpoints/auth';
-import { SMS_CASE } from '@/utils/constant/enums';
+import useAuthEmailPassword from '@/hooks/useAuthEmailPassword';
+import { useSignupEmailMutation } from '@/redux/endpoints/auth';
+import { setSession } from '@/redux/slices/auth.slice';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import toastMessage from '@/utils/func/toastMessage';
-import { LoginFormData, loginSchema } from '@/utils/schema/login-email';
-import { yupResolver } from '@hookform/resolvers/yup';
-import axios from 'axios';
+import { AuthEmailPasswordData } from '@/utils/schema/auth.schema';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
-import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
-export default function CampaignImplementerSignin() {
+export default function SignupPage() {
+  const { register, handleSubmit, errors, isDisableSubmit, onChangeRecaptcha } = useAuthEmailPassword();
+
+  const [signupEmail] = useSignupEmailMutation();
+
+  const router = useRouter();
+
+  const dispatch = useDispatch();
+
+  const onSignupEmail = async (formValue: AuthEmailPasswordData) => {
+    try {
+      if (formValue.email && formValue.password) {
+        const data = await signupEmail(formValue).unwrap();
+        if (data?.accessToken && data?.refreshToken && data?.user) {
+          dispatch(setSession({ ...data }));
+          toastMessage('Signup successful');
+          router.replace('/my-page/settings');
+        }
+      }
+    } catch (e: any) {
+      toastMessage(getErrorMessage(e), 'error');
+    }
+  };
+
   return (
     <div className="min-h-[100vh] bg-[#D5FFFF] py-[40px] px-[20px]">
       <h1 className="text-[20px] font-bold tracking-[0.6px] text-center text-[#04AFAF]">新規会員登録</h1>
@@ -41,24 +61,35 @@ export default function CampaignImplementerSignin() {
           キャンペーン作成者の方
         </div>
         <div className="border-[2px] border-[#333] rounded-b-[16px] px-[22px] py-[38px]">
-          <form autoComplete="off" className="flex flex-col gap-[16px] max-w-[327px] mx-auto items-center">
+          <form
+            autoComplete="off"
+            className="flex flex-col gap-[16px] max-w-[327px] mx-auto items-center"
+            onSubmit={handleSubmit(onSignupEmail)}
+          >
             <div className="w-full">
-              <CFormInputShadow name="email" placeholder="メールアドレスを入力" />
+              <CFormInputShadow errors={errors} name="email" placeholder="メールアドレスを入力" register={register} />
               <div className="h-[8px]" />
-              <CFormInputShadow name="password" placeholder="パスワードを入力" type="password" />
+              <CFormInputShadow
+                errors={errors}
+                name="password"
+                placeholder="パスワードを入力"
+                register={register}
+                type="password"
+              />
             </div>
 
             {/* eslint-disable-next-line react/jsx-no-bind */}
-            <ReCAPTCHA onChange={() => {}} sitekey={process?.env?.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? ''} />
+            <ReCAPTCHA onChange={onChangeRecaptcha} sitekey={process?.env?.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? ''} />
 
             <div className="w-full h-[53px]">
               <CButtonShadow
-                isDisable
+                classBgColor={isDisableSubmit ? 'bg-[#c2c2c2]' : 'bg-[#333]'}
+                classBorderColor={isDisableSubmit ? 'border-[#c2c2c2]' : 'border-[#333]'}
+                classShadowColor="bg-[#fff]"
+                isDisable={isDisableSubmit}
                 textClass="text-white text-[14px] font-notoSans"
                 title="ログインする"
                 type="submit"
-                // classBgColor={isDisableSubmit ? "#c2c2c2" : "#333"}
-                // classBorderColor={isDisableSubmit ? "#c2c2c2" : "#333"}
               />
             </div>
             <div>

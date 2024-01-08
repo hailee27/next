@@ -56,7 +56,7 @@ const config: Config = {
         md: { min: '768px' },
         lg: { min: '1024px' },
         xl: { min: '1280px' },
-        xxl: { min: '1512px' },
+        xxl: { min: '1440px' },
         fhd: { min: '1920px' },
         'mb-h': { raw: '(max-height: 767px)' },
       },
