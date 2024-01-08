@@ -1,34 +1,43 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-console */
-import axios from 'axios';
-import { useEffect } from 'react';
+
+'use client';
+
+import { useLazyAuthTwitterQuery } from '@/redux/endpoints/auth';
+
+import { useCallback, useEffect } from 'react';
 
 export default function TwitterAuthCallBack() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const oauthTokenParam = urlParams.get('oauth_token');
-  const oauthTokenVerifierParam = urlParams.get('oauth_verifier');
-
-  const handleTwitterAuth = async () => {
+  const searchParams = new URLSearchParams(window.location.search);
+  const stateQuery = searchParams.get('state');
+  const code = searchParams.get('code');
+  const [triggerAuthTwitter] = useLazyAuthTwitterQuery();
+  const handleTwitterAuth = useCallback(async () => {
     try {
-      const localReqToken = localStorage.getItem('oauthRequestToken');
-      const localReqTokenSecret = localStorage.getItem('oauthRequestTokenSecret');
+      const stateUrl = stateQuery?.split('+++');
+      const redirectUri = stateUrl?.[0];
+      const state = stateUrl?.[1];
 
-      if (oauthTokenParam === localReqToken && oauthTokenVerifierParam) {
-        const response = await axios.get(
-          `${process?.env?.NEXT_PUBLIC_API_URL}auth/redirect/${localReqToken}/${localReqTokenSecret}/${oauthTokenVerifierParam}`
-        );
-        if (response?.data?.user) {
+      if (redirectUri && (state === 'SIGNUP' || state === 'SIGNIN') && code) {
+        const resp = await triggerAuthTwitter({
+          code,
+          state,
+          redirect_uri: redirectUri,
+        }).unwrap();
+        console.log(resp);
+        if (resp?.accessToken && resp?.refreshToken && resp?.user) {
           localStorage.setItem(
             'twitter_callback_data',
             JSON.stringify({
-              data: response?.data?.user,
+              data: resp,
             })
           );
         } else {
           localStorage.setItem(
             'twitter_callback_data',
             JSON.stringify({
-              error: 'Auth Failed: failed to get user',
+              error: 'twitter connect failed',
             })
           );
         }
@@ -36,27 +45,24 @@ export default function TwitterAuthCallBack() {
         localStorage.setItem(
           'twitter_callback_data',
           JSON.stringify({
-            error: 'Auth Failed: Token not matching',
+            error: 'Missing params for connect twitter',
           })
         );
       }
-    } catch (err) {
+    } catch (err: any) {
       localStorage.setItem(
         'twitter_callback_data',
         JSON.stringify({
-          error: err || {},
+          error: err?.data?.message || err?.message || 'Something went wrong',
         })
       );
     } finally {
       window.close();
     }
-  };
+  }, []);
 
   useEffect(() => {
-    if (oauthTokenParam && oauthTokenVerifierParam) {
-      console.log('call', oauthTokenParam, oauthTokenVerifierParam);
-      handleTwitterAuth();
-    }
-  }, []);
+    handleTwitterAuth();
+  }, [handleTwitterAuth]);
   return <div className="w-full h-full mt-[300px] text-center">Waiting a moment ...</div>;
 }

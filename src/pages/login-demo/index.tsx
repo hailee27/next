@@ -11,7 +11,6 @@ import CButtonShadow from '@/components/common/CButtonShadow';
 import CShadowCard from '@/components/common/CCardShadow';
 import MainFooter from '@/components/layout/_core/MainFooter';
 import MainHeader from '@/components/layout/_core/MainHeader';
-import { useTwitterAuthMutation } from '@/redux/endpoints/auth';
 import toastMessage from '@/utils/func/toastMessage';
 import { tiktokProvider } from '@/utils/social-provider-configs/tiktok.provider';
 import axios from 'axios';
@@ -22,7 +21,6 @@ export default function Login() {
   const { data: session } = useSession();
   const [provider, setProvider] = useState('');
   const [profile, setProfile] = useState<any>();
-  const [twitterAuth] = useTwitterAuthMutation();
 
   function getTwitterOauthUrl() {
     const rootUrl = 'https://twitter.com/i/oauth2/authorize';
@@ -124,41 +122,7 @@ export default function Login() {
     }
   };
 
-  const onChangeLocalStorage = useCallback(async () => {
-    try {
-      const storageData = JSON.parse(localStorage.getItem('twitter_callback_data') || '{}');
-      if (storageData?.error) {
-        toastMessage('Something went wrong', 'error');
-        return;
-      }
-      if (storageData?.data) {
-        window.removeEventListener('storage', onChangeLocalStorage, false);
-        console.log('twitter data', storageData?.data);
-        if (storageData?.data?.id && storageData?.data?.email) {
-          const data = await twitterAuth({
-            twitterId: storageData?.data?.id?.toString(),
-            email: storageData?.data?.email,
-          }).unwrap();
-          console.log(data);
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
-  // finally {
-  //   localStorage.removeItem('twitter_callback_data');
-  //   localStorage.removeItem('oauthRequestToken');
-  //   localStorage.removeItem('oauthRequestTokenSecret');
-  // }
-
-  useEffect(() => {
-    window.addEventListener('storage', onChangeLocalStorage, false);
-    return () => {
-      window.removeEventListener('storage', onChangeLocalStorage, false);
-    };
-  }, []);
-
+  console.log('session', session);
   return (
     <div>
       <div className="h-6" />

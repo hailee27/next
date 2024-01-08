@@ -5,67 +5,66 @@ import CButtonShadow from '@/components/common/CButtonShadow';
 import CFormInputShadow from '@/components/common/CFormInputShadow';
 import ArrowDown from '@/components/common/icons/ArrowDown';
 import useAuthEmailPassword from '@/hooks/useAuthEmailPassword';
-import { useSigninEmailMutation } from '@/redux/endpoints/auth';
+import { useSignupEmailMutation } from '@/redux/endpoints/auth';
 import { setSession } from '@/redux/slices/auth.slice';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import toastMessage from '@/utils/func/toastMessage';
-import { LoginFormData } from '@/utils/schema/login-email';
+import { AuthEmailPasswordData } from '@/utils/schema/auth.schema';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useDispatch } from 'react-redux';
 
-export default function CampaignImplementerSignin() {
+export default function SignupPage() {
   const { register, handleSubmit, errors, isDisableSubmit, onChangeRecaptcha } = useAuthEmailPassword();
 
-  const [signinEmail] = useSigninEmailMutation();
+  const [signupEmail] = useSignupEmailMutation();
 
   const router = useRouter();
 
   const dispatch = useDispatch();
 
-  const onSigninEmail = async (formValue: LoginFormData) => {
+  const onSignupEmail = async (formValue: AuthEmailPasswordData) => {
     try {
       if (formValue.email && formValue.password) {
-        const data = await signinEmail(formValue).unwrap();
+        const data = await signupEmail(formValue).unwrap();
         if (data?.accessToken && data?.refreshToken && data?.user) {
           dispatch(setSession({ ...data }));
-          toastMessage('Signin successful');
+          toastMessage('Signup successful');
           router.replace('/my-page/settings');
         }
       }
-    } catch (err) {
-      toastMessage(getErrorMessage(err), 'error');
+    } catch (e: any) {
+      toastMessage(getErrorMessage(e), 'error');
     }
   };
 
   return (
     <div className="min-h-[100vh] bg-[#D5FFFF] py-[40px] px-[20px]">
-      <h1 className="text-[20xp] font-bold tracking-[0.6px] text-center">ログイン</h1>
+      <h1 className="text-[20px] font-bold tracking-[0.6px] text-center text-[#04AFAF]">新規会員登録</h1>
       <div className="h-[36px]" />
       <div>
         <div className="px-[24px] py-[14px] border-[2px] border-[#333] rounded-t-[16px] flex items-center justify-center bg-[#333] text-white text-[18px] font-bold">
           キャンペーン参加者の方
         </div>
         <div className="border-[2px] border-[#333] rounded-b-[16px] px-[22px] py-[38px]">
-          <ConnectXModal actionType="SIGNIN" buttonLabel="X（twitter）でログインする" />
-
+          <ConnectXModal actionType="SIGNUP" buttonLabel="X（twitter）を連携する" />
           <div className="h-[16px]" />
           <p className="text-gray-1 text-[13px] leading-[22px] tracking-[0.39px]">
-            キャンペーンに参加するにはXでの連携が必要です
+            ※キャンペーンに参加するにはXでの連携が必要です。
           </p>
         </div>
       </div>
       <div className="h-[16px]" />
       <div>
         <div className="px-[24px] py-[14px] border-[2px] border-[#333] rounded-t-[16px] flex items-center justify-center bg-[#333] text-white text-[18px] font-bold">
-          キャンペーン参加者の方
+          キャンペーン作成者の方
         </div>
         <div className="border-[2px] border-[#333] rounded-b-[16px] px-[22px] py-[38px]">
           <form
             autoComplete="off"
             className="flex flex-col gap-[16px] max-w-[327px] mx-auto items-center"
-            onSubmit={handleSubmit(onSigninEmail)}
+            onSubmit={handleSubmit(onSignupEmail)}
           >
             <div className="w-full">
               <CFormInputShadow errors={errors} name="email" placeholder="メールアドレスを入力" register={register} />
@@ -79,12 +78,6 @@ export default function CampaignImplementerSignin() {
               />
             </div>
 
-            <Link
-              className="  text-main-text font-medium text-[12px] tracking-[0.36px] cursor-pointer pb-[4px] border-b-[1px] border-b-[#333] w-fit"
-              href="/auth/forgot-password"
-            >
-              パスワードを忘れた方
-            </Link>
             {/* eslint-disable-next-line react/jsx-no-bind */}
             <ReCAPTCHA onChange={onChangeRecaptcha} sitekey={process?.env?.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? ''} />
 
@@ -99,9 +92,14 @@ export default function CampaignImplementerSignin() {
                 type="submit"
               />
             </div>
-            <p className="text-[13px] text-gray-1 leading-[22px]">
-              キャンペーンを作成するにはメールアドレス/パスワードでのログインが必要です
-            </p>
+            <div>
+              <p className="text-[13px] text-gray-1 leading-[22px]">
+                ※キャンペーンを作成するにはメールアドレス/パスワードでの登録が必要です。
+              </p>
+              <p className="text-[13px] text-gray-1 leading-[22px]">
+                ※続行することにより利用規約およびプライバシーポリシーに同意したものとみなされます。
+              </p>
+            </div>
           </form>
         </div>
       </div>
@@ -109,9 +107,9 @@ export default function CampaignImplementerSignin() {
       <div className="flex items-center justify-center">
         <Link
           className="flex items-center justify-center gap-[4px] text-[13px] font-bold pb-[6px] border-b-[2px] border-b-[#333] cursor-pointer"
-          href="/auth/sign-up"
+          href="/auth/sign-in/campaign-implementer"
         >
-          新規会員登録の方はこちら
+          ログインの方はこちら
           <ArrowDown className="rotate-[-90deg]" />
         </Link>
       </div>

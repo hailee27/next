@@ -1,135 +1,119 @@
 /* eslint-disable no-console */
-import SignUpFormInput from '@/components/SignUpFormInput';
-import { useLoginMutation, useRecaptchaVerifyMutation } from '@/redux/endpoints/auth';
-import { LoginFormData, loginSchema } from '@/utils/schema/login-email';
-import { yupResolver } from '@hookform/resolvers/yup';
-import clsx from 'clsx';
-import { useEffect, useState } from 'react';
-import ReCAPTCHA from 'react-google-recaptcha';
-import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/router';
-import { SMS_CASE } from '@/utils/constant/enums';
+
+import ConnectXModal from '@/components/auth/ConnectXModal';
+import CButtonShadow from '@/components/common/CButtonShadow';
+import CFormInputShadow from '@/components/common/CFormInputShadow';
+import ArrowDown from '@/components/common/icons/ArrowDown';
+import useAuthEmailPassword from '@/hooks/useAuthEmailPassword';
+import { useSigninEmailMutation } from '@/redux/endpoints/auth';
+import { setSession } from '@/redux/slices/auth.slice';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import toastMessage from '@/utils/func/toastMessage';
-
-/*
-dvhai@yopmail.com
-12345678
-*/
+import { LoginFormData } from '@/utils/schema/login-email';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import ReCAPTCHA from 'react-google-recaptcha';
+import { useDispatch } from 'react-redux';
 
 export default function CampaignCreatorSigninPage() {
-  const [hasCaptchaToken, setHasCaptchaToken] = useState(false);
-  const [isDisableSubmit, setIsDisableSubmit] = useState(true);
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<LoginFormData>({
-    resolver: yupResolver(loginSchema),
-  });
+  const { register, handleSubmit, errors, isDisableSubmit, onChangeRecaptcha } = useAuthEmailPassword();
+
+  const [signinEmail] = useSigninEmailMutation();
+
   const router = useRouter();
-  const [login] = useLoginMutation();
-  const [recaptchaVerify, { data: recaptchaVerifyData, isSuccess: isRecaptchaVerifySuccess }] =
-    useRecaptchaVerifyMutation();
-  const password = watch('password');
-  const email = watch('email');
 
-  async function onChange(token: string | null) {
-    if (token) {
-      console.log('token', token);
-      setHasCaptchaToken(true);
-      await recaptchaVerify({
-        token,
-      });
-    } else {
-      setHasCaptchaToken(false);
-    }
-  }
+  const dispatch = useDispatch();
 
-  const onSubmit = async (formValue: LoginFormData) => {
+  const onSigninEmail = async (formValue: LoginFormData) => {
     try {
-      const body = {
-        email: formValue.email,
-        password: formValue.password,
-      };
-      const data = await login(body).unwrap();
-      console.log(data);
-
-      if (data?.totpToken && data?.code) {
-        console.log(data?.code);
-        router.push({
-          pathname: '/auth/sign-in/campaign-creator/sms-verification',
-          query: {
-            totpToken: data?.totpToken,
-            code: data?.code,
-            case: SMS_CASE.LOGIN_VERIFICATION,
-          },
-        });
+      if (formValue.email && formValue.password) {
+        const data = await signinEmail(formValue).unwrap();
+        if (data?.accessToken && data?.refreshToken && data?.user) {
+          dispatch(setSession({ ...data }));
+          toastMessage('Signin successful');
+          router.replace('/my-page/settings');
+        }
       }
     } catch (err) {
       toastMessage(getErrorMessage(err), 'error');
     }
   };
-
-  useEffect(() => {
-    if (password && email && hasCaptchaToken && recaptchaVerifyData?.status && isRecaptchaVerifySuccess) {
-      setIsDisableSubmit(false);
-    } else {
-      setIsDisableSubmit(true);
-    }
-  }, [password, email, hasCaptchaToken, isRecaptchaVerifySuccess]);
-
   return (
-    <div className="bg-white border-[1px] border-solid border-border-base  p-[24px_12px] flex item-center justify-center">
-      <div className="md:flex-1 flex justify-center items-center gap-[26px] flex-col text-text-dark max-w-[400px] px-[8px]">
-        <p className="text-center py-[15px] text-[18px] leading-[18px]">Log in</p>
-        <div className="h-[1px] w-full bg-border-base" />
+    <div className="xxl:bg-[#D5FFFF] xxl:border-[2px] xxl:border-[#333] xxl:rounded-[16px] xxl:px-[56px] xxl:py-[48px] text-[#333] mt-[30px]">
+      <h3 className="text-[30px] font-bold text-[#04AFAF] tracking-[0.9px] text-center ">新規会員登録</h3>
+      <div className="h-[8px]" />
+      <p className="text-[13px] text-center">キャンペーン作成にはメールアドレスでのログインと2段階認証が必要です</p>
+      <div className="h-[24px]" />
+
+      <div className="bg-[#D5FFFF] border-[2px] border-[#333] rounded-[16px] p-[16px] xxl:p-[24px] xxl:pt-[32px]">
         <form
           autoComplete="off"
-          className="flex flex-col gap-[26px] max-w-[327px] mx-auto items-center"
-          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col gap-[16px]  mx-auto items-center"
+          onSubmit={handleSubmit(onSigninEmail)}
         >
-          <SignUpFormInput errors={errors} label="Email" name="email" register={register} />
-          <SignUpFormInput errors={errors} label="Password" name="password" register={register} type="password" />
-          <p className="w-full text-primary-base text-[16px] leading-[16px] cursor-pointer">パスワードを忘れた方</p>
+          <div className="flex flex-col xxl:flex-row items-start gap-[8px]">
+            <div className="w-[287px]">
+              <CFormInputShadow errors={errors} name="email" placeholder="メールアドレスを入力" register={register} />
+            </div>
+            <div className="w-[287px]">
+              <CFormInputShadow
+                errors={errors}
+                name="password"
+                placeholder="パスワードを入力"
+                register={register}
+                type="password"
+              />
+            </div>
+          </div>
 
-          {/* eslint-disable-next-line react/jsx-no-bind */}
-          <ReCAPTCHA onChange={onChange} sitekey={process?.env?.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? ''} />
-          <p className=" text-[16px] leading-[16px] ">
-            続行することにより、利用規約およびプライバシーポリシーに同意したものとみなされます。
-          </p>
-
-          <button
-            className={clsx(
-              'w-full   text-white text-[16px] font-medium h-[48px] rounded-full max-w-[327px]  hover:opacity-80 transition-all duration-100',
-              isDisableSubmit ? 'pointer-events-none bg-[#00000014]' : 'bg-primary-base'
-            )}
-            disabled={isDisableSubmit}
-            type="submit"
+          <Link
+            className="  text-main-text font-medium text-[12px] tracking-[0.36px] cursor-pointer pb-[4px] border-b-[1px] border-b-[#333] w-fit"
+            href="/auth/forgot-password"
           >
-            ログイン
-          </button>
+            パスワードを忘れた方
+          </Link>
+          {/* eslint-disable-next-line react/jsx-no-bind */}
+          <ReCAPTCHA onChange={onChangeRecaptcha} sitekey={process?.env?.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? ''} />
+
+          <div className="w-[287px] h-[53px]">
+            <CButtonShadow
+              classBgColor={isDisableSubmit ? 'bg-[#c2c2c2]' : 'bg-[#333]'}
+              classBorderColor={isDisableSubmit ? 'border-[#c2c2c2]' : 'border-[#333]'}
+              classShadowColor="bg-[#fff]"
+              isDisable={isDisableSubmit}
+              textClass="text-white text-[14px] font-notoSans"
+              title="ログインする"
+              type="submit"
+            />
+          </div>
+          <div>
+            <p className="text-[13px] text-gray-1 leading-[22px]">
+              ※続行することにより、<span className="font-bold">利用規約</span>
+              および<span className="font-bold">プライバシーポリシー</span> に同意したものとみなされます。
+            </p>
+            <p className="text-[13px] text-gray-1 leading-[22px]">
+              ※2段階認証を<span className="font-bold">マイページ</span>より設定してください。
+            </p>
+          </div>
         </form>
-        <div className="h-[1px] w-full bg-border-base" />
-        <div className="text-center text-[16px] leading-[16px]">
-          メールアドレス・パスワード・2段階認証を <br />
-          未設定の方
+      </div>
+      <div className="h-[16px]" />
+      <div className="bg-[#D5FFFF] border-[2px] border-[#333] rounded-[16px] p-[24px]  ">
+        <p className="text-[16px]  font-bold">X連携済であるが、メールアドレス・パスワード・2段階認証を未設定の方</p>
+        <div className="h-[24px]" />
+        <div className="w-[287px] mx-auto">
+          <ConnectXModal actionType="SIGNIN" buttonLabel="マイページで設定する" />
         </div>
-        <button
-          className="w-full bg-primary-base text-white text-[16px] font-medium h-[48px] rounded-full max-w-[327px]  hover:opacity-80 transition-all duration-100"
-          type="button"
+      </div>
+      <div className="h-[24px]" />
+      <div className="  flex items-center justify-center">
+        <Link
+          className="flex items-center justify-center gap-[4px] text-[13px] font-bold pb-[6px] border-b-[2px] border-b-[#333] cursor-pointer"
+          href="/auth/sign-up"
         >
-          マイページで設定
-        </button>
-        <div className="h-[1px] w-full bg-border-base" />
-        <p className=" text-[16px] leading-[16px] ">アカウントをお持ちでない方</p>
-        <button
-          className="w-full bg-primary-base text-white text-[16px] font-medium h-[48px] rounded-full max-w-[327px]  hover:opacity-80 transition-all duration-100"
-          type="button"
-        >
-          会員登録
-        </button>
+          新規会員登録の方はこちら
+          <ArrowDown className="rotate-[-90deg]" />
+        </Link>
       </div>
     </div>
   );

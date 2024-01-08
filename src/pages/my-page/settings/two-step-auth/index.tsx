@@ -4,7 +4,7 @@ import CFormInputShadow from '@/components/common/CFormInputShadow';
 import clsx from 'clsx';
 import { useState } from 'react';
 
-export default function SMSAuthSetup() {
+export default function SettingTwoStepAuthPage() {
   const [step, setStep] = useState(1);
   return (
     <div className="relative w-full min-h-[100vh] overflow-x-hidden bg-[#D5FFFF]">

@@ -14,5 +14,5 @@ export function getErrorMessage(error: any) {
   // eslint-disable-next-line no-console
   console.log(error);
 
-  return ErrorCode[statusCode] || '内部サーバーエラー';
+  return ErrorCode?.[statusCode] || error?.data?.message || error?.message || '内部サーバーエラー';
 }

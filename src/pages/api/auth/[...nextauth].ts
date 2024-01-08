@@ -19,6 +19,8 @@ export const authOptions: NextAuthOptions = {
     DiscordProvider({
       clientId: discordProvider.clientKey,
       clientSecret: discordProvider.clientKeySecret,
+      authorization:
+        'https://discord.com/api/oauth2/authorize?scope=identify+guilds+email+connections+guilds.members.read+guilds.join',
     }),
     LineProvider({
       clientId: '2002221153',
@@ -33,7 +35,7 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token, user }: any) {
       session.user.userProfile = token?.userProfile ?? null;
-      session.user.provider = token?.account?.provider ?? '';
+      session.user.account = token?.account ?? null;
       return session;
     },
   },

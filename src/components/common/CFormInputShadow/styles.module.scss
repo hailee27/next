@@ -3,7 +3,7 @@
 }
 
 .inputContainer :global(.inputContent) {
-  @apply w-full h-full transition-all duration-200  border-[2px] flex items-center justify-center gap-[6px]  overflow-hidden font-medium text-[#333] text-[14px] font-notoSans leading-[21px]  bg-white absolute left-[-6px] top-[-6px] rounded-full border-[#333] outline-none  px-[24px] placeholder:text-gray-2;
+  @apply w-full h-full transition-all duration-200  border-[2px] flex items-center justify-center gap-[6px]  overflow-hidden font-medium text-[#333] text-[14px] font-notoSans leading-[21px]  bg-white absolute left-[-6px] top-[-6px] rounded-full border-[#333] outline-none  px-[24px] placeholder:text-gray-2 placeholder:font-medium;
 }
 .inputContainer :global(.inputContent.content-error) {
   border-color: red !important;

@@ -27,7 +27,7 @@ function CFormInputShadow<FormData extends FieldValues>({
       {label ? <span className={clsx('inputLabel', name && errors?.[name] ? 'label-error' : '')}>{label}</span> : ''}
       <div className="h-[53px] pl-[6px] pt-[6px]">
         <div className={styles.inputContainer}>
-          <div className="shadowContent" />
+          <div className={clsx('shadowContent')} />
           <input
             className={clsx('inputContent', name && errors?.[name] ? 'content-error' : '')}
             {...formRegister}
