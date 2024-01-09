@@ -8,6 +8,7 @@ import { SMS_CASE } from '@/utils/constant/enums';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import toastMessage from '@/utils/func/toastMessage';
 import { Spin } from 'antd';
+import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 
@@ -50,18 +51,24 @@ export default function VerificationPage() {
 
   return (
     <Spin spinning={isLoading || isSendVerificationCode}>
-      <div className="bg-[#D5FFFF] border-[2px] border-[#333] rounded-[16px] px-[16px] xxl:px-[56px] py-[48px] text-[#333] ">
-        <h3 className="text-center text-[#04AFAF]  text-[30px] font-bold tracking-[0.9px]">ログイン</h3>
-        <div className="h-[8px]" />
-        <p className="text-[13px] text-center">携帯電話に届いた認証コードを入力してください</p>
-        <div className="h-[32px]" />
-        <div className="bg-[#fff] border-[2px] border-[#333] rounded-[16px] p-[16px] xxl:px-[24px] xxl:py-[32px] text-[#333] xxl:min-w-[625px] ">
-          <p className="text-center font-bold text-[16px]">携帯電話に届いた認証コードを入力してください</p>
+      <div
+        className={clsx(' min-h-[100vh] h-full w-full bg-[#D5FFFF] py-[40px] px-[20px] transition-all duration-300')}
+      >
+        <div className="bg-white border-[2px] border-[#333] px-[22px] py-[30px] rounded-[16px]">
+          <h1 className="text-[20px] font-bold text-[#04AFAF] tracking-[0.6px] text-center ">
+            携帯電話に届いた認証コード
+            <br />
+            を入力してください
+          </h1>
           <div className="h-[16px]" />
+
           <SmsVerificationForm onSubmitCode={handleSubmitSMS} />
         </div>
         <div className="h-[24px]" />
-        <p className="font-bold text-[12px]">SMSが届いていませんか？下記のいずれかをお試しください</p>
+        <p className="text-[12px] font-bold">
+          SMSが届いていませんか？ <br />
+          下記のいずれかをお試しください
+        </p>
         <div className="h-[16px]" />
         <div>
           <p

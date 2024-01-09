@@ -35,7 +35,7 @@ function Header() {
         <div className="flex space-x-[16px] h-[21px]">
           <span>ONE.course</span>
           <span className="border-x-[1px] border-[#AAA] px-[16px]">管理者</span>
-          <span>{user?.email.email}</span>
+          <span>{user?.email?.email}</span>
         </div>
         <div>
           <CButtonClassic

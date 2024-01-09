@@ -37,7 +37,7 @@ export default function CampaignCreatorSigninPage() {
           router.push(
             `/auth/sign-in/campaign-creator/verification?code=${data?.code ?? undefined}&totpToken=${
               data?.totpToken ?? undefined
-            }&case=${SMS_CASE.LOGIN_VERIFICATION}`
+            }&case=${SMS_CASE.LOGIN_VERIFICATION}&userId=${data?.user?.id ?? undefined}`
           );
         }
       }
@@ -46,7 +46,7 @@ export default function CampaignCreatorSigninPage() {
     }
   };
   return (
-    <div className="xxl:bg-[#D5FFFF] xxl:border-[2px] xxl:border-[#333] xxl:rounded-[16px] xxl:px-[56px] xxl:py-[48px] text-[#333] mt-[30px]">
+    <div className="xxl:bg-[#D5FFFF] xxl:border-[2px] xxl:border-[#333] xxl:rounded-[16px] xxl:px-[56px] xxl:py-[48px] text-[#333]">
       <h3 className="text-[30px] font-bold text-[#04AFAF] tracking-[0.9px] text-center ">新規会員登録</h3>
       <div className="h-[8px]" />
       <p className="text-[13px] text-center">キャンペーン作成にはメールアドレスでのログインと2段階認証が必要です</p>

@@ -7,6 +7,7 @@ import ArrowDown from '@/components/common/icons/ArrowDown';
 import useAuthEmailPassword from '@/hooks/useAuthEmailPassword';
 import { useSigninEmailMutation } from '@/redux/endpoints/auth';
 import { setSession } from '@/redux/slices/auth.slice';
+import { SMS_CASE } from '@/utils/constant/enums';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import toastMessage from '@/utils/func/toastMessage';
 import { LoginFormData } from '@/utils/schema/login-email';
@@ -32,6 +33,12 @@ export default function CampaignImplementerSignin() {
           dispatch(setSession({ ...data }));
           toastMessage('Signin successfully');
           router.replace('/my-page/settings');
+        } else if (data?.user && data?.totpToken) {
+          router.push(
+            `/auth/sign-in/campaign-implementer/verification?code=${data?.code ?? undefined}&totpToken=${
+              data?.totpToken ?? undefined
+            }&case=${SMS_CASE.LOGIN_VERIFICATION}&userId=${data?.user?.id ?? undefined}`
+          );
         }
       }
     } catch (err) {

@@ -25,7 +25,7 @@ export default function SettingTwoStepAuthPage() {
 
   const { user } = useSelector((store: RootState) => store.auth);
 
-  const [sendSMSCode, { isLoading: isSendSMSCode }] = useAuthVerificationMutation();
+  const [sendVerificationCode, { isLoading: isSendVerificationCode }] = useAuthVerificationMutation();
   const [verifiSMS, { isLoading: isVerifiSMS }] = useSmsVerifyMutation();
   const [updateMe, { isLoading: isUpdateUser }] = useUpdateMeMutation();
   const {
@@ -40,7 +40,7 @@ export default function SettingTwoStepAuthPage() {
   const onSubmitPhone = async (values: UpdatePhoneData) => {
     try {
       if (values?.phone && user?.id) {
-        const data = await sendSMSCode({ type: 'SMS', userId: user?.id }).unwrap();
+        const data = await sendVerificationCode({ type: 'SMS', userId: user?.id }).unwrap();
         setUserPhone(values.phone);
         setTotpToken(data?.totpToken ?? undefined);
       }
@@ -51,7 +51,7 @@ export default function SettingTwoStepAuthPage() {
 
   const onReSendCode = async (sendBy: 'CALL' | 'MESSAGE') => {
     try {
-      const data = await sendSMSCode({ type: 'SMS', userId: user?.id, sendBy }).unwrap();
+      const data = await sendVerificationCode({ type: 'SMS', userId: user?.id, sendBy }).unwrap();
       setTotpToken(data?.totpToken ?? undefined);
     } catch (err) {
       toastMessage(getErrorMessage(err), 'error');
@@ -80,7 +80,7 @@ export default function SettingTwoStepAuthPage() {
   };
 
   return (
-    <Spin spinning={isSendSMSCode || isVerifiSMS || isUpdateUser}>
+    <Spin spinning={isSendVerificationCode || isVerifiSMS || isUpdateUser}>
       <div className="relative w-full min-h-[100vh] overflow-x-hidden bg-[#D5FFFF]">
         <div
           className={clsx(
@@ -128,6 +128,12 @@ export default function SettingTwoStepAuthPage() {
             <SmsVerificationForm onSubmitCode={onUpdatePhone} />
           </div>
           <div className="h-[24px]" />
+          <p className="text-[12px] font-bold">
+            SMSが届いていませんか？ <br />
+            下記のいずれかをお試しください
+          </p>
+          <div className="h-[16px]" />
+
           <div>
             <p
               aria-hidden
