@@ -107,12 +107,12 @@ export default function MainHeader() {
         <div
           aria-hidden="true"
           className={clsx(
-            ' bg-white  w-[302px]  mb-h:h-[100vh] h-[75vh] border-[2px] border-[#333] border-r-[0px] absolute z-[1001]  duration-500 transition-all  py-[88px] pb-[10px] px-[48px]',
+            ' bg-white  w-[302px]  mb-h:h-[100vh] h-[75vh] border-[2px] border-[#333] border-r-[0px] absolute z-[1001]  duration-500 transition-all  py-[88px] pb-[10px] px-[48px] pr-[20px]',
             isOpenMenu ? ' right-0 top-0' : ' right-[-500px] top-0'
           )}
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="w-full h-full overflow-y-auto pb-[70px]">
+          <div className="w-full h-full overflow-y-auto pb-[70px] pr-[28px]">
             <div className="w-[42px] h-[42px] absolute right-[20px] top-[11px] z-[1111] ">
               <CButtonShadow
                 classBgColor="bg-white"

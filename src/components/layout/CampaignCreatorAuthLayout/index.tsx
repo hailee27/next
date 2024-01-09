@@ -18,7 +18,8 @@ export default function CampaignCreatorAuthLayout({ children }: { children: Reac
         </Link>
       </div>
       <div className="min-h-[calc(100vh-62px)] bg-[url('/assets/images/login-bg.png')] bg-no-repeat bg-cover bg-center">
-        <div className="flex w-full h-full min-h-[calc(100vh-62px)] items-center justify-center  xxl:justify-between gap-[88px] p-[16px] xxl:p-[92px] xxl:pt-[0px]">
+        <div className="h-[40px]" />
+        <div className="flex w-full h-full min-h-[calc(100vh-62px-40px)] items-center justify-center  xxl:justify-between gap-[88px] p-[16px] xxl:p-[92px] xxl:pt-[0px]">
           <div className="hidden xxl:block m-w-[425px]">
             <h1 className="text-[#333] text-[56px] font-bold leading-[72px] tracking-[1.68px]">
               月額利用料なし <br />
