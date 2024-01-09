@@ -45,12 +45,13 @@ export default function ConnectXModal({ buttonLabel, actionType }: ConnectXModal
       if (storageData?.data?.accessToken && storageData?.data?.refreshToken && storageData?.data?.user) {
         console.log('twitter data', storageData);
         dispatch(setSession({ ...storageData?.data }));
-        toastMessage('Signup successful');
         if (actionType === 'SIGNUP') {
-          router.replace('/my-page/settings');
-        } else {
-          router.replace('/');
+          toastMessage('Signup successful');
         }
+        if (actionType === 'SIGNIN') {
+          toastMessage('Signin successful');
+        }
+        router.replace('/my-page/settings');
       }
     } catch (error) {
       console.log(error);

@@ -8,7 +8,7 @@ export default function authVerification(build: EndpointBuilder<BaseQueryFn, str
       type: 'SMS' | 'RECAPTCHA';
       token?: string;
       sendBy?: 'MESSAGE' | 'CALL';
-      secret?: string;
+      userId?: number;
     }
   >({
     query(body) {

@@ -2,7 +2,6 @@ import AuthCheck from '@/components/AuthCheck';
 import AcountInfoCard from '@/components/my-page/AcountInfoCard';
 import AuthInfoCard from '@/components/my-page/AuthInfoCard';
 import RewardHistoryCard from '@/components/my-page/RewardHistoryCard';
-import React from 'react';
 
 export default function SettingsPage() {
   return (

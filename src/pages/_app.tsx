@@ -45,6 +45,10 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
     getLayout = (page) => <MainLayout>{page}</MainLayout>;
   }
 
+  if (router.pathname.startsWith('/my-page/settings')) {
+    getLayout = (page) => <MainLayout>{page}</MainLayout>;
+  }
+
   useEffect(() => {
     const start = () => {
       setLoading(true);
