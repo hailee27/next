@@ -30,7 +30,7 @@ export default function CampaignImplementerSignin() {
         const data = await signinEmail(formValue).unwrap();
         if (data?.accessToken && data?.refreshToken && data?.user) {
           dispatch(setSession({ ...data }));
-          toastMessage('Signin successful');
+          toastMessage('Signin successfully');
           router.replace('/my-page/settings');
         }
       }

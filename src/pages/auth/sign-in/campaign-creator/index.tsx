@@ -7,6 +7,7 @@ import ArrowDown from '@/components/common/icons/ArrowDown';
 import useAuthEmailPassword from '@/hooks/useAuthEmailPassword';
 import { useSigninEmailMutation } from '@/redux/endpoints/auth';
 import { setSession } from '@/redux/slices/auth.slice';
+import { SMS_CASE } from '@/utils/constant/enums';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import toastMessage from '@/utils/func/toastMessage';
 import { LoginFormData } from '@/utils/schema/login-email';
@@ -32,6 +33,12 @@ export default function CampaignCreatorSigninPage() {
           dispatch(setSession({ ...data }));
           toastMessage('Signin successful');
           router.replace('/my-page/settings');
+        } else if (data?.user && data?.totpToken) {
+          router.push(
+            `/auth/sign-in/campaign-creator/verification?code=${data?.code ?? undefined}&totpToken=${
+              data?.totpToken ?? undefined
+            }&case=${SMS_CASE.LOGIN_VERIFICATION}`
+          );
         }
       }
     } catch (err) {
@@ -45,7 +52,7 @@ export default function CampaignCreatorSigninPage() {
       <p className="text-[13px] text-center">キャンペーン作成にはメールアドレスでのログインと2段階認証が必要です</p>
       <div className="h-[24px]" />
 
-      <div className="bg-[#D5FFFF] border-[2px] border-[#333] rounded-[16px] p-[16px] xxl:p-[24px] xxl:pt-[32px]">
+      <div className="bg-[#D5FFFF] xxl:bg-white border-[2px] border-[#333] rounded-[16px] p-[16px] xxl:p-[24px] xxl:pt-[32px]">
         <form
           autoComplete="off"
           className="flex flex-col gap-[16px]  mx-auto items-center"
@@ -98,7 +105,7 @@ export default function CampaignCreatorSigninPage() {
         </form>
       </div>
       <div className="h-[16px]" />
-      <div className="bg-[#D5FFFF] border-[2px] border-[#333] rounded-[16px] p-[24px]  ">
+      <div className="bg-[#D5FFFF] xxl:bg-white border-[2px] border-[#333] rounded-[16px] p-[24px]  ">
         <p className="text-[16px]  font-bold">X連携済であるが、メールアドレス・パスワード・2段階認証を未設定の方</p>
         <div className="h-[24px]" />
         <div className="w-[287px] mx-auto">

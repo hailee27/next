@@ -31,7 +31,7 @@ export interface User {
   profilePictureUrl: string;
   role: string;
   timezone: string;
-  twoFactorMethod: string;
+  twoFactorMethod: 'NONE' | 'TOTP';
   twoFactorPhone: string | null;
   updatedAt: string;
   active: boolean;
@@ -61,6 +61,7 @@ export interface User {
   companyRole: TypeCompanyRole[];
   memberCompany: string | null;
   ownCompany: TypeOwnCompany[];
+  havePassword?: boolean;
 }
 
 export interface LoginData {
