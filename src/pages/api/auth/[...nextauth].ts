@@ -10,7 +10,7 @@ import type { NextAuthOptions } from 'next-auth';
 export const authOptions: NextAuthOptions = {
   secret: 'developer_clout',
   // site: process?.env?.NEXTAUTH_URL || 'http://localhost:3000',
-  pages: { signIn: '/auth/signin' },
+  // pages: { signIn: '/auth/signin' },
   providers: [
     TwitterProvider({
       clientId: 'INGuSX5GyqypSrHclokya8WdT',
@@ -26,6 +26,17 @@ export const authOptions: NextAuthOptions = {
       clientId: '2002221153',
       clientSecret: '4190208119fdc2fbe69fb5d746d2c587',
     }),
+    {
+      id: 'tiktok',
+      name: 'Tiktok',
+      type: 'oauth',
+      authorization: 'https://www.tiktok.com/v2/auth/authorize/',
+      clientId: 'awkycd3ez80voj09',
+      clientSecret: 'a13LFIfTa8mGERwQvKL9akJX1QWvfwYU',
+      profile(profile) {
+        return profile;
+      },
+    },
   ],
   callbacks: {
     async jwt({ token, account, profile }: any) {
