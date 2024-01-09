@@ -51,7 +51,7 @@ export default function ConnectXModal({ buttonLabel, actionType }: ConnectXModal
         if (actionType === 'SIGNIN') {
           toastMessage('Signin successful');
         }
-        router.replace('/my-page/settings');
+        router.replace('/my-page');
       }
     } catch (error) {
       console.log(error);

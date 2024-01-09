@@ -32,7 +32,7 @@ export default function CampaignCreatorSigninPage() {
         if (data?.accessToken && data?.refreshToken && data?.user) {
           dispatch(setSession({ ...data }));
           toastMessage('Signin successful');
-          router.replace('/my-page/settings');
+          router.replace('/my-page');
         } else if (data?.user && data?.totpToken) {
           router.push(
             `/auth/sign-in/campaign-creator/verification?code=${data?.code ?? undefined}&totpToken=${

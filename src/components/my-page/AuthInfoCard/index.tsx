@@ -51,7 +51,7 @@ export default function AuthInfoCard() {
     setTwoStepAuthState(Boolean(user?.twoFactorMethod === 'TOTP' && user?.twoFactorPhone));
   }, [user?.twoFactorMethod, user?.twoFactorPhone]);
   return (
-    <Spin spinning={isFetchingUser}>
+    <Spin spinning={isFetchingUser || isUpdateUser}>
       <div className=" border-[2px] border-[#333] px-[22px] py-[30px] rounded-[16px] bg-white">
         <div className="flex flex-col gap-[16px]">
           <div className="flex justify-between gap-[12px] items-center">

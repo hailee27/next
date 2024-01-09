@@ -42,7 +42,7 @@ export default function SettingPasswordPage() {
         }
         await updateMe(requestBody).unwrap();
         toastMessage('Password has been updated successfully', 'error');
-        router.push('/my-page/settings');
+        router.push('/my-page');
       }
     } catch (err) {
       toastMessage(getErrorMessage(err), 'error');
@@ -70,7 +70,7 @@ export default function SettingPasswordPage() {
                     name="password"
                     placeholder="パスワードを入力"
                     register={register}
-                    type="text"
+                    type="password"
                   />
                   <div className="h-[16px]" />
                   <div className="flex items-center justify-center">

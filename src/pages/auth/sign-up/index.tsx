@@ -31,7 +31,7 @@ export default function SignupPage() {
         if (data?.accessToken && data?.refreshToken && data?.user) {
           dispatch(setSession({ ...data }));
           toastMessage('Signup successful');
-          router.replace('/my-page/settings');
+          router.replace('/my-page');
         }
       }
     } catch (e: any) {

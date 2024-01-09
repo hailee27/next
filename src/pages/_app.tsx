@@ -48,7 +48,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
     getLayout = (page) => <MainLayout>{page}</MainLayout>;
   }
 
-  if (router.pathname.startsWith('/my-page/settings')) {
+  if (router.pathname.startsWith('/my-page')) {
     getLayout = (page) => <MainLayout>{page}</MainLayout>;
   }
 
