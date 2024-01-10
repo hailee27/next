@@ -42,7 +42,7 @@ function Header() {
             customClassName="px-[32px] !py-[13px] h-[44px] bg-white !text-[#333] !text-[12px]"
             onClick={() => {
               dispatch(logout());
-              router.push('/auth/sign-in/campaign-creator');
+              // router.push('/auth/sign-in/campaign-creator');
             }}
             title="ログアウト"
             withIcon={{

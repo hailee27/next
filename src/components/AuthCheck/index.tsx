@@ -6,12 +6,17 @@ import { useRouter } from 'next/router';
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+const FlagComponent = () => {
+  const router = useRouter();
+  useEffect(() => {
+    router.push('/auth/sign-in/campaign-creator');
+  }, []);
+  return null;
+};
 function AuthCheck({ children }: { children: React.ReactElement }) {
   const { accessToken } = useSelector((state: RootState) => state.auth);
-  const router = useRouter();
   const [triggerGetMe] = useLazyMeQuery();
   const dispatch = useDispatch();
-
   const getUserLoggedIn = useCallback(async () => {
     try {
       if (accessToken) {
@@ -27,15 +32,15 @@ function AuthCheck({ children }: { children: React.ReactElement }) {
   }, [accessToken]);
 
   useEffect(() => {
-    getUserLoggedIn();
-    return () => {};
-  }, []);
+    if (accessToken) {
+      getUserLoggedIn();
+    }
+  }, [accessToken]);
 
-  if (!accessToken) {
-    router.replace('/auth/sign-in/campaign-creator');
-  } else {
-    return children;
+  if (!accessToken || accessToken === null) {
+    return <FlagComponent />;
   }
+  return children;
 }
 
 export default AuthCheck;

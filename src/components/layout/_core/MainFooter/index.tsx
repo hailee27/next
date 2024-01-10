@@ -7,52 +7,47 @@ import React from 'react';
 
 const FooterNavigation = [
   {
+    key: 1,
     text: 'Home',
     to: '/',
   },
+  { key: 2, text: 'キャンペーン', to: '/' },
   {
-    text: 'キャンペーン',
-    to: '/',
-  },
-  {
+    key: 3,
     text: 'マイページ',
     to: '/',
   },
   {
+    key: 4,
     text: 'キャンペーン作成',
     to: '/',
   },
   {
+    key: 5,
     text: '問い合わせ',
     to: '/',
   },
   {
+    key: 6,
     text: 'プライバシーポリシー',
     to: '/',
   },
-  {
-    text: '利用規約',
-    to: '/',
-  },
+  { key: 7, text: '利用規約', to: '/' },
 ];
 
 const FooterSocialLinks = [
   {
+    key: 1,
     to: '/',
     icon: <FacebookIcon />,
   },
+  { key: 2, to: '/', icon: <TwitterIcon /> },
   {
-    to: '/',
-    icon: <TwitterIcon />,
-  },
-  {
+    key: 3,
     to: '/',
     icon: <InstagramIcon />,
   },
-  {
-    to: '/',
-    icon: <LinkedinIcon />,
-  },
+  { key: 4, to: '/', icon: <LinkedinIcon /> },
 ];
 
 export default function MainFooter() {
@@ -70,14 +65,14 @@ export default function MainFooter() {
       </div>
       <div className="flex flex-wrap gap-[16px] items-center justify-center">
         {FooterNavigation.map((i) => (
-          <a className="text-[16px] font-medium" href={i.to} key={i.to}>
+          <a className="text-[16px] font-medium" href={i.to} key={i.key}>
             {i.text}
           </a>
         ))}
       </div>
       <div className="flex flex-wrap gap-[16px]">
         {FooterSocialLinks.map((i) => (
-          <a href={i.to} key={i.to}>
+          <a href={i.to} key={i.key}>
             {i.icon}
           </a>
         ))}
