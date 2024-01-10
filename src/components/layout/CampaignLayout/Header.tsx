@@ -35,14 +35,14 @@ function Header() {
         <div className="flex space-x-[16px] h-[21px]">
           <span>ONE.course</span>
           <span className="border-x-[1px] border-[#AAA] px-[16px]">管理者</span>
-          <span>{user?.email.email}</span>
+          <span>{user?.email?.email}</span>
         </div>
         <div>
           <CButtonClassic
             customClassName="px-[32px] !py-[13px] h-[44px] bg-white !text-[#333] !text-[12px]"
             onClick={() => {
               dispatch(logout());
-              router.push('/auth/sign-in/campaign-creator');
+              // router.push('/auth/sign-in/campaign-creator');
             }}
             title="ログアウト"
             withIcon={{
