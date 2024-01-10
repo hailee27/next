@@ -12,22 +12,23 @@ export default function MainHeader() {
   const MainNavigation = useMemo(
     () => [
       {
+        key: 1,
         text: 'Home',
         to: '/',
       },
       {
+        key: 2,
         text: 'キャンペーン一覧',
         to: '/',
       },
       {
+        key: 3,
         text: 'マイページ',
         to: '/',
       },
+      { key: 4, text: 'キャンペーン作成', to: '/' },
       {
-        text: 'キャンペーン作成',
-        to: '/',
-      },
-      {
+        key: 5,
         text: 'お問い合わせ',
         to: '/inquiry',
       },
@@ -37,14 +38,17 @@ export default function MainHeader() {
   const SubNavigation = useMemo(
     () => [
       {
+        key: 1,
         text: '利用規約',
         to: '/terms-of-service',
       },
       {
+        key: 2,
         text: '特定商取引法に基づく表示',
         to: '/specified-commercial-transactions-law',
       },
       {
+        key: 3,
         text: 'プライバシーポリシー',
         to: '/privacy-policy',
       },
@@ -136,7 +140,7 @@ export default function MainHeader() {
                     i.text === 'Home' ? 'font-montserrat' : ''
                   )}
                   href={i.to}
-                  key={i.to}
+                  key={i.key}
                 >
                   {i.text}
                 </a>
@@ -147,7 +151,7 @@ export default function MainHeader() {
             </div>
             <div className="flex flex-col gap-[16px]">
               {SubNavigation.map((i) => (
-                <a className={clsx('text-[13px]  tracking-[4px]  ')} href={i.to} key={i.to}>
+                <a className={clsx('text-[13px]  tracking-[4px]  ')} href={i.to} key={i.key}>
                   {i.text}
                 </a>
               ))}
