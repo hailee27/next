@@ -48,7 +48,7 @@ export default function CampaignImplementerSignin() {
 
   return (
     <div className="min-h-[100vh] bg-[#D5FFFF] py-[40px] px-[20px]">
-      <h1 className="text-[20xp] font-bold tracking-[0.6px] text-center">ログイン</h1>
+      <h1 className="text-[20xp] text-[#04AFAF] font-bold tracking-[0.6px] text-center">ログイン</h1>
       <div className="h-[36px]" />
       <div>
         <div className="px-[24px] py-[14px] border-[2px] border-[#333] rounded-t-[16px] flex items-center justify-center bg-[#333] text-white text-[18px] font-bold">

@@ -27,12 +27,16 @@ const FooterNavigation = [
     to: '/',
   },
   {
-    text: 'プライバシーポリシー',
+    text: '利用規約',
+    to: '/terms-of-service',
+  },
+  {
+    text: '特定商取引法に基づく表示',
     to: '/',
   },
   {
-    text: '利用規約',
-    to: '/',
+    text: 'プライバシーポリシー',
+    to: '/privacy-policy',
   },
 ];
 
@@ -69,11 +73,27 @@ export default function MainFooter() {
         />
       </div>
       <div className="flex flex-wrap gap-[16px] items-center justify-center">
-        {FooterNavigation.map((i) => (
-          <a className="text-[16px] font-medium" href={i.to} key={i.to}>
-            {i.text}
-          </a>
-        ))}
+        <div className="flex flex-wrap gap-[16px] items-center justify-center">
+          {FooterNavigation.slice(0, 3).map((i) => (
+            <a className="text-[12px] font-medium" href={i.to} key={i.to}>
+              {i.text}
+            </a>
+          ))}
+        </div>
+        <div className="flex flex-wrap gap-[16px] items-center justify-center">
+          {FooterNavigation.slice(3, 5).map((i) => (
+            <a className="text-[12px] font-medium" href={i.to} key={i.to}>
+              {i.text}
+            </a>
+          ))}
+        </div>
+        <div className="flex flex-wrap gap-[16px] items-center justify-center">
+          {FooterNavigation.slice(5, 8).map((i) => (
+            <a className="text-[12px] font-medium" href={i.to} key={i.to}>
+              {i.text}
+            </a>
+          ))}
+        </div>
       </div>
       <div className="flex flex-wrap gap-[16px]">
         {FooterSocialLinks.map((i) => (

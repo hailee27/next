@@ -109,7 +109,13 @@ export default function SettingTwoStepAuthPage() {
               <div className="h-[24px]" />
               <div className="h-[53px] flex gap-[8px]">
                 <div className="flex-1">
-                  <CButtonShadow onClick={() => {}} title="キャンセルする" type="button" />
+                  <CButtonShadow
+                    onClick={() => {
+                      router.back();
+                    }}
+                    title="キャンセルする"
+                    type="button"
+                  />
                 </div>
                 <div className="flex-1">
                   <CButtonShadow title="保存する" type="submit" />

@@ -8,6 +8,7 @@ import TwitterLogo from '@/components/common/icons/TwitterLogo';
 import { setSession } from '@/redux/slices/auth.slice';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import toastMessage from '@/utils/func/toastMessage';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -121,8 +122,14 @@ export default function ConnectXModal({ buttonLabel, actionType }: ConnectXModal
             </div>
             <div className="h-[16px]" />
             <p className="text-[13px] text-gray-1 leading-[22px] tracking-[0.39px]">
-              ※続行することにより<span className="font-bold">利用規約</span>および
-              <span className="font-bold">プライバシーポリシー</span>
+              ※続行することにより
+              <Link className="font-bold" href="/terms-of-service">
+                利用規約
+              </Link>
+              および
+              <Link className="font-bold" href="/privacy-policy">
+                プライバシーポリシー
+              </Link>
               に同意したものとみなされます。
             </p>
           </div>

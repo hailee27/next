@@ -121,21 +121,10 @@ export default function Login() {
       console.log(error);
     }
   };
-
+  // telegram bot API token: 6886566855:AAGdl1a3_GdP4Y6tvNqbrCRnN34nku_Fs30
   console.log('session', session);
   return (
     <div>
-      <div className="h-6" />
-      <div className="w-[300px] h-[66px]">
-        <CButtonShadow
-          onClick={() => {
-            handleClickAuthTwitter?.();
-          }}
-          title="Sign in 3 legged auth twitter"
-          type="button"
-        />
-      </div>
-
       <div className="h-6" />
       <div className="w-[300px] h-[66px]">
         <CButtonShadow onClick={() => signIn('tiktok')} title=" Sign in Tiktok NextAuth" type="button" />
@@ -145,10 +134,7 @@ export default function Login() {
         <CButtonShadow onClick={() => signIn('discord')} title=" Sign in discord NextAuth" type="button" />
       </div>
       <div className="h-6" />
-      <div className="w-[300px] h-[66px]">
-        <CButtonShadow onClick={() => signIn('twitter')} title=" Sign in twitter NextAuth" type="button" />
-      </div>
-      <div className="h-6" />
+
       <div className="w-[300px] h-[66px]">
         <CButtonShadow onClick={() => signIn('line')} title=" Sign in LINE NextAuth" type="button" />
       </div>
