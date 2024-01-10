@@ -62,13 +62,25 @@ function PopUpOrganization() {
         />
 
         <div className="flex flex-col space-y-[10px] mb-[24px]">
-          <span className="font-bold">ロゴ </span>
+          <div className="flex space-x-[8px] items-center ">
+            <div className="text-[14px] font-bold ">ロゴ</div>
+            <div className="w-[35px] bg-[#04AFAF] h-[20px] text-center text-[11px] font-medium leading-[1.7] text-white rounded-[2px]">
+              必須
+            </div>
+          </div>
+          {/* <span className="font-bold">ロゴ </span> */}
           <Form.Item name="companyImage" noStyle rules={[{ required: true, message: '' }]}>
             <UploadButton className="w-[149px]" />
           </Form.Item>
         </div>
         <div className="flex flex-col space-y-[10px]">
-          <span className="font-bold">お支払い方法</span>
+          <div className="flex space-x-[8px] items-center ">
+            <div className="text-[14px] font-bold ">お支払い方法</div>
+            <div className="w-[35px] bg-[#04AFAF] h-[20px] text-center text-[11px] font-medium leading-[1.7] text-white rounded-[2px]">
+              必須
+            </div>
+          </div>
+          {/* <span className="font-bold">お支払い方法</span> */}
           <CButtonClassic
             customClassName="!rounded-[6px] !w-[290px] !h-[47px] !text-[14px]"
             onClick={() => openPopUp({ contents: <PopUpCreditOrDebitCard /> })}

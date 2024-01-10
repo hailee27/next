@@ -43,7 +43,7 @@ function SideBar() {
       </div>
       <div className="pl-[32px]  border-[#2D3648] flex flex-col justify-end">
         <ListItem title="組織情報" to="/campaign/organize-information" />
-        <ListItem title="アカウント情報" to="/campaign/account-information" />
+        <ListItem title="マイページ" to="/campaign/account-information" />
       </div>
     </div>
   );

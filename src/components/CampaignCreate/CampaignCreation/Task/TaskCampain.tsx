@@ -64,7 +64,7 @@ const TaskCampain = ({ item, onDelete, showDelete }: Props) => {
             { label: ' 自由形式で質問する', value: 'CUSTOM' },
           ]}
         />
-        {dataPlatForm?.[0].value && platFormWatch !== 'question' ? (
+        {dataPlatForm?.[0].value && platFormWatch !== 'CUSTOM' ? (
           <SelectLabel
             initialValue={dataPlatForm?.[0].value}
             name={['optionTasks', `task${item.id}`, 'type']}
@@ -101,7 +101,7 @@ const TaskCampain = ({ item, onDelete, showDelete }: Props) => {
               ))
           )}
         {/* TASK QUESTION */}
-        {platFormWatch === 'question' && (
+        {platFormWatch === 'CUSTOM' && (
           <div>
             <div className="w-full">
               <div className="text-[14px] font-semibold mb-[5px]">タスクタイトル ※必須</div>
