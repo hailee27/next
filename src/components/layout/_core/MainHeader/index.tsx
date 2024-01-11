@@ -6,9 +6,16 @@ import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import CButtonShadow from '@/components/common/CButtonShadow';
 import Link from 'next/link';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
+import { useRouter } from 'next/router';
+import { logout } from '@/redux/slices/auth.slice';
 
 export default function MainHeader() {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
+  const { accessToken } = useSelector((store: RootState) => store.auth);
+  const router = useRouter();
+  const dispatch = useDispatch();
   const MainNavigation = useMemo(
     () => [
       {
@@ -19,14 +26,14 @@ export default function MainHeader() {
       {
         key: 2,
         text: 'キャンペーン一覧',
-        to: '/',
+        to: '/campaigns',
       },
       {
         key: 3,
         text: 'マイページ',
-        to: '/',
+        to: '/my-page',
       },
-      { key: 4, text: 'キャンペーン作成', to: '/' },
+      { key: 4, text: 'キャンペーン作成', to: '/campaign' },
       {
         key: 5,
         text: 'お問い合わせ',
@@ -55,6 +62,21 @@ export default function MainHeader() {
     ],
     []
   );
+
+  const onChangeAuth = async () => {
+    try {
+      setIsOpenMenu(false);
+      if (accessToken) {
+        await dispatch(logout());
+      } else {
+        router.push('/auth/sign-in/campaign-implementer');
+      }
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     if (isOpenMenu) {
       document.body.classList.add('stop-scrolling');
@@ -147,7 +169,7 @@ export default function MainHeader() {
               ))}
             </div>
             <div className="my-[40px] h-[53px]">
-              <CButtonShadow onClick={() => {}} title="ログイン" />
+              <CButtonShadow onClick={onChangeAuth} title={accessToken ? 'ログアウト' : 'ログイン'} />
             </div>
             <div className="flex flex-col gap-[16px]">
               {SubNavigation.map((i) => (

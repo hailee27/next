@@ -30,7 +30,6 @@ export default function ConnectXModal({ buttonLabel, actionType }: ConnectXModal
   const router = useRouter();
 
   const dispatch = useDispatch();
-
   const onChangeLocalStorage = useCallback(async () => {
     try {
       const storageData = JSON.parse(localStorage.getItem('twitter_callback_data') || '{}');
@@ -46,10 +45,13 @@ export default function ConnectXModal({ buttonLabel, actionType }: ConnectXModal
       if (storageData?.data?.accessToken && storageData?.data?.refreshToken && storageData?.data?.user) {
         console.log('twitter data', storageData);
         dispatch(setSession({ ...storageData?.data }));
+
         if (actionType === 'SIGNUP') {
+          localStorage.setItem('USER_LOGIN_FROM', 'IMPLEMENTER');
           toastMessage('Signup successful');
         }
         if (actionType === 'SIGNIN') {
+          localStorage.setItem('USER_LOGIN_FROM', router.pathname?.includes('creator') ? 'CREATOR' : 'IMPLEMENTER');
           toastMessage('Signin successful');
         }
         router.replace('/my-page');

@@ -15,6 +15,7 @@ export default function useAuthEmailPassword() {
     formState: { errors },
   } = useForm<AuthEmailPasswordData>({
     resolver: yupResolver(authEmailPasswordSchema),
+    mode: 'onChange',
   });
   const password = watch('password');
   const email = watch('email');

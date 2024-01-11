@@ -26,6 +26,7 @@ export default function SettingPasswordPage() {
     formState: { errors },
   } = useForm<any>({
     resolver: user?.havePassword ? yupResolver(updatePasswordSchema) : yupResolver(newPasswordSchema),
+    mode: 'onChange',
   });
 
   const onUpdatePassword = async (data: any) => {

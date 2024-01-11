@@ -35,6 +35,7 @@ export default function SettingTwoStepAuthPage() {
     formState: { errors },
   } = useForm<UpdatePhoneData>({
     resolver: yupResolver(phoneSchema),
+    mode: 'onChange',
   });
 
   const onSubmitPhone = async (values: UpdatePhoneData) => {
