@@ -107,9 +107,7 @@ export default function ConnectXModal({ buttonLabel, actionType }: ConnectXModal
             </h3>
             <div className="h-[8px]" />
             <p className="text-[13px] text-gray-1 leading-[22px] tracking-[0.39px]">
-              cloutでは連携されたX（twitter）アカウントの情報を以下の目的で使用します。
-              <br />
-              ・X（twitter）アカウントでログイン
+              cloutでは連携されたX（twitter）アカウントの情報を、X（twitter）アカウントでログインする目的で使用します。
             </p>
             <div className="h-[24px]" />
             <div className="w-[206px] h-[53px]">
