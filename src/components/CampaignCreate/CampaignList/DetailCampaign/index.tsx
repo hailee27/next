@@ -46,7 +46,7 @@ function DetailCampaign() {
                   // onClick={() => router.push('/campaign/create')}
                   shadowSize="normal"
                   // textClass='"bg-main-text"'
-                  title="プレビュー"
+                  title="CSV出力"
                   withIcon={{
                     position: 'left',
                     icon: (
