@@ -1,11 +1,14 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { Image } from 'antd';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 import CButtonShadow from '../common/CButtonShadow';
 import SearchIcon from '../common/icons/SearchIcon';
 import FileIcon from '../common/icons/FileIcon';
 
 function HeaderHomePage() {
+  const { accessToken } = useSelector((store: RootState) => store.auth);
   const router = useRouter();
   return (
     <div
@@ -35,7 +38,10 @@ function HeaderHomePage() {
           <CButtonShadow
             classBgColor="bg-[#333]"
             classShadowColor="bg-[#fff]"
-            onClick={() => router.push('/auth/sign-in/campaign-implementer')}
+            onClick={() => {
+              localStorage.setItem('USER_LOGIN_FROM', 'IMPLEMENTER');
+              router.push('/auth/sign-in/campaign-implementer');
+            }}
             textClass="text-white text-[16px] font-bold"
             title="キャンペーンを探す"
             withIcon={{
@@ -48,7 +54,14 @@ function HeaderHomePage() {
           <CButtonShadow
             classBgColor="bg-btn-gradation"
             classShadowColor="bg-[#333]"
-            onClick={() => router.push('/campaign')}
+            onClick={() => {
+              if (accessToken) {
+                router.push('/campaign');
+              } else {
+                localStorage.setItem('USER_LOGIN_FROM', 'CREATOR');
+                router.push('/auth/sign-in/campaign-creator');
+              }
+            }}
             textClass="text-main-text text-[16px] font-bold"
             title="キャンペーンを作成する"
             withIcon={{

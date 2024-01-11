@@ -41,6 +41,10 @@ export default function AuthInfoCard() {
   };
 
   const onUpdateTwoStepAuthState = async (newState: boolean) => {
+    if (newState === true && (!user?.email?.email || !user?.havePassword)) {
+      toastMessage('Please setup email and password before enable two-step authentication', 'error');
+      return;
+    }
     if (newState === false) {
       await onDisableTwoStepAuth();
     } else {

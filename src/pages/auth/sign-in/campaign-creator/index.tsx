@@ -13,11 +13,14 @@ import toastMessage from '@/utils/func/toastMessage';
 import { LoginFormData } from '@/utils/schema/login-email';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useDispatch } from 'react-redux';
 
 export default function CampaignCreatorSigninPage() {
   const { register, handleSubmit, errors, isDisableSubmit, onChangeRecaptcha } = useAuthEmailPassword();
+
+  const [isShowMsg, setIsShowMsg] = useState(false);
 
   const [signinEmail] = useSigninEmailMutation();
 
@@ -32,8 +35,11 @@ export default function CampaignCreatorSigninPage() {
         if (data?.accessToken && data?.refreshToken && data?.user) {
           localStorage.setItem('USER_LOGIN_FROM', 'CREATOR');
           dispatch(setSession({ ...data }));
-          toastMessage('Signin successful');
-          router.replace('/my-page');
+          setIsShowMsg(true);
+          await setTimeout(() => {
+            toastMessage('Signin successfully');
+            router.replace('/my-page');
+          }, 2000);
         } else if (data?.user && data?.totpToken) {
           router.push(
             `/auth/sign-in/campaign-creator/verification?code=${data?.code ?? undefined}&totpToken=${
@@ -106,9 +112,13 @@ export default function CampaignCreatorSigninPage() {
               </Link>
               に同意したものとみなされます。
             </p>
-            <p className="text-[13px] text-gray-1 leading-[22px]">
-              ※2段階認証を<span className="font-bold">マイページ</span>より設定してください。
-            </p>
+            {isShowMsg ? (
+              <p className="ml-[10px] text-[12px] text-[#FF0000] leading-[22px]">
+                2段階認証をマイページより設定する必要があります。約2秒後に自動的にマイページに遷移します。
+              </p>
+            ) : (
+              ''
+            )}
           </div>
         </form>
       </div>

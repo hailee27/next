@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import AuthCheck from '@/components/AuthCheck';
 import CButtonShadow from '@/components/common/CButtonShadow';
 import CFormInputShadow from '@/components/common/CFormInputShadow';
@@ -21,13 +20,14 @@ export default function SettingAuthEmailPage() {
 
   const onUpdateEmail = async (data: LoginFormData) => {
     try {
-      //   if (data?.email) {
-      //     await updateMe({
-      //       email: data?.email,
-      //     }).unwrap();
-      //     toastMessage('Email has been updated successfully', 'error');
-      //     router.push('/my-page');
-      //   }
+      if (data?.email && data?.password) {
+        await updateMe({
+          email: data?.email,
+          newPassword: data?.password,
+        }).unwrap();
+        toastMessage('Email, password has been updated successfully', 'error');
+        router.push('/my-page');
+      }
     } catch (err) {
       toastMessage(getErrorMessage(err), 'error');
     }
@@ -66,7 +66,15 @@ export default function SettingAuthEmailPage() {
               <div className="h-[24px]" />
               <div className="h-[53px] flex gap-[8px]">
                 <div className="flex-1">
-                  <CButtonShadow title="保存する" type="submit" />
+                  <CButtonShadow
+                    classBgColor={isDisableSubmit ? 'bg-[#c2c2c2]' : 'bg-[#333]'}
+                    classBorderColor={isDisableSubmit ? 'border-[#c2c2c2]' : 'border-[#333]'}
+                    classShadowColor="bg-[#fff]"
+                    isDisable={isDisableSubmit}
+                    textClass="text-white text-[14px] font-notoSans"
+                    title="保存する"
+                    type="submit"
+                  />
                 </div>
               </div>
             </div>

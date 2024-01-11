@@ -13,11 +13,14 @@ import toastMessage from '@/utils/func/toastMessage';
 import { LoginFormData } from '@/utils/schema/login-email';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useDispatch } from 'react-redux';
 
 export default function CampaignImplementerSignin() {
   const { register, handleSubmit, errors, isDisableSubmit, onChangeRecaptcha } = useAuthEmailPassword();
+
+  const [isShowMsg, setIsShowMsg] = useState(false);
 
   const [signinEmail] = useSigninEmailMutation();
 
@@ -32,8 +35,11 @@ export default function CampaignImplementerSignin() {
         if (data?.accessToken && data?.refreshToken && data?.user) {
           localStorage.setItem('USER_LOGIN_FROM', 'IMPLEMENTER');
           dispatch(setSession({ ...data }));
-          toastMessage('Signin successfully');
-          router.replace('/my-page');
+          setIsShowMsg(true);
+          await setTimeout(() => {
+            toastMessage('Signin successfully');
+            router.replace('/my-page');
+          }, 2000);
         } else if (data?.user && data?.totpToken) {
           router.push(
             `/auth/sign-in/campaign-implementer/verification?code=${data?.code ?? undefined}&totpToken=${
@@ -67,7 +73,7 @@ export default function CampaignImplementerSignin() {
       <div className="h-[16px]" />
       <div>
         <div className="px-[24px] py-[14px] border-[2px] border-[#333] rounded-t-[16px] flex items-center justify-center bg-[#333] text-white text-[18px] font-bold">
-          キャンペーン参加者の方
+          キャンペーン作成者の方
         </div>
         <div className="border-[2px] border-[#333] rounded-b-[16px] px-[22px] py-[38px]">
           <form
@@ -107,9 +113,18 @@ export default function CampaignImplementerSignin() {
                 type="submit"
               />
             </div>
-            <p className="text-[13px] text-gray-1 leading-[22px]">
-              キャンペーンを作成するにはメールアドレス/パスワードでのログインが必要です
-            </p>
+            <div>
+              <p className="text-[13px] text-gray-1 leading-[22px]">
+                ※キャンペーンを作成するにはメールアドレス/パスワードでのログインが必要です。
+              </p>
+              {isShowMsg ? (
+                <p className="ml-[10px] text-[12px] text-[#FF0000] leading-[22px]">
+                  2段階認証をマイページより設定する必要があります。約2秒後に自動的にマイページに遷移します。
+                </p>
+              ) : (
+                ''
+              )}
+            </div>
           </form>
         </div>
       </div>
