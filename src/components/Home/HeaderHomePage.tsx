@@ -37,7 +37,7 @@ function HeaderHomePage() {
             classShadowColor="bg-[#fff]"
             onClick={() => router.push('/auth/sign-in/campaign-implementer')}
             textClass="text-white text-[16px] font-bold"
-            title="キャンペーンの一覧をみる"
+            title="キャンペーンを探す"
             withIcon={{
               position: 'left',
               icon: <SearchIcon />,
@@ -50,7 +50,7 @@ function HeaderHomePage() {
             classShadowColor="bg-[#333]"
             onClick={() => router.push('/campaign')}
             textClass="text-main-text text-[16px] font-bold"
-            title="キャンペーンの一覧をみる"
+            title="キャンペーンを作成する"
             withIcon={{
               position: 'left',
               icon: <FileIcon />,

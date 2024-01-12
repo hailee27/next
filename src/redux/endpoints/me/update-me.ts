@@ -9,7 +9,7 @@ export default function updateMe(build: EndpointBuilder<BaseQueryFn, string, str
       password?: string;
       newPassword?: string;
       twoFactorMethod?: 'NONE' | 'TOTP';
-      twoFactorPhone?: string;
+      twoFactorPhone?: string | null;
       email?: string;
     }
   >({

@@ -32,7 +32,7 @@ export default function SettingEmailPage() {
           email: data?.email,
         }).unwrap();
         toastMessage('Email has been updated successfully', 'error');
-        router.push('/my-page/settings');
+        router.push('/my-page');
       }
     } catch (err) {
       toastMessage(getErrorMessage(err), 'error');

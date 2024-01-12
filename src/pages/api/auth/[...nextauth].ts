@@ -23,8 +23,8 @@ export const authOptions: NextAuthOptions = {
         'https://discord.com/api/oauth2/authorize?scope=identify+guilds+email+connections+guilds.members.read+guilds.join',
     }),
     LineProvider({
-      clientId: '2002221153',
-      clientSecret: '4190208119fdc2fbe69fb5d746d2c587',
+      clientId: '2002706068',
+      clientSecret: '41fc750b48d14a59528a8e45517db7ca',
     }),
     {
       id: 'tiktok',

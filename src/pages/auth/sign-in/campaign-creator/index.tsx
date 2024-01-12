@@ -32,12 +32,12 @@ export default function CampaignCreatorSigninPage() {
         if (data?.accessToken && data?.refreshToken && data?.user) {
           dispatch(setSession({ ...data }));
           toastMessage('Signin successful');
-          router.replace('/my-page/settings');
+          router.replace('/my-page');
         } else if (data?.user && data?.totpToken) {
           router.push(
             `/auth/sign-in/campaign-creator/verification?code=${data?.code ?? undefined}&totpToken=${
               data?.totpToken ?? undefined
-            }&case=${SMS_CASE.LOGIN_VERIFICATION}`
+            }&case=${SMS_CASE.LOGIN_VERIFICATION}&userId=${data?.user?.id ?? undefined}`
           );
         }
       }
@@ -46,8 +46,8 @@ export default function CampaignCreatorSigninPage() {
     }
   };
   return (
-    <div className="xxl:bg-[#D5FFFF] xxl:border-[2px] xxl:border-[#333] xxl:rounded-[16px] xxl:px-[56px] xxl:py-[48px] text-[#333] mt-[30px]">
-      <h3 className="text-[30px] font-bold text-[#04AFAF] tracking-[0.9px] text-center ">新規会員登録</h3>
+    <div className="xxl:bg-[#D5FFFF] xxl:border-[2px] xxl:border-[#333] xxl:rounded-[16px] xxl:px-[56px] xxl:py-[48px] text-[#333]">
+      <h3 className="text-[30px] font-bold text-[#04AFAF] tracking-[0.9px] text-center ">ログイン</h3>
       <div className="h-[8px]" />
       <p className="text-[13px] text-center">キャンペーン作成にはメールアドレスでのログインと2段階認証が必要です</p>
       <div className="h-[24px]" />
@@ -95,8 +95,15 @@ export default function CampaignCreatorSigninPage() {
           </div>
           <div>
             <p className="text-[13px] text-gray-1 leading-[22px]">
-              ※続行することにより、<span className="font-bold">利用規約</span>
-              および<span className="font-bold">プライバシーポリシー</span> に同意したものとみなされます。
+              ※続行することにより、
+              <Link className="font-bold" href="/terms-of-service">
+                利用規約
+              </Link>
+              および
+              <Link className="font-bold" href="/privacy-policy">
+                プライバシーポリシー
+              </Link>
+              に同意したものとみなされます。
             </p>
             <p className="text-[13px] text-gray-1 leading-[22px]">
               ※2段階認証を<span className="font-bold">マイページ</span>より設定してください。

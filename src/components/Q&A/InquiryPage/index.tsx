@@ -5,6 +5,7 @@ import SelectLabel from '@/components/common/BasicSelect/SelectLabel';
 import BasicTextArea from '@/components/common/BasicTextArea';
 import CButtonShadow from '@/components/common/CButtonShadow';
 import { Form } from 'antd';
+import Link from 'next/link';
 import React from 'react';
 
 function Inquiry() {
@@ -72,9 +73,13 @@ function Inquiry() {
         </Form>
         <p className="mt-[16px] text-[13px] text-[#777]">
           ※続行することにより
-          <span className="font-bold">利用規約</span>
+          <Link className="font-bold" href="/terms-of-service">
+            利用規約
+          </Link>
           および
-          <span className="font-bold">プライバシーポリシー</span>
+          <Link className="font-bold" href="/privacy-policy">
+            プライバシーポリシー
+          </Link>
           に同意したものとみなされます。
         </p>
       </div>

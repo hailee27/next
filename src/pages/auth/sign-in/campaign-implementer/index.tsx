@@ -7,6 +7,7 @@ import ArrowDown from '@/components/common/icons/ArrowDown';
 import useAuthEmailPassword from '@/hooks/useAuthEmailPassword';
 import { useSigninEmailMutation } from '@/redux/endpoints/auth';
 import { setSession } from '@/redux/slices/auth.slice';
+import { SMS_CASE } from '@/utils/constant/enums';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import toastMessage from '@/utils/func/toastMessage';
 import { LoginFormData } from '@/utils/schema/login-email';
@@ -31,7 +32,13 @@ export default function CampaignImplementerSignin() {
         if (data?.accessToken && data?.refreshToken && data?.user) {
           dispatch(setSession({ ...data }));
           toastMessage('Signin successfully');
-          router.replace('/my-page/settings');
+          router.replace('/my-page');
+        } else if (data?.user && data?.totpToken) {
+          router.push(
+            `/auth/sign-in/campaign-implementer/verification?code=${data?.code ?? undefined}&totpToken=${
+              data?.totpToken ?? undefined
+            }&case=${SMS_CASE.LOGIN_VERIFICATION}&userId=${data?.user?.id ?? undefined}`
+          );
         }
       }
     } catch (err) {
@@ -41,7 +48,7 @@ export default function CampaignImplementerSignin() {
 
   return (
     <div className="min-h-[100vh] bg-[#D5FFFF] py-[40px] px-[20px]">
-      <h1 className="text-[20xp] font-bold tracking-[0.6px] text-center">ログイン</h1>
+      <h1 className="text-[20xp] text-[#04AFAF] font-bold tracking-[0.6px] text-center">ログイン</h1>
       <div className="h-[36px]" />
       <div>
         <div className="px-[24px] py-[14px] border-[2px] border-[#333] rounded-t-[16px] flex items-center justify-center bg-[#333] text-white text-[18px] font-bold">

@@ -38,14 +38,17 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
   if (router.pathname.startsWith('/campaigns')) {
     getLayout = (page) => <MainLayout>{page}</MainLayout>;
   }
-  if (router.pathname === '/auth/sign-in/campaign-creator') {
+  if (
+    router.pathname === '/auth/sign-in/campaign-creator' ||
+    router.pathname === '/auth/sign-in/campaign-creator/verification'
+  ) {
     getLayout = (page) => <CampaignCreatorAuthLayout>{page}</CampaignCreatorAuthLayout>;
   }
   if (router.pathname === '/') {
     getLayout = (page) => <MainLayout>{page}</MainLayout>;
   }
 
-  if (router.pathname.startsWith('/my-page/settings')) {
+  if (router.pathname.startsWith('/my-page')) {
     getLayout = (page) => <MainLayout>{page}</MainLayout>;
   }
 

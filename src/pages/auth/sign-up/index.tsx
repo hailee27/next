@@ -31,7 +31,7 @@ export default function SignupPage() {
         if (data?.accessToken && data?.refreshToken && data?.user) {
           dispatch(setSession({ ...data }));
           toastMessage('Signup successful');
-          router.replace('/my-page/settings');
+          router.replace('/my-page');
         }
       }
     } catch (e: any) {
@@ -88,16 +88,24 @@ export default function SignupPage() {
                 classShadowColor="bg-[#fff]"
                 isDisable={isDisableSubmit}
                 textClass="text-white text-[14px] font-notoSans"
-                title="ログインする"
+                title="同意して登録する"
                 type="submit"
               />
             </div>
             <div>
-              <p className="text-[13px] text-gray-1 leading-[22px]">
+              <p className="text-[13px] text-gray-1 leading-[22px] tracking-[0.39px]">
                 ※キャンペーンを作成するにはメールアドレス/パスワードでの登録が必要です。
               </p>
-              <p className="text-[13px] text-gray-1 leading-[22px]">
-                ※続行することにより利用規約およびプライバシーポリシーに同意したものとみなされます。
+              <p className="text-[13px] text-gray-1 leading-[22px] tracking-[0.39px]">
+                ※続行することにより
+                <Link className="font-bold" href="/terms-of-service">
+                  利用規約
+                </Link>
+                および
+                <Link className="font-bold" href="/privacy-policy">
+                  プライバシーポリシー
+                </Link>
+                に同意したものとみなされます。
               </p>
             </div>
           </form>
