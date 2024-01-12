@@ -30,7 +30,6 @@ export default function ConnectXModal({ buttonLabel, actionType }: ConnectXModal
   const router = useRouter();
 
   const dispatch = useDispatch();
-
   const onChangeLocalStorage = useCallback(async () => {
     try {
       const storageData = JSON.parse(localStorage.getItem('twitter_callback_data') || '{}');
@@ -46,10 +45,13 @@ export default function ConnectXModal({ buttonLabel, actionType }: ConnectXModal
       if (storageData?.data?.accessToken && storageData?.data?.refreshToken && storageData?.data?.user) {
         console.log('twitter data', storageData);
         dispatch(setSession({ ...storageData?.data }));
+
         if (actionType === 'SIGNUP') {
+          localStorage.setItem('USER_LOGIN_FROM', 'IMPLEMENTER');
           toastMessage('Signup successful');
         }
         if (actionType === 'SIGNIN') {
+          localStorage.setItem('USER_LOGIN_FROM', router.pathname?.includes('creator') ? 'CREATOR' : 'IMPLEMENTER');
           toastMessage('Signin successful');
         }
         router.replace('/my-page');
@@ -105,9 +107,7 @@ export default function ConnectXModal({ buttonLabel, actionType }: ConnectXModal
             </h3>
             <div className="h-[8px]" />
             <p className="text-[13px] text-gray-1 leading-[22px] tracking-[0.39px]">
-              cloutでは連携されたX（twitter）アカウントの情報を以下の目的で使用します。
-              <br />
-              ・X（twitter）アカウントでログイン
+              cloutでは連携されたX（twitter）アカウントの情報を、X（twitter）アカウントでログインする目的で使用します。
             </p>
             <div className="h-[24px]" />
             <div className="w-[206px] h-[53px]">

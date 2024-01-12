@@ -9,7 +9,9 @@ import { useDispatch, useSelector } from 'react-redux';
 const FlagComponent = () => {
   const router = useRouter();
   useEffect(() => {
-    router.push('/auth/sign-in/campaign-creator');
+    const lastLoginFrom = localStorage.getItem('USER_LOGIN_FROM');
+
+    router.push(lastLoginFrom === 'CREATOR' ? '/auth/sign-in/campaign-creator' : '/auth/sign-in/campaign-implementer');
   }, []);
   return null;
 };

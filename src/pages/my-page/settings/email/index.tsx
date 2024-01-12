@@ -23,6 +23,7 @@ export default function SettingEmailPage() {
     formState: { errors },
   } = useForm<UpdateEmailData>({
     resolver: yupResolver(emailSchema),
+    mode: 'onChange',
   });
 
   const onUpdateEmail = async (data: UpdateEmailData) => {

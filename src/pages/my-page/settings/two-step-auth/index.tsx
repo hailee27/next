@@ -35,6 +35,7 @@ export default function SettingTwoStepAuthPage() {
     formState: { errors },
   } = useForm<UpdatePhoneData>({
     resolver: yupResolver(phoneSchema),
+    mode: 'onChange',
   });
 
   const onSubmitPhone = async (values: UpdatePhoneData) => {
@@ -70,9 +71,14 @@ export default function SettingTwoStepAuthPage() {
           twoFactorMethod: 'TOTP',
           twoFactorPhone: userPhone,
         }).unwrap();
-        toastMessage('Phone number has been updated successfully. Please login again');
-        dispatch(logout());
-        router.replace('/auth/sign-in/campaign-implementer');
+        if (router?.query?.from === 'sign-up') {
+          toastMessage('Phone number has been updated successfully. ');
+          router.push('/my-page');
+        } else {
+          toastMessage('Phone number has been updated successfully. Please login again');
+          dispatch(logout());
+          router.replace('/auth/sign-in/campaign-implementer');
+        }
       }
     } catch (err) {
       toastMessage(getErrorMessage(err), 'error');
@@ -110,9 +116,12 @@ export default function SettingTwoStepAuthPage() {
               <div className="h-[53px] flex gap-[8px]">
                 <div className="flex-1">
                   <CButtonShadow
+                    classBgColor="bg-white"
+                    classShadowColor="bg-[#333]"
                     onClick={() => {
-                      router.back();
+                      router.push('/my-page');
                     }}
+                    textClass="text-[#333]"
                     title="キャンセルする"
                     type="button"
                   />

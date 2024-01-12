@@ -31,7 +31,7 @@ export default function SignupPage() {
         if (data?.accessToken && data?.refreshToken && data?.user) {
           dispatch(setSession({ ...data }));
           toastMessage('Signup successful');
-          router.replace('/my-page');
+          router.push('/my-page/settings/two-step-auth?from=sign-up');
         }
       }
     } catch (e: any) {

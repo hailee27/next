@@ -75,21 +75,21 @@ export default function MainFooter() {
       <div className="flex flex-wrap gap-[16px] items-center justify-center">
         <div className="flex flex-wrap gap-[16px] items-center justify-center">
           {FooterNavigation.slice(0, 3).map((i) => (
-            <a className="text-[12px] font-medium" href={i.to} key={i.to}>
+            <a className="text-[12px] font-medium" href={i.to} key={i.key}>
               {i.text}
             </a>
           ))}
         </div>
         <div className="flex flex-wrap gap-[16px] items-center justify-center">
           {FooterNavigation.slice(3, 5).map((i) => (
-            <a className="text-[12px] font-medium" href={i.to} key={i.to}>
+            <a className="text-[12px] font-medium" href={i.to} key={i.key}>
               {i.text}
             </a>
           ))}
         </div>
         <div className="flex flex-wrap gap-[16px] items-center justify-center">
           {FooterNavigation.slice(5, 8).map((i) => (
-            <a className="text-[12px] font-medium" href={i.to} key={i.to}>
+            <a className="text-[12px] font-medium" href={i.to} key={i.key}>
               {i.text}
             </a>
           ))}
