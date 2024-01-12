@@ -15,7 +15,7 @@ function HeaderHomePage() {
       }}
     >
       <div className="flex-1 text-center relative">
-        <Image alt="" className="mt-[25px]" src="/assets/images/banner.png" />
+        <Image alt="" className="mt-[25px]" preview={false} src="/assets/images/banner.png" />
         <div className="absolute w-full top-[261px] px-[20px]">
           <div className="flex flex-col items-start space-y-[8px]">
             <span className="text-[30px] font-bold  px-[14px] bg-white">お気に入りの</span>

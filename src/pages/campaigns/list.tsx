@@ -1,12 +1,8 @@
-import SelectShadow from '@/components/common/BasicSelect/SelectShadow';
 import React from 'react';
+import ListCampaign from '@/components/ListCampaign';
 
-function ListCampaigns() {
-  return (
-    <div>
-      <SelectShadow />
-    </div>
-  );
+function ListCampaignsPage() {
+  return <ListCampaign />;
 }
 
-export default ListCampaigns;
+export default ListCampaignsPage;

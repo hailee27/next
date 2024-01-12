@@ -9,13 +9,15 @@ import CampaignCardItem from '@/components/CampaignCardItem';
 import CampaignRewardCardItem from '@/components/CampaignRewardCardItem';
 import CButtonShadow from '@/components/common/CButtonShadow';
 import CShadowCard from '@/components/common/CCardShadow';
+import LineAddFriend from '@/components/common/line/LineAddFriend';
 import MainFooter from '@/components/layout/_core/MainFooter';
 import MainHeader from '@/components/layout/_core/MainHeader';
+import useScript from '@/hooks/useScript';
 import toastMessage from '@/utils/func/toastMessage';
 import { tiktokProvider } from '@/utils/social-provider-configs/tiktok.provider';
 import axios from 'axios';
 import { signIn, useSession } from 'next-auth/react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useImperativeHandle, useState } from 'react';
 
 export default function Login() {
   const { data: session } = useSession();
@@ -135,7 +137,7 @@ export default function Login() {
           type="button"
         />
       </div>
-
+      <LineAddFriend />
       <div className="h-6" />
       <div className="w-[300px] h-[66px]">
         <CButtonShadow onClick={() => signIn('tiktok')} title=" Sign in Tiktok NextAuth" type="button" />

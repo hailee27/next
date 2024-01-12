@@ -4,7 +4,23 @@ import clsx from 'clsx';
 import React, { useEffect, useRef } from 'react';
 import styles from './styles.module.scss';
 
-interface ICButtonShadow {
+// interface ICButtonShadow {
+//   type?: 'button' | 'reset' | 'submit';
+//   title?: string;
+//   withIcon?: {
+//     position: 'left' | 'right';
+//     icon: React.ReactElement;
+//   };
+//   onClick?: (event?: React.MouseEvent<HTMLElement>) => void;
+//   textClass?: string;
+//   classBgColor?: string;
+//   classShadowColor?: string;
+//   classRounded?: string;
+//   classBorderColor?: string;
+//   isDisable?: boolean;
+//   shadowSize?: 'small' | 'normal';
+// }
+interface Props {
   type?: 'button' | 'reset' | 'submit';
   title?: string;
   withIcon?: {
@@ -20,20 +36,21 @@ interface ICButtonShadow {
   isDisable?: boolean;
   shadowSize?: 'small' | 'normal';
 }
-
-export default function CButtonShadow({
-  withIcon,
-  title,
-  type,
-  onClick,
-  textClass,
-  classBgColor,
-  classShadowColor,
-  classRounded,
-  classBorderColor,
-  isDisable,
-  shadowSize,
-}: ICButtonShadow) {
+export type Ref = HTMLButtonElement | null;
+const CButtonShadow = React.forwardRef<Ref, Props>((props, ref) => {
+  const {
+    withIcon,
+    title,
+    type,
+    onClick,
+    textClass,
+    classBgColor,
+    classShadowColor,
+    classRounded,
+    classBorderColor,
+    isDisable,
+    shadowSize,
+  } = props;
   const btnCardRef = useRef<HTMLDivElement | null>(null);
 
   const onTouchStart = () => {
@@ -62,6 +79,7 @@ export default function CButtonShadow({
         shadowSize === 'small' ? 'pl-[2px] pt-[2px]' : 'pl-[6px] pt-[6px]'
       )}
       onClick={onClick}
+      ref={ref}
       type={type}
     >
       <div className="btnShadowInner relative w-full h-full" ref={btnCardRef}>
@@ -102,8 +120,7 @@ export default function CButtonShadow({
       </div>
     </button>
   );
-}
-
+});
 CButtonShadow.defaultProps = {
   withIcon: undefined,
   title: '',
@@ -117,3 +134,4 @@ CButtonShadow.defaultProps = {
   classBorderColor: 'border-[#333]',
   shadowSize: 'normal',
 };
+export default CButtonShadow;
