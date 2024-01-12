@@ -1,18 +1,80 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { Popover } from 'antd';
 import CButtonShadow from '../CButtonShadow';
-// import BasicSelect from '.';
+import styles from './index.module.scss';
 
-function SelectShadow() {
-  // const [dropDown, setDropDown] = useState();
+interface Props {
+  options?: {
+    label: string | number;
+    value: string | number;
+  }[];
+  onChange?: (value: string | number) => void;
+  value?: string | number;
+}
+
+function SelectShadow(props: Props) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { options, onChange, value: valueForm } = props;
+  const [value, setValue] = useState<number | string>(valueForm ?? '');
+  const [open, setOpen] = useState<boolean>(false);
+  const refButtonShadow = useRef<HTMLButtonElement | null>(null);
+  const [offSetPopUp, setOffSetPopUp] = useState<number>(0);
+  useEffect(() => {
+    setOffSetPopUp(Number(refButtonShadow.current?.offsetWidth));
+    window.onresize = () => {
+      setOffSetPopUp(Number(refButtonShadow.current?.offsetWidth));
+    };
+  }, [window, refButtonShadow]);
+
   return (
-    <div className="w-full h-[50px] relative">
-      <div className="absolute z-10 w-full h-full">
+    <div className={styles.customSelectShadow}>
+      <Popover
+        align={{ offset: [0, 8] }}
+        arrow={false}
+        content={
+          <div className="w-full text-[14px] font-bold text-[#333] ">
+            {options?.map((item) => (
+              <div
+                className="px-[40px] py-[10px] flex items-center space-x-[10px] hover:bg-[#F2F2F2] first:rounded-t-[6px] last:rounded-b-[6px]"
+                key={item.value}
+                onClick={() => {
+                  setOpen(false);
+                  setValue(item.value);
+                  onChange?.(item.value);
+                }}
+                onKeyPress={undefined}
+                role="button"
+                tabIndex={0}
+              >
+                <div className="w-[10px]">
+                  {value === item.value && (
+                    <svg fill="none" height="9" viewBox="0 0 12 9" width="12" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M1 4.5L3.5 7.5L11 1.5" stroke="#333333" strokeLinecap="round" strokeWidth="2" />
+                    </svg>
+                  )}
+                </div>
+                <span>{item.label}</span>
+              </div>
+            ))}
+          </div>
+        }
+        onOpenChange={(e) => setOpen(e)}
+        open={open}
+        overlayInnerStyle={{ borderRadius: '6px', border: '2px solid #333', padding: '0px' }}
+        overlayStyle={{ width: `${offSetPopUp}px` }}
+        placement="bottom"
+        trigger="click"
+      >
         <CButtonShadow
           classBgColor="bg-white"
           classShadowColor="bg-main-text"
-          // onClick={() => setDropDown(!dropDown)}
+          onClick={() => {
+            setOffSetPopUp(Number(refButtonShadow.current?.offsetWidth));
+            setOpen(!open);
+          }}
+          ref={refButtonShadow}
           textClass="!justify-between px-[40px]"
-          title="alooo"
+          title={String(value)}
           withIcon={{
             position: 'right',
             icon: (
@@ -25,10 +87,13 @@ function SelectShadow() {
             ),
           }}
         />
-      </div>
-      <div className="absolute w-full  top-0 z-0 ">{/* <BasicSelect open={dropDown} /> */}</div>
+      </Popover>
     </div>
   );
 }
-
+SelectShadow.defaultProps = {
+  options: undefined,
+  value: undefined,
+  onChange: undefined,
+};
 export default SelectShadow;
