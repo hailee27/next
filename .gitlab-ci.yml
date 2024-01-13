@@ -20,9 +20,8 @@ include:
 variables:
   CI_DEPENDENCY_PROXY_SERVER: ''
 
-build_develop:
+build:
   image: 'registry.gitlab.com/gitlab-org/cluster-integration/auto-build-image:v1.49.0'
-  stage: build
   script:
     - |
       cp .env.develop.example .env;
