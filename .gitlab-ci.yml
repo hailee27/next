@@ -1,11 +1,28 @@
+stages:
+  - build
+  - test
+  - deploy # dummy stage to follow the template guidelines
+  - review
+  - dast
+  - staging
+  - canary
+  - production
+  - incremental rollout 10%
+  - incremental rollout 25%
+  - incremental rollout 50%
+  - incremental rollout 100%
+  - performance
+  - cleanup
+
 include:
   - template: Auto-DevOps.gitlab-ci.yml
 
 variables:
   CI_DEPENDENCY_PROXY_SERVER: ''
 
-build:
+build_develop:
   image: 'registry.gitlab.com/gitlab-org/cluster-integration/auto-build-image:v1.49.0'
+  stage: build
   script:
     - |
       cp .env.develop.example .env;
@@ -21,55 +38,44 @@ build:
 
 .auto-deploy:
   image: 'registry.gitlab.com/gitlab-org/cluster-integration/auto-deploy-image:v2.64.0'
-# stages:
-#   - build
-#   - test
 
-# include:
-#   - template: Code-Quality.gitlab-ci.yml
+.build_staging:
+  stage: build
+  image: node:19-alpine3.16
+  cache:
+    key: $CI_COMMIT_REF_SLUG
+    paths:
+      - node_modules/
+    policy: pull
+  variables:
+    GIT_STRATEGY: fetch
+  before_script:
+    - apk update && apk add openssh-client bash rsync yarn
+    - apk --no-cache --virtual build-dependencies add python3 make g++
+    - eval $(ssh-agent -s)
+    - bash -c 'ssh-add <(echo "$SSH_PRIVATE_KEY")'
+    - mkdir -p ~/.ssh
+    - ssh-keyscan -H $SSH_SERVER_IP >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+  script:
+    - rm -f .env
+    - cp .env.$CI_ENVIRONMENT_NAME.example .env
+    - yarn
+    - yarn build
 
-# .build:
-#   stage: build
-#   image: node:19-alpine3.16
-#   cache:
-#     key: $CI_COMMIT_REF_SLUG
-#     paths:
-#       - node_modules/
-#     policy: pull
-#   variables:
-#     GIT_STRATEGY: fetch
-#   before_script:
-#     - apk update && apk add openssh-client bash rsync yarn
-#     - apk --no-cache --virtual build-dependencies add python3 make g++
-#     - eval $(ssh-agent -s)
-#     - bash -c 'ssh-add <(echo "$SSH_PRIVATE_KEY")'
-#     - mkdir -p ~/.ssh
-#     - ssh-keyscan -H $SSH_SERVER_IP >> ~/.ssh/known_hosts
-#     - chmod 644 ~/.ssh/known_hosts
-#   script:
-#     - rm -f .env
-#     - cp .env.$CI_ENVIRONMENT_NAME.example .env
-#     - yarn
-#     - yarn build
+    - ssh -T $SSH_USER@$SSH_SERVER_IP "pwd; cd $REMOTE_PROJECT_DIR; git pull;"
 
-#     - ssh -T $SSH_USER@$SSH_SERVER_IP "pwd; cd $REMOTE_PROJECT_DIR; git pull;"
+    - rsync -a -e 'ssh' node_modules/ $SSH_USER@$SSH_SERVER_IP:$REMOTE_PROJECT_DIR/node_modules
+    - rsync -a -e 'ssh' .env $SSH_USER@$SSH_SERVER_IP:$REMOTE_PROJECT_DIR/.env
+    - rsync -a -e 'ssh' .next/ $SSH_USER@$SSH_SERVER_IP:$REMOTE_PROJECT_DIR/.next
 
-#     - rsync -a -e 'ssh' node_modules/ $SSH_USER@$SSH_SERVER_IP:$REMOTE_PROJECT_DIR/node_modules
-#     - rsync -a -e 'ssh' .env $SSH_USER@$SSH_SERVER_IP:$REMOTE_PROJECT_DIR/.env
-#     - rsync -a -e 'ssh' .next/ $SSH_USER@$SSH_SERVER_IP:$REMOTE_PROJECT_DIR/.next
+    - ssh -T $SSH_USER@$SSH_SERVER_IP "pwd; source ~/.nvm/nvm.sh; pm2 restart clout-frontend;"
 
-#     - ssh -T $SSH_USER@$SSH_SERVER_IP "pwd; source ~/.nvm/nvm.sh; pm2 restart goji-frontend;"
-
-# build_staging:
-#   extends: .build
-#   only:
-#     refs:
-#       - staging
-#   environment:
-#     name: staging
-#     url: https://staging.clout-fi.com/
-
-# code_quality:
-#   stage: test
-#   artifacts:
-#     paths: [gl-code-quality-report.json]
+build_staging:
+  extends: .build_staging
+  only:
+    refs:
+      - staging
+  environment:
+    name: staging
+    url: https://staging.clout-fi.com/
