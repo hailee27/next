@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "set NODE_OPTIONS=--require=elastic-apm-node/start-next.js && next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "set NODE_OPTIONS=--require=elastic-apm-node/start-next.js && next start",
     "lint": "next lint",
     "postinstall": "husky install"
   },
   "dependencies": {
+    "@elastic/apm-rum": "^5.15.0",
     "@hookform/error-message": "^2.0.1",
     "@hookform/resolvers": "^3.3.2",
     "@reduxjs/toolkit": "^2.0.1",
@@ -19,6 +20,8 @@
     "axios": "^1.6.2",
     "clsx": "^2.0.0",
     "cookies-next": "^4.1.0",
+    "dotenv": "^16.3.1",
+    "elastic-apm-node": "^4.0.0",
     "eslint-config-airbnb": "^19.0.4",
     "moment": "^2.30.0",
     "next": "14.0.2",
