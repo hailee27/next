@@ -7,7 +7,6 @@ import ArrowDown from '@/components/common/icons/ArrowDown';
 import useAuthEmailPassword from '@/hooks/useAuthEmailPassword';
 import { useSigninEmailMutation } from '@/redux/endpoints/auth';
 import { setSession } from '@/redux/slices/auth.slice';
-import { SMS_CASE } from '@/utils/constant/enums';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import toastMessage from '@/utils/func/toastMessage';
 import { LoginFormData } from '@/utils/schema/login-email';
@@ -36,7 +35,7 @@ export default function CampaignCreatorSigninPage() {
           localStorage.setItem('USER_LOGIN_FROM', 'CREATOR');
           dispatch(setSession({ ...data }));
           setIsShowMsg(true);
-          await setTimeout(() => {
+          setTimeout(() => {
             toastMessage('Signin successfully');
             router.replace('/my-page');
           }, 2000);
@@ -44,7 +43,7 @@ export default function CampaignCreatorSigninPage() {
           router.push(
             `/auth/sign-in/campaign-creator/verification?code=${data?.code ?? undefined}&totpToken=${
               data?.totpToken ?? undefined
-            }&case=${SMS_CASE.LOGIN_VERIFICATION}&userId=${data?.user?.id ?? undefined}`
+            }&userId=${data?.user?.id ?? undefined}`
           );
         }
       }
