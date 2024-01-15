@@ -4,7 +4,7 @@
 
 'use client';
 
-import { useLazyAuthTwitterQuery } from '@/redux/endpoints/auth';
+import { useConnectTwitterMutation } from '@/redux/endpoints/auth';
 
 import { useCallback, useEffect } from 'react';
 
@@ -12,21 +12,33 @@ export default function TwitterAuthCallBack() {
   const searchParams = new URLSearchParams(window.location.search);
   const stateQuery = searchParams.get('state');
   const code = searchParams.get('code');
-  const [triggerAuthTwitter] = useLazyAuthTwitterQuery();
+  const [connectTwitter] = useConnectTwitterMutation();
   const handleTwitterAuth = useCallback(async () => {
     try {
       const stateUrl = stateQuery?.split('+++');
       const redirectUri = stateUrl?.[0];
       const state = stateUrl?.[1];
 
-      if (redirectUri && (state === 'SIGNUP' || state === 'SIGNIN') && code) {
-        const resp = await triggerAuthTwitter({
-          code,
-          state,
-          redirect_uri: redirectUri,
-        }).unwrap();
+      if (redirectUri && (state === 'SIGNUP' || state === 'SIGNIN' || state === 'CONNECT') && code) {
+        const request = {
+          body: {
+            code,
+            state: state === 'SIGNUP' || state === 'SIGNIN' ? 'SIGNIN' : 'CONNECT',
+            redirect_uri: redirectUri,
+          },
+        };
+        if (state !== 'CONNECT') {
+          (request as any).params = {
+            token: 'user',
+          };
+        }
+        const resp = await connectTwitter(request).unwrap();
         console.log(resp);
-        if (resp?.accessToken && resp?.refreshToken && resp?.user) {
+        if (
+          (resp?.accessToken && resp?.refreshToken && resp?.user) ||
+          (resp?.user && resp?.totpToken) ||
+          resp?.status === true
+        ) {
           localStorage.setItem(
             'twitter_callback_data',
             JSON.stringify({

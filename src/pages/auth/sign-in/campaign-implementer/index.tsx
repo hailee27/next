@@ -36,7 +36,6 @@ export default function CampaignImplementerSignin() {
           dispatch(setSession({ ...data }));
           setIsShowMsg(true);
           setTimeout(() => {
-            toastMessage('Signin successfully');
             router.replace('/my-page');
           }, 2000);
         } else if (data?.user && data?.totpToken) {
@@ -54,18 +53,18 @@ export default function CampaignImplementerSignin() {
 
   return (
     <div className="min-h-[100vh] bg-[#D5FFFF] py-[40px] px-[20px]">
-      <h1 className="text-[20xp] text-[#04AFAF] font-bold tracking-[0.6px] text-center">ログイン</h1>
+      <h1 className="text-[20px] text-[#04AFAF] font-bold tracking-[0.6px] text-center">ログイン</h1>
       <div className="h-[36px]" />
       <div>
         <div className="px-[24px] py-[14px] border-[2px] border-[#333] rounded-t-[16px] flex items-center justify-center bg-[#333] text-white text-[18px] font-bold">
           キャンペーン参加者の方
         </div>
         <div className="border-[2px] border-[#333] rounded-b-[16px] px-[22px] py-[38px]">
-          <ConnectXModal actionType="SIGNIN" buttonLabel="X（twitter）でログインする" />
+          <ConnectXModal actionType="SIGNUP" buttonLabel="X（twitter）でログインする" />
 
           <div className="h-[16px]" />
           <p className="text-gray-1 text-[13px] leading-[22px] tracking-[0.39px]">
-            キャンペーンに参加するにはXでの連携が必要です
+            ※キャンペーンに参加するにはXでの連携が必要です。
           </p>
         </div>
       </div>

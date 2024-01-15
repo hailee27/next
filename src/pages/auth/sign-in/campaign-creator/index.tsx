@@ -36,7 +36,6 @@ export default function CampaignCreatorSigninPage() {
           dispatch(setSession({ ...data }));
           setIsShowMsg(true);
           setTimeout(() => {
-            toastMessage('Signin successfully');
             router.replace('/my-page');
           }, 2000);
         } else if (data?.user && data?.totpToken) {
@@ -126,7 +125,7 @@ export default function CampaignCreatorSigninPage() {
         <p className="text-[16px]  font-bold">X連携済であるが、メールアドレス・パスワード・2段階認証を未設定の方</p>
         <div className="h-[24px]" />
         <div className="w-[287px] mx-auto">
-          <ConnectXModal actionType="SIGNIN" buttonLabel="マイページで設定する" />
+          <ConnectXModal actionType="SIGNUP" buttonLabel="マイページで設定する" />
         </div>
       </div>
       <div className="h-[24px]" />

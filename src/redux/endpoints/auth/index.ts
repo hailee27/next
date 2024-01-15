@@ -3,7 +3,7 @@ import smsVerify from './sms-verify';
 import me from './me';
 import logout from './logout';
 import signupEmail from './email-signup';
-import authTwitter from './auth-twitter';
+import { connectTwitter, disconnectTwitter } from './auth-twitter';
 import signinEmail from './email-signin';
 import authVerification from './auth-verification';
 
@@ -16,8 +16,9 @@ export const authApi = api.injectEndpoints({
 
     signupEmail: signupEmail(build),
     signinEmail: signinEmail(build),
-    authTwitter: authTwitter(build),
     authVerification: authVerification(build),
+    connectTwitter: connectTwitter(build),
+    disconnectTwitter: disconnectTwitter(build),
   }),
   overrideExisting: false,
 });
@@ -28,7 +29,8 @@ export const {
   useLazyMeQuery,
   useMeQuery,
   useSignupEmailMutation,
-  useLazyAuthTwitterQuery,
   useSigninEmailMutation,
   useAuthVerificationMutation,
+  useConnectTwitterMutation,
+  useDisconnectTwitterMutation,
 } = authApi;

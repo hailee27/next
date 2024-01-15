@@ -96,6 +96,7 @@ export default function SettingTwoStepAuthPage() {
               }
         ).unwrap();
         toastMessage('Phone number has been updated successfully. ');
+        router.push('/my-page');
       }
     } catch (err) {
       toastMessage(getErrorMessage(err), 'error');
