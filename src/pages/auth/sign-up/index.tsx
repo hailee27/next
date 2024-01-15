@@ -30,7 +30,6 @@ export default function SignupPage() {
         const data = await signupEmail(formValue).unwrap();
         if (data?.accessToken && data?.refreshToken && data?.user) {
           dispatch(setSession({ ...data }));
-          toastMessage('Signup successful');
           router.push('/my-page/settings/two-step-auth?from=sign-up');
         }
       }

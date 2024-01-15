@@ -4,7 +4,6 @@ import CFormInputShadow from '@/components/common/CFormInputShadow';
 import { useAuthVerificationMutation, useSmsVerifyMutation } from '@/redux/endpoints/auth';
 
 import { useUpdateMeMutation } from '@/redux/endpoints/me';
-import { logout } from '@/redux/slices/auth.slice';
 import { RootState } from '@/redux/store';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import toastMessage from '@/utils/func/toastMessage';
@@ -13,15 +12,19 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Spin } from 'antd';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 export default function SettingTwoStepAuthPage() {
   const [userPhone, setUserPhone] = useState<undefined | string>(undefined);
   const [totpToken, setTotpToken] = useState<undefined | string>(undefined);
-  const dispatch = useDispatch();
+
+  const [isPhoneNotMatched, setIsPhoneNotMatched] = useState(false);
+
   const router = useRouter();
+
+  const userAction = router?.query?.action;
 
   const { user, accessToken } = useSelector((store: RootState) => store.auth);
 
@@ -31,17 +34,27 @@ export default function SettingTwoStepAuthPage() {
   const {
     register,
     handleSubmit,
-
+    watch,
     formState: { errors },
   } = useForm<UpdatePhoneData>({
     resolver: yupResolver(phoneSchema),
     mode: 'onChange',
   });
+  const phoneInput = watch('phone');
 
   const onSubmitPhone = async (values: UpdatePhoneData) => {
     try {
       if (values?.phone && user?.id) {
-        const data = await sendVerificationCode({ type: 'SMS', userId: user?.id }).unwrap();
+        if (userAction === 'disable' && user?.twoFactorPhone !== values?.phone) {
+          setIsPhoneNotMatched(true);
+          return;
+        }
+        setIsPhoneNotMatched(false);
+        const data = await sendVerificationCode({
+          type: 'SMS',
+          userId: user?.id,
+          phoneNumber: values?.phone,
+        }).unwrap();
         setUserPhone(values.phone);
         setTotpToken(data?.totpToken ?? undefined);
       }
@@ -52,8 +65,15 @@ export default function SettingTwoStepAuthPage() {
 
   const onReSendCode = async (sendBy: 'CALL' | 'MESSAGE') => {
     try {
-      const data = await sendVerificationCode({ type: 'SMS', userId: user?.id, sendBy }).unwrap();
-      setTotpToken(data?.totpToken ?? undefined);
+      if (userPhone) {
+        const data = await sendVerificationCode({
+          type: 'SMS',
+          userId: user?.id,
+          sendBy,
+          phoneNumber: userPhone,
+        }).unwrap();
+        setTotpToken(data?.totpToken ?? undefined);
+      }
     } catch (err) {
       toastMessage(getErrorMessage(err), 'error');
     }
@@ -67,23 +87,26 @@ export default function SettingTwoStepAuthPage() {
           token: totpToken,
         }).unwrap();
 
-        await updateMe({
-          twoFactorMethod: 'TOTP',
-          twoFactorPhone: userPhone,
-        }).unwrap();
-        if (router?.query?.from === 'sign-up') {
-          toastMessage('Phone number has been updated successfully. ');
-          router.push('/my-page');
-        } else {
-          toastMessage('Phone number has been updated successfully. Please login again');
-          dispatch(logout());
-          router.replace('/auth/sign-in/campaign-implementer');
-        }
+        await updateMe(
+          userAction === 'disable'
+            ? { twoFactorMethod: 'NONE', twoFactorPhone: null }
+            : {
+                twoFactorMethod: 'TOTP',
+                twoFactorPhone: userPhone,
+              }
+        ).unwrap();
+        toastMessage('Phone number has been updated successfully. ');
+        router.push('/my-page');
       }
     } catch (err) {
       toastMessage(getErrorMessage(err), 'error');
     }
   };
+
+  useEffect(() => {
+    if (isPhoneNotMatched) setIsPhoneNotMatched(false);
+  }, [phoneInput]);
+
   if (!accessToken) {
     router.replace('/auth/sign-in/campaign-implementer');
   } else if (user?.twoFactorMethod === 'TOTP' && user.twoFactorPhone) {
@@ -111,6 +134,17 @@ export default function SettingTwoStepAuthPage() {
                   register={register}
                   type="text"
                 />
+
+                {isPhoneNotMatched ? (
+                  <>
+                    <div className="h-[8px]" />
+                    <p className="text-[#FF0000] text-[12px]">
+                      The phone number you entered does not match the phone number you have set up.
+                    </p>
+                  </>
+                ) : (
+                  ''
+                )}
               </div>
               <div className="h-[24px]" />
               <div className="h-[53px] flex gap-[8px]">

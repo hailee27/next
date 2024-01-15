@@ -1,13 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { BaseQueryFn, EndpointBuilder } from '@reduxjs/toolkit/query';
 
-export default function authTwitter(build: EndpointBuilder<BaseQueryFn, string, string>) {
-  return build.query<any, any>({
-    query(params) {
+export function connectTwitter(build: EndpointBuilder<BaseQueryFn, string, string>) {
+  return build.mutation<any, any>({
+    query({ body, params }) {
       return {
-        url: 'auth/twitter',
-        method: 'get',
+        url: 'accounts',
+        method: 'POST',
+        body,
         params,
+      };
+    },
+  });
+}
+
+export function disconnectTwitter(build: EndpointBuilder<BaseQueryFn, string, string>) {
+  return build.mutation<any, any>({
+    query({ id }) {
+      return {
+        url: `accounts/${id}`,
+        method: 'DELETE',
       };
     },
   });

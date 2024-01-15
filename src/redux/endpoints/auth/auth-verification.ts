@@ -9,6 +9,7 @@ export default function authVerification(build: EndpointBuilder<BaseQueryFn, str
       token?: string;
       sendBy?: 'MESSAGE' | 'CALL';
       userId?: number;
+      phoneNumber?: string;
     }
   >({
     query(body) {

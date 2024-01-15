@@ -7,7 +7,6 @@ import ArrowDown from '@/components/common/icons/ArrowDown';
 import useAuthEmailPassword from '@/hooks/useAuthEmailPassword';
 import { useSigninEmailMutation } from '@/redux/endpoints/auth';
 import { setSession } from '@/redux/slices/auth.slice';
-import { SMS_CASE } from '@/utils/constant/enums';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import toastMessage from '@/utils/func/toastMessage';
 import { LoginFormData } from '@/utils/schema/login-email';
@@ -36,15 +35,14 @@ export default function CampaignImplementerSignin() {
           localStorage.setItem('USER_LOGIN_FROM', 'IMPLEMENTER');
           dispatch(setSession({ ...data }));
           setIsShowMsg(true);
-          await setTimeout(() => {
-            toastMessage('Signin successfully');
+          setTimeout(() => {
             router.replace('/my-page');
           }, 2000);
         } else if (data?.user && data?.totpToken) {
           router.push(
             `/auth/sign-in/campaign-implementer/verification?code=${data?.code ?? undefined}&totpToken=${
               data?.totpToken ?? undefined
-            }&case=${SMS_CASE.LOGIN_VERIFICATION}&userId=${data?.user?.id ?? undefined}`
+            }&userId=${data?.user?.id ?? undefined}`
           );
         }
       }
@@ -55,18 +53,18 @@ export default function CampaignImplementerSignin() {
 
   return (
     <div className="min-h-[100vh] bg-[#D5FFFF] py-[40px] px-[20px]">
-      <h1 className="text-[20xp] text-[#04AFAF] font-bold tracking-[0.6px] text-center">ログイン</h1>
+      <h1 className="text-[20px] text-[#04AFAF] font-bold tracking-[0.6px] text-center">ログイン</h1>
       <div className="h-[36px]" />
       <div>
         <div className="px-[24px] py-[14px] border-[2px] border-[#333] rounded-t-[16px] flex items-center justify-center bg-[#333] text-white text-[18px] font-bold">
           キャンペーン参加者の方
         </div>
         <div className="border-[2px] border-[#333] rounded-b-[16px] px-[22px] py-[38px]">
-          <ConnectXModal actionType="SIGNIN" buttonLabel="X（twitter）でログインする" />
+          <ConnectXModal actionType="SIGNUP" buttonLabel="X（twitter）でログインする" />
 
           <div className="h-[16px]" />
           <p className="text-gray-1 text-[13px] leading-[22px] tracking-[0.39px]">
-            キャンペーンに参加するにはXでの連携が必要です
+            ※キャンペーンに参加するにはXでの連携が必要です。
           </p>
         </div>
       </div>

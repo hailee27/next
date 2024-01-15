@@ -7,7 +7,6 @@ import ArrowDown from '@/components/common/icons/ArrowDown';
 import useAuthEmailPassword from '@/hooks/useAuthEmailPassword';
 import { useSigninEmailMutation } from '@/redux/endpoints/auth';
 import { setSession } from '@/redux/slices/auth.slice';
-import { SMS_CASE } from '@/utils/constant/enums';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import toastMessage from '@/utils/func/toastMessage';
 import { LoginFormData } from '@/utils/schema/login-email';
@@ -36,15 +35,14 @@ export default function CampaignCreatorSigninPage() {
           localStorage.setItem('USER_LOGIN_FROM', 'CREATOR');
           dispatch(setSession({ ...data }));
           setIsShowMsg(true);
-          await setTimeout(() => {
-            toastMessage('Signin successfully');
+          setTimeout(() => {
             router.replace('/my-page');
           }, 2000);
         } else if (data?.user && data?.totpToken) {
           router.push(
             `/auth/sign-in/campaign-creator/verification?code=${data?.code ?? undefined}&totpToken=${
               data?.totpToken ?? undefined
-            }&case=${SMS_CASE.LOGIN_VERIFICATION}&userId=${data?.user?.id ?? undefined}`
+            }&userId=${data?.user?.id ?? undefined}`
           );
         }
       }
@@ -127,7 +125,7 @@ export default function CampaignCreatorSigninPage() {
         <p className="text-[16px]  font-bold">X連携済であるが、メールアドレス・パスワード・2段階認証を未設定の方</p>
         <div className="h-[24px]" />
         <div className="w-[287px] mx-auto">
-          <ConnectXModal actionType="SIGNIN" buttonLabel="マイページで設定する" />
+          <ConnectXModal actionType="SIGNUP" buttonLabel="マイページで設定する" />
         </div>
       </div>
       <div className="h-[24px]" />

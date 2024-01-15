@@ -42,19 +42,25 @@ export default function ConnectXModal({ buttonLabel, actionType }: ConnectXModal
         toastMessage(storageData?.error, 'error');
         return;
       }
+      console.log(storageData, 'storageData');
       if (storageData?.data?.accessToken && storageData?.data?.refreshToken && storageData?.data?.user) {
         console.log('twitter data', storageData);
         dispatch(setSession({ ...storageData?.data }));
 
-        if (actionType === 'SIGNUP') {
-          localStorage.setItem('USER_LOGIN_FROM', 'IMPLEMENTER');
-          toastMessage('Signup successful');
-        }
-        if (actionType === 'SIGNIN') {
-          localStorage.setItem('USER_LOGIN_FROM', router.pathname?.includes('creator') ? 'CREATOR' : 'IMPLEMENTER');
-          toastMessage('Signin successful');
-        }
+        localStorage.setItem(
+          'USER_LOGIN_FROM',
+          router.pathname?.includes('campaign-creator') ? 'CREATOR' : 'IMPLEMENTER'
+        );
+
         router.replace('/my-page');
+      } else if (storageData?.data?.totpToken && storageData?.data?.user) {
+        router.push(
+          `/auth/sign-in/${
+            router.pathname?.includes('campaign-creator') ? 'campaign-creator' : 'campaign-implementer'
+          }/verification?code=${storageData?.data?.code ?? undefined}&totpToken=${
+            storageData?.data?.totpToken ?? undefined
+          }&userId=${storageData?.data?.user?.id ?? undefined}`
+        );
       }
     } catch (error) {
       console.log(error);
