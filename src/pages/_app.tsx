@@ -25,6 +25,7 @@ import MainLayout from '@/components/layout/MainLayout';
 import { PopUpProvider } from '@/context/PopUpContext';
 import { wrapper } from '@/redux/store';
 import '@/styles/globals.css';
+import '@/styles/globals.scss';
 import { NextPage } from 'next';
 import { SessionProvider } from 'next-auth/react';
 import type { AppProps } from 'next/app';

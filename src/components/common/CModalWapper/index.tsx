@@ -1,62 +1,53 @@
-import React, { useEffect } from 'react';
 import { Modal } from 'antd';
-import styles from './styles.module.scss';
-import XCricleIcon from '../icons/XCricleIcon';
+import React from 'react';
 import CButtonClassic from '../CButtonClassic';
+import XCricleIcon from '../icons/XCricleIcon';
 import XMarkIcon from '../icons/XMarkIcon';
 
 interface IComponentProps {
   isOpen: boolean;
   onCancel: () => void;
+  modalWidth?: number;
   children: React.ReactNode;
 }
 
-export default function CModalWapper({ isOpen, onCancel, children }: IComponentProps) {
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
-    }
-    return () => {
-      document.body.style.overflow = 'auto';
-    };
-  }, [isOpen]);
-
+export default function CModalWapper({ isOpen, onCancel, modalWidth, children }: IComponentProps) {
   return (
-    <div className={styles.cModalWapper}>
-      <Modal
-        closeIcon={false}
-        destroyOnClose
-        footer={false}
-        getContainer={false}
-        onCancel={onCancel}
-        open={isOpen}
-        style={{ top: 60 }}
-      >
-        <div className="flex justify-end">
-          <div aria-hidden="true" className="cursor-pointer" onClick={onCancel}>
-            <XCricleIcon />
-          </div>
+    <Modal
+      closeIcon={false}
+      destroyOnClose
+      footer={false}
+      onCancel={onCancel}
+      open={isOpen}
+      rootClassName="clout-custom-modal"
+      style={{ top: 64 }}
+      width={modalWidth}
+    >
+      <div className="flex justify-end">
+        <div aria-hidden="true" className="cursor-pointer" onClick={onCancel}>
+          <XCricleIcon />
         </div>
-        <div className="h-[24px]" />
-        <div className="bg-white rounded-[16px]  py-[48px] px-[24px]">{children}</div>
-        <div className="h-[40px]" />
-        <div className="flex justify-center">
-          <div className="w-[139px] h-[47px]">
-            <CButtonClassic
-              customClassName="!bg-[#FFF] !text-main-text !text-[14px] 
-                !font-bold"
-              onClick={onCancel}
-              title="閉じる"
-              withIcon={{
-                position: 'left',
-                icon: <XMarkIcon />,
-              }}
-            />
-          </div>
+      </div>
+      <div className="h-[24px]" />
+      <div className="bg-white rounded-[16px]  py-[48px] px-[24px]">{children}</div>
+      <div className="h-[40px]" />
+      <div className="flex justify-center">
+        <div className="w-[139px] h-[47px]">
+          <CButtonClassic
+            customClassName="!bg-[#FFF] !text-main-text !text-[14px] 
+            !font-bold"
+            onClick={onCancel}
+            title="閉じる"
+            withIcon={{
+              position: 'left',
+              icon: <XMarkIcon />,
+            }}
+          />
         </div>
-      </Modal>
-    </div>
+      </div>
+    </Modal>
   );
 }
+CModalWapper.defaultProps = {
+  modalWidth: 343,
+};
