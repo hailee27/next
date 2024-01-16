@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;200;300;400;500;600;700;800;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
 
 :root {
   font-family: 'Noto Sans JP', sans-serif;
@@ -48,4 +47,17 @@ body {
 }
 .custom-scroll::-webkit-scrollbar-thumb:hover {
   background: #a9a9a9;
+}
+
+.clout-custom-modal.ant-modal-root .ant-modal-mask {
+  background-color: rgba(51, 51, 51, 0.9) !important;
+}
+
+.clout-custom-modal.ant-modal-root .ant-modal .ant-modal-content {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  padding: 8px !important;
+}
+.clout-custom-modal.ant-modal-root .ant-modal-wrap {
+  z-index: 9999999;
 }
