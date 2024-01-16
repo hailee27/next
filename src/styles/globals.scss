@@ -67,3 +67,29 @@
     border: none !important;
   }
 }
+
+.display-text-editer-content {
+  font-size: 14px;
+  h1 {
+    font-size: 26px;
+  }
+  h2 {
+    font-size: 20px;
+  }
+  h3 {
+    font-size: 16px;
+  }
+  ol,
+  ul {
+    padding-left: 19.5px;
+  }
+  li {
+    margin-left: 19.5px;
+  }
+  ol {
+    list-style: decimal;
+  }
+  ul {
+    list-style: disc;
+  }
+}
