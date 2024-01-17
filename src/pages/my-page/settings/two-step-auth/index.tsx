@@ -1,3 +1,6 @@
+/* eslint-disable max-lines-per-function */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-empty */
 import SmsVerificationForm from '@/components/auth/sms-verification-form';
 import CButtonShadow from '@/components/common/CButtonShadow';
 import CFormInputShadow from '@/components/common/CFormInputShadow';
@@ -17,14 +20,16 @@ import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
 export default function SettingTwoStepAuthPage() {
+  const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window?.location?.search) : null;
+
+  const userAction = searchParams?.get('action');
+
   const [userPhone, setUserPhone] = useState<undefined | string>(undefined);
   const [totpToken, setTotpToken] = useState<undefined | string>(undefined);
 
   const [isPhoneNotMatched, setIsPhoneNotMatched] = useState(false);
 
   const router = useRouter();
-
-  const userAction = router?.query?.action;
 
   const { user, accessToken } = useSelector((store: RootState) => store.auth);
 
@@ -89,7 +94,7 @@ export default function SettingTwoStepAuthPage() {
 
         await updateMe(
           userAction === 'disable'
-            ? { twoFactorMethod: 'NONE', twoFactorPhone: null }
+            ? { twoFactorMethod: 'NONE', twoFactorPhone: '' }
             : {
                 twoFactorMethod: 'TOTP',
                 twoFactorPhone: userPhone,
@@ -107,10 +112,75 @@ export default function SettingTwoStepAuthPage() {
     if (isPhoneNotMatched) setIsPhoneNotMatched(false);
   }, [phoneInput]);
 
+  const formInputVerifyCodeRender = (
+    <>
+      <div className="bg-white border-[2px] border-[#333] px-[22px] py-[30px] rounded-[16px]">
+        <h1 className="text-[20px] font-bold text-[#04AFAF] tracking-[0.6px] text-center ">
+          携帯電話に届いた認証コード
+          <br />
+          を入力してください
+        </h1>
+        <div className="h-[16px]" />
+
+        <SmsVerificationForm onSubmitCode={onUpdatePhone} />
+      </div>
+      <div className="h-[24px]" />
+      <p className="text-[12px] font-bold">
+        SMSが届いていませんか？ <br />
+        下記のいずれかをお試しください
+      </p>
+      <div className="h-[16px]" />
+
+      <div>
+        <p
+          aria-hidden
+          className="w-fit pb-[4px] border-b-[#333] border-b-[1px] text-[12px] font-medium cursor-pointer"
+          onClick={onReSendCode.bind(null, 'CALL')}
+        >
+          自動音声案内で認証コードを受け取る
+        </p>
+        <div className="h-[8px]" />
+
+        <p
+          aria-hidden
+          className="w-fit pb-[4px] border-b-[#333] border-b-[1px] text-[12px] font-medium cursor-pointer "
+          onClick={onReSendCode.bind(null, 'MESSAGE')}
+        >
+          認証コードを再送する
+        </p>
+      </div>
+    </>
+  );
+
+  useEffect(() => {
+    if (userAction === 'disable' && user?.twoFactorPhone) {
+      if (user?.twoFactorPhone !== userPhone) {
+        setUserPhone(user?.twoFactorPhone ?? '');
+      }
+
+      onReSendCode('MESSAGE');
+    }
+  }, [userPhone]);
+
   if (!accessToken) {
     router.replace('/auth/sign-in/campaign-implementer');
-  } else if (user?.twoFactorMethod === 'TOTP' && user.twoFactorPhone && router?.query?.action !== 'disable') {
+  } else if (user?.twoFactorMethod === 'TOTP' && user.twoFactorPhone && userAction !== 'disable') {
     router.push('/my-page');
+  } else if (userAction === 'disable') {
+    return (
+      <Spin spinning={isSendVerificationCode || isVerifiSMS || isUpdateUser}>
+        <div className="relative w-full min-h-[100vh] overflow-x-hidden bg-[#D5FFFF]">
+          <div
+            className={clsx(
+              'absolute z-[1] min-h-[100vh] h-full w-full bg-[#D5FFFF] py-[40px] px-[20px] transition-all duration-300',
+              'top-0 left-[0]'
+            )}
+          >
+            {formInputVerifyCodeRender}
+          </div>
+        </div>
+      </Spin>
+    );
   } else {
     return (
       <Spin spinning={isSendVerificationCode || isVerifiSMS || isUpdateUser}>
@@ -172,41 +242,7 @@ export default function SettingTwoStepAuthPage() {
               !userPhone || !totpToken ? 'top-0 left-[110vw]' : 'top-0 left-[0]'
             )}
           >
-            <div className="bg-white border-[2px] border-[#333] px-[22px] py-[30px] rounded-[16px]">
-              <h1 className="text-[20px] font-bold text-[#04AFAF] tracking-[0.6px] text-center ">
-                携帯電話に届いた認証コード
-                <br />
-                を入力してください
-              </h1>
-              <div className="h-[16px]" />
-
-              <SmsVerificationForm onSubmitCode={onUpdatePhone} />
-            </div>
-            <div className="h-[24px]" />
-            <p className="text-[12px] font-bold">
-              SMSが届いていませんか？ <br />
-              下記のいずれかをお試しください
-            </p>
-            <div className="h-[16px]" />
-
-            <div>
-              <p
-                aria-hidden
-                className="w-fit pb-[4px] border-b-[#333] border-b-[1px] text-[12px] font-medium cursor-pointer"
-                onClick={onReSendCode.bind(null, 'CALL')}
-              >
-                自動音声案内で認証コードを受け取る
-              </p>
-              <div className="h-[8px]" />
-
-              <p
-                aria-hidden
-                className="w-fit pb-[4px] border-b-[#333] border-b-[1px] text-[12px] font-medium cursor-pointer "
-                onClick={onReSendCode.bind(null, 'MESSAGE')}
-              >
-                認証コードを再送する
-              </p>
-            </div>
+            {formInputVerifyCodeRender}
           </div>
         </div>
       </Spin>

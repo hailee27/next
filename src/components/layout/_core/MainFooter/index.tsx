@@ -37,7 +37,7 @@ const FooterNavigation = [
   {
     key: 7,
     text: '特定商取引法に基づく表示',
-    to: '//specified-commercial-transactions-law',
+    to: '/specified-commercial-transactions-law',
   },
   {
     key: 8,
