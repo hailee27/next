@@ -12,6 +12,7 @@ import ArrowUpRightFormIcon from '@/components/common/icons/ArrowUpRightFormIcon
 import CalendarIcon from '@/components/common/icons/CalendarIcon';
 import YenIcon from '@/components/common/icons/YenIcon';
 import { CampaignApi, DetailCampaignResponse } from '@/redux/endpoints/campaign';
+import { useGetMasterDataQuery } from '@/redux/endpoints/masterData';
 import { wrapper } from '@/redux/store';
 import moment from 'moment';
 import Image from 'next/image';
@@ -22,7 +23,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
 
   const { data: dataCampaign } = await store.dispatch(
     CampaignApi.endpoints.getDetailCampaign.initiate({
-      campaignId: id,
+      campaignId: id as string,
       token: 'user',
     })
   );
@@ -48,8 +49,10 @@ export default function CampaignDetail({ campaign }: { campaign: DetailCampaignR
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+  const { data } = useGetMasterDataQuery();
 
-  console.log('campaign', campaign);
+  const campaignCategory = data?.CATEGORY_CAMPAIGN?.find((item) => item?.value === campaign?.category)?.label ?? '';
+  console.log('campaign', campaign, campaignCategory);
   const sortCampaignReward = Array.isArray(campaign?.CampaignReward)
     ? campaign?.CampaignReward?.sort((a, b) => a.amountOfMoney - b.amountOfMoney)
     : [];
@@ -75,9 +78,13 @@ export default function CampaignDetail({ campaign }: { campaign: DetailCampaignR
           <div>
             <h3 className="font-bold text-[20px] tracking-[0.6px] text-main-text ">{campaign?.title ?? '-'}</h3>
             <div className="h-[8px]" />
-            <span className="inline-flex justify-center items-center rounded-full px-[12px] py-[3px] border-gray-1 border-[1px]">
-              <span className="text-[12px] tracking-[0.36px] leading-[18px]  text-gray-1">カテゴリー名</span>
-            </span>
+            {campaignCategory ? (
+              <span className="inline-flex justify-center items-center rounded-full px-[12px] py-[3px] border-gray-1 border-[1px]">
+                <span className="text-[12px] tracking-[0.36px] leading-[18px]  text-gray-1">{campaignCategory}</span>
+              </span>
+            ) : (
+              ''
+            )}
           </div>
           <div className="h-[335px] rounded-[5px]">
             <Image
