@@ -89,7 +89,7 @@ export default function SettingTwoStepAuthPage() {
 
         await updateMe(
           userAction === 'disable'
-            ? { twoFactorMethod: 'NONE', twoFactorPhone: null }
+            ? { twoFactorMethod: 'NONE', twoFactorPhone: '' }
             : {
                 twoFactorMethod: 'TOTP',
                 twoFactorPhone: userPhone,

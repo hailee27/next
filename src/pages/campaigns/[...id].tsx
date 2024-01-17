@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 /* eslint-disable react/no-danger */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -11,15 +12,26 @@ import ArrowDown from '@/components/common/icons/ArrowDown';
 import ArrowUpRightFormIcon from '@/components/common/icons/ArrowUpRightFormIcon';
 import CalendarIcon from '@/components/common/icons/CalendarIcon';
 import YenIcon from '@/components/common/icons/YenIcon';
-import { CampaignApi, DetailCampaignResponse } from '@/redux/endpoints/campaign';
+import { CampaignApi, DetailCampaignResponse, ListCampaignParams, TypeCampaign } from '@/redux/endpoints/campaign';
 import { useGetMasterDataQuery } from '@/redux/endpoints/masterData';
 import { wrapper } from '@/redux/store';
 import moment from 'moment';
 import Image from 'next/image';
-import { useState } from 'react';
+import Link from 'next/link';
+import { useMemo, useState } from 'react';
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ params }) => {
   const id = Array.isArray(params?.id) ? params?.id?.[0] : params?.id ?? '';
+  const apiRequest: ListCampaignParams = {
+    orderBy: JSON.stringify({
+      totalViews: 'desc',
+    }),
+    skip: 0,
+    take: 3,
+    token: 'user',
+  };
+
+  const { data: dataCampaigns } = await store.dispatch(CampaignApi.endpoints.getListCampaign.initiate(apiRequest));
 
   const { data: dataCampaign } = await store.dispatch(
     CampaignApi.endpoints.getDetailCampaign.initiate({
@@ -35,12 +47,19 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
   return {
     props: {
       campaign: dataCampaign ?? null,
+      campaignsRecommend: dataCampaigns?.campaigns ?? null,
     },
   };
 });
 
 // eslint-disable-next-line max-lines-per-function
-export default function CampaignDetail({ campaign }: { campaign: DetailCampaignResponse }) {
+export default function CampaignDetail({
+  campaign,
+  campaignsRecommend,
+}: {
+  campaign: DetailCampaignResponse;
+  campaignsRecommend: TypeCampaign[] | null;
+}) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
     setIsModalOpen(true);
@@ -51,11 +70,26 @@ export default function CampaignDetail({ campaign }: { campaign: DetailCampaignR
   };
   const { data } = useGetMasterDataQuery();
 
-  const campaignCategory = data?.CATEGORY_CAMPAIGN?.find((item) => item?.value === campaign?.category)?.label ?? '';
-  console.log('campaign', campaign, campaignCategory);
-  const sortCampaignReward = Array.isArray(campaign?.CampaignReward)
-    ? campaign?.CampaignReward?.sort((a, b) => a.amountOfMoney - b.amountOfMoney)
-    : [];
+  console.log('campaignsRecommend', campaignsRecommend);
+
+  const campaignCategory = useMemo(
+    () => data?.CATEGORY_CAMPAIGN?.find((item) => item?.value === campaign?.category)?.label ?? '',
+    [data?.CATEGORY_CAMPAIGN]
+  );
+
+  const sortCampaignRewardPrice = useMemo(
+    () =>
+      Array.isArray(campaign?.CampaignReward)
+        ? campaign?.CampaignReward?.sort((a, b) => a.amountOfMoney - b.amountOfMoney)
+        : [],
+    [campaign?.CampaignReward]
+  );
+
+  const sortCampaignRewardIndex = useMemo(
+    () => (Array.isArray(campaign?.CampaignReward) ? campaign?.CampaignReward?.sort((a, b) => a.index - b.index) : []),
+    [campaign?.CampaignReward]
+  );
+
   return (
     <div className="font-notoSans">
       <div className="bg-white px-[20px] pt-[48px] pb-[56px] ">
@@ -86,7 +120,7 @@ export default function CampaignDetail({ campaign }: { campaign: DetailCampaignR
               ''
             )}
           </div>
-          <div className="h-[335px] rounded-[5px]">
+          <div className="h-[335px] rounded-[5px] overflow-hidden">
             <Image
               alt="campaign image"
               className="w-full h-full object-contain"
@@ -112,22 +146,22 @@ export default function CampaignDetail({ campaign }: { campaign: DetailCampaignR
             <p className="flex gap-[12px] items-center text-[14px] tracking-[0.42px] ">
               <YenIcon className="w-[16px]" />
               <span>
-                {sortCampaignReward?.length >= 2 ? (
+                {sortCampaignRewardPrice?.length >= 2 ? (
                   <>
                     <span>
-                      <span className="font-montserrat">{sortCampaignReward[0]?.amountOfMoney ?? '--'}</span>円
+                      <span className="font-montserrat">{sortCampaignRewardPrice[0]?.amountOfMoney ?? '--'}</span>円
                     </span>
                     <span> 〜 </span>
                     <span>
                       <span className="font-montserrat">
-                        {sortCampaignReward[sortCampaignReward.length - 1]?.amountOfMoney ?? '--'}
+                        {sortCampaignRewardPrice[sortCampaignRewardPrice.length - 1]?.amountOfMoney ?? '--'}
                       </span>
                       円
                     </span>
                   </>
-                ) : sortCampaignReward?.length === 1 ? (
+                ) : sortCampaignRewardPrice?.length === 1 ? (
                   <span>
-                    <span className="font-montserrat">{sortCampaignReward[0]?.amountOfMoney ?? '--'}</span>円
+                    <span className="font-montserrat">{sortCampaignRewardPrice[0]?.amountOfMoney ?? '--'}</span>円
                   </span>
                 ) : (
                   '--'
@@ -144,24 +178,28 @@ export default function CampaignDetail({ campaign }: { campaign: DetailCampaignR
         />
 
         <div className="flex gap-[8px] flex-col">
-          <CampaignRewardCardItem />
-          <CampaignRewardCardItem />
-          <CampaignRewardCardItem />
-          <div className="mt-[32px] flex items-center justify-center">
-            <div className="w-[203px] h-[53px]">
-              <CButtonShadow
-                classBgColor="bg-[#333]"
-                classShadowColor="bg-[#fff]"
-                onClick={showModal}
-                textClass="text-white text-[14px] font-bold"
-                title="報酬一覧をみる"
-                withIcon={{
-                  position: 'right',
-                  icon: <ArrowDown className="rotate-[-90deg]" />,
-                }}
-              />
+          {sortCampaignRewardIndex
+            ?.slice(0, 3)
+            ?.map((item) => <CampaignRewardCardItem campaignReward={item} key={item?.id} />)}
+          {Array.isArray(campaign?.CampaignReward) ? (
+            <div className="mt-[32px] flex items-center justify-center">
+              <div className="w-[203px] h-[53px]">
+                <CButtonShadow
+                  classBgColor="bg-[#333]"
+                  classShadowColor="bg-[#fff]"
+                  onClick={showModal}
+                  textClass="text-white text-[14px] font-bold"
+                  title="報酬一覧をみる"
+                  withIcon={{
+                    position: 'right',
+                    icon: <ArrowDown className="rotate-[-90deg]" />,
+                  }}
+                />
+              </div>
             </div>
-          </div>
+          ) : (
+            ''
+          )}
         </div>
       </div>
       <div className="py-[56px] px-[20px]">
@@ -257,39 +295,38 @@ export default function CampaignDetail({ campaign }: { campaign: DetailCampaignR
         </p>
       </div>
       <div className="bg-[#D5FFFF] px-[20px] py-[56px] rounded-[32px]">
-        <h3 className="text-[24px] font-bold tracking-[0.72px] text-center">タスク</h3>
+        <h3 className="text-[24px] font-bold tracking-[0.72px] text-center">おすすめのキャンペーン</h3>
         <div className="h-[40px]" />
         <div className="flex flex-col gap-[16px]">
-          <CampaignCardItem />
-          <CampaignCardItem />
+          {Array.isArray(campaignsRecommend) && campaignsRecommend?.length > 0
+            ? campaignsRecommend?.map((item) => <CampaignCardItem item={item as any} key={item.id} />)
+            : ''}
         </div>
         <div className="h-[40px]" />
         <div className="flex justify-center">
           <div className="w-[275px] h-[53px]">
-            <CButtonShadow
-              classBgColor="bg-[#333]"
-              classShadowColor="bg-[#fff]"
-              textClass="text-white text-[14px] font-bold"
-              title="キャンペーンの一覧をみる"
-              withIcon={{
-                position: 'right',
-                icon: <ArrowDown className="rotate-[-90deg]" />,
-              }}
-            />
+            <Link href="/campaigns?page=1&orderBy=totalViews">
+              <CButtonShadow
+                classBgColor="bg-[#333]"
+                classShadowColor="bg-[#fff]"
+                textClass="text-white text-[14px] font-bold"
+                title="キャンペーンの一覧をみる"
+                withIcon={{
+                  position: 'right',
+                  icon: <ArrowDown className="rotate-[-90deg]" />,
+                }}
+              />
+            </Link>
           </div>
         </div>
       </div>
+
       <div className="h-[56px]" />
 
-      <CModalWapper isOpen={isModalOpen} onCancel={handleCancel}>
-        <div className="h-[50vh] overflow-hidden">
-          <div className="h-full overflow-y-auto flex flex-col gap-[8px] pr-[8px] custom-scroll">
-            <CampaignRewardCardItem />
-            <CampaignRewardCardItem />
-            <CampaignRewardCardItem />
-            <CampaignRewardCardItem />
-            <CampaignRewardCardItem />
-            <CampaignRewardCardItem />
+      <CModalWapper isOpen={isModalOpen} modalWidth={368} onCancel={handleCancel} top={10}>
+        <div className="h-[55vh] overflow-hidden">
+          <div className="h-full overflow-y-auto flex flex-col gap-[8px] custom-scroll  pr-[8px]  ">
+            {sortCampaignRewardIndex?.map((item) => <CampaignRewardCardItem campaignReward={item} key={item?.id} />)}
           </div>
         </div>
       </CModalWapper>
