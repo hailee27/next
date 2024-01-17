@@ -12,7 +12,7 @@ export default function CampaignCardItem({
   item,
   viewMode,
 }: {
-  item: TypeCampaign;
+  item?: TypeCampaign;
   viewMode?: 'HAS_IMAGE' | 'NO_IMAGE';
 }) {
   const router = useRouter();
@@ -63,12 +63,12 @@ export default function CampaignCardItem({
             />
           )}
           <div className="text-[13px] text-[#777] flex flex-col space-y-[6px]">
-            {item.methodOfselectWinners !== 'MANUAL_SELECTION' && (
+            {item?.methodOfselectWinners !== 'MANUAL_SELECTION' && (
               <>
                 <span>
                   報酬：
                   <span>
-                    {sortCampaignReward?.length >= 2 ? (
+                    {Array.isArray(sortCampaignReward) && sortCampaignReward?.length >= 2 ? (
                       <>
                         <span>
                           <span className="font-montserrat">{sortCampaignReward[0]?.amountOfMoney ?? '--'}</span>円
@@ -110,7 +110,7 @@ export default function CampaignCardItem({
         <div className="min-w-[279px] h-[47px]">
           <CButtonClassic
             customClassName="!bg-btn-gradation !text-[14px] !text-main-text"
-            tagLabel={item.methodOfselectWinners !== 'MANUAL_SELECTION' ? '即時抽選' : ''}
+            tagLabel={item?.methodOfselectWinners !== 'MANUAL_SELECTION' ? '即時抽選' : ''}
             title="キャンペーンの詳細をみる"
             withIcon={{
               position: 'right',
@@ -125,4 +125,5 @@ export default function CampaignCardItem({
 
 CampaignCardItem.defaultProps = {
   viewMode: 'HAS_IMAGE',
+  item: undefined,
 };
