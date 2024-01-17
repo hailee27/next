@@ -10,3 +10,5 @@ export const USER_ROLE = {
   QUESTER: 'QUESTER',
   CREATOR: 'CREATOR',
 };
+
+export const PAGINATION_PAGE_SIZE = 20;

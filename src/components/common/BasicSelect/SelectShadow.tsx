@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Popover } from 'antd';
+import clsx from 'clsx';
 import CButtonShadow from '../CButtonShadow';
 import styles from './index.module.scss';
 
@@ -35,7 +36,10 @@ function SelectShadow(props: Props) {
           <div className="w-full text-[14px] font-bold text-[#333] ">
             {options?.map((item) => (
               <div
-                className="px-[40px] py-[10px] flex items-center space-x-[10px] hover:bg-[#F2F2F2] first:rounded-t-[6px] last:rounded-b-[6px]"
+                className={clsx(
+                  'px-[40px] py-[10px] flex items-center space-x-[10px] hover:bg-[#F2F2F2] first:rounded-t-[6px] last:rounded-b-[6px]',
+                  value === item.value ? 'bg-[#F2F2F2]' : ''
+                )}
                 key={item.value}
                 onClick={() => {
                   setOpen(false);
@@ -74,7 +78,7 @@ function SelectShadow(props: Props) {
           }}
           ref={refButtonShadow}
           textClass="!justify-between px-[40px]"
-          title={String(value)}
+          title={options?.find((item) => item?.value === value)?.label?.toString() ?? ''}
           withIcon={{
             position: 'right',
             icon: (
