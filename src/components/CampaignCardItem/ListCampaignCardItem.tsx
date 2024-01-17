@@ -36,6 +36,7 @@ function ListCampaignCardItem({ item }: { item: TypeCampaign }) {
           {item?.methodOfselectWinners === 'MANUAL_SELECTION' && (
             <div
               className="text-[13px] line-clamp-2 text-ellipsis"
+              // eslint-disable-next-line react/no-danger
               dangerouslySetInnerHTML={{ __html: item?.description?.replace(/\r?\n/g, '<br/>') ?? '' }}
             />
           )}
