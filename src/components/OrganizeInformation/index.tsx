@@ -62,7 +62,7 @@ function OrganizeInformation() {
                   crossOrigin="anonymous"
                   height="56px"
                   preview={false}
-                  src={user?.memberCompany.image.imageUrl}
+                  src={user?.memberCompany?.image?.imageUrl}
                   width="189px"
                 />
               </div>
@@ -71,8 +71,8 @@ function OrganizeInformation() {
           <div className="flex flex-col space-y-[16px] pb-[24px]">
             <span className="text-[18px] font-bold text-[#04AFAF] leading-[16px]">支払方法</span>
             <div className="flex flex-col text-[16px] leading-[24px] space-y-[20px]">
-              <span>Mastercard</span>
-              <span>末尾が•••• 7274のクレジットカード</span>
+              <span>{user?.memberCompany?.cardInfo?.cardBrand}</span>
+              <span>末尾が••••{user?.memberCompany?.cardInfo?.lastFour}のクレジットカード</span>
             </div>
             {isEdit && (
               <span

@@ -1,7 +1,8 @@
+import EditPermmission from '@/components/CampaignCreate/PermissionManagement/EditPermmission';
 import React from 'react';
 
-function EditPermissions() {
-  return <div>EditPermissions</div>;
+function EditPermissionsPage() {
+  return <EditPermmission />;
 }
 
-export default EditPermissions;
+export default EditPermissionsPage;
