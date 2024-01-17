@@ -1,3 +1,21 @@
+/* eslint-disable import/first */
+/* eslint-disable import/order */
+import { init as initApm } from '@elastic/apm-rum';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const serviceVersion = require('../../package.json').version;
+
+initApm({
+  serviceName: `${process.env.NEXT_PUBLIC_SERVICE_NAME}-rum`,
+  serverUrl: process.env.NEXT_PUBLIC_APM_SERVER_URL ?? 'http://localhost:8200',
+  serviceVersion,
+  environment: process.env.NEXT_PUBLIC_ENVIRONMENT ?? 'local',
+  apiVersion: 3,
+  distributedTracingOrigins: [process.env.NEXT_PUBLIC_APM_API_BASE_URL ?? 'http://localhost:8080'],
+  active: ['staging', 'production'].includes(process.env.NEXT_PUBLIC_ENVIRONMENT ?? 'local'),
+});
+//* * */
+
 import AuthCheck from '@/components/AuthCheck';
 import Loading from '@/components/Loading';
 import MegaHead from '@/components/MegaHead';
@@ -7,6 +25,7 @@ import MainLayout from '@/components/layout/MainLayout';
 import { PopUpProvider } from '@/context/PopUpContext';
 import { wrapper } from '@/redux/store';
 import '@/styles/globals.css';
+import '@/styles/globals.scss';
 import { NextPage } from 'next';
 import { SessionProvider } from 'next-auth/react';
 import type { AppProps } from 'next/app';

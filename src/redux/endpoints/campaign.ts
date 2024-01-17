@@ -97,7 +97,7 @@ export type TypeCampaign = {
   expiredTime: string;
   startTime: string;
   dontSetExpiredTime: boolean;
-  methodOfselectWinners: string;
+  methodOfselectWinners: 'AUTO_PRIZEE_DRAW' | 'MANUAL_SELECTION';
   totalNumberOfUsersAllowedToWork: number;
   numberOfPrizes: number;
   totalPrizeValue: number;
@@ -117,6 +117,13 @@ export type TypeCampaign = {
   };
   CampaignReward: TypeCampaignReward[];
   Task: TypeTask[];
+  company?: {
+    code: string;
+    image: {
+      id: number;
+      imageUrl: string;
+    };
+  };
 };
 export type ListCampaignResponse = {
   campaigns: TypeCampaign[];
@@ -129,6 +136,7 @@ export type ListCampaignParams = {
   orderBy?: string;
   q?: string;
   include?: string;
+  token?: 'user';
 };
 export type QuestsResponse = void;
 export type QuestsParams = {

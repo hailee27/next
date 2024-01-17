@@ -57,7 +57,7 @@ export interface User {
     deletedAt: string | null;
   };
   profile: string | null;
-  identities: [];
+
   companyRole: TypeCompanyRole[];
   memberCompany: {
     id: number;
@@ -90,6 +90,12 @@ export interface User {
   };
   ownCompany: TypeOwnCompany[];
   havePassword?: boolean;
+  identities?: {
+    id: number;
+    type?: string;
+    accountId?: string;
+    accountName?: string;
+  }[];
 }
 
 export interface LoginData {

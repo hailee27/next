@@ -4,7 +4,6 @@
 import SmsVerificationForm from '@/components/auth/sms-verification-form';
 import { useAuthVerificationMutation, useSmsVerifyMutation } from '@/redux/endpoints/auth';
 import { setSession } from '@/redux/slices/auth.slice';
-import { SMS_CASE } from '@/utils/constant/enums';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import toastMessage from '@/utils/func/toastMessage';
 import { Spin } from 'antd';
@@ -20,19 +19,16 @@ export default function VerificationPage() {
   const dispatch = useDispatch();
   const handleSubmitSMS = async (code: string) => {
     try {
-      console.log(code, query?.code && query?.totpToken, query?.case === SMS_CASE.LOGIN_VERIFICATION);
       if (query?.code && query?.totpToken) {
-        if (query?.case === SMS_CASE.LOGIN_VERIFICATION) {
-          const data = await smsAuth({
-            code,
-            token: typeof query?.totpToken === 'string' ? query?.totpToken : '',
-          }).unwrap();
+        const data = await smsAuth({
+          code,
+          token: typeof query?.totpToken === 'string' ? query?.totpToken : '',
+        }).unwrap();
 
-          if (data?.accessToken && data?.refreshToken && data?.user) {
-            dispatch(setSession({ ...data }));
-            localStorage.setItem('USER_LOGIN_FROM', 'IMPLEMENTER');
-            push('/');
-          }
+        if (data?.accessToken && data?.refreshToken && data?.user) {
+          dispatch(setSession({ ...data }));
+          localStorage.setItem('USER_LOGIN_FROM', 'IMPLEMENTER');
+          push('/');
         }
       }
     } catch (err) {
