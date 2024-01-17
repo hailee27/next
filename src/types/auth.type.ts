@@ -59,7 +59,35 @@ export interface User {
   profile: string | null;
   identities: [];
   companyRole: TypeCompanyRole[];
-  memberCompany: string | null;
+  memberCompany: {
+    id: number;
+    name: string;
+    code: string;
+    emailId: 2;
+    imageId: 1;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+    email: {
+      id: number;
+      email: string;
+      isVerified: boolean;
+      userId: number;
+      companyId: string | null;
+      createdAt: string;
+      updatedAt: string;
+      deletedAt: string | null;
+    };
+    image: {
+      id: number;
+      uploadedBy: string | null;
+      uploadAt: string;
+      deleteFlg: boolean;
+      createdAt: string;
+      updatedAt: string;
+      imageUrl: string;
+    };
+  };
   ownCompany: TypeOwnCompany[];
   havePassword?: boolean;
 }

@@ -22,27 +22,27 @@ function CampaignList() {
     },
     {
       key: '2',
-      label: <ListTab title="購入申請中" />,
+      label: <ListTab title="下書き・購入待ち" />,
       children: <TableAll />,
     },
     {
       key: '3',
-      label: <ListTab title="公開待ち" />,
+      label: <ListTab title="審査中" />,
       children: <TableAll />,
     },
     {
       key: '4',
-      label: <ListTab title="公開中" />,
+      label: <ListTab title="公開待ち" />,
       children: <TableAll />,
     },
     {
       key: '5',
-      label: <ListTab title="完了" />,
+      label: <ListTab title="公開中" />,
       children: <TableAll />,
     },
     {
       key: '6',
-      label: <ListTab title="下書き" />,
+      label: <ListTab title="完了" />,
       children: <TableAll />,
     },
   ];

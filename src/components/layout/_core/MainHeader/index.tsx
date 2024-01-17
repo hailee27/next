@@ -85,7 +85,7 @@ export default function MainHeader() {
     }
   }, [isOpenMenu]);
   return (
-    <div className="font-notoSans sticky z-[999999] top-0 bg-white">
+    <div className="font-notoSans sticky z-[999] top-0 bg-white">
       <div className="h-[64px] px-[20px] flex justify-between items-center w-full  border-t-[2px] border-b-[2px] border-[#333] border-solid">
         <Link className="w-[81px] h-[24px] hover:cursor-pointer" href="/">
           <Image
