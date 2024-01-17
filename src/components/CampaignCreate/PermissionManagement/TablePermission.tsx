@@ -4,6 +4,7 @@ import type { ColumnsType } from 'antd/es/table';
 import styles from '@/components/common/BasicTable/index.module.scss';
 import CButtonClassic from '@/components/common/CButtonClassic';
 import { useGetCompaniesListQuery } from '@/redux/endpoints/companies';
+import { useRouter } from 'next/router';
 
 interface DataType {
   key: string;
@@ -15,7 +16,7 @@ interface DataType {
 
 function TablePermission() {
   const [data, setData] = useState<DataType[] | undefined>(undefined);
-
+  const router = useRouter();
   const columns: ColumnsType<DataType> = [
     {
       title: 'アカウントアドレス',
@@ -64,6 +65,7 @@ function TablePermission() {
           />
           <CButtonClassic
             customClassName="!bg-white !text-[#333] !w-[95px] !h-[37px]"
+            onClick={() => router.push(`/campaign/permission-management/edit/${value}`)}
             title="編集"
             withIcon={{
               position: 'left',

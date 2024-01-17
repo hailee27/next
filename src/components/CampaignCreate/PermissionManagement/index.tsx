@@ -1,8 +1,11 @@
 import CButtonShadow from '@/components/common/CButtonShadow';
 import React from 'react';
+import { usePopUpContext } from '@/context/PopUpContext';
+import SearchoOganizationID from '@/components/PopUpOrganization/SearchoOganizationID';
 import TablePermission from './TablePermission';
 
 function PermissionManagement() {
+  const { openPopUp } = usePopUpContext();
   return (
     <div className="px-[48px] pt-[32px]">
       <div className="border-b-2 border-[#333] flex justify-between items-center pb-[24px] mb-[47px]">
@@ -12,7 +15,7 @@ function PermissionManagement() {
             classBgColor="bg-main-text"
             classRounded="rounded-[6px]"
             classShadowColor="bg-white"
-            // onClick={() => router.push('/campaign/create')}
+            onClick={() => openPopUp({ contents: <SearchoOganizationID /> })}
             shadowSize="normal"
             title="追加する"
             withIcon={{

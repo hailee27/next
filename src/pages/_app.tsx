@@ -48,7 +48,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
   let getLayout = Component.getLayout ?? ((page) => <MainLayout>{page}</MainLayout>);
   if (router.pathname.startsWith('/campaign')) {
     getLayout = (page) => (
-      <AuthCheck>
+      <AuthCheck type="CREATOR">
         <CampaignLayout>{page}</CampaignLayout>
       </AuthCheck>
     );

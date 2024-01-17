@@ -6,17 +6,16 @@ import { useRouter } from 'next/router';
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-const FlagComponent = () => {
+const FlagComponent = ({ type }: { type?: 'CREATOR' | 'IMPLEMENTER' }) => {
   const router = useRouter();
   useEffect(() => {
-    const lastLoginFrom = localStorage.getItem('USER_LOGIN_FROM');
-
-    router.push(lastLoginFrom === 'CREATOR' ? '/auth/sign-in/campaign-creator' : '/auth/sign-in/campaign-implementer');
-  }, []);
+    router.push(type === 'CREATOR' ? '/auth/sign-in/campaign-creator' : '/auth/sign-in/campaign-implementer');
+  }, [router.isReady, type]);
   return null;
 };
-function AuthCheck({ children }: { children: React.ReactElement }) {
-  const { accessToken } = useSelector((state: RootState) => state.auth);
+
+function AuthCheck({ children, type }: { children: React.ReactElement; type?: 'CREATOR' | 'IMPLEMENTER' }) {
+  const { accessToken, user } = useSelector((state: RootState) => state.auth);
   const [triggerGetMe] = useLazyMeQuery();
   const dispatch = useDispatch();
   const getUserLoggedIn = useCallback(async () => {
@@ -39,10 +38,22 @@ function AuthCheck({ children }: { children: React.ReactElement }) {
     }
   }, [accessToken]);
 
-  if (!accessToken || accessToken === null) {
-    return <FlagComponent />;
+  if ((!accessToken || accessToken === null) && type === 'IMPLEMENTER') {
+    return <FlagComponent type="IMPLEMENTER" />;
+  }
+  if (
+    (!accessToken || accessToken === null || user?.twoFactorMethod === 'NONE' || user?.emailId === null) &&
+    type === 'CREATOR'
+  ) {
+    return <FlagComponent type="CREATOR" />;
   }
   return children;
 }
 
+FlagComponent.defaultProps = {
+  type: 'IMPLEMENTER',
+};
+AuthCheck.defaultProps = {
+  type: 'IMPLEMENTER',
+};
 export default AuthCheck;

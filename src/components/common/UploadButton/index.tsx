@@ -17,6 +17,7 @@ const UploadButton = ({
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+
   const getBase64 = (file: RcFile): Promise<string> =>
     new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -42,8 +43,15 @@ const UploadButton = ({
 
   return (
     <div className={`${combinedClassName}`}>
-      <ImgCrop modalProps={{ okButtonProps: { className: 'bg-[#333]' } }} {...props}>
+      <ImgCrop
+        modalCancel="キャンセル"
+        modalProps={{ okButtonProps: { className: 'bg-[#333]' } }}
+        modalTitle="画像修正"
+        rotationSlider
+        {...props}
+      >
         <Upload
+          action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
           fileList={fileList}
           listType="picture-card"
           onChange={handleChange}
