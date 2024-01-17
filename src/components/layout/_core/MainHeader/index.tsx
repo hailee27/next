@@ -1,19 +1,21 @@
 import BarIcon from '@/components/common/icons/BarIcon';
 import XIcon from '@/components/common/icons/XIcon';
 import clsx from 'clsx';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 
-import Image from 'next/image';
 import CButtonShadow from '@/components/common/CButtonShadow';
-import Link from 'next/link';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/redux/store';
-import { useRouter } from 'next/router';
 import { logout } from '@/redux/slices/auth.slice';
+import { setIsOpenMainMenu } from '@/redux/slices/common.slice';
+import { RootState } from '@/redux/store';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function MainHeader() {
-  const [isOpenMenu, setIsOpenMenu] = useState(false);
   const { accessToken } = useSelector((store: RootState) => store.auth);
+  const { isOpenMainMenu } = useSelector((store: RootState) => store.common);
+
   const router = useRouter();
   const dispatch = useDispatch();
   const MainNavigation = useMemo(
@@ -65,7 +67,7 @@ export default function MainHeader() {
 
   const onChangeAuth = async () => {
     try {
-      setIsOpenMenu(false);
+      dispatch(setIsOpenMainMenu(false));
       if (accessToken) {
         await dispatch(logout());
       } else {
@@ -78,12 +80,28 @@ export default function MainHeader() {
   };
 
   useEffect(() => {
-    if (isOpenMenu) {
+    if (isOpenMainMenu) {
       document.body.classList.add('stop-scrolling');
     } else {
       document.body.classList.remove('stop-scrolling');
     }
-  }, [isOpenMenu]);
+  }, [isOpenMainMenu]);
+
+  useEffect(() => {
+    const start = () => {
+      dispatch(setIsOpenMainMenu(false));
+    };
+    const end = () => {};
+    router.events.on('routeChangeStart', start);
+    router.events.on('routeChangeComplete', end);
+    router.events.on('routeChangeError', end);
+
+    return () => {
+      router.events.off('routeChangeStart', start);
+      router.events.off('routeChangeComplete', end);
+      router.events.off('routeChangeError', end);
+    };
+  }, []);
   return (
     <div
       className="font-notoSans  bg-white"
@@ -106,7 +124,7 @@ export default function MainHeader() {
             classRounded="rounded-[4px]"
             classShadowColor="bg-main-text"
             onClick={() => {
-              setIsOpenMenu(true);
+              dispatch(setIsOpenMainMenu(true));
             }}
             shadowSize="small"
             withIcon={{
@@ -120,16 +138,16 @@ export default function MainHeader() {
         aria-hidden="true"
         className={clsx(
           'fixed top-0 w-full h-screen z-[1000] duration-500 transition-all',
-          isOpenMenu ? 'right-0' : 'right-[-100vw]'
+          isOpenMainMenu ? 'right-0' : 'right-[-100vw]'
         )}
         onClick={() => {
-          setIsOpenMenu(false);
+          dispatch(setIsOpenMainMenu(false));
         }}
       >
         <div
           className={clsx(
             'fixed top-0 left-0 w-full h-screen  bg-[#333]/[60%] duration-200 transition-all ',
-            isOpenMenu ? 'opacity-100 visible z-[1000]' : 'invisible opacity-0 z-[-1]'
+            isOpenMainMenu ? 'opacity-100 visible z-[1000]' : 'invisible opacity-0 z-[-1]'
           )}
         />
 
@@ -137,7 +155,7 @@ export default function MainHeader() {
           aria-hidden="true"
           className={clsx(
             ' bg-white  w-[302px]  mb-h:h-[100vh] h-[75vh] border-[2px] border-[#333] border-r-[0px] absolute z-[1001]  duration-500 transition-all  py-[88px] pb-[10px] px-[48px] pr-[20px]',
-            isOpenMenu ? ' right-0 top-0' : ' right-[-500px] top-0'
+            isOpenMainMenu ? ' right-0 top-0' : ' right-[-500px] top-0'
           )}
           onClick={(e) => e.stopPropagation()}
         >
@@ -148,7 +166,7 @@ export default function MainHeader() {
                 classRounded="rounded-[4px]"
                 classShadowColor="bg-main-text"
                 onClick={() => {
-                  setIsOpenMenu(false);
+                  dispatch(setIsOpenMainMenu(false));
                 }}
                 shadowSize="small"
                 withIcon={{
@@ -159,7 +177,7 @@ export default function MainHeader() {
             </div>
             <div className="flex flex-col gap-[24px]">
               {MainNavigation.map((i) => (
-                <a
+                <Link
                   className={clsx(
                     'text-[20px] font-bold tracking-[0.6px]  ',
                     i.text === 'Home' ? 'font-montserrat' : ''
@@ -168,7 +186,7 @@ export default function MainHeader() {
                   key={i.key}
                 >
                   {i.text}
-                </a>
+                </Link>
               ))}
             </div>
             <div className="my-[40px] h-[53px]">
@@ -176,9 +194,9 @@ export default function MainHeader() {
             </div>
             <div className="flex flex-col gap-[16px]">
               {SubNavigation.map((i) => (
-                <a className={clsx('text-[13px]  tracking-[4px]  ')} href={i.to} key={i.key}>
+                <Link className={clsx('text-[13px]  tracking-[4px]  ')} href={i.to} key={i.key}>
                   {i.text}
-                </a>
+                </Link>
               ))}
             </div>
           </div>

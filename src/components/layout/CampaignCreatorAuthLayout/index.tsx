@@ -6,7 +6,7 @@ export default function CampaignCreatorAuthLayout({ children }: { children: Reac
   return (
     <div className="font-notoSans">
       <div className="h-[62px] px-[20px] flex justify-between items-center w-full  ">
-        <Link className="w-[81px] h-[24px] hover:cursor-pointer" href="/">
+        <Link className="w-[102px] h-[30px] hover:cursor-pointer" href="/">
           <Image
             alt=" logo"
             className="w-full h-full object-cover"

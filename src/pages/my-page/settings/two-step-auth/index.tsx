@@ -109,7 +109,7 @@ export default function SettingTwoStepAuthPage() {
 
   if (!accessToken) {
     router.replace('/auth/sign-in/campaign-implementer');
-  } else if (user?.twoFactorMethod === 'TOTP' && user.twoFactorPhone) {
+  } else if (user?.twoFactorMethod === 'TOTP' && user.twoFactorPhone && router?.query?.action !== 'disable') {
     router.push('/my-page');
   } else {
     return (

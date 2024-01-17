@@ -1,12 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable max-lines-per-function */
-/* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import ListCampaignCardItem from '@/components/CampaignCardItem/ListCampaignCardItem';
-import BasicPaination from '@/components/common/BasicPaination';
+import PaginationRouterControl from '@/components/common/BasicPaination/PaginationRouterControl';
 import SelectShadow from '@/components/common/BasicSelect/SelectShadow';
-import { CampaignApi, TypeCampaign } from '@/redux/endpoints/campaign';
+import { CampaignApi, ListCampaignParams, TypeCampaign } from '@/redux/endpoints/campaign';
 import { wrapper } from '@/redux/store';
+import { PAGINATION_PAGE_SIZE } from '@/utils/constant/enums';
 import { Form } from 'antd';
 import { useRouter } from 'next/router';
 
@@ -15,14 +13,24 @@ interface ICampaignsPage {
   totals: number | null;
 }
 
-export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ query, req, res }) => {
-  const { data: dataCampaigns } = await store.dispatch(
-    CampaignApi.endpoints.getListCampaign.initiate({
-      skip: 0,
-      take: 20,
-      token: 'user',
-    })
-  );
+export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ query }) => {
+  const { page: pageString, orderBy } = query;
+  const page = parseInt((pageString ?? '1') as string, 10);
+
+  const apiRequest: ListCampaignParams = {
+    orderBy: JSON.stringify({
+      totalViews: 'desc',
+    }),
+    skip: PAGINATION_PAGE_SIZE * (page - 1),
+    take: PAGINATION_PAGE_SIZE,
+    token: 'user',
+  };
+  if (orderBy) {
+    apiRequest.orderBy = JSON.stringify({
+      [`${orderBy}`]: 'desc',
+    });
+  }
+  const { data: dataCampaigns } = await store.dispatch(CampaignApi.endpoints.getListCampaign.initiate(apiRequest));
 
   return {
     props: {
@@ -36,23 +44,33 @@ export default function CampaignsPage({ campaigns, totals }: ICampaignsPage) {
   const router = useRouter();
   return (
     <div className="font-notoSans text-main-text min-h-screen px-[20px] py-[40px] bg-[#D5FFFF] ">
-      <Form onValuesChange={(e, v) => router.push({ query: v })}>
-        <Form.Item initialValue="人気順" name="filter">
+      <Form
+        onValuesChange={(e, v) => {
+          if (v?.orderBy) {
+            router.push({ query: { ...router.query, orderBy: v?.orderBy } });
+          }
+        }}
+      >
+        <Form.Item initialValue={router?.query?.orderBy ?? 'totalViews'} name="orderBy" noStyle>
           <SelectShadow
             options={[
-              { label: '人気順', value: '人気順' },
-              { label: '新着順', value: '新着順' },
-              { label: '報酬額順', value: '報酬額順' },
+              { value: 'totalViews', label: '人気順' },
+              { value: 'startTime', label: '新着順' },
+              {
+                value: 'totalPrizeValue',
+                label: '報酬額順',
+              },
             ]}
           />
         </Form.Item>
       </Form>
+      <div className="h-[32px]" />
       <div className="flex flex-col space-y-[16px] pb-[32px] ">
         {Array.isArray(campaigns) && campaigns?.length > 0
           ? campaigns?.map((item) => <ListCampaignCardItem item={item as any} key={item.id} />)
           : ''}
       </div>
-      <BasicPaination total={20} />
+      <PaginationRouterControl countItems={campaigns?.length ?? 0} total={totals ?? 0} />
     </div>
   );
 }
