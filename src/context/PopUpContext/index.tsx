@@ -2,8 +2,12 @@ import { Modal } from 'antd';
 import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import styles from './modal.module.scss';
 
+interface PopUpData {
+  id?: string;
+  content: JSX.Element;
+}
 interface PropsOpenPopUp {
-  contents: JSX.Element | string;
+  contents: JSX.Element;
   classNameWrapperPopup?: string;
 }
 interface TypePopUpContext {
@@ -16,45 +20,50 @@ const ModalRender = (node: React.ReactNode, classNameWrapper?: string) => (
 );
 
 export const PopUpProvider = ({ children }: { children: React.ReactNode }) => {
-  const [open, setOpen] = useState<boolean>(false);
-  const [contentPopUp, setContentPopUp] = useState<JSX.Element | string>('');
+  // const [open, setOpen] = useState<boolean>(false);
+  const [contentPopUp, setContentPopUp] = useState<PopUpData[]>([]);
   const [classNameWrapper, setClassNameWrapper] = useState<string>('');
   const openPopUp = useCallback(
     ({ contents, classNameWrapperPopup }: PropsOpenPopUp) => {
-      setContentPopUp(contents);
+      const id = (Math.random() + 1).toString(36).substring(7);
       setClassNameWrapper(classNameWrapperPopup ?? '');
-      setOpen(true);
+      setContentPopUp((prev) => [...prev, { id, content: contents }]);
+      // setOpen(true);
     },
     [contentPopUp]
   );
   const closePopUp = () => {
-    setOpen(false);
+    setContentPopUp((prev) => prev.filter((e) => e.id !== prev[prev.length - 1].id));
   };
   const contextvalue = useMemo<TypePopUpContext>(
     () => ({
       openPopUp,
       closePopUp,
     }),
-    []
+    [openPopUp]
   );
   return (
     <PopUpContext.Provider value={contextvalue}>
       <>
         {children}
 
-        <Modal
-          centered
-          closeIcon={false}
-          footer={false}
-          modalRender={(node) => ModalRender(node, classNameWrapper)}
-          onCancel={() => setOpen(false)}
-          open={open}
-          styles={{ mask: { background: '#333', opacity: 0.9 } }}
-          width="max-content"
-          wrapClassName={styles.customModal}
-        >
-          {contentPopUp}
-        </Modal>
+        {contentPopUp.length > 0 &&
+          contentPopUp.map((e) => (
+            <Modal
+              centered
+              closeIcon={false}
+              footer={false}
+              key={e.id}
+              modalRender={(node) => ModalRender(node, classNameWrapper)}
+              onCancel={() => closePopUp()}
+              open={contentPopUp.length > 0}
+              styles={{ mask: { background: '#333', opacity: 0.9 } }}
+              width="max-content"
+              wrapClassName={styles.customModal}
+            >
+              {e.content}
+            </Modal>
+          ))}
       </>
     </PopUpContext.Provider>
   );

@@ -16,7 +16,7 @@ function Setup() {
   const { data } = useGetMasterDataQuery();
   const dataCategory = useMemo(
     () =>
-      data?.CATEGORY_CAMPAIGN.map((e) => ({
+      data?.CATEGORY_CAMPAIGN?.map((e) => ({
         value: e.value,
         label: e.label,
       })),
