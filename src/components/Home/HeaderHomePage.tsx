@@ -56,7 +56,7 @@ function HeaderHomePage() {
             classShadowColor="bg-[#333]"
             onClick={() => {
               if (accessToken) {
-                router.push('/campaign');
+                router.push('/campaign/list');
               } else {
                 localStorage.setItem('USER_LOGIN_FROM', 'CREATOR');
                 router.push('/auth/sign-in/campaign-creator');

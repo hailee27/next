@@ -5,7 +5,13 @@ const injectedRtkApi = api.injectEndpoints({
     postCompanies: build.mutation<CompaniesaResponse, CompaniesParams>({
       query: (queryArg) => {
         const body = new FormData();
-        Object.entries(queryArg).forEach(([key, value]) => body.append(`${key}`, value));
+        Object.entries(queryArg).forEach(([key, value]) => {
+          if (key === 'cardInfor') {
+            body.append('cardInfor', JSON.stringify(value));
+          } else {
+            body.append(`${key}`, value);
+          }
+        });
         return {
           url: '/companies',
           method: 'POST',
@@ -15,7 +21,7 @@ const injectedRtkApi = api.injectEndpoints({
     }),
     getCompaniesList: build.query<CompaniesListResponse, CompaniesListParams>({
       query: (queryArg) => ({
-        url: '/companies/users',
+        url: '/users',
         method: 'GET',
         params: queryArg,
       }),
@@ -90,6 +96,8 @@ export type CompaniesParams = {
   code: string;
   email: string;
   companyImage: string;
+  cardInfo: string;
+  sourceId: string;
 };
 
 export { injectedRtkApi as CompaniesApi };

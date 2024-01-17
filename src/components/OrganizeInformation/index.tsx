@@ -1,6 +1,8 @@
 import { Form, Image } from 'antd';
 import React, { useState } from 'react';
 import { usePopUpContext } from '@/context/PopUpContext';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 import BasicButton from '../common/BasicButton';
 import BasicInput from '../common/BasicInput';
 import UploadButton from '../common/UploadButton';
@@ -10,6 +12,11 @@ import CButtonShadow from '../common/CButtonShadow';
 function OrganizeInformation() {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const { openPopUp } = usePopUpContext();
+  const { user } = useSelector((state: RootState) => state.auth);
+  // const initialValue = useMemo(()=>({
+
+  // }),[])
+
   return (
     <Form className="px-[48px] pb-[100px]">
       <div className="border-b-2 border-[#2D3648]  py-[24px]">
@@ -20,25 +27,25 @@ function OrganizeInformation() {
           <div className="flex flex-col space-y-[16px]">
             <span className="text-[18px] font-bold text-[#04AFAF] leading-[16px]">組織名</span>
             {isEdit ? (
-              <Form.Item>
+              <Form.Item initialValue={user?.memberCompany?.name} name="name">
                 <BasicInput />
               </Form.Item>
             ) : (
-              <span className="text-[16px] leading-[24px]">ONE.course</span>
+              <span className="text-[16px] leading-[24px]">{user?.memberCompany?.name}</span>
             )}
           </div>
           <div className="flex flex-col space-y-[16px]">
             <span className="text-[18px] font-bold text-[#04AFAF] leading-[16px]">組織ID</span>
-            <span className="text-[16px] leading-[24px]">one-course</span>
+            <span className="text-[16px] leading-[24px]">{user?.memberCompany?.code}</span>
           </div>
           <div className="flex flex-col space-y-[16px]">
             <span className="text-[18px] font-bold text-[#04AFAF] leading-[16px]">組織 代表メールアドレス </span>
             {isEdit ? (
-              <Form.Item>
+              <Form.Item initialValue={user?.memberCompany?.email?.email} name="email">
                 <BasicInput />
               </Form.Item>
             ) : (
-              <span className="text-[16px] leading-[24px]">one-course@gmail.com</span>
+              <span className="text-[16px] leading-[24px]">{user?.memberCompany?.email?.email}</span>
             )}
           </div>
           <div className="flex flex-col">
@@ -49,7 +56,15 @@ function OrganizeInformation() {
               </div>
             ) : (
               <div className="mt-[12px] w-[189px] h-[56px] ">
-                <Image alt="" height="100%" preview={false} src="/assets/images/logo 1.png" width="100%" />
+                <Image
+                  alt="image"
+                  className="object-cover"
+                  crossOrigin="anonymous"
+                  height="56px"
+                  preview={false}
+                  src={user?.memberCompany.image.imageUrl}
+                  width="189px"
+                />
               </div>
             )}
           </div>

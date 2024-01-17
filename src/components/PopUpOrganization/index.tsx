@@ -1,5 +1,5 @@
 import { usePopUpContext } from '@/context/PopUpContext';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 // import { useRouter } from 'next/router';
 import { Form } from 'antd';
 import { usePostCompaniesMutation } from '@/redux/endpoints/companies';
@@ -7,12 +7,14 @@ import toastMessage from '@/utils/func/toastMessage';
 import { useLazyMeQuery } from '@/redux/endpoints/auth';
 import { setUser } from '@/redux/slices/auth.slice';
 import { useDispatch } from 'react-redux';
+import { TypeTokenPayment } from '@/types/paymentCard.type';
 import InputLabel from '../common/BasicInput/InputLabel';
 import PopUpCreditOrDebitCard from '../OrganizeInformation/PopUpCreditOrDebitCard';
 import UploadButton from '../common/UploadButton';
 import CButtonClassic from '../common/CButtonClassic';
 import CButtonShadow from '../common/CButtonShadow';
 import SearchoOganizationID from './SearchoOganizationID';
+import FlagItem from '../common/FlagItem';
 
 function PopUpOrganization() {
   const { openPopUp, closePopUp } = usePopUpContext();
@@ -21,13 +23,35 @@ function PopUpOrganization() {
   const [trigger] = usePostCompaniesMutation();
   const [getMe] = useLazyMeQuery();
   const dispatch = useDispatch();
+  const [paymentMethod, setPaymentMethod] = useState<TypeTokenPayment | undefined>(undefined);
+  const [errorValidate, setErrorValidate] = useState<string[]>([]);
+  const companyImageWatch = Form.useWatch('companyImage', form);
+
+  useEffect(() => {
+    if (companyImageWatch) {
+      setErrorValidate(errorValidate.filter((v) => v !== 'companyImage'));
+    }
+  }, [companyImageWatch]);
+  useEffect(() => {
+    if (paymentMethod) {
+      form.setFieldValue(
+        'cardInfor',
+        JSON.stringify({
+          cardholderName: paymentMethod.cardholderName,
+          lastFour: paymentMethod.details.card.last4,
+          cardBrand: paymentMethod.details.card.brand,
+        })
+      );
+      form.setFieldValue('sourceId', paymentMethod.token);
+    }
+  }, [paymentMethod]);
 
   return (
     <div className="p-[64px] w-[928px] max-h-[829px] overflow-y-auto">
       <Form
         form={form}
         onFinish={(e) => {
-          trigger(e)
+          trigger({ ...e })
             .unwrap()
             .then(() => {
               getMe()
@@ -36,7 +60,12 @@ function PopUpOrganization() {
               toastMessage('success', 'success');
               closePopUp();
             })
-            .catch(() => toastMessage('error', 'error'));
+            .catch((err) => {
+              toastMessage(err.data.message, 'error');
+            });
+        }}
+        onFinishFailed={(e) => {
+          setErrorValidate(e.errorFields.map((v) => String(v.name[0])));
         }}
       >
         <InputLabel
@@ -44,14 +73,30 @@ function PopUpOrganization() {
           name="name"
           placeholder="記入してください"
           required
-          rules={[{ required: true, message: 'ご入力いただいた組織名は既に使用されています。' }]}
+          rules={[
+            {
+              required: true,
+              message: 'ご入力いただいた組織名は既に使用されています。',
+            },
+          ]}
         />
         <InputLabel
           label="組織ID"
           name="code"
           placeholder="選択してください"
           required
-          rules={[{ required: true, message: 'ご入力いただいた組織IDは既に使用されています。' }]}
+          rules={[
+            { required: true, message: 'ご入力いただいた組織IDは既に使用されています。' },
+            // {
+            //   validator() {
+            //     if (error?.data?.error === 'Conflict') {
+            //       // eslint-disable-next-line prefer-promise-reject-errors
+            //       return Promise.reject('ご入力いただいた組織名は既に使用されています。');
+            //     }
+            //     return Promise.resolve(' ');
+            //   },
+            // },
+          ]}
         />
         <InputLabel
           label="組織 代表メールアドレス"
@@ -70,7 +115,11 @@ function PopUpOrganization() {
           </div>
           {/* <span className="font-bold">ロゴ </span> */}
           <Form.Item name="companyImage" noStyle rules={[{ required: true, message: '' }]}>
-            <UploadButton className="w-[149px]" />
+            <UploadButton
+              className={`w-[149px]  ${
+                errorValidate.includes('companyImage') && 'border-[#ff0000] border-2 rounded-[8px]'
+              } `}
+            />
           </Form.Item>
         </div>
         <div className="flex flex-col space-y-[10px]">
@@ -81,11 +130,30 @@ function PopUpOrganization() {
             </div>
           </div>
           {/* <span className="font-bold">お支払い方法</span> */}
-          <CButtonClassic
-            customClassName="!rounded-[6px] !w-[290px] !h-[47px] !text-[14px]"
-            onClick={() => openPopUp({ contents: <PopUpCreditOrDebitCard /> })}
-            title="クレジットまたはデビットカードを追加"
-          />
+          <div className="hidden">
+            <Form.Item name="cardInfor" noStyle rules={[{ required: true, message: '' }]}>
+              <FlagItem />
+            </Form.Item>
+            <Form.Item name="sourceId" noStyle rules={[{ required: true, message: '' }]}>
+              <FlagItem />
+            </Form.Item>
+          </div>
+          {paymentMethod ? (
+            <div className="text-[16px] ">
+              {paymentMethod.details.card.brand} <br />
+              末尾が•••• {paymentMethod.details.card.last4}のクレジットカード
+            </div>
+          ) : (
+            <CButtonClassic
+              customClassName={`!rounded-[6px] !w-[290px] !h-[47px] !text-[14px] ${
+                errorValidate.includes('cardInfor' || 'sourceId') && 'border-[#ff0000]'
+              }`}
+              onClick={() =>
+                openPopUp({ contents: <PopUpCreditOrDebitCard getCardPayment={(value) => setPaymentMethod(value)} /> })
+              }
+              title="クレジットまたはデビットカードを追加"
+            />
+          )}
         </div>
         <div className="flex space-y-[16px] items-center flex-col border-t border-[#AAA] mt-[32px] pt-[40px]">
           <div className="w-[195px]  h-[56px]">
