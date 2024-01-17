@@ -4,11 +4,12 @@ import React, { useEffect, useRef } from 'react';
 import styles from './styles.module.scss';
 
 interface ICCardShadowProps {
+  disableClick?: boolean;
   onClickCard?: () => void;
   children: JSX.Element;
 }
 
-export default function CCardShadow({ onClickCard, children }: ICCardShadowProps) {
+export default function CCardShadow({ disableClick, onClickCard, children }: ICCardShadowProps) {
   const cardRef = useRef<HTMLDivElement | null>(null);
 
   const onTouchStart = () => {
@@ -30,7 +31,7 @@ export default function CCardShadow({ onClickCard, children }: ICCardShadowProps
   return (
     <div
       aria-hidden="true"
-      className={clsx(styles.shadowCardContainer)}
+      className={clsx(styles.shadowCardContainer, disableClick ? 'pointer-events-none' : '')}
       onClick={() => {
         onClickCard?.();
       }}
@@ -49,4 +50,5 @@ export default function CCardShadow({ onClickCard, children }: ICCardShadowProps
 
 CCardShadow.defaultProps = {
   onClickCard: () => {},
+  disableClick: false,
 };

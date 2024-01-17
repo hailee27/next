@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import ListCampaignCardItem from '@/components/CampaignCardItem/ListCampaignCardItem';
+import CampaignCardItem from '@/components/CampaignCardItem';
 import PaginationRouterControl from '@/components/common/BasicPaination/PaginationRouterControl';
 import SelectShadow from '@/components/common/BasicSelect/SelectShadow';
 import { CampaignApi, ListCampaignParams, TypeCampaign } from '@/redux/endpoints/campaign';
@@ -67,7 +67,7 @@ export default function CampaignsPage({ campaigns, totals }: ICampaignsPage) {
       <div className="h-[32px]" />
       <div className="flex flex-col space-y-[16px] pb-[32px] ">
         {Array.isArray(campaigns) && campaigns?.length > 0
-          ? campaigns?.map((item) => <ListCampaignCardItem item={item as any} key={item.id} />)
+          ? campaigns?.map((item) => <CampaignCardItem item={item as any} key={item.id} viewMode="NO_IMAGE" />)
           : ''}
       </div>
       <PaginationRouterControl countItems={campaigns?.length ?? 0} total={totals ?? 0} />

@@ -8,10 +8,11 @@ interface IComponentProps {
   isOpen: boolean;
   onCancel: () => void;
   modalWidth?: number;
+  top?: number;
   children: React.ReactNode;
 }
 
-export default function CModalWapper({ isOpen, onCancel, modalWidth, children }: IComponentProps) {
+export default function CModalWapper({ isOpen, onCancel, modalWidth, top, children }: IComponentProps) {
   return (
     <Modal
       closeIcon={false}
@@ -20,7 +21,7 @@ export default function CModalWapper({ isOpen, onCancel, modalWidth, children }:
       onCancel={onCancel}
       open={isOpen}
       rootClassName="clout-custom-modal"
-      style={{ top: 64 }}
+      style={{ top }}
       width={modalWidth}
     >
       <div className="flex justify-end">
@@ -49,5 +50,6 @@ export default function CModalWapper({ isOpen, onCancel, modalWidth, children }:
   );
 }
 CModalWapper.defaultProps = {
-  modalWidth: 343,
+  modalWidth: 360,
+  top: 64,
 };
