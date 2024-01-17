@@ -8,13 +8,19 @@ import CShadowCard from '../common/CCardShadow';
 import ArrowDown from '../common/icons/ArrowDown';
 import CButtonClassic from '../common/CButtonClassic';
 
-export default function CampaignCardItem({ item }: { item: TypeCampaign }) {
+export default function CampaignCardItem({
+  item,
+  viewMode,
+}: {
+  item: TypeCampaign;
+  viewMode?: 'HAS_IMAGE' | 'NO_IMAGE';
+}) {
   const router = useRouter();
   const sortCampaignReward = Array.isArray(item?.CampaignReward)
     ? item?.CampaignReward?.sort((a, b) => a.amountOfMoney - b.amountOfMoney)
     : [];
   return (
-    <CShadowCard onClickCard={() => router.push('/campaigns/1')}>
+    <CShadowCard onClickCard={() => router.push(`/campaigns/${item?.id}`)}>
       <div className="font-notoSans px-[24px] py-[32px] flex flex-col gap-[16px]   ">
         <div className=" flex gap-[10px] items-center  ">
           <div className="w-[32px] h-[32px] rounded-full  overflow-hidden">
@@ -31,17 +37,20 @@ export default function CampaignCardItem({ item }: { item: TypeCampaign }) {
             {item?.company?.code ?? '-'}
           </p>
         </div>
-
-        <div className="h-[184px] rounded-[5px] overflow-hidden">
-          <Image
-            alt="campaign image"
-            className="w-full h-full object-cover"
-            height="0"
-            sizes="100vw"
-            src={item?.image?.imageUrl ?? '/assets/images/ImagePlaceholder.png'}
-            width="0"
-          />
-        </div>
+        {viewMode === 'HAS_IMAGE' ? (
+          <div className="h-[184px] rounded-[5px] overflow-hidden">
+            <Image
+              alt="campaign image"
+              className="w-full h-full object-cover"
+              height="0"
+              sizes="100vw"
+              src={item?.image?.imageUrl ?? '/assets/images/ImagePlaceholder.png'}
+              width="0"
+            />
+          </div>
+        ) : (
+          ''
+        )}
 
         <div>
           <h3 className="font-bold text-[16px] tracking-[0.48px] leading-[24px] mb-[8px] text-main-text line-clamp-2 text-ellipsis">
@@ -113,3 +122,7 @@ export default function CampaignCardItem({ item }: { item: TypeCampaign }) {
     </CShadowCard>
   );
 }
+
+CampaignCardItem.defaultProps = {
+  viewMode: 'HAS_IMAGE',
+};
