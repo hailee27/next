@@ -70,8 +70,6 @@ export default function CampaignDetail({
   };
   const { data } = useGetMasterDataQuery();
 
-  console.log('campaignsRecommend', campaignsRecommend);
-
   const campaignCategory = useMemo(
     () => data?.CATEGORY_CAMPAIGN?.find((item) => item?.value === campaign?.category)?.label ?? '',
     [data?.CATEGORY_CAMPAIGN]
