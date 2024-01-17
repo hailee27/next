@@ -24,7 +24,24 @@ const injectedRtkApi = api.injectEndpoints({
       }),
     }),
     getDetailCampaign: build.query<DetailCampaignResponse, DetailCampaignParams>({
-      query: (queryArg) => ({ url: `/campaigns/${queryArg.campaignId}`, method: 'GET' }),
+      query: (queryArg) => {
+        const config: {
+          url: string;
+          method: string;
+          params?: {
+            [x: string]: string;
+          };
+        } = {
+          url: `/campaigns/${queryArg.campaignId}`,
+          method: 'GET',
+        };
+        if (queryArg?.token === 'user') {
+          config.params = {
+            token: queryArg?.token,
+          };
+        }
+        return config;
+      },
     }),
     postCampaignDraft: build.mutation<QuestsResponse, QuestsParams>({
       query: (queryArg) => {
@@ -46,6 +63,7 @@ const injectedRtkApi = api.injectEndpoints({
 export type DetailCampaignResponse = TypeCampaign;
 export type DetailCampaignParams = {
   campaignId: string;
+  token?: 'user';
 };
 
 export type TypeCampaignReward = {
@@ -119,6 +137,7 @@ export type TypeCampaign = {
   Task: TypeTask[];
   company?: {
     code: string;
+    name: string;
     image: {
       id: number;
       imageUrl: string;
