@@ -33,8 +33,8 @@ function Header() {
 
       <div className="flex space-x-[40px] text-[14px] text-[#333] font-medium items-center ">
         <div className="flex space-x-[16px] h-[21px]">
-          <span>ONE.course</span>
-          <span className="border-x-[1px] border-[#AAA] px-[16px]">管理者</span>
+          <span>{user?.memberCompany?.name}</span>
+          <span className="border-x-[1px] border-[#AAA] px-[16px]"> 管理者</span>
           <span>{user?.email?.email}</span>
         </div>
         <div>
