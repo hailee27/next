@@ -39,8 +39,11 @@ function HeaderHomePage() {
             classBgColor="bg-[#333]"
             classShadowColor="bg-[#fff]"
             onClick={() => {
-              localStorage.setItem('USER_LOGIN_FROM', 'IMPLEMENTER');
-              router.push('/auth/sign-in/campaign-implementer');
+              if (accessToken) {
+                router.push('/campaigns');
+              } else {
+                router.push('/auth/sign-in/campaign-implementer');
+              }
             }}
             textClass="text-white text-[16px] font-bold"
             title="キャンペーンを探す"
@@ -58,7 +61,6 @@ function HeaderHomePage() {
               if (accessToken) {
                 router.push('/campaign/list');
               } else {
-                localStorage.setItem('USER_LOGIN_FROM', 'CREATOR');
                 router.push('/auth/sign-in/campaign-creator');
               }
             }}

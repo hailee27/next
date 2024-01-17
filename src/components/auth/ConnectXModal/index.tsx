@@ -47,11 +47,6 @@ export default function ConnectXModal({ buttonLabel, actionType }: ConnectXModal
         console.log('twitter data', storageData);
         dispatch(setSession({ ...storageData?.data }));
 
-        localStorage.setItem(
-          'USER_LOGIN_FROM',
-          router.pathname?.includes('campaign-creator') ? 'CREATOR' : 'IMPLEMENTER'
-        );
-
         router.replace('/my-page');
       } else if (storageData?.data?.totpToken && storageData?.data?.user) {
         router.push(

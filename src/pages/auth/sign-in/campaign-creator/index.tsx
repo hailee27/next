@@ -32,7 +32,6 @@ export default function CampaignCreatorSigninPage() {
       if (formValue.email && formValue.password) {
         const data = await signinEmail(formValue).unwrap();
         if (data?.accessToken && data?.refreshToken && data?.user) {
-          localStorage.setItem('USER_LOGIN_FROM', 'CREATOR');
           dispatch(setSession({ ...data }));
           setIsShowMsg(true);
           setTimeout(() => {

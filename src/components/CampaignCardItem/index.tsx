@@ -21,7 +21,7 @@ export default function CampaignCardItem({
     : [];
   return (
     <CShadowCard onClickCard={() => router.push(`/campaigns/${item?.id}`)}>
-      <div className="font-notoSans px-[24px] py-[32px] flex flex-col gap-[16px]   ">
+      <div className="font-notoSans px-[24px] py-[32px] flex flex-col gap-[16px] ">
         <div className=" flex gap-[10px] items-center  ">
           <div className="w-[32px] h-[32px] rounded-full  overflow-hidden">
             <Image
