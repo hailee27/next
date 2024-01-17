@@ -1548,7 +1548,7 @@ end-of-stream@^1.4.1, end-of-stream@^1.4.4:
   dependencies:
     once "^1.4.0"
 
-enhanced-resolve@^5.12.0:
+enhanced-resolve@^5.10.0, enhanced-resolve@^5.12.0:
   version "5.15.0"
   resolved "https://registry.npmjs.org/enhanced-resolve/-/enhanced-resolve-5.15.0.tgz"
   integrity sha512-LXYT42KJ7lpIKECr2mAXIaMldcNCh/7E0KBKOu4KSfkHmP+mZmSs+8V5gBAqisWBy0OO4W5Oyys0GO1Y8KtdKg==
@@ -4184,17 +4184,6 @@ sonic-boom@^3.7.0:
   resolved "https://registry.npmjs.org/source-map-js/-/source-map-js-1.0.2.tgz"
   integrity sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==
 
-square@^33.1.0:
-  version "33.1.0"
-  resolved "https://registry.yarnpkg.com/square/-/square-33.1.0.tgz#3c146b44ac8badb1d77a38ace9353df146826b53"
-  integrity sha512-m6qiBTgWqCDmFAGagmfj7nRzqa5+ugC2TLQxkF1nUw5qtVU1gALGO/ii9Bc5Z6f1/soMxjT3B7HveTzd4vWzsA==
-  dependencies:
-    "@apimatic/authentication-adapters" "^0.5.0"
-    "@apimatic/axios-client-adapter" "^0.2.0"
-    "@apimatic/core" "^0.10.0"
-    "@apimatic/json-bigint" "^1.2.0"
-    "@apimatic/schema" "^0.7.0"
-    "@types/node" "^14.14.30"
 source-map@^0.8.0-beta.0:
   version "0.8.0-beta.0"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.8.0-beta.0.tgz#d4c1bb42c3f7ee925f005927ba10709e0d1d1f11"
@@ -4211,6 +4200,18 @@ sql-summary@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/sql-summary/-/sql-summary-1.0.1.tgz#a2dddb5435bae294eb11424a7330dc5bafe09c2b"
   integrity sha512-IpCr2tpnNkP3Jera4ncexsZUp0enJBLr+pHCyTweMUBrbJsTgQeLWx1FXLhoBj/MvcnUQpkgOn2EY8FKOkUzww==
+
+square@^33.1.0:
+  version "33.1.0"
+  resolved "https://registry.yarnpkg.com/square/-/square-33.1.0.tgz#3c146b44ac8badb1d77a38ace9353df146826b53"
+  integrity sha512-m6qiBTgWqCDmFAGagmfj7nRzqa5+ugC2TLQxkF1nUw5qtVU1gALGO/ii9Bc5Z6f1/soMxjT3B7HveTzd4vWzsA==
+  dependencies:
+    "@apimatic/authentication-adapters" "^0.5.0"
+    "@apimatic/axios-client-adapter" "^0.2.0"
+    "@apimatic/core" "^0.10.0"
+    "@apimatic/json-bigint" "^1.2.0"
+    "@apimatic/schema" "^0.7.0"
+    "@types/node" "^14.14.30"
 
 stackframe@^0.3.1:
   version "0.3.1"
