@@ -55,11 +55,11 @@ export default function AuthInfoCard() {
         }
         const twitterIdentity = user?.identities?.find((item) => item?.type === 'TWITTER');
         if (twitterIdentity === undefined) {
-          toastMessage('Twitter connection not found');
+          toastMessage('Twitter connection not found', 'error');
           return;
         }
         await disconnectTwitter({ id: twitterIdentity?.id }).unwrap();
-        toastMessage('twitter has been disconnected successfully');
+        toastMessage('twitter has been disconnected successfully', 'success');
         await refreshUser();
       }
     } catch (error) {

@@ -34,19 +34,29 @@ export default function CampaignCardItem({
             />
           </div>
           <p className="font-bold text-[14px] tracking-[0.42px] leading-[21px] text-main-text ">
-            {item?.company?.code ?? '-'}
+            {item?.company?.name ?? '-'}
           </p>
         </div>
         {viewMode === 'HAS_IMAGE' ? (
-          <div className="h-[184px] rounded-[5px] overflow-hidden">
+          <div className="h-[184px] rounded-[5px] overflow-hidden border-[#333] border-[2px] relative  ">
             <Image
               alt="campaign image"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover  blur-[4px]"
               height="0"
               sizes="100vw"
               src={item?.image?.imageUrl ?? '/assets/images/ImagePlaceholder.png'}
               width="0"
             />
+            <div className="absolute z-[1] top-0 left-0 w-full h-full">
+              <Image
+                alt="campaign image"
+                className="w-full h-full object-contain  "
+                height="0"
+                sizes="100vw"
+                src={item?.image?.imageUrl ?? '/assets/images/ImagePlaceholder.png'}
+                width="0"
+              />
+            </div>
           </div>
         ) : (
           ''

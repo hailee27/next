@@ -104,7 +104,7 @@ export default function CampaignDetail({
               />
             </div>
             <p className="font-bold text-[14px] tracking-[0.42px] leading-[21px] text-main-text ">
-              {campaign?.company?.code ?? '-'}
+              {campaign?.company?.name ?? '-'}
             </p>
           </div>
           <div>
@@ -118,7 +118,7 @@ export default function CampaignDetail({
               ''
             )}
           </div>
-          <div className="h-[335px] rounded-[5px] overflow-hidden">
+          <div className="h-[335px] rounded-[5px] overflow-hidden border-[#333] border-[2px]">
             <Image
               alt="campaign image"
               className="w-full h-full object-contain"
