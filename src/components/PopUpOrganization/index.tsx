@@ -35,7 +35,7 @@ function PopUpOrganization() {
   useEffect(() => {
     if (paymentMethod) {
       form.setFieldValue(
-        'cardInfor',
+        'cardInfo',
         JSON.stringify({
           cardholderName: paymentMethod.cardholderName,
           lastFour: paymentMethod.details.card.last4,
@@ -131,7 +131,7 @@ function PopUpOrganization() {
           </div>
           {/* <span className="font-bold">お支払い方法</span> */}
           <div className="hidden">
-            <Form.Item name="cardInfor" noStyle rules={[{ required: true, message: '' }]}>
+            <Form.Item name="cardInfo" noStyle rules={[{ required: true, message: '' }]}>
               <FlagItem />
             </Form.Item>
             <Form.Item name="sourceId" noStyle rules={[{ required: true, message: '' }]}>

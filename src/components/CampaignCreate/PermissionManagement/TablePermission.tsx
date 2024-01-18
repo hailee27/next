@@ -3,8 +3,9 @@ import { Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import styles from '@/components/common/BasicTable/index.module.scss';
 import CButtonClassic from '@/components/common/CButtonClassic';
-import { useGetCompaniesListQuery } from '@/redux/endpoints/companies';
+
 import { useRouter } from 'next/router';
+import { useGetCompaniesListQuery } from '@/redux/endpoints/users';
 
 interface DataType {
   key: string;
@@ -83,7 +84,10 @@ function TablePermission() {
       ),
     },
   ];
-  const { data: dataCompanies, isLoading } = useGetCompaniesListQuery({ skip: 0, take: 10 });
+  const { data: dataCompanies, isLoading } = useGetCompaniesListQuery(
+    { skip: 0, take: 10 },
+    { refetchOnMountOrArgChange: true }
+  );
   useEffect(() => {
     if (dataCompanies?.users) {
       setData(
