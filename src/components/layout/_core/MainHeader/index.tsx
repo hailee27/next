@@ -2,7 +2,6 @@ import BarIcon from '@/components/common/icons/BarIcon';
 import XIcon from '@/components/common/icons/XIcon';
 import clsx from 'clsx';
 import { useEffect, useMemo } from 'react';
-
 import CButtonShadow from '@/components/common/CButtonShadow';
 import { logout } from '@/redux/slices/auth.slice';
 import { setIsOpenMainMenu } from '@/redux/slices/common.slice';
@@ -35,7 +34,7 @@ export default function MainHeader() {
         text: 'マイページ',
         to: '/my-page',
       },
-      { key: 4, text: 'キャンペーン作成', to: '/campaign' },
+      { key: 4, text: 'キャンペーン作成', to: '/campaign-creator' },
       {
         key: 5,
         text: 'お問い合わせ',

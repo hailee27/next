@@ -43,7 +43,7 @@ function DetailCampaign() {
                   classBgColor="bg-main-text"
                   classRounded="rounded-[6px]"
                   classShadowColor="bg-white"
-                  // onClick={() => router.push('/campaign/create')}
+                  // onClick={() => router.push('/campaign-creator/create')}
                   shadowSize="normal"
                   // textClass='"bg-main-text"'
                   title="CSV出力"
@@ -68,7 +68,7 @@ function DetailCampaign() {
                   classBgColor="bg-white"
                   classRounded="rounded-[6px]"
                   classShadowColor="bg-main-text"
-                  // onClick={() => router.push('/campaign/create')}
+                  // onClick={() => router.push('/campaign-creator/create')}
                   shadowSize="normal"
                   textClass='"bg-main-text"'
                   title="公開中のページをコピー"
@@ -90,7 +90,7 @@ function DetailCampaign() {
                   classBgColor="bg-main-text"
                   classRounded="rounded-[6px]"
                   classShadowColor="bg-white"
-                  // onClick={() => router.push('/campaign/create')}
+                  // onClick={() => router.push('/campaign-creator/create')}
                   shadowSize="normal"
                   title="公開中のページ"
                   withIcon={{

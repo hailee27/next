@@ -165,7 +165,7 @@ function PopUpOrganization() {
                 classRounded="rounded-[6px]"
                 classShadowColor="bg-white"
                 onClick={() => {
-                  // router.push('/campaign/list');
+                  // router.push('/campaign-creator/list');
                   // closePopUp();
                   form.submit();
                 }}
