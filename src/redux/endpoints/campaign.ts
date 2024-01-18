@@ -156,6 +156,7 @@ export type ListCampaignParams = {
   q?: string;
   include?: string;
   token?: 'user';
+  except?: string;
 };
 export type QuestsResponse = void;
 export type QuestsParams = {

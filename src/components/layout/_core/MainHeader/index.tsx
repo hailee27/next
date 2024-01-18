@@ -67,11 +67,11 @@ export default function MainHeader() {
   const onChangeAuth = async () => {
     try {
       dispatch(setIsOpenMainMenu(false));
+
       if (accessToken) {
-        await dispatch(logout());
-      } else {
-        router.push('/auth/sign-in/campaign-implementer');
+        dispatch(logout());
       }
+      router.push('/auth/sign-in/campaign-implementer');
     } catch (err) {
       // eslint-disable-next-line no-console
       console.log(err);

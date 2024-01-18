@@ -93,3 +93,32 @@
     list-style: disc;
   }
 }
+
+div.custom-antd-notification {
+  border-radius: 8px;
+  padding: 16px 12px !important ;
+  font-weight: 500 !important;
+  .ant-notification-notice-close {
+    width: 28px !important;
+    height: 28px !important;
+    inset-inline-end: 12px !important;
+  }
+  .ant-notification-notice-message {
+    margin-inline-end: 28px !important;
+    padding-right: 12px !important;
+  }
+}
+
+.custom-antd-notification--error {
+  // background-color: #ff0000;
+  .ant-notification-notice-message {
+    // color: white !important;
+  }
+}
+
+.custom-antd-notification--success {
+  // background-color: #04afaf;
+  .ant-notification-notice-message {
+    // color: white !important;
+  }
+}

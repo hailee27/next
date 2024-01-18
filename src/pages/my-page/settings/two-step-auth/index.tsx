@@ -100,7 +100,7 @@ export default function SettingTwoStepAuthPage() {
                 twoFactorPhone: userPhone,
               }
         ).unwrap();
-        toastMessage('Phone number has been updated successfully. ');
+        toastMessage('Phone number has been updated successfully. ', 'success');
         router.push('/my-page');
       }
     } catch (err) {

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import HeaderHomePage from './HeaderHomePage';
 import TemplateCampaign from './TemplateCampaign';
 
