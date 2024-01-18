@@ -31,7 +31,6 @@ function PermissionManagement() {
           />
         </div>
       </div>
-
       <TablePermission />
     </div>
   );

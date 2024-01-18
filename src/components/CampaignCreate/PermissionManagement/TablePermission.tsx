@@ -5,7 +5,12 @@ import styles from '@/components/common/BasicTable/index.module.scss';
 import CButtonClassic from '@/components/common/CButtonClassic';
 
 import { useRouter } from 'next/router';
-import { useGetCompaniesListQuery } from '@/redux/endpoints/users';
+import { useGetCompaniesListQuery, useUpdateUserMutation } from '@/redux/endpoints/users';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
+import toastMessage from '@/utils/func/toastMessage';
+import { useLazyMeQuery } from '@/redux/endpoints/auth';
+import { setUser } from '@/redux/slices/auth.slice';
 
 interface DataType {
   key: string;
@@ -17,7 +22,11 @@ interface DataType {
 
 function TablePermission() {
   const [data, setData] = useState<DataType[] | undefined>(undefined);
+  const { user } = useSelector((state: RootState) => state.auth);
+  const [trigger] = useUpdateUserMutation();
   const router = useRouter();
+  const dispatch = useDispatch();
+  const [triggerMe] = useLazyMeQuery();
   const columns: ColumnsType<DataType> = [
     {
       title: 'アカウントアドレス',
@@ -43,7 +52,21 @@ function TablePermission() {
         <div className="flex space-x-[16px]">
           <CButtonClassic
             customClassName="!bg-white !text-[#333] !w-[95px] !h-[37px]"
-            onClick={() => setData((prev) => prev?.filter((e) => e.id !== value))}
+            onClick={() => {
+              trigger({
+                userId: String(value),
+                body: { companyId: Number(user?.companyId), isAccept: false },
+              })
+                .unwrap()
+                .then(() => {
+                  triggerMe()
+                    .unwrap()
+                    .then((res) => dispatch(setUser(res)));
+                  toastMessage('success delete', 'success');
+                  setData((prev) => prev?.filter((e) => e.id !== value));
+                })
+                .catch(() => toastMessage('error', 'error'));
+            }}
             title="削除"
             withIcon={{
               position: 'left',
@@ -94,8 +117,8 @@ function TablePermission() {
         dataCompanies?.users.map((e) => ({
           key: String(e.id),
           accountAddress: e.email.email,
-          authority: '管理者',
-          status: '参加済',
+          authority: e.companyRole.membership === 'MANAGER' ? '管理者' : 'メンバー',
+          status: e.companyRole.isVerified ? '参加済' : 'リクエスト中',
           id: String(e.id),
         }))
       );
