@@ -18,7 +18,7 @@ function CampaignCreatePage() {
   const { user } = useSelector((state: RootState) => state.auth);
   useEffect(() => {
     if (user?.companyId == null) {
-      push('/campaign/list');
+      push('/campaign-creator/list');
     }
   }, [user?.companyId]);
   return <CampaignCreation />;

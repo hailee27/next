@@ -32,18 +32,18 @@ function SideBar() {
         <div className="py-[12px]  flex items-center space-x-[10px]">
           <span className="text-[11px] font-medium">キャンペーン</span>
         </div>
-        <ListItem icon={<ListIcon />} title="キャンペーン一覧" to="/campaign/list" />
-        <ListItem icon={<FileIcon color="#fff" />} title="キャンペーン新規作成" to="/campaign/create" />
-        <ListItem icon={<CheckIcon />} title="完了済みのキャンペーン" to="/campaign/completed" />
+        <ListItem icon={<ListIcon />} title="キャンペーン一覧" to="/campaign-creator/list" />
+        <ListItem icon={<FileIcon color="#fff" />} title="キャンペーン新規作成" to="/campaign-creator/create" />
+        <ListItem icon={<CheckIcon />} title="完了済みのキャンペーン" to="/campaign-creator/completed" />
         <div className="py-[12px]  flex items-center space-x-[10px]">
           <span className="text-[11px] font-medium">管理</span>
         </div>
-        <ListItem icon={<BriefcaseIcon />} title="権限管理" to="/campaign/permission-management" />
-        <ListItem icon={<YenIcon color="#fff" />} title="デポジット残高" to="/campaign/Deposit-balance" />
+        <ListItem icon={<BriefcaseIcon />} title="権限管理" to="/campaign-creator/permission-management" />
+        <ListItem icon={<YenIcon color="#fff" />} title="デポジット残高" to="/campaign-creator/Deposit-balance" />
       </div>
       <div className="pl-[32px]  border-[#2D3648] flex flex-col justify-end">
-        <ListItem title="組織情報" to="/campaign/organize-information" />
-        <ListItem title="マイページ" to="/campaign/account-information" />
+        <ListItem title="組織情報" to="/campaign-creator/organize-information" />
+        <ListItem title="マイページ" to="/campaign-creator/account-information" />
       </div>
     </div>
   );

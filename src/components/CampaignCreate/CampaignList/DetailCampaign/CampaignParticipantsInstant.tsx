@@ -104,7 +104,7 @@ function CampaignParticipantsInstant() {
           loading={isLoading}
           // onRow={(record) => ({
           //   onClick: () => {
-          //     push(`/campaign/list/${record.key}`);
+          //     push(`/campaign-creator/list/${record.key}`);
           //     // trigger({ campaignId: String(record.key) }); // click row
           //   },
           // })}

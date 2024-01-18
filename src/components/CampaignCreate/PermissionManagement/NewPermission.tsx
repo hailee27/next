@@ -30,7 +30,7 @@ function NewPermission() {
             })
               .unwrap()
               .then(() => {
-                router.push('/campaign/permission-management');
+                router.push('/campaign-creator/permission-management');
                 toastMessage('succses', 'success');
               })
               .catch((err) => toastMessage(err.data.message, 'error'))

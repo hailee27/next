@@ -1,10 +1,10 @@
+import React, { useEffect } from 'react';
 import { useMeQuery } from '@/redux/endpoints/auth';
 import { setUser } from '@/redux/slices/auth.slice';
-
-import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import CampainListPage from './list';
 
-function CampaignPage() {
+function CampaignCreatorPage() {
   const { data } = useMeQuery();
   const dispatch = useDispatch();
 
@@ -13,7 +13,7 @@ function CampaignPage() {
       dispatch(setUser(data));
     }
   }, [data]);
-  return <div>CampaignPage</div>;
+  return <CampainListPage />;
 }
 
-export default CampaignPage;
+export default CampaignCreatorPage;

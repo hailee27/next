@@ -28,7 +28,7 @@ export default function VerificationPage() {
         if (data?.accessToken && data?.refreshToken && data?.user) {
           dispatch(setSession({ ...data }));
           localStorage.setItem('USER_LOGIN_FROM', 'IMPLEMENTER');
-          push('/campaign');
+          push('/campaign-creator');
         }
       }
     } catch (err) {

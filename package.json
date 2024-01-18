@@ -10,7 +10,7 @@
     "postinstall": "husky install"
   },
   "dependencies": {
-    "@elastic/apm-rum": "^5.15.0",
+    "@elastic/apm-rum": "^5.16.0",
     "@hookform/error-message": "^2.0.1",
     "@hookform/resolvers": "^3.3.2",
     "@reduxjs/toolkit": "^2.0.1",

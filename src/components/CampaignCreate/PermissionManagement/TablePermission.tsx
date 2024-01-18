@@ -89,7 +89,7 @@ function TablePermission() {
           />
           <CButtonClassic
             customClassName="!bg-white !text-[#333] !w-[95px] !h-[37px]"
-            onClick={() => router.push(`/campaign/permission-management/edit/${value}`)}
+            onClick={() => router.push(`/campaign-creator/permission-management/edit/${value}`)}
             title="編集"
             withIcon={{
               position: 'left',

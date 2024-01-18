@@ -14,7 +14,7 @@ function PermissionManagement() {
             classBgColor="bg-main-text"
             classRounded="rounded-[6px]"
             classShadowColor="bg-white"
-            onClick={() => router.push('/campaign/permission-management/new')}
+            onClick={() => router.push('/campaign-creator/permission-management/new')}
             shadowSize="normal"
             title="追加する"
             withIcon={{
