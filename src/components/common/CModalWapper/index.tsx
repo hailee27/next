@@ -10,9 +10,21 @@ interface IComponentProps {
   modalWidth?: number;
   top?: number;
   children: React.ReactNode;
+  bottomBtnType?: 'CANCEL' | 'OK';
+  onOk?: () => void;
+  bottomBtnTitle?: string;
 }
 
-export default function CModalWapper({ isOpen, onCancel, modalWidth, top, children }: IComponentProps) {
+export default function CModalWapper({
+  isOpen,
+  onCancel,
+  modalWidth,
+  top,
+  bottomBtnType,
+  onOk,
+  children,
+  bottomBtnTitle,
+}: IComponentProps) {
   return (
     <Modal
       closeIcon={false}
@@ -32,24 +44,40 @@ export default function CModalWapper({ isOpen, onCancel, modalWidth, top, childr
       <div className="h-[24px]" />
       <div className="bg-white rounded-[16px]  py-[48px] px-[24px]">{children}</div>
       <div className="h-[40px]" />
-      <div className="flex justify-center">
-        <div className="w-[139px] h-[47px]">
-          <CButtonClassic
-            customClassName="!bg-[#FFF] !text-main-text !text-[14px] 
+      {bottomBtnType === 'CANCEL' ? (
+        <div className="flex justify-center">
+          <div className="w-[139px] h-[47px]">
+            <CButtonClassic
+              customClassName="!bg-[#FFF] !text-main-text !text-[14px] 
             !font-bold"
-            onClick={onCancel}
-            title="閉じる"
-            withIcon={{
-              position: 'left',
-              icon: <XMarkIcon />,
-            }}
-          />
+              onClick={onCancel}
+              title={bottomBtnTitle}
+              withIcon={{
+                position: 'left',
+                icon: <XMarkIcon />,
+              }}
+            />
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="flex justify-center">
+          <div className="h-[47px]">
+            <CButtonClassic
+              customClassName="!bg-[#FFF] !text-main-text !text-[14px] 
+            !font-bold px-[16px]"
+              onClick={onOk ?? onCancel}
+              title={bottomBtnTitle}
+            />
+          </div>
+        </div>
+      )}
     </Modal>
   );
 }
 CModalWapper.defaultProps = {
   modalWidth: 360,
   top: 64,
+  onOk: undefined,
+  bottomBtnType: 'CANCEL',
+  bottomBtnTitle: '閉じる',
 };

@@ -6,11 +6,15 @@ import SelectLabel from '@/components/common/BasicSelect/SelectLabel';
 import CButtonShadow from '@/components/common/CButtonShadow';
 import { usePostNewPermissionCompaniesMutation } from '@/redux/endpoints/users';
 import toastMessage from '@/utils/func/toastMessage';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 
 function NewPermission() {
   const router = useRouter();
   const [form] = Form.useForm();
   const [trigger] = usePostNewPermissionCompaniesMutation();
+  const { user } = useSelector((state: RootState) => state.auth);
+
   return (
     <div className="px-[48px] pt-[32px]">
       <div className="border-b-2 border-[#333] flex justify-between items-center pb-[24px] mb-[47px]">
@@ -20,10 +24,13 @@ function NewPermission() {
         <Form
           form={form}
           onFinish={(e) =>
-            trigger({ params: { companyId: '4' }, body: { email: e.accountAddress, membership: e.authority } })
+            trigger({
+              params: { companyId: String(user?.companyId) },
+              body: { email: e.accountAddress, membership: e.authority },
+            })
               .unwrap()
               .then(() => {
-                router.push('/campaign/permission-management');
+                router.push('/campaign-creator/permission-management');
                 toastMessage('succses', 'success');
               })
               .catch((err) => toastMessage(err.data.message, 'error'))

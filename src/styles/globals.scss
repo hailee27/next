@@ -110,15 +110,15 @@ div.custom-antd-notification {
 }
 
 .custom-antd-notification--error {
-  background-color: #ff0000;
+  // background-color: #ff0000;
   .ant-notification-notice-message {
-    color: white !important;
+    // color: white !important;
   }
 }
 
 .custom-antd-notification--success {
-  background-color: #04afaf;
+  // background-color: #04afaf;
   .ant-notification-notice-message {
-    color: white !important;
+    // color: white !important;
   }
 }

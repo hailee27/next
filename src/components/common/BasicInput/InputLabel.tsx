@@ -4,7 +4,7 @@ import BasicInput from '.';
 import styles from './index.module.scss';
 
 function InputLabel(props: FormItemProps & InputProps) {
-  const { type, label, value, required, placeholder, ...rest } = props;
+  const { type, label, value, required, placeholder, disabled, ...rest } = props;
   return (
     <div className={styles.inputLabel}>
       <div className="flex space-x-[8px] items-center mb-[10px]">
@@ -16,7 +16,7 @@ function InputLabel(props: FormItemProps & InputProps) {
         )}
       </div>
       <Form.Item {...rest}>
-        <BasicInput placeholder={placeholder} type={type} />
+        <BasicInput disabled={disabled} placeholder={placeholder} type={type} />
       </Form.Item>
     </div>
   );

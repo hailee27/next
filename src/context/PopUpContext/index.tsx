@@ -51,12 +51,13 @@ export const PopUpProvider = ({ children }: { children: React.ReactNode }) => {
           contentPopUp.map((e) => (
             <Modal
               centered
+              className="!hidden"
               closeIcon={false}
               footer={false}
               key={e.id}
               modalRender={(node) => ModalRender(node, classNameWrapper)}
               onCancel={() => closePopUp()}
-              open={contentPopUp.length > 0}
+              open={contentPopUp[contentPopUp.length - 1].id === e.id}
               styles={{ mask: { background: '#333', opacity: 0.9 } }}
               width="max-content"
               wrapClassName={styles.customModal}

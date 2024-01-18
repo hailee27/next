@@ -16,8 +16,35 @@ const injectedRtkApi = api.injectEndpoints({
         params: queryArg,
       }),
     }),
+    getUserDetail: build.query<UserDetailResponse, UserDetailParams>({
+      query: (queryArg) => ({
+        url: `/users/${queryArg.userId}`,
+        method: 'GET',
+      }),
+    }),
+    updateUser: build.mutation<UpdateUserResponse, UpdateUserParams>({
+      query: (queryArg) => ({
+        url: `/users/${queryArg.userId}`,
+        method: 'PATCH',
+        body: queryArg.body,
+      }),
+    }),
   }),
 });
+export type UpdateUserResponse = void;
+export type UpdateUserParams = {
+  userId: string;
+  body: {
+    companyId?: number;
+    membership?: string;
+    isAccept?: boolean;
+    updateCompany?: boolean;
+  };
+};
+export type UserDetailResponse = TypeUserCompanies;
+export type UserDetailParams = {
+  userId: string;
+};
 export type TypeUserCompanies = {
   id: number;
   checkLocationOnLogin: boolean;
@@ -52,8 +79,9 @@ export type TypeUserCompanies = {
     membership: string;
     createdAt: string;
     updatedAt: string;
+    isVerified?: boolean;
     deletedAt: string | null;
-  }[];
+  };
   profile: string | null;
   email: {
     id: number;
@@ -89,5 +117,10 @@ export type CompaniesListParams = {
   include?: string;
 };
 export { injectedRtkApi as UsersApi };
-export const { usePostNewPermissionCompaniesMutation, useGetCompaniesListQuery, useLazyGetCompaniesListQuery } =
-  injectedRtkApi;
+export const {
+  usePostNewPermissionCompaniesMutation,
+  useGetUserDetailQuery,
+  useGetCompaniesListQuery,
+  useLazyGetCompaniesListQuery,
+  useUpdateUserMutation,
+} = injectedRtkApi;

@@ -46,7 +46,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
   const [loading, setLoading] = useState<boolean>(false);
   const { store, props } = wrapper.useWrappedStore(pageProps);
   let getLayout = Component.getLayout ?? ((page) => <MainLayout>{page}</MainLayout>);
-  if (router.pathname.startsWith('/campaign')) {
+  if (router.pathname.startsWith('/campaign-creator')) {
     getLayout = (page) => (
       <AuthCheck type="CREATOR">
         <CampaignLayout>{page}</CampaignLayout>

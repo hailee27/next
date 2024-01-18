@@ -29,6 +29,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
     skip: 0,
     take: 3,
     token: 'user',
+    except: id as string,
   };
 
   const { data: dataCampaigns } = await store.dispatch(CampaignApi.endpoints.getListCampaign.initiate(apiRequest));
@@ -60,6 +61,8 @@ export default function CampaignDetail({
   campaign: DetailCampaignResponse;
   campaignsRecommend: TypeCampaign[] | null;
 }) {
+  // const [isOpenModalSetupAuthEmail, setIsOpenModalSetupAuthEmail] = useState(false);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
     setIsModalOpen(true);
@@ -88,6 +91,7 @@ export default function CampaignDetail({
     [campaign?.CampaignReward]
   );
 
+  console.log('campaign', campaign);
   return (
     <div className="font-notoSans">
       <div className="bg-white px-[20px] pt-[48px] pb-[56px] ">
@@ -118,7 +122,7 @@ export default function CampaignDetail({
               ''
             )}
           </div>
-          <div className="h-[335px] rounded-[5px] overflow-hidden border-[#333] border-[2px]">
+          <div className="h-[335px] rounded-[5px] overflow-hidden">
             <Image
               alt="campaign image"
               className="w-full h-full object-contain"
@@ -129,6 +133,12 @@ export default function CampaignDetail({
             />
           </div>
           <div className=" flex flex-col gap-[6px] text-main-text">
+            {campaign?.methodOfselectWinners === 'MANUAL_SELECTION' && (
+              <p
+                className="text-[14px]   mb-[2px]"
+                dangerouslySetInnerHTML={{ __html: campaign?.noteReward?.replace(/\r?\n/g, '<br/>') ?? '' }}
+              />
+            )}
             <p className="flex gap-[12px] items-center text-[14px] tracking-[0.42px] ">
               <CalendarIcon className="w-[16px]" />
               <span className="font-montserrat">
@@ -141,31 +151,33 @@ export default function CampaignDetail({
                   : '--/-- --:--'}
               </span>
             </p>
-            <p className="flex gap-[12px] items-center text-[14px] tracking-[0.42px] ">
-              <YenIcon className="w-[16px]" />
-              <span>
-                {sortCampaignRewardPrice?.length >= 2 ? (
-                  <>
+            {campaign?.methodOfselectWinners !== 'MANUAL_SELECTION' && (
+              <p className="flex gap-[12px] items-center text-[14px] tracking-[0.42px] ">
+                <YenIcon className="w-[16px]" />
+                <span>
+                  {sortCampaignRewardPrice?.length >= 2 ? (
+                    <>
+                      <span>
+                        <span className="font-montserrat">{sortCampaignRewardPrice[0]?.amountOfMoney ?? '--'}</span>円
+                      </span>
+                      <span> 〜 </span>
+                      <span>
+                        <span className="font-montserrat">
+                          {sortCampaignRewardPrice[sortCampaignRewardPrice.length - 1]?.amountOfMoney ?? '--'}
+                        </span>
+                        円
+                      </span>
+                    </>
+                  ) : sortCampaignRewardPrice?.length === 1 ? (
                     <span>
                       <span className="font-montserrat">{sortCampaignRewardPrice[0]?.amountOfMoney ?? '--'}</span>円
                     </span>
-                    <span> 〜 </span>
-                    <span>
-                      <span className="font-montserrat">
-                        {sortCampaignRewardPrice[sortCampaignRewardPrice.length - 1]?.amountOfMoney ?? '--'}
-                      </span>
-                      円
-                    </span>
-                  </>
-                ) : sortCampaignRewardPrice?.length === 1 ? (
-                  <span>
-                    <span className="font-montserrat">{sortCampaignRewardPrice[0]?.amountOfMoney ?? '--'}</span>円
-                  </span>
-                ) : (
-                  '--'
-                )}
-              </span>
-            </p>
+                  ) : (
+                    '--'
+                  )}
+                </span>
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -175,30 +187,32 @@ export default function CampaignDetail({
           dangerouslySetInnerHTML={{ __html: campaign?.description ?? '' }}
         />
 
-        <div className="flex gap-[8px] flex-col">
-          {sortCampaignRewardIndex
-            ?.slice(0, 3)
-            ?.map((item) => <CampaignRewardCardItem campaignReward={item} key={item?.id} />)}
-          {Array.isArray(campaign?.CampaignReward) ? (
-            <div className="mt-[32px] flex items-center justify-center">
-              <div className="w-[203px] h-[53px]">
-                <CButtonShadow
-                  classBgColor="bg-[#333]"
-                  classShadowColor="bg-[#fff]"
-                  onClick={showModal}
-                  textClass="text-white text-[14px] font-bold"
-                  title="報酬一覧をみる"
-                  withIcon={{
-                    position: 'right',
-                    icon: <ArrowDown className="rotate-[-90deg]" />,
-                  }}
-                />
+        {campaign?.methodOfselectWinners !== 'MANUAL_SELECTION' && (
+          <div className="flex gap-[8px] flex-col">
+            {sortCampaignRewardIndex
+              ?.slice(0, 3)
+              ?.map((item) => <CampaignRewardCardItem campaignReward={item} key={item?.id} />)}
+            {Array.isArray(campaign?.CampaignReward) ? (
+              <div className="mt-[32px] flex items-center justify-center">
+                <div className="w-[203px] h-[53px]">
+                  <CButtonShadow
+                    classBgColor="bg-[#333]"
+                    classShadowColor="bg-[#fff]"
+                    onClick={showModal}
+                    textClass="text-white text-[14px] font-bold"
+                    title="報酬一覧をみる"
+                    withIcon={{
+                      position: 'right',
+                      icon: <ArrowDown className="rotate-[-90deg]" />,
+                    }}
+                  />
+                </div>
               </div>
-            </div>
-          ) : (
-            ''
-          )}
-        </div>
+            ) : (
+              ''
+            )}
+          </div>
+        )}
       </div>
       <div className="py-[56px] px-[20px]">
         <h3 className="text-[24px] font-bold tracking-[0.72px] text-center">タスク</h3>
@@ -272,12 +286,16 @@ export default function CampaignDetail({
         <div className=" flex items-center justify-center">
           <div className="w-[203px] h-[53px]">
             <CButtonShadow
-              classBgColor="bg-[#c2c2c2]"
-              classBorderColor="border-[#c2c2c2]"
+              classBgColor="bg-[#333]" // "bg-[#c2c2c2]"
+              classBorderColor="border-[#333]" // "border-[#c2c2c2]"
               classShadowColor="bg-[#fff]"
-              isDisable
+              onClick={() => {
+                if (campaign?.methodOfselectWinners === 'MANUAL_SELECTION') {
+                  console.log('asdasdasdasd');
+                }
+              }}
               textClass="text-white text-[14px] font-bold tracking-[0.42px]"
-              title="報酬を受け取る"
+              title="キャンペーンに応募する"
               withIcon={{
                 position: 'right',
                 icon: <ArrowDown className="rotate-[-90deg]" />,
@@ -318,14 +336,26 @@ export default function CampaignDetail({
           </div>
         </div>
       </div>
-
       <div className="h-[56px]" />
-
-      <CModalWapper isOpen={isModalOpen} modalWidth={368} onCancel={handleCancel} top={10}>
+      {/* <CModalWapper isOpen={isModalOpen} modalWidth={368} onCancel={handleCancel} top={10}>
         <div className="h-[55vh] overflow-hidden">
           <div className="h-full overflow-y-auto flex flex-col gap-[8px] custom-scroll  pr-[8px]  ">
             {sortCampaignRewardIndex?.map((item) => <CampaignRewardCardItem campaignReward={item} key={item?.id} />)}
           </div>
+        </div>
+      </CModalWapper> */}
+      <CModalWapper
+        bottomBtnTitle="登録"
+        bottomBtnType="OK"
+        isOpen={isModalOpen}
+        modalWidth={368}
+        onCancel={handleCancel}
+        onOk={handleCancel}
+      >
+        <div>
+          <h3 className="text-[24px] font-bold ">メール・パスワード登録</h3>
+          <div className="h-[24px]" />
+          <p>キャンペーンの応募にはメールアドレス・パスワードの登録が必要になります。</p>
         </div>
       </CModalWapper>
     </div>

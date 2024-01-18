@@ -32,6 +32,7 @@ export default function AuthInfoCard() {
         dispatch(setUser(data));
       }
     } catch (error) {
+      // console.log(error, 'Errrrrrrrrrrrrrrrrrr');
       toastMessage(getErrorMessage(error), 'error');
     }
   };
@@ -84,6 +85,7 @@ export default function AuthInfoCard() {
 
       await refreshUser();
     } catch (error) {
+      // console.log(error, 'Errrrrrrrrrrrrrrrrrr');
       toastMessage(getErrorMessage(error), 'error');
     }
   }, []);

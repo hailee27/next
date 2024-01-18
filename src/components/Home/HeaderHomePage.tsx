@@ -59,7 +59,7 @@ function HeaderHomePage() {
             classShadowColor="bg-[#333]"
             onClick={() => {
               if (accessToken) {
-                router.push('/campaign/list');
+                router.push('/campaign-creator/list');
               } else {
                 router.push('/auth/sign-in/campaign-creator');
               }
