@@ -27,7 +27,7 @@ export default function VerificationPage() {
 
         if (data?.accessToken && data?.refreshToken && data?.user) {
           dispatch(setSession({ ...data }));
-          push('/');
+          push('/campaign-creator');
         }
       }
     } catch (err) {

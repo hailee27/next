@@ -26,7 +26,7 @@ function Header() {
         alt="logo"
         className="cursor-pointer"
         height={30}
-        onClick={() => router.push('/')}
+        onClick={() => router.push('/campaign-creator')}
         preview={false}
         src="/assets/images/logo 1.png"
       />

@@ -22,7 +22,7 @@ const FooterNavigation = [
   {
     key: 4,
     text: 'キャンペーン作成',
-    to: '/campaign/create',
+    to: '/campaign-creator/create',
   },
   {
     key: 5,

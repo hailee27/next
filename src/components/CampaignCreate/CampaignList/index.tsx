@@ -58,7 +58,7 @@ function CampaignList() {
             classBgColor="bg-main-text"
             classRounded="rounded-[6px]"
             classShadowColor="bg-white"
-            onClick={() => router.push('/campaign/create')}
+            onClick={() => router.push('/campaign-creator/create')}
             shadowSize="normal"
             title="新規作成"
             withIcon={{ position: 'left', icon: <FileIcon color="#fff" /> }}

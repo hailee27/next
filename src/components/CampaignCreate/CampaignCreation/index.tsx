@@ -112,7 +112,7 @@ function CampaignCreation() {
               if (res?.error?.status === 400) {
                 toastMessage(res?.error?.data?.error, 'error');
               } else {
-                router.push('/campaign/list');
+                router.push('/campaign-creator/list');
                 toastMessage('succses', 'success');
               }
             })
