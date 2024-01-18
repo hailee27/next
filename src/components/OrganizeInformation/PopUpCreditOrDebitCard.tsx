@@ -3,17 +3,15 @@ import { usePopUpContext } from '@/context/PopUpContext';
 import { Form } from 'antd';
 import { CreditCard, PaymentForm } from 'react-square-web-payments-sdk';
 import { TypeTokenPayment } from '@/types/paymentCard.type';
-// import { useSelector } from 'react-redux';
-// import { RootState } from '@/redux/store';
+
 import InputLabel from '../common/BasicInput/InputLabel';
-// import BasicSelect from '../common/BasicSelect';
-// import CButtonShadow from '../common/CButtonShadow';
+import CButtonShadow from '../common/CButtonShadow';
 
 function PopUpCreditOrDebitCard({ getCardPayment }: { getCardPayment?: (value: TypeTokenPayment) => void }) {
   const { closePopUp } = usePopUpContext();
   const [infor, setInfor] = useState<TypeTokenPayment>();
-  const [form] = Form.useForm();
 
+  const [form] = Form.useForm();
   useEffect(() => {
     if (infor) {
       getCardPayment?.(infor);
@@ -22,7 +20,7 @@ function PopUpCreditOrDebitCard({ getCardPayment }: { getCardPayment?: (value: T
   }, [infor]);
 
   return (
-    <div className="p-[64px] w-[928px]">
+    <div className="p-[64px] w-[928px] ">
       <Form form={form}>
         <div className="font-bold text-[#04AFAF] text-[20px] text-center">
           クレジットカードまたはデビットカードを変更
@@ -30,27 +28,56 @@ function PopUpCreditOrDebitCard({ getCardPayment }: { getCardPayment?: (value: T
         <div className="pt-[30px] flex flex-col space-y-[24px]">
           <InputLabel label="カードの名義" name="cardholderName" noStyle placeholder="ここに記入してください" />
           <PaymentForm
-            applicationId="sandbox-sq0idb-1wfWg9L1C4y3cVLtx4c6bQ"
+            applicationId={process.env.NEXT_PUBLIC_SQUARE_APPLICATIONID}
             cardTokenizeResponseReceived={async (token) => {
               if (token) {
                 setInfor({ ...token, cardholderName: form.getFieldValue('cardholderName') });
-                // closePopUp();
               }
             }}
-            // createVerificationDetails={() => ({
-            //   billingContact: {
-            //     givenName: user?.name,
-            //     countryCode: user?.countryCode,
-            //   },
-            //   // currencyCode: user.,
-            //   // intent: 'CHARGE',
-            // })}
-
-            locationId="LYJN8QYK6BW5H"
+            locationId={process.env.NEXT_PUBLIC_SQUARE_LOACTIONID}
           >
             <CreditCard
-              // cardNumber="41111111111111111"
               postalCode="12345"
+              render={(Button) => (
+                <div className="flex items-center justify-center space-x-[24px] pt-[40px] border-t-2">
+                  <div className="w-[162px]  h-[56px]">
+                    <CButtonShadow
+                      classBgColor="bg-white"
+                      classRounded="rounded-[6px]"
+                      classShadowColor="bg-main-text"
+                      onClick={() => closePopUp()}
+                      shadowSize="normal"
+                      textClass="text-main-text"
+                      title="キャンセル"
+                    />
+                  </div>
+                  <Button className="!w-[245px]  !h-[56px] !p-0 !bg-transparent">
+                    <CButtonShadow
+                      classBgColor="bg-main-text"
+                      classRounded="rounded-[6px]"
+                      classShadowColor="bg-white"
+                      shadowSize="normal"
+                      title="カード情報を保存する"
+                    />
+                  </Button>
+                </div>
+              )}
+              style={{
+                input: {
+                  fontSize: '14px',
+                  fontWeight: '500',
+                },
+                'input::placeholder': {
+                  color: '#AAAAAA',
+                },
+                '.input-container': {
+                  borderWidth: '2px',
+                  borderColor: '#333',
+                },
+                '.input-container.is-focus': {
+                  borderColor: '#333',
+                },
+              }}
             />
           </PaymentForm>
         </div>
