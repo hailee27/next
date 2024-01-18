@@ -9,7 +9,7 @@ import { useSigninEmailMutation } from '@/redux/endpoints/auth';
 import { setSession } from '@/redux/slices/auth.slice';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import toastMessage from '@/utils/func/toastMessage';
-import { LoginFormData } from '@/utils/schema/login-email';
+import { AuthEmailPasswordData } from '@/utils/schema/auth.schema';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -27,12 +27,11 @@ export default function CampaignCreatorSigninPage() {
 
   const dispatch = useDispatch();
 
-  const onSigninEmail = async (formValue: LoginFormData) => {
+  const onSigninEmail = async (formValue: AuthEmailPasswordData) => {
     try {
       if (formValue.email && formValue.password) {
         const data = await signinEmail(formValue).unwrap();
         if (data?.accessToken && data?.refreshToken && data?.user) {
-          localStorage.setItem('USER_LOGIN_FROM', 'CREATOR');
           dispatch(setSession({ ...data }));
           setIsShowMsg(true);
           setTimeout(() => {

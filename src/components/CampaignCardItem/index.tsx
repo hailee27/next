@@ -21,7 +21,7 @@ export default function CampaignCardItem({
     : [];
   return (
     <CShadowCard onClickCard={() => router.push(`/campaigns/${item?.id}`)}>
-      <div className="font-notoSans px-[24px] py-[32px] flex flex-col gap-[16px]   ">
+      <div className="font-notoSans px-[24px] py-[32px] flex flex-col gap-[16px] ">
         <div className=" flex gap-[10px] items-center  ">
           <div className="w-[32px] h-[32px] rounded-full  overflow-hidden">
             <Image
@@ -34,19 +34,29 @@ export default function CampaignCardItem({
             />
           </div>
           <p className="font-bold text-[14px] tracking-[0.42px] leading-[21px] text-main-text ">
-            {item?.company?.code ?? '-'}
+            {item?.company?.name ?? '-'}
           </p>
         </div>
         {viewMode === 'HAS_IMAGE' ? (
-          <div className="h-[184px] rounded-[5px] overflow-hidden">
+          <div className="h-[184px] rounded-[5px] overflow-hidden border-[#333] border-[2px] relative  ">
             <Image
               alt="campaign image"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover  blur-[4px]"
               height="0"
               sizes="100vw"
               src={item?.image?.imageUrl ?? '/assets/images/ImagePlaceholder.png'}
               width="0"
             />
+            <div className="absolute z-[1] top-0 left-0 w-full h-full">
+              <Image
+                alt="campaign image"
+                className="w-full h-full object-contain  "
+                height="0"
+                sizes="100vw"
+                src={item?.image?.imageUrl ?? '/assets/images/ImagePlaceholder.png'}
+                width="0"
+              />
+            </div>
           </div>
         ) : (
           ''

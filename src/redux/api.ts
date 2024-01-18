@@ -24,6 +24,14 @@ const baseQuery = fetchBaseQuery({
   },
 });
 
+export type QueryError = {
+  data: {
+    message: string;
+    error: string;
+    statusCode: number;
+  };
+  status: number;
+};
 const baseQueryWithInterceptor: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (
   args,
   api,
@@ -82,7 +90,7 @@ const baseQueryWithInterceptor: BaseQueryFn<string | FetchArgs, unknown, FetchBa
 };
 export const api = createApi({
   baseQuery: baseQueryWithInterceptor,
-
+  // keepUnusedDataFor: 1,
   extractRehydrationInfo(action, { reducerPath }) {
     if (action.type === REHYDRATE) {
       return (action?.payload as any)?.[reducerPath];

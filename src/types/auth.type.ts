@@ -58,7 +58,7 @@ export interface User {
   };
   profile: string | null;
 
-  companyRole: TypeCompanyRole[];
+  companyRole: TypeCompanyRole;
   memberCompany: {
     id: number;
     name: string;
@@ -87,6 +87,13 @@ export interface User {
       updatedAt: string;
       imageUrl: string;
     };
+    cardInfo: {
+      lastFour: string;
+      cardBrand: string;
+      cardholderName: string;
+    };
+    squareCardId: string;
+    squareCustomerId: string;
   };
   ownCompany: TypeOwnCompany[];
   havePassword?: boolean;

@@ -6,6 +6,7 @@ import signupEmail from './email-signup';
 import { connectTwitter, disconnectTwitter } from './auth-twitter';
 import signinEmail from './email-signin';
 import authVerification from './auth-verification';
+import { forgotPassword, resetPassword } from './forgot-password';
 
 export const authApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -19,6 +20,8 @@ export const authApi = api.injectEndpoints({
     authVerification: authVerification(build),
     connectTwitter: connectTwitter(build),
     disconnectTwitter: disconnectTwitter(build),
+    forgotPassword: forgotPassword(build),
+    resetPassword: resetPassword(build),
   }),
   overrideExisting: false,
 });
@@ -33,4 +36,6 @@ export const {
   useAuthVerificationMutation,
   useConnectTwitterMutation,
   useDisconnectTwitterMutation,
+  useForgotPasswordMutation,
+  useResetPasswordMutation,
 } = authApi;

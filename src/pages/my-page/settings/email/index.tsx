@@ -32,7 +32,7 @@ export default function SettingEmailPage() {
         await updateMe({
           email: data?.email,
         }).unwrap();
-        toastMessage('Email has been updated successfully', 'error');
+        toastMessage('Email has been updated successfully', 'success');
         router.push('/my-page');
       }
     } catch (err) {
