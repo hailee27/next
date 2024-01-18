@@ -69,7 +69,7 @@ export default function CampaignCardItem({
           {item?.methodOfselectWinners === 'MANUAL_SELECTION' && (
             <div
               className="text-[13px] line-clamp-2 text-ellipsis  mb-[8px]"
-              dangerouslySetInnerHTML={{ __html: item?.description?.replace(/\r?\n/g, '<br/>') ?? '' }}
+              dangerouslySetInnerHTML={{ __html: item?.noteReward?.replace(/\r?\n/g, '<br/>') ?? '' }}
             />
           )}
           <div className="text-[13px] text-[#777] flex flex-col space-y-[6px]">

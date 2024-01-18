@@ -47,6 +47,7 @@ export default function CampaignImplementerSignin() {
         }
       }
     } catch (err) {
+      console.log(err, 'Errrrrrrrrrrrrrrrrrr');
       toastMessage(getErrorMessage(err), 'error');
     }
   };
