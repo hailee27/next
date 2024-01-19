@@ -73,7 +73,12 @@ export default function ForgotPasswordPage() {
           router.push('/auth/sign-in/campaign-implementer');
         }}
       >
-        <div className="h-[50vh]">Please check your email.</div>
+        <div>
+          <p className="text-[14px] font-medium">
+            上記のメールアドレスから、ご登録のメールアドレスに確認メールをお送りしました。 <br className="h-[8px]" />
+            受信したメールに記載されているURLをクリックすると、パスワードの変更が完了します。
+          </p>
+        </div>
       </CModalWapper>
     </>
   );

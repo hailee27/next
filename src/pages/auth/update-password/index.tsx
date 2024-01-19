@@ -81,7 +81,7 @@ export default function SettingPasswordPage() {
           router.push('/auth/sign-in/campaign-implementer');
         }}
       >
-        <div className="h-[50vh]">Password has been updated successfully. Please login again</div>
+        <div className="text-[14px] font-medium">パスワードが正常に更新されました。もう一度ログインしてください</div>
       </CModalWapper>
     </>
   );
