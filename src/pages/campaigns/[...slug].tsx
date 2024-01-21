@@ -48,11 +48,11 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
       token: 'user',
     })
   );
-  if (!dataCampaign) {
-    return {
-      notFound: true,
-    };
-  }
+  // if (!dataCampaign) {
+  //   return {
+  //     notFound: true,
+  //   };
+  // }
   return {
     props: {
       viewType: params?.slug?.[1] ?? 'detail',

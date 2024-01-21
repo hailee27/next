@@ -8,8 +8,10 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import { convertCampaignTask } from '@/utils/func/convertCampaign';
 import TaskItem from './TaskItem';
+import { TASK_DUMMY } from './mock';
 
 export default function CampaignTasksSection({ campaign }: { campaign: TypeCampaign | null }) {
+  console.log('TASK_DUMMY', TASK_DUMMY);
   const { masterData } = useSelector((store: RootState) => store.common);
   return (
     <div className="py-[56px] px-[20px]">
@@ -30,11 +32,22 @@ LINE友達登録させる // add friend
 */}
 
       <div className="flex flex-col gap-[8px]">
-        {campaign?.Task &&
+        {/* {campaign?.Task &&
           Array.isArray(campaign?.Task) &&
           campaign?.Task?.length > 0 &&
           campaign?.Task?.map((item) => {
             const result = convertCampaignTask(item, masterData);
+            if (result) {
+              return <TaskItem key={item?.id} task={result} />;
+            }
+            return '';
+          })} */}
+        {TASK_DUMMY &&
+          Array.isArray(TASK_DUMMY) &&
+          TASK_DUMMY?.length > 0 &&
+          TASK_DUMMY?.map((item) => {
+            const result = convertCampaignTask(item, masterData);
+
             if (result) {
               return <TaskItem key={item?.id} task={result} />;
             }
@@ -62,7 +75,7 @@ LINE友達登録させる // add friend
           />
         </div>
       </div>
-      <div className="h-[40px]" />
+      <div className="h-[40px] " />
       <p className="text-gray-2 text-[13px] leading-[22px] tracking-[0.39px]">
         利用規約の短縮版文言を入れる想定利用規約の短縮版文言を入れる想定
         <br />
