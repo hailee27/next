@@ -15,7 +15,6 @@ import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ params }) => {
-  console.log('paramssss', params);
   if (
     !Array.isArray(params?.slug) ||
     (Array.isArray(params?.slug) && params?.slug && params?.slug?.length > 2) ||
@@ -48,11 +47,12 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
       token: 'user',
     })
   );
-  // if (!dataCampaign) {
-  //   return {
-  //     notFound: true,
-  //   };
-  // }
+
+  if (!dataCampaign?.id) {
+    return {
+      notFound: true,
+    };
+  }
   return {
     props: {
       viewType: params?.slug?.[1] ?? 'detail',

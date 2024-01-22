@@ -10,6 +10,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
+import ArrowDown from '@/components/common/icons/ArrowDown';
 
 export default function MainHeader() {
   const { accessToken } = useSelector((store: RootState) => store.auth);
@@ -188,9 +189,21 @@ export default function MainHeader() {
                 </Link>
               ))}
             </div>
-            <div className="my-[40px] h-[53px]">
+            <div className="h-[40px]" />
+            <div className=" h-[53px]">
               <CButtonShadow onClick={onChangeAuth} title={accessToken ? 'ログアウト' : 'ログイン'} />
             </div>
+            {accessToken ? (
+              ''
+            ) : (
+              <Link
+                className="text-[13px] font-bold pb-[6px] border-b-[2px] border-b-[#333] flex items-center justify-center !w-fit mx-auto mt-[16px]"
+                href="/auth/sign-up"
+              >
+                新規会員登録の方はこちら <ArrowDown className=" rotate-[-90deg] w-[14px] h-[14px]" />
+              </Link>
+            )}
+            <div className="h-[40px]" />
             <div className="flex flex-col gap-[16px]">
               {SubNavigation.map((i) => (
                 <Link className={clsx('text-[13px]  tracking-[4px]  ')} href={i.to} key={i.key}>
