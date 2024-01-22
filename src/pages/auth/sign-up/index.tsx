@@ -47,7 +47,7 @@ export default function SignupPage() {
           キャンペーン参加者の方
         </div>
         <div className="border-[2px] border-[#333] rounded-b-[16px] px-[22px] py-[38px]">
-          <ConnectXModal actionType="SIGNUP" buttonLabel="X（twitter）を連携する" />
+          <ConnectXModal buttonLabel="X（twitter）を連携する" />
           <div className="h-[16px]" />
           <p className="text-gray-1 text-[13px] leading-[22px] tracking-[0.39px]">
             ※キャンペーンに参加するにはXでの連携が必要です。

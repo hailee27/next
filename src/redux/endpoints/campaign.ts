@@ -82,7 +82,7 @@ export type TypeTask = {
   id: number;
   campaignId: string;
   type: string;
-  taskActionType: string;
+  taskActionType: string | null;
   taskTemplateId: number;
   updatedAt: string;
   createdAt: string;
