@@ -6,6 +6,8 @@ function BasicDatePicker(props: DatePickerProps) {
   return (
     <div className={styles.customeDatePicker}>
       <DatePicker
+        changeOnBlur
+        popupClassName={styles.customPopup}
         suffixIcon={
           <svg fill="none" height="15" viewBox="0 0 14 15" width="14" xmlns="http://www.w3.org/2000/svg">
             <g clipPath="url(#clip0_2149_3815)">

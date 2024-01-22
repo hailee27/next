@@ -1,7 +1,6 @@
-import BasicTabs from '@/components/common/BasicTabs';
 import React from 'react';
+import BasicTabs from '@/components/common/BasicTabs';
 import type { TabsProps } from 'antd';
-import { Image } from 'antd';
 import { useRouter } from 'next/router';
 import CButtonShadow from '@/components/common/CButtonShadow';
 import FileIcon from '@/components/common/icons/FileIcon';
@@ -9,7 +8,7 @@ import TableAll from './TableAll';
 
 const ListTab = ({ title }: { title: string }) => (
   <div className=" flex items-center space-x-[8px]">
-    <Image alt="" preview={false} src="/icons/icon-placeholder.svg" />
+    {/* <Image alt="" preview={false} src="/icons/icon-placeholder.svg" /> */}
     <span className="text-[16px] font-bold">{title}</span>
   </div>
 );
@@ -23,27 +22,27 @@ function CampaignList() {
     {
       key: '2',
       label: <ListTab title="下書き・購入待ち" />,
-      children: <TableAll />,
+      children: <TableAll status="DRAFT" />,
     },
     {
       key: '3',
       label: <ListTab title="審査中" />,
-      children: <TableAll />,
+      children: <TableAll status="UNDER_REVIEW" />,
     },
     {
       key: '4',
       label: <ListTab title="公開待ち" />,
-      children: <TableAll />,
+      children: <TableAll status="WAITING_FOR_PUBLICATION" />,
     },
     {
       key: '5',
       label: <ListTab title="公開中" />,
-      children: <TableAll />,
+      children: <TableAll status="PUBLIC" />,
     },
     {
       key: '6',
       label: <ListTab title="完了" />,
-      children: <TableAll />,
+      children: <TableAll status="COMPLETION" />,
     },
   ];
 
@@ -52,7 +51,6 @@ function CampaignList() {
     <div className="px-[48px] pb-[77px]">
       <div className="flex py-[32px] w-full justify-between border-b-2 border-[#2D3648] max-h-[112px]">
         <span className="text-[32px] font-bold">キャンペーン一覧</span>
-        {/* <CButtonShadow title="新規作成" /> */}
         <div className="w-[165px]  h-[56px]">
           <CButtonShadow
             classBgColor="bg-main-text"

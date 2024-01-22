@@ -66,7 +66,7 @@ const columns: ColumnsType<DataType> = [
   {
     title: 'キャンペーン残高',
     dataIndex: 'campaignBalance',
-    render: (value) => `¥${formatNumber(value, true, 1)}`,
+    render: (value) => (!value ? '-' : `¥${formatNumber(value, true, 1)}`),
     sorter: {
       compare: (a, b) => Number(a.campaignBalance) - Number(b.campaignBalance),
     },
@@ -74,13 +74,19 @@ const columns: ColumnsType<DataType> = [
   },
 ];
 
-function TableAll() {
+function TableAll({
+  status,
+}: {
+  status?: 'ALL' | 'DRAFT' | 'UNDER_REVIEW' | 'WAITING_FOR_PUBLICATION' | 'PUBLIC' | 'COMPLETION';
+}) {
   const [pageTable, setPageTable] = useState<number>(0);
   const { push, query, isReady } = useRouter();
   const { data: dataTable, isLoading } = useGetListCampaignQuery(
     { skip: pageTable ?? 0, take: 10 },
     { refetchOnMountOrArgChange: true }
   );
+  // eslint-disable-next-line no-console
+  console.log(status);
 
   useEffect(() => {
     if (query.page) {
@@ -136,5 +142,7 @@ function TableAll() {
     </div>
   );
 }
-
+TableAll.defaultProps = {
+  status: 'ALL',
+};
 export default TableAll;

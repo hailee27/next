@@ -54,25 +54,35 @@ function Detail({ data }: { data?: TypeCampaign }) {
           </div>
         </div>
       </div>
-      <div className="flex flex-col space-y-[16px]">
-        <h2 className="font-bold text-[18px] text-[#04AFAF] ">報酬</h2>
-        <TableReWard valueTable={data?.CampaignReward} />
-      </div>
-      <div className="flex flex-col space-y-[16px]">
-        <h2 className="font-bold text-[18px] text-[#04AFAF] ">報酬</h2>
-        <span className="text-[16px] font-bold">終了する</span>
-      </div>
-      <div className="flex flex-col space-y-[16px]">
-        <h2 className="font-bold text-[18px] text-[#04AFAF] ">報酬</h2>
-        <div className="flex flex-col space-y-[8px] text-[14px]">
-          <span className="text-[16px] font-bold">合計 {formatNumber(data?.totalPrizeValue ?? 0, true)}円</span>
-          <span>ギフト代金：110,000円</span>
-          <span>手数料：0円</span>
-          <span>その他：0円</span>
-          <span>消費税：0円</span>
-          <span>デポジット残高利用：0円</span>
+      {/* <div></div> */}
+      {data?.methodOfselectWinners === 'MANUAL_SELECTION' ? (
+        <div className="flex flex-col space-y-[16px]">
+          <h2 className="font-bold text-[18px] text-[#04AFAF] ">報酬要約文</h2>
+          <span className="text-[16px] font-bold">{data.noteReward}</span>
         </div>
-      </div>
+      ) : (
+        <>
+          <div className="flex flex-col space-y-[16px]">
+            <h2 className="font-bold text-[18px] text-[#04AFAF] ">報酬</h2>
+            <TableReWard valueTable={data?.CampaignReward} />
+          </div>
+          <div className="flex flex-col space-y-[16px]">
+            <h2 className="font-bold text-[18px] text-[#04AFAF] ">報酬</h2>
+            <span className="text-[16px] font-bold">終了する</span>
+          </div>
+          <div className="flex flex-col space-y-[16px]">
+            <h2 className="font-bold text-[18px] text-[#04AFAF] ">報酬</h2>
+            <div className="flex flex-col space-y-[8px] text-[14px]">
+              <span className="text-[16px] font-bold">合計 {formatNumber(data?.totalPrizeValue ?? 0, true)}円</span>
+              <span>ギフト代金：110,000円</span>
+              <span>手数料：0円</span>
+              <span>その他：0円</span>
+              <span>消費税：0円</span>
+              <span>デポジット残高利用：0円</span>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

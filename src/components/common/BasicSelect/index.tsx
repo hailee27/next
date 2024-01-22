@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Select, SelectProps } from 'antd';
 import styles from './index.module.scss';
 
@@ -8,6 +8,11 @@ function BasicSelect(props: SelectProps & { type?: 'default' | 'primary' }) {
   const combinedClassName = [type === 'primary' && styles.selectPrimary, type === 'default' && styles.defaultSelect]
     .filter((e) => e)
     .join(' ');
+  useEffect(() => {
+    if (value) {
+      setSelected(value);
+    }
+  }, [value]);
 
   return (
     <div className={combinedClassName}>

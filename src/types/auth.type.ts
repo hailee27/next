@@ -57,7 +57,7 @@ export interface User {
     deletedAt: string | null;
   };
   profile: string | null;
-
+  isRequestMemberCompany: boolean;
   companyRole: TypeCompanyRole;
   memberCompany: {
     id: number;

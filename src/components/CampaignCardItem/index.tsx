@@ -1,3 +1,4 @@
+/* eslint-disable react/no-danger */
 /* eslint-disable no-nested-ternary */
 import React from 'react';
 import { useRouter } from 'next/router';

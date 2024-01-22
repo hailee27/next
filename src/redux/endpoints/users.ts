@@ -25,7 +25,7 @@ const injectedRtkApi = api.injectEndpoints({
     updateUser: build.mutation<UpdateUserResponse, UpdateUserParams>({
       query: (queryArg) => ({
         url: `/users/${queryArg.userId}`,
-        method: 'PATCH',
+        method: 'PUT',
         body: queryArg.body,
       }),
     }),

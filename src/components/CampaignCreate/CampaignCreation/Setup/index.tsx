@@ -8,11 +8,14 @@ import UploadButton from '@/components/common/UploadButton';
 import { useGetMasterDataQuery } from '@/redux/endpoints/masterData';
 import CButtonShadow from '@/components/common/CButtonShadow';
 import type { CropperProps } from 'react-easy-crop';
+import moment from 'moment';
+import { range } from '@/utils/range';
 import ExplanatoryText from './ExplanatoryText';
 
 function Setup() {
   const [form] = Form.useForm();
   const noDateWatch = Form.useWatch('noDate', form);
+  const startDateWatch = Form.useWatch('startDate', form);
   const { data } = useGetMasterDataQuery();
   const dataCategory = useMemo(
     () =>
@@ -26,7 +29,12 @@ function Setup() {
   return (
     <>
       <div className="mt-[16px]  bg-white rounded-[4px] p-[40px]">
-        <Form form={form} name="setUp" scrollToFirstError={{ behavior: 'smooth', inline: 'center', block: 'center' }}>
+        <Form
+          form={form}
+          name="setUp"
+          // onFinishFailed={(e) => console.log(e)}
+          scrollToFirstError={{ behavior: 'smooth', inline: 'center', block: 'center' }}
+        >
           <InputLabel
             label="キャンペーン名"
             name="campainName"
@@ -61,7 +69,7 @@ function Setup() {
               必須
             </div>
           </div>
-          <Form.Item name="explanatoryText" noStyle>
+          <Form.Item name="explanatoryText" rules={[{ required: true, message: ' ' }]}>
             <ExplanatoryText />
           </Form.Item>
           <div className="my-[32px]">
@@ -73,7 +81,16 @@ function Setup() {
             </div>
 
             <Form.Item className="!flex-1" name="startDate" rules={[{ required: true, message: '' }]}>
-              <BasicDatePicker placeholder="開始日時を選択してください" />
+              <BasicDatePicker
+                disabledDate={(current) => moment(current.format('YYYY-MM-DD')) < moment().add(-1, 'day')}
+                disabledTime={() => ({
+                  disabledHours: () => range(0, Number(moment().format('HH'))),
+                  disabledMinutes: () => range(0, Number(moment().format('mm'))),
+                })}
+                format="YYYY-MM-DD HH:mm"
+                placeholder="開始日時を選択してください"
+                showTime
+              />
             </Form.Item>
           </div>
           <div className="flex items-center space-x-[32px] ">
@@ -89,7 +106,16 @@ function Setup() {
           </div>
           <div className="mt-[16px]">
             <Form.Item className="!flex-1 !mb-0" name="endDate" rules={[{ required: !noDateWatch, message: '' }]}>
-              <BasicDatePicker disabled={noDateWatch} placeholder="終了日時を選択してください" />
+              <BasicDatePicker
+                disabled={noDateWatch}
+                disabledDate={(current) =>
+                  moment(current.format('YYYY-MM-DD')) < moment(startDateWatch?.format('YYYY-MM-DD'))
+                }
+                format="YYYY-MM-DD HH:mm"
+                placeholder="終了日時を選択してください"
+                showNow
+                showTime
+              />
             </Form.Item>
           </div>
         </Form>
@@ -137,12 +163,6 @@ function Setup() {
             }}
           />
         </div>
-        {/* <BasicButton className="w-[84px] h-[56px]" type="primary">
-          戻る
-        </BasicButton> */}
-        {/* <BasicButton className="w-[191px] h-[56px]" onClick={() => form.submit()}>
-          保存して次へ進む
-        </BasicButton> */}
       </div>
     </>
   );

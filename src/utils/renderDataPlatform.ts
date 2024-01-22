@@ -69,7 +69,8 @@ export function renderDataPlatform(platForm: TypePlatForm, data?: MasterDataResp
       ];
     case 'CUSTOM':
       return [
-        { value: 'selectionFormat', label: '選択形式' },
+        { value: 'formatSingle', label: '選択形式_単一回答' },
+        { value: 'formatMultiple', label: '選択形式_複数回答' },
         { value: 'freeAnswer', label: '自由回答' },
       ];
     default:

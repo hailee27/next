@@ -11,6 +11,8 @@ import adapterCampaignParams from '@/utils/func/adapterCampaignParams';
 import { StepContext, TypeTabContext } from '@/context/TabContext';
 import { useGetMasterDataQuery } from '@/redux/endpoints/masterData';
 import CButtonShadow from '@/components/common/CButtonShadow';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 import ReWard from './ReWard';
 import Confirmation from './Confirmation';
 import Setup from './Setup';
@@ -40,7 +42,7 @@ const items: TabsProps['items'] = [
   },
   {
     key: '4',
-    label: '確認',
+    label: '確認・購入',
     children: <Confirmation />,
     forceRender: true,
     destroyInactiveTabPane: true,
@@ -49,6 +51,7 @@ const items: TabsProps['items'] = [
 
 function CampaignCreation() {
   const router = useRouter();
+  const { user } = useSelector((state: RootState) => state.auth);
   const [tab, setTab] = useState<string>('1');
   const [trigger, { isLoading }] = usePostQuestsMutation();
   const [triggerCampaignDraft] = usePostCampaignDraftMutation();
@@ -87,16 +90,13 @@ function CampaignCreation() {
           nameCampagin: queryParams.campainName,
           typeCampagin: dataMaster?.CATEGORY_CAMPAIGN.find((e) => e.value === queryParams.category)?.label,
           dateCampagin: queryParams.noDate
-            ? moment(String(queryParams.startDate)).format('YYYY/MM/DD')
-            : // eslint-disable-next-line no-irregular-whitespace
-              `${moment(String(queryParams.startDate)).format('YYYY/MM/DD')}　〜　${moment(
+            ? moment(String(queryParams.startDate)).format('YYYY/MM/DD HH:mm')
+            : `${moment(String(queryParams.startDate)).format('YYYY/MM/DD HH:mm')} 〜 ${moment(
                 String(queryParams.endDate)
-              ).format('YYYY/MM/DD')} `,
+              ).format('YYYY/MM/DD  HH:mm')} `,
           typeWinner: queryParams.typeWinner ?? 'AUTO_PRIZEE_DRAW',
-          // status: String(queryParams.statusCampaign),
           status: '下書き',
-          campaginCreator: 'halie',
-          // tableReward: { ...queryParams.reWard },
+          campaginCreator: user?.email?.email,
         });
         if (queryParams.typeWinner === 'AUTO_PRIZEE_DRAW') {
           forms?.confirm?.setFieldValue('tableReward', queryParams?.reWard);
