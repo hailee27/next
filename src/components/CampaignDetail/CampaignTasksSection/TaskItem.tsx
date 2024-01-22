@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-console */
 import CShadowCard from '@/components/common/CCardShadow';
@@ -8,12 +9,21 @@ import clsx from 'clsx';
 
 import Image from 'next/image';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { getErrorMessage } from '@/utils/func/getErrorMessage';
+import toastMessage from '@/utils/func/toastMessage';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 import ModalFreeTextContent from './ModalFreeTextContent';
+import ModalConnectX from './ModalConnectX';
 
 export default function TaskItem({ task }: { task: TasksConvert }) {
+  const router = useRouter();
+  const { accessToken, user } = useSelector((state: RootState) => state.auth);
+
   const [modalState, setModalState] = useState<{
     isOpenModal: boolean;
-    content: 1 | 2 | 3 | undefined;
+    content: 'FAQ_FREE_TEXT' | 'FAQ_CHOOSE_ONE' | 'FAQ_CHOOSE_MULTIPLE' | 'CONNECT_X' | undefined;
   }>({
     isOpenModal: false,
     content: undefined,
@@ -39,22 +49,37 @@ export default function TaskItem({ task }: { task: TasksConvert }) {
 
     newWindow?.focus();
   };
-  console.log('asdasd', modalState);
+
   const onClickCard = () => {
-    switch (task?.type) {
-      case 'OPEN_LINK': {
-        if (task?.link) handleOpenPopup(task?.link);
-        break;
+    try {
+      if (!accessToken || !user || (user && !user?.id)) {
+        router.push('/auth/sign-in/campaign-implementer');
+        return;
       }
-      case 'FAQ_FREE_TEXT': {
+      if (user?.identities && user?.identities?.length > 0) {
+        switch (task?.type) {
+          case 'OPEN_LINK': {
+            if (task?.link) handleOpenPopup(task?.link);
+            break;
+          }
+          case 'FAQ_FREE_TEXT': {
+            setModalState({
+              isOpenModal: true,
+              content: 'FAQ_FREE_TEXT',
+            });
+            break;
+          }
+          default:
+            break;
+        }
+      } else {
         setModalState({
           isOpenModal: true,
-          content: 1,
+          content: 'CONNECT_X',
         });
-        break;
       }
-      default:
-        break;
+    } catch (err: any) {
+      toastMessage(getErrorMessage(err), 'error');
     }
   };
 
@@ -93,7 +118,16 @@ export default function TaskItem({ task }: { task: TasksConvert }) {
         </div>
       </CShadowCard>
       <ModalFreeTextContent
-        isOpen={modalState?.isOpenModal && modalState?.content === 1}
+        isOpen={modalState?.isOpenModal && modalState?.content === 'FAQ_FREE_TEXT'}
+        onCancel={() => {
+          setModalState({
+            isOpenModal: false,
+            content: undefined,
+          });
+        }}
+      />
+      <ModalConnectX
+        isOpen={modalState?.isOpenModal && modalState?.content === 'CONNECT_X'}
         onCancel={() => {
           setModalState({
             isOpenModal: false,

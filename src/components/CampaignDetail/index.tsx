@@ -27,7 +27,6 @@ export default function CampaignDetail({ campaign }: { campaign: TypeCampaign | 
 
   return (
     <>
-      <CampaignTasksSection campaign={campaign} />
       <div className="bg-white px-[20px] pt-[48px] pb-[56px] ">
         <div className="flex flex-col gap-[16px] ">
           <div className=" flex gap-[10px] items-center  ">

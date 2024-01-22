@@ -33,10 +33,8 @@ function AuthCheck({ children, type }: { children: React.ReactElement; type?: 'C
   }, [accessToken]);
 
   useEffect(() => {
-    if (accessToken) {
-      getUserLoggedIn();
-    }
-  }, [accessToken]);
+    getUserLoggedIn();
+  }, [getUserLoggedIn]);
 
   if ((!accessToken || accessToken === null) && type === 'IMPLEMENTER') {
     return <FlagComponent type="IMPLEMENTER" />;

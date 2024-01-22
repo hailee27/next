@@ -61,7 +61,7 @@ export default function CampaignImplementerSignin() {
           キャンペーン参加者の方
         </div>
         <div className="border-[2px] border-[#333] rounded-b-[16px] px-[22px] py-[38px]">
-          <ConnectXModal actionType="SIGNUP" buttonLabel="X（twitter）でログインする" />
+          <ConnectXModal buttonLabel="X（twitter）でログインする" />
 
           <div className="h-[16px]" />
           <p className="text-gray-1 text-[13px] leading-[22px] tracking-[0.39px]">
