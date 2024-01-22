@@ -1,5 +1,5 @@
-import React from 'react';
-import { useRouter } from 'next/router';
+import { TypeCampaign } from '@/redux/endpoints/campaign';
+import Link from 'next/link';
 import CampaignCardItem from '../CampaignCardItem';
 import CButtonShadow from '../common/CButtonShadow';
 import ArrowDown from '../common/icons/ArrowDown';
@@ -7,28 +7,38 @@ import ArrowDown from '../common/icons/ArrowDown';
 interface Props {
   bgColor?: string;
   title?: string;
-  listCampaign?: string[];
+  listCampaign: TypeCampaign[] | null;
+  viewMoreLink: string;
 }
-function TemplateCampaign({ bgColor, listCampaign, title }: Props) {
-  const router = useRouter();
+function TemplateCampaign({ bgColor, listCampaign, title, viewMoreLink }: Props) {
   return (
     <div className={`px-[20px] py-[56px] ${bgColor && `rounded-[32px] bg-[${bgColor}]`} `}>
       <h2 className="text-[24px] font-bold text-center mb-[24px]">{title}</h2>
-      <div className="grid grid-cols-1 gap-[16px]">{listCampaign?.map((item) => <CampaignCardItem key={item} />)}</div>
+      <div className="grid grid-cols-1 gap-[16px]">
+        {Array.isArray(listCampaign) && listCampaign?.length > 0
+          ? listCampaign?.slice(0, 3)?.map((item) => {
+              if (item) {
+                return <CampaignCardItem item={item} key={item.id} />;
+              }
+              return '';
+            })
+          : ''}
+      </div>
       <div className="h-[40px]" />
       <div className="flex justify-center">
         <div className="w-[275px] h-[53px]">
-          <CButtonShadow
-            classBgColor="bg-[#333]"
-            classShadowColor="bg-[#fff]"
-            onClick={() => router.push('/campaigns/list')}
-            textClass="text-white text-[14px] font-bold"
-            title="キャンペーンの一覧をみる"
-            withIcon={{
-              position: 'right',
-              icon: <ArrowDown className="rotate-[-90deg]" />,
-            }}
-          />
+          <Link href={viewMoreLink}>
+            <CButtonShadow
+              classBgColor="bg-[#333]"
+              classShadowColor="bg-[#fff]"
+              textClass="text-white text-[14px] font-bold"
+              title="キャンペーンの一覧をみる"
+              withIcon={{
+                position: 'right',
+                icon: <ArrowDown className="rotate-[-90deg]" />,
+              }}
+            />
+          </Link>
         </div>
       </div>
     </div>
@@ -37,6 +47,5 @@ function TemplateCampaign({ bgColor, listCampaign, title }: Props) {
 TemplateCampaign.defaultProps = {
   bgColor: undefined,
   title: '',
-  listCampaign: ['1', '2', '3'],
 };
 export default TemplateCampaign;
