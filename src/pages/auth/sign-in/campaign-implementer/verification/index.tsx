@@ -27,7 +27,11 @@ export default function VerificationPage() {
 
         if (data?.accessToken && data?.refreshToken && data?.user) {
           dispatch(setSession({ ...data }));
-          push('/campaign-creator');
+          if (query?.authMethod === 'twitter') {
+            push('/');
+          } else {
+            push('/campaign-creator');
+          }
         }
       }
     } catch (err) {

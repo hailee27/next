@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import { TypeCampaignReward } from '@/redux/endpoints/campaign';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
@@ -36,8 +37,8 @@ export default function CampaignRewardCardItem({ campaignReward }: { campaignRew
         <div className="border-t-[1px] border-top-[#aaa] pt-[12px]">
           <div className="flex flex-wrap justify-between items-end gap-[12px]  transition-all duration-150">
             <div className="flex flex-wrap gap-[8px]">
-              {renderRewardItem.map(() => (
-                <div className="w-[32px] h-[32px] min-w-[32px] min-h-[32px] rounded-full  ">
+              {renderRewardItem.map((item, index) => (
+                <div className="w-[32px] h-[32px] min-w-[32px] min-h-[32px] rounded-full" key={index}>
                   <Image
                     alt="campaign image"
                     className="w-full h-full object-contain"
