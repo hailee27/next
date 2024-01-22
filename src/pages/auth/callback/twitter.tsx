@@ -76,5 +76,5 @@ export default function TwitterAuthCallBack() {
   useEffect(() => {
     handleTwitterAuth();
   }, [handleTwitterAuth]);
-  return <div className="w-full h-full mt-[300px] text-center">Waiting a moment ...</div>;
+  return <div className="w-full h-full pt-[300px] text-center">Waiting a moment ...</div>;
 }
