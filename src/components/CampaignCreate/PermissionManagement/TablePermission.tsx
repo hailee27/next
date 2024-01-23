@@ -5,12 +5,13 @@ import styles from '@/components/common/BasicTable/index.module.scss';
 import CButtonClassic from '@/components/common/CButtonClassic';
 
 import { useRouter } from 'next/router';
-import { useGetCompaniesListQuery, useUpdateUserMutation } from '@/redux/endpoints/users';
+import { useUpdateUserMutation } from '@/redux/endpoints/users';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import toastMessage from '@/utils/func/toastMessage';
 import { useLazyMeQuery } from '@/redux/endpoints/auth';
 import { setUser } from '@/redux/slices/auth.slice';
+import { useLazyGetCompanyUsersQuery } from '@/redux/endpoints/companies';
 
 interface DataType {
   key: string;
@@ -21,12 +22,13 @@ interface DataType {
 }
 
 function TablePermission() {
-  const [data, setData] = useState<DataType[] | undefined>(undefined);
-  const { user } = useSelector((state: RootState) => state.auth);
-  const [trigger] = useUpdateUserMutation();
   const router = useRouter();
   const dispatch = useDispatch();
+  const { user } = useSelector((state: RootState) => state.auth);
+  const [trigger] = useUpdateUserMutation();
   const [triggerMe] = useLazyMeQuery();
+  const [triggerListCompanies, { data: dataCompanies, isLoading }] = useLazyGetCompanyUsersQuery();
+  const [data, setData] = useState<DataType[] | undefined>(undefined);
   const columns: ColumnsType<DataType> = [
     {
       title: 'アカウントアドレス',
@@ -48,7 +50,7 @@ function TablePermission() {
       title: ' ',
       key: 'id',
       dataIndex: 'id',
-      render: (value) => (
+      render: (value, row) => (
         <div className="flex space-x-[16px]">
           <CButtonClassic
             customClassName="!bg-white !text-[#333] !w-[95px] !h-[37px]"
@@ -87,30 +89,66 @@ function TablePermission() {
               ),
             }}
           />
-          <CButtonClassic
-            customClassName="!bg-white !text-[#333] !w-[95px] !h-[37px]"
-            onClick={() => router.push(`/campaign-creator/permission-management/edit/${value}`)}
-            title="編集"
-            withIcon={{
-              position: 'left',
-              icon: (
-                <svg fill="none" height="15" viewBox="0 0 14 15" width="14" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M9.93416 1.02441C10.6178 0.34082 11.7388 0.34082 12.4224 1.02441L13.4888 2.09082C14.1724 2.77441 14.1724 3.89551 13.4888 4.5791L12.1763 5.8916L8.62166 2.33691L9.93416 1.02441ZM11.5474 6.52051L5.17635 12.8916C4.90291 13.165 4.54744 13.3838 4.16463 13.4932L0.856037 14.4502C0.637287 14.5322 0.391193 14.4775 0.227131 14.2861C0.0357244 14.1221 -0.0189631 13.876 0.0357244 13.6572L1.0201 10.3486C1.12947 9.96582 1.34822 9.61035 1.62166 9.33691L7.99276 2.96582L11.5474 6.52051Z"
-                    fill="#333333"
-                  />
-                </svg>
-              ),
-            }}
-          />
+          {row.status === 'リクエスト中' ? (
+            <CButtonClassic
+              customClassName="!bg-white !text-[#333] !w-[95px] !h-[37px]"
+              onClick={() => {
+                trigger({
+                  userId: String(value),
+                  body: { companyId: Number(user?.companyId), membership: 'MEMBER', isAccept: true },
+                })
+                  .unwrap()
+                  .then(() => {
+                    triggerListCompanies({ companyId: String(user?.companyId), skip: 0, take: 10 })
+                      .unwrap()
+                      .then(() => toastMessage('success delete', 'success'));
+                  })
+                  .catch(() => toastMessage('error', 'error'));
+              }}
+              // onClick={() => router.push(`/campaign-creator/permission-management/edit/${value}`)}
+              title="承認"
+              withIcon={{
+                position: 'left',
+                icon: (
+                  <svg fill="none" height="15" viewBox="0 0 14 15" width="14" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M11.9375 13.75H2.3125C1.57422 13.75 1 13.1758 1 12.4375V2.8125C1 2.10156 1.57422 1.5 2.3125 1.5H11.9375C12.6484 1.5 13.25 2.10156 13.25 2.8125V12.4375C13.25 13.1758 12.6484 13.75 11.9375 13.75ZM6.33203 11.0703L11.3633 6.03906C11.5273 5.875 11.5273 5.60156 11.3633 5.4375L10.7344 4.80859C10.5703 4.64453 10.2969 4.64453 10.1328 4.80859L6.03125 8.91016L4.08984 6.99609C3.92578 6.83203 3.65234 6.83203 3.48828 6.99609L2.85938 7.625C2.69531 7.78906 2.69531 8.0625 2.85938 8.22656L5.70312 11.0703C5.86719 11.2617 6.16797 11.2617 6.33203 11.0703Z"
+                      fill="#333333"
+                    />
+                    <path
+                      d="M11.9375 13.75H2.3125C1.57422 13.75 1 13.1758 1 12.4375V2.8125C1 2.10156 1.57422 1.5 2.3125 1.5H11.9375C12.6484 1.5 13.25 2.10156 13.25 2.8125V12.4375C13.25 13.1758 12.6484 13.75 11.9375 13.75ZM6.33203 11.0703L11.3633 6.03906C11.5273 5.875 11.5273 5.60156 11.3633 5.4375L10.7344 4.80859C10.5703 4.64453 10.2969 4.64453 10.1328 4.80859L6.03125 8.91016L4.08984 6.99609C3.92578 6.83203 3.65234 6.83203 3.48828 6.99609L2.85938 7.625C2.69531 7.78906 2.69531 8.0625 2.85938 8.22656L5.70312 11.0703C5.86719 11.2617 6.16797 11.2617 6.33203 11.0703Z"
+                      fill="#333333"
+                    />
+                  </svg>
+                ),
+              }}
+            />
+          ) : (
+            <CButtonClassic
+              customClassName="!bg-white !text-[#333] !w-[95px] !h-[37px]"
+              onClick={() => router.push(`/campaign-creator/permission-management/edit/${value}`)}
+              title="編集"
+              withIcon={{
+                position: 'left',
+                icon: (
+                  <svg fill="none" height="15" viewBox="0 0 14 15" width="14" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M9.93416 1.02441C10.6178 0.34082 11.7388 0.34082 12.4224 1.02441L13.4888 2.09082C14.1724 2.77441 14.1724 3.89551 13.4888 4.5791L12.1763 5.8916L8.62166 2.33691L9.93416 1.02441ZM11.5474 6.52051L5.17635 12.8916C4.90291 13.165 4.54744 13.3838 4.16463 13.4932L0.856037 14.4502C0.637287 14.5322 0.391193 14.4775 0.227131 14.2861C0.0357244 14.1221 -0.0189631 13.876 0.0357244 13.6572L1.0201 10.3486C1.12947 9.96582 1.34822 9.61035 1.62166 9.33691L7.99276 2.96582L11.5474 6.52051Z"
+                      fill="#333333"
+                    />
+                  </svg>
+                ),
+              }}
+            />
+          )}
         </div>
       ),
     },
   ];
-  const { data: dataCompanies, isLoading } = useGetCompaniesListQuery(
-    { skip: 0, take: 10 },
-    { refetchOnMountOrArgChange: true }
-  );
+
+  useEffect(() => {
+    triggerListCompanies({ companyId: String(user?.companyId), skip: 0, take: 10 });
+  }, [router.isReady]);
   useEffect(() => {
     if (dataCompanies?.users) {
       setData(

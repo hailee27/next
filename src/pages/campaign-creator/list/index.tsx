@@ -11,10 +11,10 @@ function CampainListPage() {
   const { user } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
-    if (user?.companyId == null) {
+    if (user?.companyId == null && user?.isRequestMemberCompany) {
       openPopUp({ contents: <PopUpOrganization /> });
     }
-  }, [user?.companyId]);
+  }, [user?.companyId, user?.isRequestMemberCompany]);
   return <CampaignList />;
 }
 
