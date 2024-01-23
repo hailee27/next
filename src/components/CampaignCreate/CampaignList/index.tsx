@@ -17,7 +17,7 @@ function CampaignList() {
     {
       key: '1',
       label: <ListTab title="すべて" />,
-      children: <TableAll />,
+      children: <TableAll status="ALL" />,
     },
     {
       key: '2',

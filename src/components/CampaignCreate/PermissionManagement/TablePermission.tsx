@@ -5,12 +5,13 @@ import styles from '@/components/common/BasicTable/index.module.scss';
 import CButtonClassic from '@/components/common/CButtonClassic';
 
 import { useRouter } from 'next/router';
-import { useLazyGetCompaniesListQuery, useUpdateUserMutation } from '@/redux/endpoints/users';
+import { useUpdateUserMutation } from '@/redux/endpoints/users';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import toastMessage from '@/utils/func/toastMessage';
 import { useLazyMeQuery } from '@/redux/endpoints/auth';
 import { setUser } from '@/redux/slices/auth.slice';
+import { useLazyGetCompanyUsersQuery } from '@/redux/endpoints/companies';
 
 interface DataType {
   key: string;
@@ -26,7 +27,7 @@ function TablePermission() {
   const { user } = useSelector((state: RootState) => state.auth);
   const [trigger] = useUpdateUserMutation();
   const [triggerMe] = useLazyMeQuery();
-  const [triggerListCompanies, { data: dataCompanies, isLoading }] = useLazyGetCompaniesListQuery();
+  const [triggerListCompanies, { data: dataCompanies, isLoading }] = useLazyGetCompanyUsersQuery();
   const [data, setData] = useState<DataType[] | undefined>(undefined);
   const columns: ColumnsType<DataType> = [
     {
@@ -98,7 +99,7 @@ function TablePermission() {
                 })
                   .unwrap()
                   .then(() => {
-                    triggerListCompanies({ skip: 0, take: 10 })
+                    triggerListCompanies({ companyId: String(user?.companyId), skip: 0, take: 10 })
                       .unwrap()
                       .then(() => toastMessage('success delete', 'success'));
                   })
@@ -146,7 +147,7 @@ function TablePermission() {
   ];
 
   useEffect(() => {
-    triggerListCompanies({ skip: 0, take: 10 });
+    triggerListCompanies({ companyId: String(user?.companyId), skip: 0, take: 10 });
   }, [router.isReady]);
   useEffect(() => {
     if (dataCompanies?.users) {

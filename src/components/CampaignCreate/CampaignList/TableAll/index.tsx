@@ -35,6 +35,24 @@ const columns: ColumnsType<DataType> = [
     // sorter: {
     //   compare: (a, b) => a.status - b.status,
     // },
+    render: (
+      value: 'DRAFT' | 'WAITING_FOR_PURCASE' | 'UNDER_REVIEW' | 'WAITING_FOR_PUBLICATION' | 'PUBLIC' | 'COMPLETION'
+    ) => {
+      switch (value) {
+        case 'DRAFT':
+          return '下書き';
+        case 'UNDER_REVIEW':
+          return '審査中';
+        case 'WAITING_FOR_PUBLICATION':
+          return '公開待ち';
+        case 'PUBLIC':
+          return '公開中';
+        case 'COMPLETION':
+          return '完了';
+        default:
+          return '下書き';
+      }
+    },
     sortIcon: () => <ArrowDown />,
   },
   {
@@ -96,18 +114,23 @@ function TableAll({
 
   const data = useMemo<DataType[] | undefined>(() => {
     if (dataTable) {
-      return dataTable.campaigns.map((item) => ({
+      let dataCampaign: DataType[] = [];
+      dataCampaign = dataTable.campaigns.map((item) => ({
         key: item.id,
         campaignName: item.title,
-        status: '公開待ち',
+        status: item.status,
         startDate: item.startTime,
         endDate: item.expiredTime,
         winner: item.methodOfselectWinners === 'AUTO_PRIZEE_DRAW' ? 'インスタントウィン' : 'マニュアル',
         campaignBalance: item.totalPrizeValue,
       }));
+      if (status === 'ALL') {
+        return dataCampaign;
+      }
+      return dataCampaign.filter((e) => e.status === status);
     }
     return undefined;
-  }, [dataTable?.campaigns]);
+  }, [dataTable?.campaigns, status]);
 
   return (
     <div className={styles.customTable}>

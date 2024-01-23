@@ -1,14 +1,29 @@
+import React, { useMemo } from 'react';
 import FlagItem from '@/components/common/FlagItem';
-import React from 'react';
-
 import { TypeCampaign } from '@/redux/endpoints/campaign';
-import moment from 'moment';
 import { useGetMasterDataQuery } from '@/redux/endpoints/masterData';
 import { formatNumber } from '@/utils/formatNumber';
+import moment from 'moment';
 import TableReWard from '../../CampaignCreation/Confirmation/TableReWard';
 
 function Detail({ data }: { data?: TypeCampaign }) {
   const { data: masterData } = useGetMasterDataQuery();
+  const status = useMemo(() => {
+    switch (data?.status) {
+      case 'DRAFT':
+        return '下書き';
+      case 'UNDER_REVIEW':
+        return '審査中';
+      case 'WAITING_FOR_PUBLICATION':
+        return '公開待ち';
+      case 'PUBLIC':
+        return '公開中';
+      case 'COMPLETION':
+        return '完了';
+      default:
+        return '下書き';
+    }
+  }, [data?.status]);
 
   return (
     <div className="mt-[56px] bg-white rounded-[8px] p-[48px] flex flex-col space-y-[56px]">
@@ -44,7 +59,7 @@ function Detail({ data }: { data?: TypeCampaign }) {
           </div>
           <div className="flex flex-col space-y-[8px]">
             <div className="text-[16px] font-bold border-l-2 border-[#04AFAF] h-[24px] pl-[14px]">現在のステータス</div>
-            <FlagItem className="pl-[16px]" value="公開中" />
+            <FlagItem className="pl-[16px]" value={status} />
           </div>
           <div className="flex flex-col space-y-[8px]">
             <div className="text-[16px] font-bold border-l-2 border-[#04AFAF] h-[24px] pl-[14px]">

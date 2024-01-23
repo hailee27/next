@@ -1,4 +1,5 @@
 import { api } from '../api';
+import { CompaniesListResponse } from './users';
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -25,10 +26,28 @@ const injectedRtkApi = api.injectEndpoints({
         };
       },
     }),
+    getCompanyUsers: build.query<CompaniesListResponse, CompanyUserParams>({
+      query: (queryArg) => ({
+        url: `/companies/${queryArg.companyId}/users`,
+        method: 'GET',
+        params: queryArg,
+      }),
+    }),
   }),
 });
 
 export type CompaniesResponse = void;
+export type CompanyUserParams = {
+  companyId: string;
+  skip: number;
+  take: number;
+  where?: string;
+  orderBy?: string;
+  q?: string;
+  include?: string;
+  token?: 'user';
+  action?: string;
+};
 export type CompaniesParams = {
   name: string;
   code?: string;
@@ -40,4 +59,9 @@ export type CompaniesParams = {
 };
 
 export { injectedRtkApi as CompaniesApi };
-export const { usePostCompaniesMutation, useUpdateCompaniesMutation } = injectedRtkApi;
+export const {
+  usePostCompaniesMutation,
+  useUpdateCompaniesMutation,
+  useGetCompanyUsersQuery,
+  useLazyGetCompanyUsersQuery,
+} = injectedRtkApi;
