@@ -16,6 +16,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import ModalFreeTextContent from './ModalFreeTextContent';
 import ModalConnectX from './ModalConnectX';
+import ModalChooseMultiple from './ModalChooseMultiple';
+import ModalChooseOne from './ModalChooseOne';
 
 export default function TaskItem({ task }: { task: TasksConvert }) {
   const router = useRouter();
@@ -62,13 +64,16 @@ export default function TaskItem({ task }: { task: TasksConvert }) {
             if (task?.link) handleOpenPopup(task?.link);
             break;
           }
-          case 'FAQ_FREE_TEXT': {
+          case 'FAQ_FREE_TEXT':
+          case 'FAQ_CHOOSE_ONE':
+          case 'FAQ_CHOOSE_MULTIPLE': {
             setModalState({
               isOpenModal: true,
-              content: 'FAQ_FREE_TEXT',
+              content: task?.type,
             });
             break;
           }
+
           default:
             break;
         }
@@ -125,6 +130,26 @@ export default function TaskItem({ task }: { task: TasksConvert }) {
             content: undefined,
           });
         }}
+      />
+      <ModalChooseOne
+        isOpen={modalState?.isOpenModal && modalState?.content === 'FAQ_CHOOSE_ONE'}
+        onCancel={() => {
+          setModalState({
+            isOpenModal: false,
+            content: undefined,
+          });
+        }}
+        taskInfo={task?.taskInfo}
+      />
+      <ModalChooseMultiple
+        isOpen={modalState?.isOpenModal && modalState?.content === 'FAQ_CHOOSE_MULTIPLE'}
+        onCancel={() => {
+          setModalState({
+            isOpenModal: false,
+            content: undefined,
+          });
+        }}
+        taskInfo={task?.taskInfo}
       />
       <ModalConnectX
         isOpen={modalState?.isOpenModal && modalState?.content === 'CONNECT_X'}

@@ -42,6 +42,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
 
 export default function CampaignsPage({ campaigns, totals }: ICampaignsPage) {
   const router = useRouter();
+
   return (
     <div className="font-notoSans text-main-text min-h-screen px-[20px] py-[40px] bg-[#D5FFFF] ">
       <Form

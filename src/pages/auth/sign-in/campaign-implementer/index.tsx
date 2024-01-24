@@ -7,6 +7,7 @@ import ArrowDown from '@/components/common/icons/ArrowDown';
 import useAuthEmailPassword from '@/hooks/useAuthEmailPassword';
 import { useSigninEmailMutation } from '@/redux/endpoints/auth';
 import { setSession } from '@/redux/slices/auth.slice';
+import { RootState } from '@/redux/store';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import toastMessage from '@/utils/func/toastMessage';
 import { AuthEmailPasswordData } from '@/utils/schema/auth.schema';
@@ -15,11 +16,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function CampaignImplementerSignin() {
   const { register, handleSubmit, errors, isDisableSubmit, onChangeRecaptcha } = useAuthEmailPassword();
-
+  const { accessToken, user } = useSelector((state: RootState) => state.auth);
+  console.log(accessToken, user);
   const [isShowMsg, setIsShowMsg] = useState(false);
 
   const [signinEmail] = useSigninEmailMutation();
@@ -60,7 +62,7 @@ export default function CampaignImplementerSignin() {
         <div className="px-[24px] py-[14px] border-[2px] border-[#333] rounded-t-[16px] flex items-center justify-center bg-[#333] text-white text-[18px] font-bold">
           キャンペーン参加者の方
         </div>
-        <div className="border-[2px] border-[#333] rounded-b-[16px] px-[22px] py-[38px]">
+        <div className="border-[2px] border-[#333] rounded-b-[16px] px-[22px] py-[38px] bg-white">
           <ConnectXModal buttonLabel="X（twitter）でログインする" />
 
           <div className="h-[16px]" />
@@ -74,7 +76,7 @@ export default function CampaignImplementerSignin() {
         <div className="px-[24px] py-[14px] border-[2px] border-[#333] rounded-t-[16px] flex items-center justify-center bg-[#333] text-white text-[18px] font-bold">
           キャンペーン作成者の方
         </div>
-        <div className="border-[2px] border-[#333] rounded-b-[16px] px-[22px] py-[38px]">
+        <div className="border-[2px] border-[#333] rounded-b-[16px] px-[22px] py-[38px] bg-white">
           <form
             autoComplete="off"
             className="flex flex-col gap-[16px] max-w-[327px] mx-auto items-center"

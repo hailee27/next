@@ -4,18 +4,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TypeTask } from '@/redux/endpoints/campaign';
-import { MasterDataResponse, TypeAction } from '@/redux/endpoints/masterData';
+import { MasterDataResponse } from '@/redux/endpoints/masterData';
 import toastMessage from './toastMessage';
 
 export interface TasksConvert {
   id: number;
   campaignId: string;
-
   title: string;
   description: React.ReactNode;
   type: 'OPEN_LINK' | 'FAQ_FREE_TEXT' | 'FAQ_CHOOSE_ONE' | 'FAQ_CHOOSE_MULTIPLE';
   link?: string;
   choose_options?: any;
+  taskInfo?: any;
 }
 
 export const getMasterDataLabel = (
@@ -329,10 +329,32 @@ export const convertCampaignTask = (task: TypeTask | null, masterData: MasterDat
               title: 'アンケートに回答する',
               description: '',
               type: 'FAQ_FREE_TEXT',
+              taskInfo: task?.taskTemplate?.config?.name ?? null,
             };
             break;
           }
-
+          case 'formatMultiple': {
+            result = {
+              id: task?.id ?? '',
+              campaignId: task?.campaignId ?? '',
+              title: 'アンケートに回答する',
+              description: '',
+              type: 'FAQ_CHOOSE_MULTIPLE',
+              taskInfo: task?.taskTemplate?.config?.name ?? null,
+            };
+            break;
+          }
+          case 'formatSingle': {
+            result = {
+              id: task?.id ?? '',
+              campaignId: task?.campaignId ?? '',
+              title: 'アンケートに回答する',
+              description: '',
+              type: 'FAQ_CHOOSE_ONE',
+              taskInfo: task?.taskTemplate?.config?.name ?? null,
+            };
+            break;
+          }
           default:
             return null;
         }
