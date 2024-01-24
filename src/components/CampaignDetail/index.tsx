@@ -12,7 +12,7 @@ import YenIcon from '../common/icons/YenIcon';
 import CampaignRewardSection from './CampaignRewardSection';
 import CampaignTasksSection from './CampaignTasksSection';
 
-export default function CampaignDetail({ campaign }: { campaign: TypeCampaign | null }) {
+export default function CampaignDetail({ campaign }: { campaign: TypeCampaign | null | undefined }) {
   const { data } = useGetMasterDataQuery();
 
   const campaignCategory = getMasterDataLabel(data, 'CATEGORY_CAMPAIGN', campaign?.category ?? '');

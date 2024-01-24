@@ -9,6 +9,8 @@ import Loser from '@/components/CampaignDetail/Loser';
 import RecommedCampaignsSection from '@/components/CampaignDetail/RecommedCampaignsSection';
 import Winner from '@/components/CampaignDetail/Winner';
 import { CampaignApi, ListCampaignParams, TypeCampaign } from '@/redux/endpoints/campaign';
+import { useGetReWardsQuery } from '@/redux/endpoints/reWard';
+import { useGetTasksQuery } from '@/redux/endpoints/task';
 import { RootState, wrapper } from '@/redux/store';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
@@ -56,7 +58,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
   return {
     props: {
       viewType: params?.slug?.[1] ?? 'detail',
-      campaign: dataCampaign ?? null,
+      campaignDetail: dataCampaign ?? null,
       campaignsRecommend: dataCampaigns?.campaigns ?? null,
     },
   };
@@ -64,19 +66,41 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
 
 // eslint-disable-next-line max-lines-per-function
 export default function CampaignDetailPage({
-  campaign,
+  campaignDetail,
   campaignsRecommend,
   viewType,
 }: {
-  campaign: TypeCampaign | null;
+  campaignDetail: TypeCampaign | null;
   campaignsRecommend: TypeCampaign[] | null;
   viewType: 'completion' | 'winning' | 'losing' | 'detail';
 }) {
   // const [isOpenModalSetupAuthEmail, setIsOpenModalSetupAuthEmail] = useState(false);
   const { accessToken } = useSelector((state: RootState) => state.auth);
-
   const router = useRouter();
 
+  const { data: campaignDetailTasks } = useGetTasksQuery({
+    campaignId: router?.query?.slug?.[0] ?? '',
+    token: accessToken || 'user',
+  });
+  const { data: campaignDetailRewards } = useGetReWardsQuery({
+    campaignId: router?.query?.slug?.[0] ?? '',
+    token: accessToken || 'user',
+  });
+
+  const campaign = useMemo(() => {
+    let result: TypeCampaign | null = null;
+    if (campaignDetail?.id) {
+      result = { ...campaignDetail };
+      if (campaignDetailTasks) {
+        result.Task = campaignDetailTasks;
+      }
+      if (campaignDetailRewards) {
+        result.CampaignReward = campaignDetailRewards;
+      }
+    }
+    return result;
+  }, []);
+  console.log('router', router?.query?.slug);
   console.log('viewType', viewType);
 
   const contentRender = useMemo(() => {

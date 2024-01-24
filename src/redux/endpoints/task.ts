@@ -37,6 +37,7 @@ const injectedRtkApi = api.injectEndpoints({
 export type TaskResponse = void;
 export type GetTaskParams = {
   campaignId: string;
+  token?: string;
 };
 export type DeleteTaskParams = {
   campaignId: string;
