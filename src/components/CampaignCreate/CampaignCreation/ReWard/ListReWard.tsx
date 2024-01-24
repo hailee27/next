@@ -5,7 +5,7 @@ import React from 'react';
 
 function ListReWard({ index, onDelete }: { index: number; onDelete: () => void }) {
   const form = Form.useFormInstance();
-  const paypayWatch = Form.useWatch(['reWard', `reWard${index}`, 'receivingMethod', 'paypay'], form) ?? false;
+  // const paypayWatch = Form.useWatch(['reWard', `reWard${index}`, 'receivingMethod', 'paypay'], form) ?? false;
   const amazonWatch = Form.useWatch(['reWard', `reWard${index}`, 'receivingMethod', 'amazon'], form) ?? false;
 
   return (
@@ -58,7 +58,7 @@ function ListReWard({ index, onDelete }: { index: number; onDelete: () => void }
                 <BasicSwitch />
               </Form.Item>
             </div>
-            <div className="flex space-x-[12px]">
+            {/* <div className="flex space-x-[12px]">
               <span className="text-[16px]">Paypay gift</span>
               <Form.Item
                 initialValue={paypayWatch}
@@ -67,7 +67,7 @@ function ListReWard({ index, onDelete }: { index: number; onDelete: () => void }
               >
                 <BasicSwitch />
               </Form.Item>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

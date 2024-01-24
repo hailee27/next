@@ -4,13 +4,17 @@ import moment from 'moment';
 import { Form, Spin } from 'antd';
 import type { TabsProps } from 'antd';
 import BasicTabs from '@/components/common/BasicTabs';
-import { usePostCampaignDraftMutation, usePostQuestsMutation } from '@/redux/endpoints/campaign';
+import { useDeleteCampaignMutation, usePostQuestsMutation } from '@/redux/endpoints/campaign';
 import { TypeResponseFormCampaign } from '@/types/campaign.type';
 import toastMessage from '@/utils/func/toastMessage';
-import adapterCampaignParams from '@/utils/func/adapterCampaignParams';
+import adapterCampaignParams, { adapterDataReWard, adapterDataTask } from '@/utils/func/adapterCampaignParams';
 import { StepContext, TypeTabContext } from '@/context/TabContext';
 import { useGetMasterDataQuery } from '@/redux/endpoints/masterData';
 import CButtonShadow from '@/components/common/CButtonShadow';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
+import { usePostTaskMutation } from '@/redux/endpoints/task';
+import { usePostReWardsMutation } from '@/redux/endpoints/reWard';
 import ReWard from './ReWard';
 import Confirmation from './Confirmation';
 import Setup from './Setup';
@@ -40,7 +44,7 @@ const items: TabsProps['items'] = [
   },
   {
     key: '4',
-    label: '確認',
+    label: '確認・購入',
     children: <Confirmation />,
     forceRender: true,
     destroyInactiveTabPane: true,
@@ -49,9 +53,13 @@ const items: TabsProps['items'] = [
 
 function CampaignCreation() {
   const router = useRouter();
+  const { user } = useSelector((state: RootState) => state.auth);
   const [tab, setTab] = useState<string>('1');
   const [trigger, { isLoading }] = usePostQuestsMutation();
-  const [triggerCampaignDraft] = usePostCampaignDraftMutation();
+  const [triggerTask] = usePostTaskMutation();
+  const [triggerReWard] = usePostReWardsMutation();
+  const [deleteCampaign] = useDeleteCampaignMutation();
+
   const { data: dataMaster } = useGetMasterDataQuery();
   const valueContext = useMemo<TypeTabContext>(
     () => ({
@@ -76,27 +84,17 @@ function CampaignCreation() {
           setTab('4');
         }
 
-        if (name === 'saveDraft') {
-          triggerCampaignDraft(adapterCampaignParams(queryParams, queryParams.typeWinner))
-            .unwrap()
-            .then(() => toastMessage('save draft succses', 'success'))
-            .catch(() => toastMessage('failed', 'error'));
-        }
-
         forms?.confirm?.setFieldsValue({
           nameCampagin: queryParams.campainName,
           typeCampagin: dataMaster?.CATEGORY_CAMPAIGN.find((e) => e.value === queryParams.category)?.label,
           dateCampagin: queryParams.noDate
-            ? moment(String(queryParams.startDate)).format('YYYY/MM/DD')
-            : // eslint-disable-next-line no-irregular-whitespace
-              `${moment(String(queryParams.startDate)).format('YYYY/MM/DD')}　〜　${moment(
+            ? moment(String(queryParams.startDate)).format('YYYY/MM/DD HH:mm')
+            : `${moment(String(queryParams.startDate)).format('YYYY/MM/DD HH:mm')} 〜 ${moment(
                 String(queryParams.endDate)
-              ).format('YYYY/MM/DD')} `,
+              ).format('YYYY/MM/DD  HH:mm')} `,
           typeWinner: queryParams.typeWinner ?? 'AUTO_PRIZEE_DRAW',
-          // status: String(queryParams.statusCampaign),
           status: '下書き',
-          campaginCreator: 'halie',
-          // tableReward: { ...queryParams.reWard },
+          campaginCreator: user?.email?.email,
         });
         if (queryParams.typeWinner === 'AUTO_PRIZEE_DRAW') {
           forms?.confirm?.setFieldValue('tableReward', queryParams?.reWard);
@@ -105,18 +103,59 @@ function CampaignCreation() {
         }
 
         if (name === 'confirm') {
-          trigger(adapterCampaignParams(queryParams, queryParams.typeWinner))
+          trigger(adapterCampaignParams(queryParams, queryParams.typeWinner, 'UNDER_REVIEW'))
             .unwrap()
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            .then((res: any) => {
-              if (res?.error?.status === 400) {
-                toastMessage(res?.error?.data?.error, 'error');
-              } else {
-                router.push('/campaign-creator/list');
-                toastMessage('succses', 'success');
+            .then(async (res) => {
+              try {
+                const dataTask = await triggerTask({
+                  campaignId: res.newCampaign.id,
+                  data: adapterDataTask(queryParams),
+                });
+                const dataReward = await triggerReWard({
+                  campaignId: res.newCampaign.id,
+                  data: adapterDataReWard(queryParams),
+                });
+                if (dataTask && dataReward) {
+                  router.push('/campaign-creator/list');
+                  toastMessage('succses', 'success');
+                }
+              } catch (err) {
+                // eslint-disable-next-line no-console
+                console.log(err);
               }
             })
             .catch((err) => toastMessage(err.message || 'error', 'error'));
+        }
+        if (name === 'saveDraft') {
+          trigger(adapterCampaignParams(queryParams, queryParams.typeWinner, 'DRAFT'))
+            .unwrap()
+            .then(async (res) => {
+              try {
+                const dataTask = await triggerTask({
+                  campaignId: res.newCampaign.id,
+                  data: adapterDataTask(queryParams),
+                });
+                const dataReward = await triggerReWard({
+                  campaignId: res.newCampaign.id,
+                  data: adapterDataReWard(queryParams),
+                });
+                if (dataTask && dataReward) {
+                  router.push('/campaign-creator/list');
+                  toastMessage('save draft succses', 'success');
+                }
+              } catch (err) {
+                // eslint-disable-next-line no-console
+                console.log(err);
+              }
+            })
+            .catch(() => toastMessage('failed', 'error'));
+        }
+        if (name === 'delete') {
+          if (router.query.id) {
+            deleteCampaign({ campaignId: String(router.query.id) });
+          } else {
+            router.push('/campaign-creator/list');
+          }
         }
         window.scrollTo({ behavior: 'smooth', top: 0 });
       }}

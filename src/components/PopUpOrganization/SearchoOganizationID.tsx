@@ -1,14 +1,37 @@
 import { Form } from 'antd';
 import React from 'react';
 import { usePopUpContext } from '@/context/PopUpContext';
+import { useRequestJoinCompaniesMutation } from '@/redux/endpoints/me';
+import toastMessage from '@/utils/func/toastMessage';
+import { setUser } from '@/redux/slices/auth.slice';
+import { useLazyMeQuery } from '@/redux/endpoints/auth';
+import { useDispatch } from 'react-redux';
 import InputLabel from '../common/BasicInput/InputLabel';
 import CButtonShadow from '../common/CButtonShadow';
 
 function SearchoOganizationID() {
   const { closePopUp } = usePopUpContext();
+  const [trigger] = useRequestJoinCompaniesMutation();
+  const [getMe] = useLazyMeQuery();
+  const dispatch = useDispatch();
   return (
     <div className="p-[64px] w-[928px]">
-      <Form onFinish={() => closePopUp()}>
+      <Form
+        onFinish={(e) => {
+          trigger({ companyCode: e.organizationID })
+            .unwrap()
+            .then(() => {
+              getMe()
+                .unwrap()
+                .then((res) => {
+                  dispatch(setUser(res));
+                  closePopUp();
+                });
+              toastMessage('send request success', 'success');
+            })
+            .catch(() => toastMessage('error', 'error'));
+        }}
+      >
         <InputLabel
           initialValue="123a534kj5wb3"
           label="組織ID"

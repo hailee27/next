@@ -6,7 +6,8 @@ export const ErrorCode: { [key: string]: string } = {
   '400004': '$key should be a number',
   '400005': 'Invalid cursor format',
   '400006': 'The code is expired or incorrect',
-  '400007': 'Incorrect password',
+
+  '401007': 'Incorrect password',
 
   '404001': 'User not found',
   '404002': 'Session not found',
