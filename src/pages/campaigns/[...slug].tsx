@@ -91,17 +91,15 @@ export default function CampaignDetailPage({
     let result: TypeCampaign | null = null;
     if (campaignDetail?.id) {
       result = { ...campaignDetail };
-      if (campaignDetailTasks) {
-        result.Task = campaignDetailTasks;
+      if (campaignDetailTasks?.tasks) {
+        result.Task = campaignDetailTasks?.tasks ?? null;
       }
-      if (campaignDetailRewards) {
-        result.CampaignReward = campaignDetailRewards;
+      if (campaignDetailRewards?.rewards) {
+        result.CampaignReward = campaignDetailRewards?.rewards ?? null;
       }
     }
     return result;
   }, [campaignDetail, campaignDetailTasks, campaignDetailRewards]);
-  console.log('router', router?.query?.slug);
-  console.log('viewType', viewType);
 
   const contentRender = useMemo(() => {
     switch (viewType) {
@@ -115,7 +113,7 @@ export default function CampaignDetailPage({
       default:
         return <CampaignDetail campaign={campaign} />;
     }
-  }, [viewType]);
+  }, [viewType, campaign]);
 
   if (viewType === 'winning' && !accessToken) {
     router.push('/auth/sign-in/campaign-implementer');

@@ -1,9 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { api } from '../api';
+import { TypeCampaignReward } from './campaign';
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
-    getReWards: build.query<ReWardResponse, GetReWardParameter>({
+    getReWards: build.query<
+      {
+        rewards: TypeCampaignReward[];
+        total: number;
+      },
+      GetReWardParameter
+    >({
       query: (queryArg) => ({
         url: '/rewards',
         method: 'GET',
