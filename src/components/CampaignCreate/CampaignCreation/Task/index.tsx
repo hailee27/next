@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Form } from 'antd';
 import SelectLabel from '@/components/common/BasicSelect/SelectLabel';
 import BasicInput from '@/components/common/BasicInput';
@@ -8,11 +8,14 @@ import CButtonShadow from '@/components/common/CButtonShadow';
 import FlagItem from '@/components/common/FlagItem';
 import CButtonClassic from '@/components/common/CButtonClassic';
 import { usePopUpContext } from '@/context/PopUpContext';
-import TaskCampain, { DataPlatFormType } from './TaskCampain';
+import { useRouter } from 'next/router';
+import { useGetTasksQuery } from '@/redux/endpoints/task';
+import TaskCampain from './TaskCampain';
 import { TypeTasks } from './type';
 
 function Task() {
   const [form] = Form.useForm();
+  const router = useRouter();
   const { prevTab } = useContext<TypeTabContext>(StepContext);
   const { openPopUp } = usePopUpContext();
   const [numberTask, setNumberTask] = useState<TypeTasks[]>([
@@ -34,19 +37,14 @@ function Task() {
     },
   ]);
 
-  const dataPlatForm = useMemo<DataPlatFormType[] | undefined>(
-    () => [
-      {
-        value: 'twitter_follow',
-        label: 'フォローさせる',
-      },
-    ],
-    []
-  );
   const handleDelete = (id: number) => {
     setNumberTask((prev) => prev.filter((v) => v.id !== id));
     form.setFieldValue(['optionTasks', `task${id}`], {});
   };
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { data: dataTask } = useGetTasksQuery({ campaignId: String(router?.query?.id) }, { skip: !router?.query?.id });
+
   return (
     <>
       <div className="bg-white  mt-[16px] p-[40px]">
@@ -111,7 +109,16 @@ function Task() {
                 name={['requireTask', 'platForm']}
                 options={[{ label: ' X (twitter)', value: 'TWITTER' }]}
               />
-              <SelectLabel initialValue="twitter_follow" name={['requireTask', 'type']} options={dataPlatForm} />
+              <SelectLabel
+                initialValue="twitter_follow"
+                name={['requireTask', 'type']}
+                options={[
+                  {
+                    value: 'twitter_follow',
+                    label: 'フォローさせる',
+                  },
+                ]}
+              />
             </div>
             <div className="w-full ">
               <div className="text-[14px] font-semibold mb-[5px]">ユーザーネーム</div>

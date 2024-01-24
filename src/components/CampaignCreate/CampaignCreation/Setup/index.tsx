@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Form } from 'antd';
 import InputLabel from '@/components/common/BasicInput/InputLabel';
 import SelectLabel from '@/components/common/BasicSelect/SelectLabel';
@@ -10,12 +10,19 @@ import CButtonShadow from '@/components/common/CButtonShadow';
 import type { CropperProps } from 'react-easy-crop';
 import moment from 'moment';
 import { range } from '@/utils/range';
+import { useGetDetailCampaignQuery } from '@/redux/endpoints/campaign';
+import { useRouter } from 'next/router';
 import ExplanatoryText from './ExplanatoryText';
 
 function Setup() {
+  const router = useRouter();
   const [form] = Form.useForm();
   const noDateWatch = Form.useWatch('noDate', form);
   const startDateWatch = Form.useWatch('startDate', form);
+  const { data: dataCampaign } = useGetDetailCampaignQuery(
+    { campaignId: String(router?.query?.id) },
+    { skip: !router?.query?.id }
+  );
   const { data } = useGetMasterDataQuery();
   const dataCategory = useMemo(
     () =>
@@ -25,6 +32,19 @@ function Setup() {
       })),
     [data?.CATEGORY_CAMPAIGN]
   );
+  useEffect(() => {
+    if (dataCampaign) {
+      form.setFieldsValue({
+        campainName: dataCampaign.title,
+        category: dataCampaign.category,
+        endDate: !dataCampaign.dontSetExpiredTime && moment(dataCampaign.expiredTime),
+        explanatoryText: dataCampaign.description,
+        noDate: dataCampaign.dontSetExpiredTime,
+        startDate: moment(dataCampaign.startTime),
+        thumbnail: undefined,
+      });
+    }
+  }, [dataCampaign]);
 
   return (
     <>

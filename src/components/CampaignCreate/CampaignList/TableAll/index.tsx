@@ -140,7 +140,11 @@ function TableAll({
         loading={isLoading}
         onRow={(record) => ({
           onClick: () => {
-            push(`/campaign-creator/list/${record.key}`);
+            if (record.status === 'DRAFT') {
+              push(`/campaign-creator/create/draft/${record.key}`);
+            } else {
+              push(`/campaign-creator/list/${record.key}`);
+            }
             // trigger({ campaignId: String(record.key) }); // click row
           },
         })}

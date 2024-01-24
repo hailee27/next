@@ -11,7 +11,7 @@ function CampainListPage() {
   const { user } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
-    if (user?.companyId == null && user?.isRequestMemberCompany) {
+    if (user?.companyId == null && !user?.isRequestMemberCompany) {
       openPopUp({ contents: <PopUpOrganization /> });
     }
   }, [user?.companyId, user?.isRequestMemberCompany]);
