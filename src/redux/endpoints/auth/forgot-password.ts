@@ -10,7 +10,7 @@ export function forgotPassword(build: EndpointBuilder<BaseQueryFn, string, strin
   >({
     query(body) {
       return {
-        url: 'auth/forgot/password',
+        url: 'auth/forgot_password',
         method: 'POST',
         body,
       };
@@ -28,7 +28,7 @@ export function resetPassword(build: EndpointBuilder<BaseQueryFn, string, string
   >({
     query(body) {
       return {
-        url: 'auth/reset/password',
+        url: 'auth/reset_password',
         method: 'POST',
         body,
       };

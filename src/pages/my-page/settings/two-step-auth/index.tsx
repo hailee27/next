@@ -34,7 +34,7 @@ export default function SettingTwoStepAuthPage() {
   const { user, accessToken } = useSelector((store: RootState) => store.auth);
 
   const [sendVerificationCode, { isLoading: isSendVerificationCode }] = useAuthVerificationMutation();
-  const [verifiSMS, { isLoading: isVerifiSMS }] = useSmsVerifyMutation();
+  const [verifiSMS, { isLoading: isVerifiSMS, isError: isVerifySMSError }] = useSmsVerifyMutation();
   const [updateMe, { isLoading: isUpdateUser }] = useUpdateMeMutation();
   const {
     register,
@@ -122,7 +122,7 @@ export default function SettingTwoStepAuthPage() {
         </h1>
         <div className="h-[16px]" />
 
-        <SmsVerificationForm onSubmitCode={onUpdatePhone} />
+        <SmsVerificationForm isSubmitError={isVerifySMSError} onSubmitCode={onUpdatePhone} />
       </div>
       <div className="h-[24px]" />
       <p className="text-[12px] font-bold">

@@ -37,6 +37,7 @@ const injectedRtkApi = api.injectEndpoints({
 export type ReWardResponse = void;
 export type GetReWardParameter = {
   campaignId: string;
+  token?: string;
 };
 export type DeleteReWardParameter = {
   campaignId: string;

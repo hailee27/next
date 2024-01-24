@@ -65,7 +65,7 @@ const injectedRtkApi = api.injectEndpoints({
 export type DetailCampaignResponse = TypeCampaign;
 export type DetailCampaignParams = {
   campaignId: string;
-  token?: 'user';
+  token?: string;
 };
 
 export type TypeCampaignReward = {
@@ -158,7 +158,7 @@ export type ListCampaignParams = {
   orderBy?: string;
   q?: string;
   include?: string;
-  token?: 'user';
+  token?: string;
   except?: string;
 };
 export type QuestsResponse = {

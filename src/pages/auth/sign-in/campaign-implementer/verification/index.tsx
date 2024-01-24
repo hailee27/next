@@ -15,7 +15,7 @@ export default function VerificationPage() {
   const { query, push } = useRouter();
   const [sendVerificationCode, { isLoading: isSendVerificationCode }] = useAuthVerificationMutation();
 
-  const [smsAuth, { isLoading }] = useSmsVerifyMutation();
+  const [smsAuth, { isLoading, isError }] = useSmsVerifyMutation();
   const dispatch = useDispatch();
   const handleSubmitSMS = async (code: string) => {
     try {
@@ -63,7 +63,7 @@ export default function VerificationPage() {
             </h1>
             <div className="h-[16px]" />
 
-            <SmsVerificationForm onSubmitCode={handleSubmitSMS} />
+            <SmsVerificationForm isSubmitError={isError} onSubmitCode={handleSubmitSMS} />
           </div>
           <div className="h-[24px]" />
           <p className="text-[12px] font-bold">
