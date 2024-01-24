@@ -16,7 +16,7 @@ export default function updateMe(build: EndpointBuilder<BaseQueryFn, string, str
     query(body) {
       return {
         url: '/me',
-        method: 'PATCH',
+        method: 'PUT',
         body,
       };
     },
