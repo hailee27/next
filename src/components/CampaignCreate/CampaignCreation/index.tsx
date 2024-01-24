@@ -4,7 +4,7 @@ import moment from 'moment';
 import { Form, Spin } from 'antd';
 import type { TabsProps } from 'antd';
 import BasicTabs from '@/components/common/BasicTabs';
-import { usePostQuestsMutation } from '@/redux/endpoints/campaign';
+import { useDeleteCampaignMutation, usePostQuestsMutation } from '@/redux/endpoints/campaign';
 import { TypeResponseFormCampaign } from '@/types/campaign.type';
 import toastMessage from '@/utils/func/toastMessage';
 import adapterCampaignParams, { adapterDataReWard, adapterDataTask } from '@/utils/func/adapterCampaignParams';
@@ -58,6 +58,7 @@ function CampaignCreation() {
   const [trigger, { isLoading }] = usePostQuestsMutation();
   const [triggerTask] = usePostTaskMutation();
   const [triggerReWard] = usePostReWardsMutation();
+  const [deleteCampaign] = useDeleteCampaignMutation();
 
   const { data: dataMaster } = useGetMasterDataQuery();
   const valueContext = useMemo<TypeTabContext>(
@@ -104,7 +105,6 @@ function CampaignCreation() {
         if (name === 'confirm') {
           trigger(adapterCampaignParams(queryParams, queryParams.typeWinner, 'UNDER_REVIEW'))
             .unwrap()
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             .then(async (res) => {
               try {
                 const dataTask = await triggerTask({
@@ -149,6 +149,13 @@ function CampaignCreation() {
               }
             })
             .catch(() => toastMessage('failed', 'error'));
+        }
+        if (name === 'delete') {
+          if (router.query.id) {
+            deleteCampaign({ campaignId: String(router.query.id) });
+          } else {
+            router.push('/campaign-creator/list');
+          }
         }
         window.scrollTo({ behavior: 'smooth', top: 0 });
       }}

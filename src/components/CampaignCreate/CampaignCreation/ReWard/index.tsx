@@ -5,10 +5,18 @@ import SelectLabel from '@/components/common/BasicSelect/SelectLabel';
 import BasicTextArea from '@/components/common/BasicTextArea';
 import { StepContext, TypeTabContext } from '@/context/TabContext';
 import CButtonShadow from '@/components/common/CButtonShadow';
+import { useGetReWardsQuery } from '@/redux/endpoints/reWard';
+import { useRouter } from 'next/router';
 import InstantWin from './InstantWin';
 
 function ReWard() {
   const [form] = Form.useForm();
+  const router = useRouter();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { data: dataReward } = useGetReWardsQuery(
+    { campaignId: String(router?.query?.id) },
+    { skip: !router?.query?.id }
+  );
   const typeWinnerWatch = Form.useWatch('typeWinner', form);
   const { prevTab } = useContext<TypeTabContext>(StepContext);
   useEffect(() => {
