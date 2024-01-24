@@ -99,7 +99,7 @@ export default function CampaignDetailPage({
       }
     }
     return result;
-  }, []);
+  }, [campaignDetail, campaignDetailTasks, campaignDetailRewards]);
   console.log('router', router?.query?.slug);
   console.log('viewType', viewType);
 
