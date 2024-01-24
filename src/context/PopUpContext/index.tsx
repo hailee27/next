@@ -5,10 +5,15 @@ import styles from './modal.module.scss';
 interface PopUpData {
   id?: string;
   content: JSX.Element;
+  option?: {
+    onCancel: () => void;
+  };
 }
 interface PropsOpenPopUp {
   contents: JSX.Element;
   classNameWrapperPopup?: string;
+  typePopup?: 'POPUP' | 'ALERT';
+  onCancel?: () => void;
 }
 interface TypePopUpContext {
   openPopUp: ({ contents }: PropsOpenPopUp) => void;
@@ -23,16 +28,20 @@ export const PopUpProvider = ({ children }: { children: React.ReactNode }) => {
   // const [open, setOpen] = useState<boolean>(false);
   const [contentPopUp, setContentPopUp] = useState<PopUpData[]>([]);
   const [classNameWrapper, setClassNameWrapper] = useState<string>('');
+  const [type, setType] = useState<'POPUP' | 'ALERT' | undefined>('POPUP');
+
   const openPopUp = useCallback(
-    ({ contents, classNameWrapperPopup }: PropsOpenPopUp) => {
+    ({ contents, classNameWrapperPopup, typePopup, onCancel }: PropsOpenPopUp) => {
       const id = (Math.random() + 1).toString(36).substring(7);
       setClassNameWrapper(classNameWrapperPopup ?? '');
-      setContentPopUp((prev) => [...prev, { id, content: contents }]);
+      setContentPopUp((prev) => [...prev, { id, content: contents, option: { onCancel: () => onCancel?.() } }]);
+      setType(typePopup);
       // setOpen(true);
     },
-    [contentPopUp]
+    [contentPopUp, classNameWrapper, type]
   );
-  const closePopUp = () => {
+  const closePopUp = (callBack?: () => void) => {
+    callBack?.();
     setContentPopUp((prev) => prev.filter((e) => e.id !== prev[prev.length - 1].id));
   };
   const contextvalue = useMemo<TypePopUpContext>(
@@ -40,7 +49,7 @@ export const PopUpProvider = ({ children }: { children: React.ReactNode }) => {
       openPopUp,
       closePopUp,
     }),
-    [openPopUp]
+    [openPopUp, classNameWrapper, type]
   );
   return (
     <PopUpContext.Provider value={contextvalue}>
@@ -56,7 +65,10 @@ export const PopUpProvider = ({ children }: { children: React.ReactNode }) => {
               footer={false}
               key={e.id}
               modalRender={(node) => ModalRender(node, classNameWrapper)}
-              onCancel={() => closePopUp()}
+              onCancel={() => {
+                e.option?.onCancel();
+                closePopUp();
+              }}
               open={contentPopUp[contentPopUp.length - 1].id === e.id}
               styles={{ mask: { background: '#333', opacity: 0.9 } }}
               width="max-content"

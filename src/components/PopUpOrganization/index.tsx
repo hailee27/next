@@ -147,7 +147,7 @@ function PopUpOrganization() {
             ) : (
               <CButtonClassic
                 customClassName={`!rounded-[6px] !w-[290px] !h-[47px] !text-[14px] ${
-                  errorValidate.includes('cardInfor' || 'sourceId') && 'border-[#ff0000]'
+                  errorValidate.includes('sourceId') && '!border-[#ff0000]'
                 }`}
                 onClick={() =>
                   openPopUp({

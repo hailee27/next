@@ -2,6 +2,7 @@ import React from 'react';
 import CButtonShadow from '@/components/common/CButtonShadow';
 import { useRouter } from 'next/router';
 import { useGetDetailCampaignQuery } from '@/redux/endpoints/campaign';
+import { copyFunc } from '@/utils/copyFunc';
 import Detail from './Detail';
 import CampaignParticipantsInstant from './CampaignParticipantsInstant';
 
@@ -68,7 +69,7 @@ function DetailCampaign() {
                   classBgColor="bg-white"
                   classRounded="rounded-[6px]"
                   classShadowColor="bg-main-text"
-                  // onClick={() => router.push('/campaign-creator/create')}
+                  onClick={() => copyFunc(window.location.href)}
                   shadowSize="normal"
                   textClass='"bg-main-text"'
                   title="公開中のページをコピー"

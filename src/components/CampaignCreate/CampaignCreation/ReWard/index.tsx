@@ -5,10 +5,18 @@ import SelectLabel from '@/components/common/BasicSelect/SelectLabel';
 import BasicTextArea from '@/components/common/BasicTextArea';
 import { StepContext, TypeTabContext } from '@/context/TabContext';
 import CButtonShadow from '@/components/common/CButtonShadow';
+import { useGetReWardsQuery } from '@/redux/endpoints/reWard';
+import { useRouter } from 'next/router';
 import InstantWin from './InstantWin';
 
 function ReWard() {
   const [form] = Form.useForm();
+  const router = useRouter();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { data: dataReward } = useGetReWardsQuery(
+    { campaignId: String(router?.query?.id) },
+    { skip: !router?.query?.id }
+  );
   const typeWinnerWatch = Form.useWatch('typeWinner', form);
   const { prevTab } = useContext<TypeTabContext>(StepContext);
   useEffect(() => {
@@ -33,10 +41,9 @@ function ReWard() {
             rules={[{ required: true, message: '' }]}
           />
           {typeWinnerWatch === 'AUTO_PRIZEE_DRAW' && <InstantWin />}
-          {/* <ListReWard /> */}
           <div className="flex flex-col space-y-[24px] ">
             {typeWinnerWatch === 'MANUAL_SELECTION' && (
-              <div className="mt-[24px] py-[24px]">
+              <div className="">
                 <span className="font-semibold pb-[8px] block">報酬要約文 ※必須。全角100文字以内</span>
                 <Form.Item name="compensationSummary" rules={[{ required: true, message: '' }]}>
                   <BasicTextArea maxLength={100} style={{ height: 145, resize: 'none' }} />
@@ -46,7 +53,7 @@ function ReWard() {
           </div>
         </Form>
       </div>
-      <div className={`flex space-x-[24px] justify-center ${typeWinnerWatch === 'AUTO_PRIZEE_DRAW' && 'pt-[48px]'}`}>
+      <div className="flex space-x-[24px] justify-center pt-[48px]">
         <div className="w-[135px]  h-[56px]">
           <CButtonShadow
             classBgColor="bg-white"

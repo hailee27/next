@@ -39,11 +39,11 @@ function SideBar() {
           <span className="text-[11px] font-medium">管理</span>
         </div>
         <ListItem icon={<BriefcaseIcon />} title="権限管理" to="/campaign-creator/permission-management" />
-        <ListItem icon={<YenIcon color="#fff" />} title="デポジット残高" to="/campaign-creator/Deposit-balance" />
+        <ListItem icon={<YenIcon color="#fff" />} title="デポジット残高" to="/campaign-creator/deposit-balance" />
       </div>
       <div className="pl-[32px]  border-[#2D3648] flex flex-col justify-end">
         <ListItem title="組織情報" to="/campaign-creator/organize-information" />
-        <ListItem title="マイページ" to="/campaign-creator/account-information" />
+        <ListItem title="マイページ" to="/my-page" />
       </div>
     </div>
   );

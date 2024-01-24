@@ -35,3 +35,10 @@
     }
   }
 }
+.customPopup {
+  :global {
+    .ant-picker-footer {
+      display: none;
+    }
+  }
+}
