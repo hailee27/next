@@ -24,6 +24,7 @@
     "dotenv": "^16.3.1",
     "elastic-apm-node": "^4.0.0",
     "eslint-config-airbnb": "^19.0.4",
+    "lodash": "^4.17.21",
     "moment": "^2.30.0",
     "next": "14.0.2",
     "next-auth": "^4.24.5",

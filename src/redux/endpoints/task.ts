@@ -1,9 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { api } from '../api';
+import { TypeTask } from './campaign';
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
-    getTasks: build.query<TaskResponse, GetTaskParams>({
+    getTasks: build.query<
+      {
+        tasks: TypeTask[];
+        total: number;
+      },
+      GetTaskParams
+    >({
       query: (queryArg) => ({
         url: '/tasks',
         method: 'GET',

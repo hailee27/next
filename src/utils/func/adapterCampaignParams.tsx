@@ -1,5 +1,6 @@
 import { QuestsParams } from '@/redux/endpoints/campaign';
 import { TypeResponseFormCampaign } from '@/types/campaign.type';
+import { omitBy } from 'lodash';
 
 export default function adapterCampaignParams(
   data: TypeResponseFormCampaign,
@@ -8,34 +9,40 @@ export default function adapterCampaignParams(
 ): QuestsParams {
   switch (typeWinner) {
     case 'AUTO_PRIZEE_DRAW':
-      return {
-        title: data.campainName ?? '',
-        category: data.category ?? '',
-        dontSetExpiredTime: String(data.noDate ?? false),
-        startTime: data.startDate ?? '',
-        expiredTime: data.endDate,
-        methodOfselectWinners: typeWinner,
-        totalNumberOfUsersAllowedToWork: String(data.numberOfParticipants),
-        numberOfPrizes: String(data.totalTicket),
-        totalPrizeValue: String(data.totalReWard),
-        settingForNotWin: String(data.statusCampaign ?? false),
-        description: data.explanatoryText,
-        campaignImage: data.thumbnail,
-        status,
-      };
+      return omitBy(
+        {
+          title: data.campainName ?? '',
+          category: data.category ?? '',
+          dontSetExpiredTime: String(data.noDate ?? false),
+          startTime: data.startDate ?? '',
+          expiredTime: data.endDate,
+          methodOfselectWinners: typeWinner,
+          totalNumberOfUsersAllowedToWork: String(data.numberOfParticipants),
+          numberOfPrizes: String(data.totalTicket),
+          totalPrizeValue: String(data.totalReWard),
+          settingForNotWin: String(data.statusCampaign ?? false),
+          description: data.explanatoryText,
+          campaignImage: data.thumbnail,
+          status,
+        },
+        (value) => value === undefined || value === null
+      );
     default:
-      return {
-        title: data.campainName ?? '',
-        category: data.category ?? '',
-        dontSetExpiredTime: String(data.noDate ?? false),
-        startTime: data.startDate ?? '',
-        expiredTime: data.endDate,
-        methodOfselectWinners: typeWinner,
-        description: data.explanatoryText,
-        noteReward: data.compensationSummary ?? 'NONE',
-        campaignImage: data.thumbnail,
-        status,
-      };
+      return omitBy(
+        {
+          title: data.campainName ?? '',
+          category: data.category ?? '',
+          dontSetExpiredTime: String(data.noDate ?? false),
+          startTime: data.startDate ?? '',
+          expiredTime: data.endDate,
+          methodOfselectWinners: typeWinner,
+          description: data.explanatoryText,
+          noteReward: data.compensationSummary ?? 'NONE',
+          campaignImage: data.thumbnail,
+          status,
+        },
+        (value) => value === undefined || value === null
+      );
   }
 }
 export const adapterDataTask = (data: TypeResponseFormCampaign) =>
