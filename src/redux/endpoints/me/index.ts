@@ -1,5 +1,6 @@
 import { api } from '@/redux/api';
 import updateMe from './update-me';
+import implementTask from './implement-task';
 
 export const meApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -11,6 +12,7 @@ export const meApi = api.injectEndpoints({
         body: queryArg,
       }),
     }),
+    implementTask: implementTask(build),
   }),
   overrideExisting: false,
 });
@@ -19,4 +21,4 @@ export type RequestJoinCompaniesResponse = void;
 export type RequestJoinCompaniesParam = {
   companyCode: string;
 };
-export const { useUpdateMeMutation, useRequestJoinCompaniesMutation } = meApi;
+export const { useUpdateMeMutation, useRequestJoinCompaniesMutation, useImplementTaskMutation } = meApi;

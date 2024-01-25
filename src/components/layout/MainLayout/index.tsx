@@ -6,7 +6,8 @@ function MainLayout({ children }: { children: React.ReactNode }) {
   return (
     <div>
       <MainHeader />
-      <div className="min-h-screen">{children}</div>
+      <div className="container-min-height">{children}</div>
+
       <MainFooter />
     </div>
   );
