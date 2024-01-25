@@ -39,7 +39,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-[100vh] bg-[#D5FFFF] py-[40px] px-[20px]">
+    <div className="container-min-height pb-[56px] bg-[#D5FFFF] py-[40px] px-[20px]">
       <h1 className="text-[20px] font-bold tracking-[0.6px] text-center text-[#04AFAF]">新規会員登録</h1>
       <div className="h-[36px]" />
       <div className="max-w-[345px] mx-auto">

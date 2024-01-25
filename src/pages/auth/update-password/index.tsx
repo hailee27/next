@@ -41,7 +41,9 @@ export default function SettingPasswordPage() {
   return (
     <>
       <div
-        className={clsx(' min-h-[100vh] h-full w-full bg-[#D5FFFF] py-[40px] px-[20px] transition-all duration-300')}
+        className={clsx(
+          'container-min-height pb-[56px] h-full w-full bg-[#D5FFFF] py-[40px] px-[20px] transition-all duration-300'
+        )}
       >
         <form autoComplete="off" onSubmit={handleSubmit(onUpdatePassword)}>
           <div className="bg-white border-[2px] border-[#333] px-[22px] py-[30px] rounded-[16px]">

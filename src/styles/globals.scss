@@ -30,7 +30,7 @@
   }
 }
 
-.ant-checkbox-wrapper {
+.clout-custom-antd-checkbox .ant-checkbox-wrapper {
   .ant-checkbox {
     .ant-checkbox-inner {
       background: #fff !important;
@@ -121,4 +121,25 @@ div.custom-antd-notification {
   .ant-notification-notice-message {
     // color: white !important;
   }
+}
+
+.scrollbar--custom::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #f5f5f5;
+}
+
+.scrollbar--custom::-webkit-scrollbar {
+  width: 6px;
+  background-color: #f5f5f5;
+}
+
+.scrollbar--custom::-webkit-scrollbar-thumb {
+  background-color: #666;
+}
+.custom-scroll-bar::-webkit-scrollbar-thumb:hover {
+  background: #333 !important;
+}
+
+.container-min-height {
+  min-height: calc(100vh - var(--main-header-height-mobile) - var(--main-footer-height-mobile));
 }

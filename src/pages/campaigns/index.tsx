@@ -44,29 +44,31 @@ export default function CampaignsPage({ campaigns, totals }: ICampaignsPage) {
   const router = useRouter();
 
   return (
-    <div className="font-notoSans text-main-text min-h-screen px-[20px] py-[40px] bg-[#D5FFFF] ">
-      <Form
-        onValuesChange={(e, v) => {
-          if (v?.orderBy) {
-            router.push({ query: { ...router.query, orderBy: v?.orderBy } });
-          }
-        }}
-      >
-        <Form.Item initialValue={router?.query?.orderBy ?? 'totalViews'} name="orderBy" noStyle>
-          <SelectShadow
-            options={[
-              { value: 'totalViews', label: '人気順' },
-              { value: 'startTime', label: '新着順' },
-              {
-                value: 'totalPrizeValue',
-                label: '報酬額順',
-              },
-            ]}
-          />
-        </Form.Item>
-      </Form>
-      <div className="h-[32px]" />
-      <div className="flex flex-col space-y-[16px] pb-[32px] ">
+    <div className="font-notoSans text-main-text min-h-screen px-[20px] py-[40px] xl:py-[100px] bg-[#D5FFFF] ">
+      <div className="max-w-[800px] mx-auto">
+        <Form
+          onValuesChange={(e, v) => {
+            if (v?.orderBy) {
+              router.push({ query: { ...router.query, orderBy: v?.orderBy } });
+            }
+          }}
+        >
+          <Form.Item initialValue={router?.query?.orderBy ?? 'totalViews'} name="orderBy" noStyle>
+            <SelectShadow
+              options={[
+                { value: 'totalViews', label: '人気順' },
+                { value: 'startTime', label: '新着順' },
+                {
+                  value: 'totalPrizeValue',
+                  label: '報酬額順',
+                },
+              ]}
+            />
+          </Form.Item>
+        </Form>
+      </div>
+      <div className="h-[32px] xl:h-[80px]" />
+      <div className="grid grid-cols-1 gap-[16px] xl:gap-[24px] md:grid-cols-2 xl:grid-cols-3 max-w-[1053px] mx-auto">
         {Array.isArray(campaigns) && campaigns?.length > 0
           ? campaigns?.map((item) => <CampaignCardItem item={item as any} key={item.id} viewMode="NO_IMAGE" />)
           : ''}

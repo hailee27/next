@@ -36,7 +36,7 @@ export default function CCardShadow({ disableClick, onClickCard, children }: ICC
         onClickCard?.();
       }}
     >
-      <div className="shadowCardInner">
+      <div className={clsx('shadowCardInner')}>
         <div className="card-inner">
           <div className="card-shadow" />
           <div className="card-content" ref={cardRef}>

@@ -107,7 +107,7 @@ export default function MainHeader() {
       className="font-notoSans  bg-white"
       // /sticky z-[999999] top-0
     >
-      <div className="h-[64px] px-[20px] flex justify-between items-center w-full  border-t-[2px] border-b-[2px] border-[#333] border-solid">
+      <div className="h-[var(--main-header-height-mobile)] px-[20px] flex justify-between items-center w-full  border-t-[2px] border-b-[2px] border-[#333] border-solid">
         <Link className="w-[81px] h-[24px] hover:cursor-pointer" href="/">
           <Image
             alt="footer logo"

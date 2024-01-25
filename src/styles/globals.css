@@ -7,6 +7,9 @@
   font-family: 'Noto Sans JP', sans-serif;
   --font-noto-san-jp: 'Noto Sans JP', sans-serif;
   --font-montserrat: 'Montserrat', sans-serif;
+  --main-header-height-mobile: 64px;
+  --main-header-height-pc: 85px;
+  --main-footer-height-mobile: 389px;
 }
 input[type='number'] {
   -moz-appearance: textfield;

@@ -2,17 +2,18 @@ import CampaignRewardCardItem from '@/components/CampaignRewardCardItem';
 import CButtonShadow from '@/components/common/CButtonShadow';
 import CModalWapper from '@/components/common/CModalWapper';
 import ArrowDown from '@/components/common/icons/ArrowDown';
-import { TypeCampaign } from '@/redux/endpoints/campaign';
-import { useMemo, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
+import { CampaignDetailContext } from '../CampainContext';
 
-export default function CampaignRewardSection({ campaign }: { campaign: TypeCampaign }) {
+export default function CampaignRewardSection() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { campaignDetail, campaignRewards } = useContext(CampaignDetailContext);
 
-  const sortCampaignRewardIndex = useMemo(
-    () => (Array.isArray(campaign?.CampaignReward) ? campaign?.CampaignReward?.sort((a, b) => a.index - b.index) : []),
-    [campaign?.CampaignReward]
-  );
+  const sortCampaignRewardIndex = useMemo(() => {
+    const results = campaignRewards && Array.isArray(campaignRewards) ? [...campaignRewards] : [];
 
+    return results?.sort((a, b) => a.index - b.index);
+  }, [campaignRewards]);
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -22,12 +23,12 @@ export default function CampaignRewardSection({ campaign }: { campaign: TypeCamp
   };
   return (
     <>
-      {campaign?.methodOfselectWinners !== 'MANUAL_SELECTION' && (
+      {campaignDetail?.methodOfselectWinners !== 'MANUAL_SELECTION' && (
         <div className="flex gap-[8px] flex-col">
           {sortCampaignRewardIndex
             ?.slice(0, 3)
             ?.map((item) => <CampaignRewardCardItem campaignReward={item} key={`list${item?.id}`} />)}
-          {Array.isArray(campaign?.CampaignReward) ? (
+          {Array.isArray(campaignRewards) ? (
             <div className="mt-[32px] flex items-center justify-center">
               <div className="w-[203px] h-[53px]">
                 <CButtonShadow

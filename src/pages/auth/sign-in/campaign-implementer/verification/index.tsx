@@ -52,7 +52,9 @@ export default function VerificationPage() {
   return (
     <Spin spinning={isLoading || isSendVerificationCode}>
       <div
-        className={clsx(' min-h-[100vh] h-full w-full bg-[#D5FFFF] py-[40px] px-[20px] transition-all duration-300')}
+        className={clsx(
+          'container-min-height pb-[56px] h-full w-full bg-[#D5FFFF] py-[40px] px-[20px] transition-all duration-300'
+        )}
       >
         <div className="max-w-[345px] mx-auto">
           <div className="bg-white border-[2px] border-[#333] px-[22px] py-[30px] rounded-[16px]">

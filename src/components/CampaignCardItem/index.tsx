@@ -22,100 +22,102 @@ export default function CampaignCardItem({
     : [];
   return (
     <CShadowCard onClickCard={() => router.push(`/campaigns/${item?.id}`)}>
-      <div className="font-notoSans px-[24px] py-[32px] flex flex-col gap-[16px] ">
-        <div className=" flex gap-[10px] items-center  ">
-          <div className="w-[32px] h-[32px] rounded-full  overflow-hidden">
-            <Image
-              alt="company logo"
-              className="w-full h-full object-cover"
-              height="0"
-              sizes="100vw"
-              src={item?.company?.image?.imageUrl ?? '/assets/images/ImagePlaceholder.png'}
-              width="0"
-            />
+      <div className="font-notoSans px-[24px] py-[32px] flex flex-col gap-[16px] h-full justify-between">
+        <div className=" flex flex-col gap-[16px]  ">
+          <div className=" flex gap-[10px] items-center  ">
+            <div className="w-[32px] h-[32px] rounded-full  overflow-hidden">
+              <Image
+                alt="company logo"
+                className="w-full h-full object-cover"
+                height="0"
+                sizes="100vw"
+                src={item?.company?.image?.imageUrl ?? '/assets/images/ImagePlaceholder.png'}
+                width="0"
+              />
+            </div>
+            <p className="font-bold text-[14px] tracking-[0.42px] leading-[21px] text-main-text ">
+              {item?.company?.name ?? '-'}
+            </p>
           </div>
-          <p className="font-bold text-[14px] tracking-[0.42px] leading-[21px] text-main-text ">
-            {item?.company?.name ?? '-'}
-          </p>
-        </div>
-        {viewMode === 'HAS_IMAGE' ? (
-          <div className="h-[184px] rounded-[5px] overflow-hidden border-[#333] border-[2px] relative  ">
-            <Image
-              alt="campaign image"
-              className="w-full h-full object-cover  blur-[4px]"
-              height="0"
-              sizes="100vw"
-              src={item?.image?.imageUrl ?? '/assets/images/ImagePlaceholder.png'}
-              width="0"
-            />
-            <div className="absolute z-[1] top-0 left-0 w-full h-full">
+          {viewMode === 'HAS_IMAGE' ? (
+            <div className="h-[184px] rounded-[5px] overflow-hidden border-[#333] border-[2px] relative  ">
               <Image
                 alt="campaign image"
-                className="w-full h-full object-contain  "
+                className="w-full h-full object-cover  blur-[4px]"
                 height="0"
                 sizes="100vw"
                 src={item?.image?.imageUrl ?? '/assets/images/ImagePlaceholder.png'}
                 width="0"
               />
+              <div className="absolute z-[1] top-0 left-0 w-full h-full">
+                <Image
+                  alt="campaign image"
+                  className="w-full h-full object-contain  "
+                  height="0"
+                  sizes="100vw"
+                  src={item?.image?.imageUrl ?? '/assets/images/ImagePlaceholder.png'}
+                  width="0"
+                />
+              </div>
             </div>
-          </div>
-        ) : (
-          ''
-        )}
-
-        <div>
-          <h3 className="font-bold text-[16px] tracking-[0.48px] leading-[24px] mb-[8px] text-main-text line-clamp-2 text-ellipsis">
-            {item?.title ?? '-'}
-          </h3>
-          {item?.methodOfselectWinners === 'MANUAL_SELECTION' && (
-            <div
-              className="text-[13px] line-clamp-2 text-ellipsis  mb-[8px]"
-              dangerouslySetInnerHTML={{ __html: item?.noteReward?.replace(/\r?\n/g, '<br/>') ?? '' }}
-            />
+          ) : (
+            ''
           )}
-          <div className="text-[13px] text-[#777] flex flex-col space-y-[6px]">
-            {item?.methodOfselectWinners !== 'MANUAL_SELECTION' && (
-              <>
-                <span>
-                  報酬：
+
+          <div>
+            <h3 className="font-bold text-[16px] tracking-[0.48px] leading-[24px] mb-[8px] text-main-text line-clamp-2 text-ellipsis">
+              {item?.title ?? '-'}
+            </h3>
+            {item?.methodOfselectWinners === 'MANUAL_SELECTION' && (
+              <div
+                className="text-[13px] line-clamp-2 text-ellipsis  mb-[8px]"
+                dangerouslySetInnerHTML={{ __html: item?.noteReward?.replace(/\r?\n/g, '<br/>') ?? '' }}
+              />
+            )}
+            <div className="text-[13px] text-[#777] flex flex-col space-y-[6px]">
+              {item?.methodOfselectWinners !== 'MANUAL_SELECTION' && (
+                <>
                   <span>
-                    {Array.isArray(sortCampaignReward) && sortCampaignReward?.length >= 2 ? (
-                      <>
+                    報酬：
+                    <span>
+                      {Array.isArray(sortCampaignReward) && sortCampaignReward?.length >= 2 ? (
+                        <>
+                          <span>
+                            <span className="font-montserrat">{sortCampaignReward[0]?.amountOfMoney ?? '--'}</span>円
+                          </span>
+                          <span> 〜 </span>
+                          <span>
+                            <span className="font-montserrat">
+                              {sortCampaignReward[sortCampaignReward.length - 1]?.amountOfMoney ?? '--'}
+                            </span>
+                            円
+                          </span>
+                        </>
+                      ) : sortCampaignReward?.length === 1 ? (
                         <span>
                           <span className="font-montserrat">{sortCampaignReward[0]?.amountOfMoney ?? '--'}</span>円
                         </span>
-                        <span> 〜 </span>
-                        <span>
-                          <span className="font-montserrat">
-                            {sortCampaignReward[sortCampaignReward.length - 1]?.amountOfMoney ?? '--'}
-                          </span>
-                          円
-                        </span>
-                      </>
-                    ) : sortCampaignReward?.length === 1 ? (
-                      <span>
-                        <span className="font-montserrat">{sortCampaignReward[0]?.amountOfMoney ?? '--'}</span>円
-                      </span>
-                    ) : (
-                      '--'
-                    )}
+                      ) : (
+                        '--'
+                      )}
+                    </span>
                   </span>
+                  <span>
+                    当選者枠： <span className="font-montserrat">{item?.numberOfPrizes ?? '---'}</span>名
+                  </span>
+                </>
+              )}
+              <span>
+                報酬：
+                <span className="font-montserrat">
+                  {moment(item?.startTime)?.isValid() ? moment(item?.startTime)?.format('MM/DD hh:mm') : '--/-- --:--'}
+                  <span> 〜 </span>
+                  {moment(item?.expiredTime)?.isValid()
+                    ? moment(item?.expiredTime)?.format('MM/DD hh:mm')
+                    : '--/-- --:--'}
                 </span>
-                <span>
-                  当選者枠： <span className="font-montserrat">{item?.numberOfPrizes ?? '---'}</span>名
-                </span>
-              </>
-            )}
-            <span>
-              報酬：
-              <span className="font-montserrat">
-                {moment(item?.startTime)?.isValid() ? moment(item?.startTime)?.format('MM/DD hh:mm') : '--/-- --:--'}
-                <span> 〜 </span>
-                {moment(item?.expiredTime)?.isValid()
-                  ? moment(item?.expiredTime)?.format('MM/DD hh:mm')
-                  : '--/-- --:--'}
               </span>
-            </span>
+            </div>
           </div>
         </div>
         <div className="min-w-[279px] h-[47px]">

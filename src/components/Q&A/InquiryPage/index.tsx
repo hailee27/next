@@ -9,9 +9,12 @@ import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import toastMessage from '@/utils/func/toastMessage';
 import { Form } from 'antd';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
 
 function Inquiry() {
+  const router = useRouter();
+
   const [postContact] = usePostContactMutation();
   const onSubmit = async (values) => {
     try {
@@ -19,7 +22,7 @@ function Inquiry() {
       await postContact({
         ...values,
       }).unwrap();
-      toastMessage('Your request has been sent successfully. Please await a response from the Clout Management Team');
+      router.push('/inquiry/feedback');
     } catch (err) {
       toastMessage(getErrorMessage(err), 'error');
     }
