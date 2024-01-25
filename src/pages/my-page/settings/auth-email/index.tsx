@@ -35,13 +35,13 @@ export default function SettingAuthEmailPage() {
 
   return (
     <AuthCheck>
-      <form onSubmit={handleSubmit(onUpdateEmail)}>
+      <div
+        className={clsx(
+          'container-min-height pb-[56px] h-full w-full bg-[#D5FFFF] py-[40px] px-[20px] transition-all duration-300'
+        )}
+      >
         <Spin spinning={isLoading}>
-          <div
-            className={clsx(
-              ' min-h-[100vh] h-full w-full bg-[#D5FFFF] py-[40px] px-[20px] transition-all duration-300'
-            )}
-          >
+          <form className="max-w-[335px] mx-auto" onSubmit={handleSubmit(onUpdateEmail)}>
             <h1 className="text-[20px] font-bold text-[#04AFAF] tracking-[0.6px] text-center ">
               メール・パスワード登録
             </h1>
@@ -78,9 +78,9 @@ export default function SettingAuthEmailPage() {
                 </div>
               </div>
             </div>
-          </div>
+          </form>
         </Spin>
-      </form>
+      </div>
     </AuthCheck>
   );
 }

@@ -4,6 +4,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-console */
 import CampaignDetail from '@/components/CampaignDetail';
+import CampaignDetailProvider from '@/components/CampaignDetail/CampainContext';
 import Completion from '@/components/CampaignDetail/Completion';
 import Loser from '@/components/CampaignDetail/Loser';
 import RecommedCampaignsSection from '@/components/CampaignDetail/RecommedCampaignsSection';
@@ -74,7 +75,6 @@ export default function CampaignDetailPage({
   campaignsRecommend: TypeCampaign[] | null;
   viewType: 'completion' | 'winning' | 'losing' | 'detail';
 }) {
-  // const [isOpenModalSetupAuthEmail, setIsOpenModalSetupAuthEmail] = useState(false);
   const { accessToken } = useSelector((state: RootState) => state.auth);
   const router = useRouter();
 
@@ -111,7 +111,11 @@ export default function CampaignDetailPage({
         return <Loser />;
       case 'detail':
       default:
-        return <CampaignDetail campaign={campaign} />;
+        return (
+          <CampaignDetailProvider campaign={campaignDetail}>
+            <CampaignDetail />
+          </CampaignDetailProvider>
+        );
     }
   }, [viewType, campaign]);
 
@@ -128,21 +132,6 @@ export default function CampaignDetailPage({
         )}
 
         <div className="h-[56px]" />
-
-        {/* <CModalWapper
-        bottomBtnTitle="登録"
-        bottomBtnType="OK"
-        isOpen={isModalOpen}
-        modalWidth={368}
-        onCancel={handleCancel}
-        onOk={handleCancel}
-      >
-        <div>
-          <h3 className="text-[24px] font-bold ">メール・パスワード登録</h3>
-          <div className="h-[24px]" />
-          <p>キャンペーンの応募にはメールアドレス・パスワードの登録が必要になります。</p>
-        </div>
-      </CModalWapper> */}
       </div>
     );
   }

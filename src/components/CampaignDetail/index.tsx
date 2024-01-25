@@ -1,29 +1,28 @@
 /* eslint-disable react/no-danger */
 /* eslint-disable no-nested-ternary */
 
-import { TypeCampaign } from '@/redux/endpoints/campaign';
 import { useGetMasterDataQuery } from '@/redux/endpoints/masterData';
+import { getMasterDataLabel } from '@/utils/func/convertCampaign';
 import moment from 'moment';
 import Image from 'next/image';
-import { useMemo } from 'react';
-import { getMasterDataLabel } from '@/utils/func/convertCampaign';
+import { useContext, useMemo } from 'react';
 import CalendarIcon from '../common/icons/CalendarIcon';
 import YenIcon from '../common/icons/YenIcon';
 import CampaignRewardSection from './CampaignRewardSection';
 import CampaignTasksSection from './CampaignTasksSection';
+import { CampaignDetailContext } from './CampainContext';
 
-export default function CampaignDetail({ campaign }: { campaign: TypeCampaign | null | undefined }) {
+export default function CampaignDetail() {
   const { data } = useGetMasterDataQuery();
+  const { campaignDetail, campaignRewards, campaignTasks } = useContext(CampaignDetailContext);
 
-  const campaignCategory = getMasterDataLabel(data, 'CATEGORY_CAMPAIGN', campaign?.category ?? '');
+  const campaignCategory = getMasterDataLabel(data, 'CATEGORY_CAMPAIGN', campaignDetail?.category ?? '');
 
-  const sortCampaignRewardPrice = useMemo(
-    () =>
-      Array.isArray(campaign?.CampaignReward)
-        ? campaign?.CampaignReward?.sort((a, b) => a.amountOfMoney - b.amountOfMoney)
-        : [],
-    [campaign?.CampaignReward]
-  );
+  const sortCampaignRewardPrice = useMemo(() => {
+    const results = campaignRewards && Array.isArray(campaignRewards) ? [...campaignRewards] : [];
+
+    return results?.sort((a, b) => a.amountOfMoney - b.amountOfMoney);
+  }, [campaignRewards]);
 
   return (
     <>
@@ -36,16 +35,16 @@ export default function CampaignDetail({ campaign }: { campaign: TypeCampaign | 
                 className="w-full h-full object-cover"
                 height="0"
                 sizes="100vw"
-                src={campaign?.company?.image?.imageUrl ?? '/assets/images/ImagePlaceholder.png'}
+                src={campaignDetail?.company?.image?.imageUrl ?? '/assets/images/ImagePlaceholder.png'}
                 width="0"
               />
             </div>
             <p className="font-bold text-[14px] tracking-[0.42px] leading-[21px] text-main-text ">
-              {campaign?.company?.name ?? '-'}
+              {campaignDetail?.company?.name ?? '-'}
             </p>
           </div>
           <div>
-            <h3 className="font-bold text-[20px] tracking-[0.6px] text-main-text ">{campaign?.title ?? '-'}</h3>
+            <h3 className="font-bold text-[20px] tracking-[0.6px] text-main-text ">{campaignDetail?.title ?? '-'}</h3>
             <div className="h-[8px]" />
             {campaignCategory ? (
               <span className="inline-flex justify-center items-center rounded-full px-[12px] py-[3px] border-gray-1 border-[1px]">
@@ -61,30 +60,30 @@ export default function CampaignDetail({ campaign }: { campaign: TypeCampaign | 
               //   className="w-full h-full object-contain"
               height={335}
               sizes="100vw"
-              src={campaign?.image?.imageUrl ?? '/assets/images/ImagePlaceholder.png'}
+              src={campaignDetail?.image?.imageUrl ?? '/assets/images/ImagePlaceholder.png'}
               width={335}
             />
           </div>
           <div className=" flex flex-col gap-[6px] text-main-text">
-            {campaign?.methodOfselectWinners === 'MANUAL_SELECTION' && (
+            {campaignDetail?.methodOfselectWinners === 'MANUAL_SELECTION' && (
               <p
                 className="text-[14px]   mb-[2px]"
-                dangerouslySetInnerHTML={{ __html: campaign?.noteReward?.replace(/\r?\n/g, '<br/>') ?? '' }}
+                dangerouslySetInnerHTML={{ __html: campaignDetail?.noteReward?.replace(/\r?\n/g, '<br/>') ?? '' }}
               />
             )}
             <p className="flex gap-[12px] items-center text-[14px] tracking-[0.42px] ">
               <CalendarIcon className="w-[16px]" />
               <span className="font-montserrat">
-                {moment(campaign?.startTime)?.isValid()
-                  ? moment(campaign?.startTime)?.format('MM/DD hh:mm')
+                {moment(campaignDetail?.startTime)?.isValid()
+                  ? moment(campaignDetail?.startTime)?.format('MM/DD hh:mm')
                   : '--/-- --:--'}
                 <span> 〜 </span>
-                {moment(campaign?.expiredTime)?.isValid()
-                  ? moment(campaign?.expiredTime)?.format('MM/DD hh:mm')
+                {moment(campaignDetail?.expiredTime)?.isValid()
+                  ? moment(campaignDetail?.expiredTime)?.format('MM/DD hh:mm')
                   : '--/-- --:--'}
               </span>
             </p>
-            {campaign?.methodOfselectWinners !== 'MANUAL_SELECTION' && (
+            {campaignDetail?.methodOfselectWinners !== 'MANUAL_SELECTION' && (
               <p className="flex gap-[12px] items-center text-[14px] tracking-[0.42px] ">
                 <YenIcon className="w-[16px]" />
                 <span>
@@ -117,11 +116,11 @@ export default function CampaignDetail({ campaign }: { campaign: TypeCampaign | 
       <div className=" bg-[url('/assets/images/campaign_bg.png')] bg-no-repeat bg-cover bg-center rounded-[32px] px-[20px] py-[56px] flex flex-col gap-[48px]">
         <div
           className="display-text-editer-content"
-          dangerouslySetInnerHTML={{ __html: campaign?.description ?? '' }}
+          dangerouslySetInnerHTML={{ __html: campaignDetail?.description ?? '' }}
         />
-        {campaign ? <CampaignRewardSection campaign={campaign} /> : ''}
+        {campaignRewards && Array.isArray(campaignRewards) && campaignRewards?.length ? <CampaignRewardSection /> : ''}
       </div>
-      {Array.isArray(campaign?.Task) && campaign?.Task?.length ? <CampaignTasksSection campaign={campaign} /> : ''}
+      {campaignTasks && Array.isArray(campaignTasks) && campaignTasks?.length ? <CampaignTasksSection /> : ''}
     </>
   );
 }
