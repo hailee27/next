@@ -81,6 +81,17 @@ export type TypeCampaignReward = {
   createdAt: string;
 };
 export type TypeTask = {
+  UserTask?:
+    | {
+        answer: {
+          taskId: number;
+        };
+        createdAt: string;
+        id: number;
+        taskId: number;
+        userId: number;
+      }[]
+    | null;
   id: number;
   campaignId: string;
   type: string;

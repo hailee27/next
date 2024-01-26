@@ -38,7 +38,7 @@ export const getMasterDataLabel = (
   return result;
 };
 
-export const convertCampaignTask = (task: TypeTask | null, masterData: MasterDataResponse | null) => {
+export const convertCampaignTask = (task: TypeTask | null) => {
   let result: TasksConvert | null = null;
   try {
     switch (task?.type) {

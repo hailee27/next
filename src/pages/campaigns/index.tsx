@@ -70,9 +70,10 @@ export default function CampaignsPage({ campaigns, totals }: ICampaignsPage) {
       <div className="h-[32px] xl:h-[80px]" />
       <div className="grid grid-cols-1 gap-[16px] xl:gap-[24px] md:grid-cols-2 xl:grid-cols-3 max-w-[1053px] mx-auto">
         {Array.isArray(campaigns) && campaigns?.length > 0
-          ? campaigns?.map((item) => <CampaignCardItem item={item as any} key={item.id} viewMode="NO_IMAGE" />)
+          ? campaigns?.map((item) => <CampaignCardItem item={item as any} key={item.id} />)
           : ''}
       </div>
+      <div className="h-[32px] xxl:h-[80px]" />
       <PaginationRouterControl countItems={campaigns?.length ?? 0} total={totals ?? 0} />
     </div>
   );

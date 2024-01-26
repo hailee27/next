@@ -7,17 +7,53 @@ import ArrowDown from '@/components/common/icons/ArrowDown';
 import { RootState } from '@/redux/store';
 import { convertCampaignTask } from '@/utils/func/convertCampaign';
 import { useRouter } from 'next/router';
-import { useContext, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
+import toastMessage from '@/utils/func/toastMessage';
+import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import { CampaignDetailContext } from '../CampainContext';
 import TaskItem from './TaskItem';
 
 export default function CampaignTasksSection() {
-  const { masterData } = useSelector((store: RootState) => store.common);
   const { user } = useSelector((state: RootState) => state.auth);
   const router = useRouter();
   const [isOpenModalSetupAuthEmail, setIsOpenModalSetupAuthEmail] = useState(false);
   const { campaignDetail, campaignTasks } = useContext(CampaignDetailContext);
+
+  const isDisableRegisterBtn = useMemo(() => {
+    if (!user?.id) {
+      return true;
+    }
+
+    const hasTaskNotDone = campaignTasks?.some(
+      (item) =>
+        !Object.prototype.hasOwnProperty.call(item, 'UserTask') ||
+        !item?.UserTask ||
+        (item?.UserTask && !Array.isArray(item?.UserTask)) ||
+        (item?.UserTask && Array.isArray(item?.UserTask) && !item?.UserTask?.length)
+    );
+
+    if (user?.id && hasTaskNotDone === true) {
+      return true;
+    }
+    return false;
+  }, [user?.id, campaignDetail, campaignTasks]);
+
+  const handleRegisterCampaign = async () => {
+    try {
+      if (user?.id) {
+        if (campaignDetail?.methodOfselectWinners === 'AUTO_PRIZEE_DRAW') {
+          toastMessage('demo completed random', 'success');
+        }
+        if (campaignDetail?.methodOfselectWinners === 'MANUAL_SELECTION' && (!user?.emailId || !user?.havePassword)) {
+          setIsOpenModalSetupAuthEmail(true);
+        }
+      }
+    } catch (e) {
+      toastMessage(getErrorMessage(e), 'error');
+    }
+  };
+
   return (
     <>
       <div className="py-[56px] px-[20px]">
@@ -29,9 +65,17 @@ export default function CampaignTasksSection() {
             Array.isArray(campaignTasks) &&
             campaignTasks?.length > 0 &&
             campaignTasks?.map((item) => {
-              const result = convertCampaignTask(item, masterData);
+              const result = convertCampaignTask(item);
               if (result) {
-                return <TaskItem key={item?.id} task={result} />;
+                return (
+                  <TaskItem
+                    isLoggedUserImplementedTask={Boolean(
+                      user?.id && item?.UserTask && Array.isArray(item?.UserTask) && item?.UserTask?.length
+                    )}
+                    key={item?.id}
+                    task={result}
+                  />
+                );
               }
               return '';
             })}
@@ -40,18 +84,11 @@ export default function CampaignTasksSection() {
         <div className=" flex items-center justify-center">
           <div className="w-[262px] h-[53px]">
             <CButtonShadow
-              classBgColor="bg-[#c2c2c2]"
-              classBorderColor="border-[#c2c2c2]"
+              classBgColor={isDisableRegisterBtn ? 'bg-[#c2c2c2]' : 'bg-[#333]'}
+              classBorderColor={isDisableRegisterBtn ? 'border-[#c2c2c2]' : 'border-[#333]'}
               classShadowColor="bg-[#fff]"
-              // isDisable
-              onClick={() => {
-                if (
-                  campaignDetail?.methodOfselectWinners === 'MANUAL_SELECTION' &&
-                  (!user?.emailId || !user?.havePassword)
-                ) {
-                  setIsOpenModalSetupAuthEmail(true);
-                }
-              }}
+              isDisable={isDisableRegisterBtn}
+              onClick={handleRegisterCampaign}
               textClass="text-white text-[14px] font-bold tracking-[0.42px]"
               title="キャンペーンに応募する"
               withIcon={{

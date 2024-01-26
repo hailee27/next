@@ -8,20 +8,30 @@ import { TasksConvert } from '@/utils/func/convertCampaign';
 import clsx from 'clsx';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useRouter } from 'next/router';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import toastMessage from '@/utils/func/toastMessage';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
+import { useImplementTaskMutation } from '@/redux/endpoints/me';
 import ModalFreeTextContent from './ModalFreeTextContent';
 import ModalConnectX from './ModalConnectX';
 import ModalChooseMultiple from './ModalChooseMultiple';
 import ModalChooseOne from './ModalChooseOne';
+import { CampaignDetailContext } from '../CampainContext';
 
-export default function TaskItem({ task }: { task: TasksConvert }) {
+export default function TaskItem({
+  task,
+  isLoggedUserImplementedTask,
+}: {
+  task: TasksConvert;
+  isLoggedUserImplementedTask: boolean;
+}) {
+  const [onImplementTask] = useImplementTaskMutation();
   const router = useRouter();
   const { accessToken, user } = useSelector((state: RootState) => state.auth);
+  const { onRefetchCampaignTasks } = useContext(CampaignDetailContext);
 
   const [modalState, setModalState] = useState<{
     isOpenModal: boolean;
@@ -52,8 +62,11 @@ export default function TaskItem({ task }: { task: TasksConvert }) {
     newWindow?.focus();
   };
 
-  const onClickCard = () => {
+  const onClickCard = async () => {
     try {
+      if (isLoggedUserImplementedTask) {
+        return;
+      }
       if (!accessToken || !user || (user && !user?.id)) {
         router.push('/auth/sign-in/campaign-implementer');
         return;
@@ -62,6 +75,10 @@ export default function TaskItem({ task }: { task: TasksConvert }) {
         switch (task?.type) {
           case 'OPEN_LINK': {
             if (task?.link) handleOpenPopup(task?.link);
+            await onImplementTask({
+              taskId: task?.id ?? '',
+            });
+            await onRefetchCampaignTasks();
             break;
           }
           case 'FAQ_FREE_TEXT':
@@ -99,14 +116,25 @@ export default function TaskItem({ task }: { task: TasksConvert }) {
             )}
           >
             <div className="w-[24px] h-[24px]">
-              <Image
-                alt="campaign image"
-                className="w-full h-full object-cover"
-                height="0"
-                sizes="100vw"
-                src="/assets/images/NotCheckIcon.png"
-                width="0"
-              />
+              {isLoggedUserImplementedTask ? (
+                <Image
+                  alt="campaign image"
+                  className="w-full h-full object-cover"
+                  height="0"
+                  sizes="100vw"
+                  src="/assets/images/CheckedIcon.png"
+                  width="0"
+                />
+              ) : (
+                <Image
+                  alt="campaign image"
+                  className="w-full h-full object-cover"
+                  height="0"
+                  sizes="100vw"
+                  src="/assets/images/NotCheckIcon.png"
+                  width="0"
+                />
+              )}
             </div>
             <div className="flex-1">
               <div className="text-[16px] font-bold tracking-[0.48px] flex items-center gap-[4px] flex-wrap">
@@ -130,6 +158,7 @@ export default function TaskItem({ task }: { task: TasksConvert }) {
             content: undefined,
           });
         }}
+        task={task}
       />
       <ModalChooseOne
         isOpen={modalState?.isOpenModal && modalState?.content === 'FAQ_CHOOSE_ONE'}
@@ -139,7 +168,7 @@ export default function TaskItem({ task }: { task: TasksConvert }) {
             content: undefined,
           });
         }}
-        taskInfo={task?.taskInfo}
+        task={task}
       />
       <ModalChooseMultiple
         isOpen={modalState?.isOpenModal && modalState?.content === 'FAQ_CHOOSE_MULTIPLE'}
@@ -149,7 +178,7 @@ export default function TaskItem({ task }: { task: TasksConvert }) {
             content: undefined,
           });
         }}
-        taskInfo={task?.taskInfo}
+        task={task}
       />
       <ModalConnectX
         isOpen={modalState?.isOpenModal && modalState?.content === 'CONNECT_X'}

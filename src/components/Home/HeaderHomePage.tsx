@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import { useRouter } from 'next/router';
 import { Image } from 'antd';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
+import { useMediaQuery } from 'usehooks-ts';
 import CButtonShadow from '../common/CButtonShadow';
 import SearchIcon from '../common/icons/SearchIcon';
 import FileIcon from '../common/icons/FileIcon';
@@ -10,16 +12,12 @@ import FileIcon from '../common/icons/FileIcon';
 function HeaderHomePage() {
   const { accessToken } = useSelector((store: RootState) => store.auth);
   const router = useRouter();
+  const matchesMD = useMediaQuery('(min-width: 768px)');
   return (
-    <div
-      className="flex justify-between flex-col min-h-[693px]"
-      style={{
-        background: 'linear-gradient(2deg, rgba(160, 255, 158, 0.50) 1.61%, rgba(166, 255, 255, 0.50) 98.38%), #FFF',
-      }}
-    >
-      <div className="flex-1 text-center relative">
+    <div className="flex justify-between flex-col min-h-[693px] bg-[url('/assets/images/home_banner_bg_sp.png')] bg-no-repeat bg-cover bg-center">
+      <div className="flex-1 text-center relative w-[335px] mx-auto">
         <Image alt="" className="mt-[25px]" preview={false} src="/assets/images/banner.png" />
-        <div className="absolute w-full top-[261px] px-[20px]">
+        <div className="absolute w-full top-[261px] ">
           <div className="flex flex-col items-start space-y-[8px]">
             <span className="text-[30px] font-bold  px-[14px] bg-white">お気に入りの</span>
             <span className="text-[30px] font-bold  px-[14px] bg-white">コミュニティに</span>
@@ -33,7 +31,7 @@ function HeaderHomePage() {
           </p>
         </div>
       </div>
-      <div className="px-[20px] flex flex-col gap-[8px] mb-[40px]">
+      <div className=" flex flex-col gap-[8px] mb-[40px] w-[335px] mx-auto">
         <div className="h-[66px]">
           <CButtonShadow
             classBgColor="bg-[#333]"
