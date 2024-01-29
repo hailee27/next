@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { api } from '../api';
 
 const injectedRtkApi = api.injectEndpoints({
@@ -56,6 +57,19 @@ const injectedRtkApi = api.injectEndpoints({
             token: queryArg?.token,
           };
         }
+        return config;
+      },
+    }),
+    createGacha: build.mutation<any, DetailCampaignParams>({
+      query: (queryArg) => {
+        const config: {
+          url: string;
+          method: string;
+        } = {
+          url: `/campaigns/${queryArg.campaignId}/gacha`,
+          method: 'POST',
+        };
+
         return config;
       },
     }),
@@ -157,6 +171,15 @@ export type TypeCampaign = {
       imageUrl: string;
     };
   };
+  UserClaimCampaign?: {
+    id: number;
+    userId: number;
+    campaignId: string;
+    award: {
+      id: number;
+      isWin?: boolean | null;
+    };
+  }[];
 };
 export type ListCampaignResponse = {
   campaigns: TypeCampaign[];
@@ -258,4 +281,5 @@ export const {
   useLazyGetListCampaignQuery,
   useGetDetailCampaignQuery,
   useLazyGetDetailCampaignQuery,
+  useCreateGachaMutation,
 } = injectedRtkApi;

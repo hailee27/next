@@ -15,6 +15,9 @@ import toastMessage from '@/utils/func/toastMessage';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import { useImplementTaskMutation } from '@/redux/endpoints/me';
+import { useLazyGetDetailCampaignQuery } from '@/redux/endpoints/campaign';
+import moment from 'moment';
+import { Spin } from 'antd';
 import ModalFreeTextContent from './ModalFreeTextContent';
 import ModalConnectX from './ModalConnectX';
 import ModalChooseMultiple from './ModalChooseMultiple';
@@ -33,6 +36,8 @@ export default function TaskItem({
   const { accessToken, user } = useSelector((state: RootState) => state.auth);
   const { onRefetchCampaignTasks } = useContext(CampaignDetailContext);
 
+  const [triggerGetCampaignInfo] = useLazyGetDetailCampaignQuery();
+  const [isLoading, setIsLoading] = useState(false);
   const [modalState, setModalState] = useState<{
     isOpenModal: boolean;
     content: 'FAQ_FREE_TEXT' | 'FAQ_CHOOSE_ONE' | 'FAQ_CHOOSE_MULTIPLE' | 'CONNECT_X' | undefined;
@@ -64,13 +69,28 @@ export default function TaskItem({
 
   const onClickCard = async () => {
     try {
-      if (isLoggedUserImplementedTask) {
-        return;
-      }
+      setIsLoading(true);
       if (!accessToken || !user || (user && !user?.id)) {
         router.push('/auth/sign-in/campaign-implementer');
         return;
       }
+      if (isLoggedUserImplementedTask) {
+        return;
+      }
+
+      const campaignInfo = await triggerGetCampaignInfo({
+        campaignId: router?.query?.slug?.[0] ?? '',
+        token: 'user',
+      }).unwrap();
+
+      const now = moment();
+      const nowClone = now.clone().toISOString();
+
+      if (moment(campaignInfo?.expiredTime)?.isValid() && moment(campaignInfo?.expiredTime)?.isSameOrBefore(nowClone)) {
+        toastMessage('The campaign has expired', 'error');
+        return;
+      }
+
       if (user?.identities && user?.identities?.length > 0) {
         switch (task?.type) {
           case 'OPEN_LINK': {
@@ -102,11 +122,13 @@ export default function TaskItem({
       }
     } catch (err: any) {
       toastMessage(getErrorMessage(err), 'error');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <>
+    <Spin spinning={isLoading}>
       <CShadowCard onClickCard={onClickCard}>
         <div className="p-[24px] flex gap-[8px] flex-col">
           <div
@@ -189,6 +211,6 @@ export default function TaskItem({
           });
         }}
       />
-    </>
+    </Spin>
   );
 }

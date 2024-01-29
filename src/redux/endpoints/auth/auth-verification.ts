@@ -10,6 +10,7 @@ export default function authVerification(build: EndpointBuilder<BaseQueryFn, str
       sendBy?: 'MESSAGE' | 'CALL';
       userId?: number;
       phoneNumber?: string;
+      isCheckPhone?: boolean;
     }
   >({
     query(body) {

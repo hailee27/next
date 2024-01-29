@@ -5,17 +5,9 @@
 /* eslint-disable no-console */
 import CampaignDetail from '@/components/CampaignDetail';
 import CampaignDetailProvider from '@/components/CampaignDetail/CampainContext';
-import Completion from '@/components/CampaignDetail/Completion';
-import Loser from '@/components/CampaignDetail/Loser';
 import RecommedCampaignsSection from '@/components/CampaignDetail/RecommedCampaignsSection';
-import Winner from '@/components/CampaignDetail/Winner';
 import { CampaignApi, ListCampaignParams, TypeCampaign } from '@/redux/endpoints/campaign';
-import { useGetReWardsQuery } from '@/redux/endpoints/reWard';
-import { useGetTasksQuery } from '@/redux/endpoints/task';
-import { RootState, wrapper } from '@/redux/store';
-import { useRouter } from 'next/router';
-import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { wrapper } from '@/redux/store';
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ params }) => {
   if (
@@ -37,7 +29,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
       totalViews: 'desc',
     }),
     skip: 0,
-    take: 3,
+    take: 20,
     token: 'user',
     except: id as string,
   };
@@ -75,64 +67,64 @@ export default function CampaignDetailPage({
   campaignsRecommend: TypeCampaign[] | null;
   viewType: 'completion' | 'winning' | 'losing' | 'detail';
 }) {
-  const { accessToken } = useSelector((state: RootState) => state.auth);
-  const router = useRouter();
+  // const { accessToken } = useSelector((state: RootState) => state.auth);
+  // const router = useRouter();
 
-  const { data: campaignDetailTasks } = useGetTasksQuery({
-    campaignId: router?.query?.slug?.[0] ?? '',
-    token: accessToken || 'user',
-  });
-  const { data: campaignDetailRewards } = useGetReWardsQuery({
-    campaignId: router?.query?.slug?.[0] ?? '',
-    token: accessToken || 'user',
-  });
+  // const { data } = useGetDetailCampaignQuery(
+  //   {
+  //     campaignId: router?.query?.slug?.[0] ?? '',
+  //     token: 'user',
+  //   },
+  //   {
+  //     refetchOnMountOrArgChange: true,
+  //   }
+  // );
 
-  const campaign = useMemo(() => {
-    let result: TypeCampaign | null = null;
-    if (campaignDetail?.id) {
-      result = { ...campaignDetail };
-      if (campaignDetailTasks?.tasks) {
-        result.Task = campaignDetailTasks?.tasks ?? null;
-      }
-      if (campaignDetailRewards?.rewards) {
-        result.CampaignReward = campaignDetailRewards?.rewards ?? null;
-      }
-    }
-    return result;
-  }, [campaignDetail, campaignDetailTasks, campaignDetailRewards]);
+  // const contentRender = useMemo(() => {
+  //   switch (viewType) {
+  //     case 'completion':
+  //       return <Completion />;
+  //     case 'winning':
+  //       return <Winner />;
+  //     case 'losing':
+  //       return <Loser />;
+  //     case 'detail':
+  //     default:
+  //       return (
+  //         <CampaignDetailProvider>
+  //           <CampaignDetail />
+  //         </CampaignDetailProvider>
+  //       );
+  //   }
+  // }, [viewType, campaignInfo]);
 
-  const contentRender = useMemo(() => {
-    switch (viewType) {
-      case 'completion':
-        return <Completion />;
-      case 'winning':
-        return <Winner />;
-      case 'losing':
-        return <Loser />;
-      case 'detail':
-      default:
-        return (
-          <CampaignDetailProvider campaign={campaignDetail}>
-            <CampaignDetail />
-          </CampaignDetailProvider>
-        );
-    }
-  }, [viewType, campaign]);
+  // if (viewType === 'winning' && !accessToken) {
+  //   router.push('/auth/sign-in/campaign-implementer');
+  // } else {
+  //   return (
+  //     <div className="font-notoSans">
+  //       {contentRender}
 
-  if (viewType === 'winning' && !accessToken) {
-    router.push('/auth/sign-in/campaign-implementer');
-  } else {
-    return (
+  //       {Array.isArray(campaignsRecommend) && campaignsRecommend?.length > 0 ? (
+  //         <RecommedCampaignsSection campaignsRecommend={campaignsRecommend} />
+  //       ) : (
+  //         ''
+  //       )}
+  //     </div>
+  //   );
+  // }
+
+  return (
+    <CampaignDetailProvider campaignDetail={campaignDetail} viewType={viewType}>
       <div className="font-notoSans">
-        {contentRender}
+        <CampaignDetail />
+        <div className="h-[24px]" />
         {Array.isArray(campaignsRecommend) && campaignsRecommend?.length > 0 ? (
           <RecommedCampaignsSection campaignsRecommend={campaignsRecommend} />
         ) : (
           ''
         )}
-
-        <div className="h-[56px]" />
       </div>
-    );
-  }
+    </CampaignDetailProvider>
+  );
 }

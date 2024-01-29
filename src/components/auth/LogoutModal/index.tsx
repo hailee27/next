@@ -25,6 +25,7 @@ export default function LogoutModal({ isOpen, onCancel }: { isOpen: boolean; onC
             onClick={() => {
               dispatch(logout());
               router.push('/auth/sign-in/campaign-implementer');
+              onCancel();
             }}
             title="ログアウトする"
             type="button"

@@ -1,11 +1,21 @@
+/* eslint-disable no-console */
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react/jsx-no-undef */
 import ArrowDown from '@/components/common/icons/ArrowDown';
+import { useGetCouponsQuery } from '@/redux/endpoints/coupons';
 import { Collapse } from 'antd';
 import clsx from 'clsx';
+
 import styles from './styles.module.scss';
 
 export default function RewardHistoryCard() {
+  const { data } = useGetCouponsQuery({
+    skip: 0,
+    take: 100,
+  });
+
+  console.log('data', data);
+
   return (
     <div className=" border-[2px] border-[#333] px-[22px] py-[30px] rounded-[16px] bg-white">
       <p className="text-[16px] font-bold text-center">過去の報酬リスト</p>

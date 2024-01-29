@@ -113,10 +113,14 @@ export default function CampaignCardItem({
                 報酬：
                 <span className="font-montserrat">
                   {moment(item?.startTime)?.isValid() ? moment(item?.startTime)?.format('MM/DD hh:mm') : '--/-- --:--'}
-                  <span> 〜 </span>
-                  {moment(item?.expiredTime)?.isValid()
-                    ? moment(item?.expiredTime)?.format('MM/DD hh:mm')
-                    : '--/-- --:--'}
+                  {item?.dontSetExpiredTime !== true && (
+                    <>
+                      <span> 〜 </span>
+                      {moment(item?.expiredTime)?.isValid()
+                        ? moment(item?.expiredTime)?.format('MM/DD hh:mm')
+                        : '--/-- --:--'}
+                    </>
+                  )}
                 </span>
               </span>
             </div>
