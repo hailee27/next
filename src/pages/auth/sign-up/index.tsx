@@ -10,6 +10,7 @@ import { setSession } from '@/redux/slices/auth.slice';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import toastMessage from '@/utils/func/toastMessage';
 import { AuthEmailPasswordData } from '@/utils/schema/auth.schema';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import ReCAPTCHA from 'react-google-recaptcha';
@@ -48,7 +49,14 @@ export default function SignupPage() {
             キャンペーン参加者の方
           </div>
           <div className="border-[2px] border-[#333] rounded-b-[16px] px-[22px] py-[38px] bg-white">
-            <ConnectXModal buttonLabel="X（twitter）を連携する" />
+            <ConnectXModal
+              buttonIcon={
+                <div className="mr-[18px]">
+                  <Image alt="twitter logo" height={17} src="/assets/images/twitter_white.png" width={17} />
+                </div>
+              }
+              buttonLabel="X（twitter）を連携する"
+            />
             <div className="h-[16px]" />
             <p className="text-gray-1 text-[13px] leading-[22px] tracking-[0.39px]">
               ※キャンペーンに参加するにはXでの連携が必要です。

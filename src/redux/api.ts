@@ -72,7 +72,6 @@ const baseQueryWithInterceptor: BaseQueryFn<string | FetchArgs, unknown, FetchBa
             } else {
               // handle logout
               api.dispatch({ type: 'auth/logout' });
-              window.location.pathname = '/auth/sign-in/campaign-creator';
             }
           }
         } finally {

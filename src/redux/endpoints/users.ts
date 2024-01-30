@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { api } from '../api';
 
 const injectedRtkApi = api.injectEndpoints({
@@ -27,6 +28,21 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/users/${queryArg.userId}`,
         method: 'PUT',
         body: queryArg.body,
+      }),
+    }),
+    createGacha: build.mutation<
+      any,
+      {
+        userId: number;
+        campaignId: string;
+      }
+    >({
+      query: ({ userId, campaignId }) => ({
+        url: `/rewards/users/${userId}`,
+        method: 'POST',
+        body: {
+          campaignId,
+        },
       }),
     }),
   }),
@@ -123,4 +139,5 @@ export const {
   useGetCompaniesListQuery,
   useLazyGetCompaniesListQuery,
   useUpdateUserMutation,
+  useCreateGachaMutation,
 } = injectedRtkApi;

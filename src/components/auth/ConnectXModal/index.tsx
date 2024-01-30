@@ -10,15 +10,24 @@ import Link from 'next/link';
 
 interface ConnectXModalProps {
   buttonLabel: string;
+  buttonIcon?: React.ReactElement;
 }
 
-export default function ConnectXModal({ buttonLabel }: ConnectXModalProps) {
+export default function ConnectXModal({ buttonLabel, buttonIcon }: ConnectXModalProps) {
   const { isModalOpen, showModal, cancelModal, getTwitterOauthUrl } = useConnectX({ handleAction: 'SIGNUP' });
 
   return (
     <>
       <div className="h-[53px]">
-        <CButtonShadow onClick={showModal} title={buttonLabel} type="button" />
+        <CButtonShadow
+          onClick={showModal}
+          title={buttonLabel}
+          type="button"
+          withIcon={{
+            icon: buttonIcon ?? <div />,
+            position: 'left',
+          }}
+        />
       </div>
       <CModalWapper isOpen={isModalOpen} onCancel={cancelModal}>
         <div className="h-[383px] overflow-hidden  py-[8px] ">
@@ -62,3 +71,7 @@ export default function ConnectXModal({ buttonLabel }: ConnectXModalProps) {
     </>
   );
 }
+
+ConnectXModal.defaultProps = {
+  buttonIcon: undefined,
+};
