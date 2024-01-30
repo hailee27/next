@@ -6,7 +6,9 @@ const injectedRtkApi = api.injectEndpoints({
       query: (queryArg) => {
         const body = new FormData();
         Object.entries(queryArg).forEach(([key, value]) =>
-          queryArg[key] === 'undefined' ? delete queryArg[key] : body.append(`${key}`, value)
+          queryArg[key] === 'undefined' || queryArg[key] === undefined
+            ? delete queryArg[key]
+            : body.append(`${key}`, value)
         );
         return {
           url: '/campaigns',
@@ -25,12 +27,21 @@ const injectedRtkApi = api.injectEndpoints({
         params: queryArg,
       }),
     }),
-    updateCampaign: build.mutation<DetailCampaignParams, DetailCampaignParams>({
-      query: (queryArg) => ({
-        url: `/campaigns/${queryArg.campaignId}`,
-        method: 'PUT',
-        // params: queryArg,
-      }),
+    updateCampaign: build.mutation<QuestsResponse, UpdateCampaignParams>({
+      query: (queryArg) => {
+        const body = new FormData();
+        Object.entries(queryArg.body).forEach(([key, value]) =>
+          queryArg.body[key] === 'undefined' || queryArg.body[key] === undefined
+            ? delete queryArg.body[key]
+            : body.append(`${key}`, value)
+        );
+        return {
+          url: `/campaigns/${queryArg.campaignId}`,
+          method: 'PUT',
+          body,
+          // params: queryArg,
+        };
+      },
     }),
     deleteCampaign: build.mutation<DetailCampaignParams, DetailCampaignParams>({
       query: (queryArg) => ({
@@ -217,6 +228,10 @@ export type QuestsResponse = {
       pointTotal: number;
     };
   };
+};
+export type UpdateCampaignParams = {
+  campaignId: number | string;
+  body: QuestsParams;
 };
 export type QuestsParams = {
   title?: string;

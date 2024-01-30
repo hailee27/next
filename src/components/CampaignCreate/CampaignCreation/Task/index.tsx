@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Form } from 'antd';
 import SelectLabel from '@/components/common/BasicSelect/SelectLabel';
 import BasicInput from '@/components/common/BasicInput';
@@ -10,40 +10,52 @@ import CButtonClassic from '@/components/common/CButtonClassic';
 import { usePopUpContext } from '@/context/PopUpContext';
 import { useRouter } from 'next/router';
 import { useGetTasksQuery } from '@/redux/endpoints/task';
+import { useCampaignApiContext } from '@/context/CampaignApiContext';
 import TaskCampain from './TaskCampain';
 import { TypeTasks } from './type';
 
 function Task() {
   const [form] = Form.useForm();
   const router = useRouter();
+  const { setTaskIdDeletes } = useCampaignApiContext();
   const { prevTab } = useContext<TypeTabContext>(StepContext);
   const { openPopUp } = usePopUpContext();
+  const { data: dataTask } = useGetTasksQuery(
+    { campaignId: String(router?.query?.id) },
+    { skip: !router?.query?.id, refetchOnReconnect: true, refetchOnMountOrArgChange: true }
+  );
   const [numberTask, setNumberTask] = useState<TypeTasks[]>([
     {
       id: 1,
       require: false,
       platForm: {
-        name: 'twitter',
-        type: 'follow',
-      },
-    },
-    {
-      id: 2,
-      require: false,
-      platForm: {
-        name: 'twitter',
-        type: 'follow',
+        name: 'TWITTER',
+        type: 'twitter_follow',
       },
     },
   ]);
 
   const handleDelete = (id: number) => {
+    const taskIdDelete = form.getFieldValue(['optionTasks', `task${id}`]).taskId;
+    setTaskIdDeletes((prev) => [...prev, taskIdDelete]);
     setNumberTask((prev) => prev.filter((v) => v.id !== id));
     form.setFieldValue(['optionTasks', `task${id}`], {});
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { data: dataTask } = useGetTasksQuery({ campaignId: String(router?.query?.id) }, { skip: !router?.query?.id });
+  useEffect(() => {
+    if (dataTask) {
+      form.setFieldValue(['requireTask', 'taskId'], dataTask.tasks.find((e) => e.taskTemplate.config.requireTask)?.id);
+      setNumberTask(
+        dataTask.tasks
+          .filter((e) => !e.taskTemplate.config.requireTask)
+          .map((v, i) => ({
+            id: i + 1,
+            platForm: { name: v.taskTemplate.config.platForm, type: v.taskTemplate.config.type },
+            config: v,
+          }))
+      );
+    }
+  }, [dataTask]);
 
   return (
     <>
@@ -74,9 +86,14 @@ function Task() {
           }}
           scrollToFirstError={{ behavior: 'smooth', inline: 'center' }}
         >
-          <Form.Item name="checkNumberTask" noStyle rules={[{ required: numberTask.length < 2 }]}>
-            <FlagItem />
-          </Form.Item>
+          <div className="hidden">
+            <Form.Item name="checkNumberTask" noStyle rules={[{ required: numberTask.length < 2 }]}>
+              <FlagItem />
+            </Form.Item>
+            <Form.Item name={['requireTask', 'taskId']} noStyle rules={[{ required: numberTask.length < 2 }]}>
+              <FlagItem />
+            </Form.Item>
+          </div>
           <div className="flex flex-col space-y-[24px] pb-[24px]">
             {numberTask.map((e) => (
               <TaskCampain item={e} key={e.id} onDelete={() => handleDelete(e.id)} showDelete />

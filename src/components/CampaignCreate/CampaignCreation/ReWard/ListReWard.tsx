@@ -1,13 +1,30 @@
+/* eslint-disable import/no-cycle */
 import BasicInput from '@/components/common/BasicInput';
 import BasicSwitch from '@/components/common/BasicSwitch';
 import { Form, Image } from 'antd';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { TypeReWard } from './InstantWin';
 
-function ListReWard({ index, onDelete }: { index: number; onDelete: () => void }) {
+function ListReWard({ index, item, onDelete }: { index: number; item: TypeReWard; onDelete: () => void }) {
   const form = Form.useFormInstance();
   // const paypayWatch = Form.useWatch(['reWard', `reWard${index}`, 'receivingMethod', 'paypay'], form) ?? false;
   const amazonWatch = Form.useWatch(['reWard', `reWard${index}`, 'receivingMethod', 'amazon'], form) ?? false;
 
+  useEffect(() => {
+    if (item) {
+      form.setFieldsValue({
+        reWard: {
+          [`reWard${index}`]: {
+            money: item.money,
+            tiketWinning: item.tiketWinning,
+            receivingMethod: {
+              amazon: item.receivingMethod?.amazon,
+            },
+          },
+        },
+      });
+    }
+  }, [item]);
   return (
     <div>
       {index !== 1 && (

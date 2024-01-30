@@ -1,4 +1,4 @@
-export type TaskType =
+export type TaskType = (
   | {
       platForm: 'web';
       websiteURL?: string;
@@ -61,7 +61,8 @@ export type TaskType =
       platForm: 'twitter';
       type: 'postSpecifiedText' | string;
       designatedClassicalChinese?: string;
-    };
+    }
+) & { taskId: string };
 
 export type TypeResponseFormCampaign = {
   campainName?: string;

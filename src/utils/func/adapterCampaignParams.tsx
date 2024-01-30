@@ -13,7 +13,7 @@ export default function adapterCampaignParams(
         category: data.category ?? '',
         dontSetExpiredTime: String(data.noDate ?? false),
         startTime: data.startDate ?? '',
-        expiredTime: data.endDate,
+        expiredTime: data.noDate ? undefined : data.endDate,
         methodOfselectWinners: typeWinner,
         totalNumberOfUsersAllowedToWork: String(data.numberOfParticipants),
         numberOfPrizes: String(data.totalTicket),
@@ -29,7 +29,7 @@ export default function adapterCampaignParams(
         category: data.category ?? '',
         dontSetExpiredTime: String(data.noDate ?? false),
         startTime: data.startDate ?? '',
-        expiredTime: data.endDate,
+        expiredTime: data.noDate ? undefined : data.endDate,
         methodOfselectWinners: typeWinner,
         description: data.explanatoryText,
         noteReward: data.compensationSummary ?? 'NONE',
@@ -43,15 +43,26 @@ export const adapterDataTask = (data: TypeResponseFormCampaign) =>
     {
       type: data.requireTask?.platForm ?? 'twitter',
       taskActionType: data.requireTask?.type,
-      taskTemplate: { userName: 'NONE', link: 'NONE', config: { name: data.requireTask } },
+      taskId: data.requireTask?.taskId,
+      taskTemplate: { userName: 'NONE', link: 'NONE', config: { ...data.requireTask, requireTask: true } },
     },
   ].concat(
     Object.values(data?.optionTasks ?? {}).map((e) => ({
       type: e.platForm,
       taskActionType: e?.type,
-      taskTemplate: { userName: 'NONE', link: 'NONE', config: { name: e } },
+      taskId: e.taskId,
+      taskTemplate: { userName: 'NONE', link: 'NONE', config: { ...e, requireTask: false } },
     }))
   );
+export const adapterNewTask = (data: TypeResponseFormCampaign) =>
+  Object.values(data?.optionTasks ?? {})
+    .map((e) => ({
+      type: e.platForm,
+      taskActionType: e?.type,
+      taskId: e.taskId,
+      taskTemplate: { userName: 'NONE', link: 'NONE', config: { ...e, requireTask: false } },
+    }))
+    .filter((v) => !v.taskId);
 
 export const adapterDataReWard = (data: TypeResponseFormCampaign) =>
   Object.values(data?.reWard ?? {}).map((e, i) => ({
