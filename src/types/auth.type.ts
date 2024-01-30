@@ -60,6 +60,7 @@ export interface User {
   isRequestMemberCompany: boolean;
   companyRole: TypeCompanyRole;
   memberCompany: {
+    pointTotal?: number;
     id: number;
     name: string;
     code: string;
