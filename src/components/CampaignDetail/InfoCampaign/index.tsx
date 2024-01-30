@@ -24,10 +24,33 @@ export default function InfoCampaign() {
     return results?.sort((a, b) => a.amountOfMoney - b.amountOfMoney);
   }, [campaignRewards]);
 
+  const isCampaignExpired = useMemo(() => {
+    let result = false;
+    const now = moment();
+    const nowClone = now.clone().toISOString();
+    if (
+      moment(campaignDetail?.expiredTime)?.isValid() &&
+      moment(campaignDetail?.expiredTime)?.isSameOrBefore(nowClone)
+    ) {
+      result = true;
+    }
+    return result;
+  }, [campaignDetail]);
+
   return (
     <div>
       <div className="xl:flex xl:border-b-[2px] xl:border-b-[#333]">
         <div className="xl:flex-1">
+          {isCampaignExpired === true && (
+            <div className="px-[20px] pt-[48px]  md:px-[160px] xl:px-[35px] xxl:px-[160px] md:py-[64px] !pb-0">
+              <div className="rounded-[16px] border-[2px] border-[#333] px-[24px] py-[48px]">
+                <p className="text-[20px] font-bold">本キャンペーンは終了しました</p>
+                <div className="h-[16px]" />
+                <p className="text-[13px] ">本キャンペーンは開催期間を終了したため、応募することはできません。</p>
+              </div>
+            </div>
+          )}
+
           <div className="bg-white px-[20px] pt-[48px] pb-[56px] md:px-[160px] xl:px-[35px] xxl:px-[160px] md:!py-[64px]">
             <div className="flex flex-col gap-[16px] ">
               <div className=" flex gap-[10px] items-center  ">
@@ -135,8 +158,10 @@ export default function InfoCampaign() {
             )}
           </div>
         </div>
-        <div className="xl:w-[440px] xl:border-l-[2px] xl:border-l-[#333]">
-          {campaignTasks && Array.isArray(campaignTasks) && campaignTasks?.length ? <CampaignTasksSection /> : ''}
+        <div className="xl:w-[440px] xl:border-l-[2px] xl:border-l-[#333] relative">
+          <div className={isCampaignExpired === true ? 'opacity-40 pointer-events-none' : ''}>
+            {campaignTasks && Array.isArray(campaignTasks) && campaignTasks?.length ? <CampaignTasksSection /> : ''}
+          </div>
         </div>
       </div>
       <div className="xl:h-[120px]" />
