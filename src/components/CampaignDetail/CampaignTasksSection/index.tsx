@@ -7,51 +7,112 @@ import ArrowDown from '@/components/common/icons/ArrowDown';
 import { RootState } from '@/redux/store';
 import { convertCampaignTask } from '@/utils/func/convertCampaign';
 import { useRouter } from 'next/router';
-import { useContext, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
+import toastMessage from '@/utils/func/toastMessage';
+import { getErrorMessage } from '@/utils/func/getErrorMessage';
+import { useCreateGachaMutation } from '@/redux/endpoints/campaign';
+import { Spin } from 'antd';
 import { CampaignDetailContext } from '../CampainContext';
 import TaskItem from './TaskItem';
 
 export default function CampaignTasksSection() {
-  const { masterData } = useSelector((store: RootState) => store.common);
   const { user } = useSelector((state: RootState) => state.auth);
   const router = useRouter();
   const [isOpenModalSetupAuthEmail, setIsOpenModalSetupAuthEmail] = useState(false);
-  const { campaignDetail, campaignTasks } = useContext(CampaignDetailContext);
+  const [onRegisterCampaign] = useCreateGachaMutation();
+  const { campaignDetail, campaignTasks, isFetchingCampaignTasks, onFetchCampaignInfo } =
+    useContext(CampaignDetailContext);
+
+  const isDisableRegisterBtn = useMemo(() => {
+    if (!user?.id) {
+      return true;
+    }
+
+    const hasTaskNotDone = campaignTasks?.some(
+      (item) =>
+        !Object.prototype.hasOwnProperty.call(item, 'UserTask') ||
+        !item?.UserTask ||
+        (item?.UserTask && !Array.isArray(item?.UserTask)) ||
+        (item?.UserTask && Array.isArray(item?.UserTask) && !item?.UserTask?.length)
+    );
+
+    if (user?.id && hasTaskNotDone === true) {
+      return true;
+    }
+    return false;
+  }, [user?.id, campaignDetail, campaignTasks]);
+
+  const handleRegisterCampaign = async () => {
+    try {
+      if (user?.id) {
+        const camapignId = router?.query?.slug?.[0] ?? '';
+        if (campaignDetail?.methodOfselectWinners === 'MANUAL_SELECTION' && (!user?.emailId || !user?.havePassword)) {
+          setIsOpenModalSetupAuthEmail(true);
+          return;
+        }
+        const gacha = await onRegisterCampaign({
+          campaignId: camapignId,
+        }).unwrap();
+        if (onFetchCampaignInfo) {
+          await onFetchCampaignInfo?.();
+        }
+
+        if (gacha?.isWin === true && campaignDetail?.methodOfselectWinners === 'MANUAL_SELECTION') {
+          router.push(`/campaigns/${camapignId}/completion`);
+          return;
+        }
+        if (gacha?.isWin === false && campaignDetail?.methodOfselectWinners === 'AUTO_PRIZEE_DRAW') {
+          router.push(`/campaigns/${camapignId}/losing`);
+          return;
+        }
+        if (gacha?.isWin === true && campaignDetail?.methodOfselectWinners === 'AUTO_PRIZEE_DRAW') {
+          router.push(`/campaigns/${camapignId}/winning`);
+        }
+      } else {
+        router.push('/auth/sign-in/campaign-implementer');
+      }
+    } catch (e) {
+      toastMessage(getErrorMessage(e), 'error');
+    }
+  };
+  console.log('campaignDetail', campaignDetail);
   return (
-    <>
-      <div className="py-[56px] px-[20px]">
-        <h3 className="text-[24px] font-bold tracking-[0.72px] text-center">タスク</h3>
-        <div className="h-[24px]" />
+    <Spin spinning={isFetchingCampaignTasks}>
+      <div className="py-[56px] px-[20px] md:py-[100px] md:px-[160px] xl:px-[35px]">
+        <h3 className="text-[24px] font-bold tracking-[0.72px] text-center md:text-[28px] ">タスク</h3>
+        <div className="h-[24px] md:h-[64px]" />
 
         <div className="flex flex-col gap-[8px]">
           {campaignTasks &&
             Array.isArray(campaignTasks) &&
             campaignTasks?.length > 0 &&
             campaignTasks?.map((item) => {
-              const result = convertCampaignTask(item, masterData);
+              const result = convertCampaignTask(item);
               if (result) {
-                return <TaskItem key={item?.id} task={result} />;
+                return (
+                  <TaskItem
+                    isLoggedUserImplementedTask={Boolean(
+                      user?.id && item?.UserTask && Array.isArray(item?.UserTask) && item?.UserTask?.length
+                    )}
+                    key={item?.id}
+                    task={result}
+                  />
+                );
               }
               return '';
             })}
         </div>
-        <div className="h-[40px]" />
+        <div className="h-[40px] md:h-[64px]" />
+
         <div className=" flex items-center justify-center">
           <div className="w-[262px] h-[53px]">
             <CButtonShadow
-              classBgColor="bg-[#c2c2c2]"
-              classBorderColor="border-[#c2c2c2]"
+              classBgColor={isDisableRegisterBtn ? 'bg-[#c2c2c2]' : 'bg-[#333]'}
+              classBorderColor={isDisableRegisterBtn ? 'border-[#c2c2c2]' : 'border-[#333]'}
               classShadowColor="bg-[#fff]"
-              // isDisable
-              onClick={() => {
-                if (
-                  campaignDetail?.methodOfselectWinners === 'MANUAL_SELECTION' &&
-                  (!user?.emailId || !user?.havePassword)
-                ) {
-                  setIsOpenModalSetupAuthEmail(true);
-                }
-              }}
+              isDisable={isDisableRegisterBtn}
+              onClick={handleRegisterCampaign}
               textClass="text-white text-[14px] font-bold tracking-[0.42px]"
               title="キャンペーンに応募する"
               withIcon={{
@@ -85,12 +146,12 @@ export default function CampaignTasksSection() {
               onClick={() => {
                 router.push('/my-page');
               }}
-              title="Go Setting"
+              title="設定"
               type="button"
             />
           </div>
         </div>
       </CModalWapper>
-    </>
+    </Spin>
   );
 }

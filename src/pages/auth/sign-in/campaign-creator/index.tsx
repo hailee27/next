@@ -29,7 +29,7 @@ export default function CampaignCreatorSigninPage() {
 
   const onSigninEmail = async (formValue: AuthEmailPasswordData) => {
     try {
-      if (formValue.email && formValue.password) {
+      if (formValue.email && formValue.password && !isDisableSubmit) {
         const data = await signinEmail(formValue).unwrap();
         if (data?.accessToken && data?.refreshToken && data?.user) {
           dispatch(setSession({ ...data }));

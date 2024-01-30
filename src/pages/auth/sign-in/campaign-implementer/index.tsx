@@ -7,7 +7,6 @@ import ArrowDown from '@/components/common/icons/ArrowDown';
 import useAuthEmailPassword from '@/hooks/useAuthEmailPassword';
 import { useSigninEmailMutation } from '@/redux/endpoints/auth';
 import { setSession } from '@/redux/slices/auth.slice';
-import { RootState } from '@/redux/store';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import toastMessage from '@/utils/func/toastMessage';
 import { AuthEmailPasswordData } from '@/utils/schema/auth.schema';
@@ -16,12 +15,11 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 export default function CampaignImplementerSignin() {
   const { register, handleSubmit, errors, isDisableSubmit, onChangeRecaptcha } = useAuthEmailPassword();
-  const { accessToken, user } = useSelector((state: RootState) => state.auth);
-  console.log(accessToken, user);
+
   const [isShowMsg, setIsShowMsg] = useState(false);
 
   const [signinEmail] = useSigninEmailMutation();
@@ -32,7 +30,7 @@ export default function CampaignImplementerSignin() {
 
   const onSigninEmail = async (formValue: AuthEmailPasswordData) => {
     try {
-      if (formValue.email && formValue.password) {
+      if (formValue.email && formValue.password && !isDisableSubmit) {
         const data = await signinEmail(formValue).unwrap();
         if (data?.accessToken && data?.refreshToken && data?.user) {
           dispatch(setSession({ ...data }));

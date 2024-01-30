@@ -59,6 +59,7 @@ export default function SettingTwoStepAuthPage() {
           type: 'SMS',
           userId: user?.id,
           phoneNumber: values?.phone,
+          isCheckPhone: true,
         }).unwrap();
         setUserPhone(values.phone);
         setTotpToken(data?.totpToken ?? undefined);
@@ -76,6 +77,7 @@ export default function SettingTwoStepAuthPage() {
           userId: user?.id,
           sendBy,
           phoneNumber: userPhone,
+          isCheckPhone: true,
         }).unwrap();
         setTotpToken(data?.totpToken ?? undefined);
       }
