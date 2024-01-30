@@ -34,7 +34,7 @@ export default function SettingTwoStepAuthPage() {
   const { user, accessToken } = useSelector((store: RootState) => store.auth);
 
   const [sendVerificationCode, { isLoading: isSendVerificationCode }] = useAuthVerificationMutation();
-  const [verifiSMS, { isLoading: isVerifiSMS }] = useSmsVerifyMutation();
+  const [verifiSMS, { isLoading: isVerifiSMS, isError: isVerifySMSError }] = useSmsVerifyMutation();
   const [updateMe, { isLoading: isUpdateUser }] = useUpdateMeMutation();
   const {
     register,
@@ -100,7 +100,7 @@ export default function SettingTwoStepAuthPage() {
                 twoFactorPhone: userPhone,
               }
         ).unwrap();
-        toastMessage('Phone number has been updated successfully. ');
+        toastMessage('Phone number has been updated successfully. ', 'success');
         router.push('/my-page');
       }
     } catch (err) {
@@ -113,7 +113,7 @@ export default function SettingTwoStepAuthPage() {
   }, [phoneInput]);
 
   const formInputVerifyCodeRender = (
-    <>
+    <div className="mx-auto max-w-[335px]">
       <div className="bg-white border-[2px] border-[#333] px-[22px] py-[30px] rounded-[16px]">
         <h1 className="text-[20px] font-bold text-[#04AFAF] tracking-[0.6px] text-center ">
           携帯電話に届いた認証コード
@@ -122,7 +122,7 @@ export default function SettingTwoStepAuthPage() {
         </h1>
         <div className="h-[16px]" />
 
-        <SmsVerificationForm onSubmitCode={onUpdatePhone} />
+        <SmsVerificationForm isSubmitError={isVerifySMSError} onSubmitCode={onUpdatePhone} />
       </div>
       <div className="h-[24px]" />
       <p className="text-[12px] font-bold">
@@ -149,7 +149,7 @@ export default function SettingTwoStepAuthPage() {
           認証コードを再送する
         </p>
       </div>
-    </>
+    </div>
   );
 
   useEffect(() => {
@@ -169,10 +169,10 @@ export default function SettingTwoStepAuthPage() {
   } else if (userAction === 'disable') {
     return (
       <Spin spinning={isSendVerificationCode || isVerifiSMS || isUpdateUser}>
-        <div className="relative w-full min-h-[100vh] overflow-x-hidden bg-[#D5FFFF]">
+        <div className="relative w-full container-min-height overflow-x-hidden bg-[#D5FFFF]">
           <div
             className={clsx(
-              'absolute z-[1] min-h-[100vh] h-full w-full bg-[#D5FFFF] py-[40px] px-[20px] transition-all duration-300',
+              'absolute z-[1] container-min-height h-full w-full bg-[#D5FFFF] py-[40px] px-[20px] transition-all duration-300',
               'top-0 left-[0]'
             )}
           >
@@ -184,15 +184,15 @@ export default function SettingTwoStepAuthPage() {
   } else {
     return (
       <Spin spinning={isSendVerificationCode || isVerifiSMS || isUpdateUser}>
-        <div className="relative w-full min-h-[100vh] overflow-x-hidden bg-[#D5FFFF]">
+        <div className="relative w-full container-min-height pb-[16px] overflow-x-hidden bg-[#D5FFFF]">
           <div
             className={clsx(
-              'absolute z-[1] min-h-[100vh] h-full w-full bg-[#D5FFFF] py-[40px] px-[20px] transition-all duration-300',
+              'absolute z-[1] h-full w-full bg-[#D5FFFF] py-[40px] px-[20px] transition-all duration-300',
               !userPhone || !totpToken ? 'top-0 left-[0]' : 'top-0 left-[-110vw]'
             )}
           >
-            <form onSubmit={handleSubmit(onSubmitPhone)}>
-              <div className=" border-[2px] border-[#333] px-[22px] py-[30px] rounded-[16px]">
+            <form className="mx-auto max-w-[335px]" onSubmit={handleSubmit(onSubmitPhone)}>
+              <div className=" border-[2px] border-[#333] px-[22px] py-[30px] rounded-[16px] bg-white">
                 <h1 className="text-[20px] font-bold text-[#04AFAF] tracking-[0.6px] text-center ">
                   携帯電話番号を入力
                 </h1>
@@ -238,7 +238,7 @@ export default function SettingTwoStepAuthPage() {
           </div>
           <div
             className={clsx(
-              'absolute z-[1] min-h-[100vh] h-full w-full bg-[#D5FFFF] py-[40px] px-[20px] transition-all duration-300',
+              'absolute z-[1]  h-full w-full bg-[#D5FFFF] py-[40px] px-[20px] transition-all duration-300',
               !userPhone || !totpToken ? 'top-0 left-[110vw]' : 'top-0 left-[0]'
             )}
           >

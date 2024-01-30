@@ -34,7 +34,7 @@ export default function RewardHistoryCard() {
             },
           ]}
         />
-        <div className="h-[1px] bg-[#aaa]" />
+        {/* <div className="h-[1px] bg-[#aaa]" />
         <div className={clsx('flex flex-col gap-[16px]', styles.customRewardCollapse)}>
           <Collapse
             accordion
@@ -59,7 +59,7 @@ export default function RewardHistoryCard() {
               },
             ]}
           />
-        </div>
+        </div> */}
       </div>
     </div>
   );

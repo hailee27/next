@@ -1,40 +1,28 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { RootState } from '@/redux/store';
-import { Spin, Switch } from 'antd';
-import { useRouter } from 'next/router';
-import { useDispatch, useSelector } from 'react-redux';
-import Link from 'next/link';
-import { useCallback, useState } from 'react';
+import CButtonShadow from '@/components/common/CButtonShadow';
 import CModalWapper from '@/components/common/CModalWapper';
 import TwitterLogo from '@/components/common/icons/TwitterLogo';
-import toastMessage from '@/utils/func/toastMessage';
+import useConnectX from '@/hooks/useConnectX';
+import { useDisconnectTwitterMutation } from '@/redux/endpoints/auth';
+import { RootState } from '@/redux/store';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
-import { useDisconnectTwitterMutation, useLazyMeQuery } from '@/redux/endpoints/auth';
-import { setUser } from '@/redux/slices/auth.slice';
-import CButtonShadow from '@/components/common/CButtonShadow';
+import toastMessage from '@/utils/func/toastMessage';
+import { Spin, Switch } from 'antd';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
 import styles from './styles.module.scss';
 
 export default function AuthInfoCard() {
   const { user } = useSelector((store: RootState) => store.auth);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   const router = useRouter();
 
-  const [triggerGetMe, { isFetching: isFetchingUser }] = useLazyMeQuery();
   const [disconnectTwitter, { isLoading: isDisconnecting }] = useDisconnectTwitterMutation();
-  const dispatch = useDispatch();
 
-  const refreshUser = async () => {
-    try {
-      const data = await triggerGetMe().unwrap();
-      if (data as any) {
-        dispatch(setUser(data));
-      }
-    } catch (error) {
-      toastMessage(getErrorMessage(error), 'error');
-    }
-  };
+  const { isModalOpen, showModal, cancelModal, getTwitterOauthUrl, isFetchingUser, refreshUser } = useConnectX({
+    handleAction: 'CONNECT',
+  });
 
   const onUpdateTwoStepAuthState = async (newState: boolean) => {
     if (newState === false) {
@@ -47,7 +35,7 @@ export default function AuthInfoCard() {
   const onUpdateAuthTwitter = async (newState: boolean) => {
     try {
       if (newState === true) {
-        setIsModalOpen(true);
+        showModal();
       } else {
         if (user?.havePassword === false && user?.email === null) {
           toastMessage('Please set email and password before disabling twitter connection');
@@ -55,67 +43,18 @@ export default function AuthInfoCard() {
         }
         const twitterIdentity = user?.identities?.find((item) => item?.type === 'TWITTER');
         if (twitterIdentity === undefined) {
-          toastMessage('Twitter connection not found');
+          toastMessage('Twitter connection not found', 'error');
           return;
         }
         await disconnectTwitter({ id: twitterIdentity?.id }).unwrap();
-        toastMessage('twitter has been disconnected successfully');
+        toastMessage('twitter has been disconnected successfully', 'success');
         await refreshUser();
       }
     } catch (error) {
       toastMessage(getErrorMessage(error), 'error');
     }
   };
-  const handleCancelModal = () => {
-    setIsModalOpen(false);
-  };
 
-  const onChangeLocalStorage = useCallback(async () => {
-    try {
-      const storageData = JSON.parse(localStorage.getItem('twitter_callback_data') || '{}');
-      if (storageData?.error && storageData?.data) {
-        window.removeEventListener('storage', onChangeLocalStorage, false);
-      }
-
-      if (storageData?.error) {
-        toastMessage(storageData?.error, 'error');
-        return;
-      }
-
-      await refreshUser();
-    } catch (error) {
-      toastMessage(getErrorMessage(error), 'error');
-    }
-  }, []);
-
-  function getTwitterOauthUrl() {
-    localStorage.removeItem('twitter_callback_data');
-    window.addEventListener('storage', onChangeLocalStorage, false);
-    const rootUrl = 'https://twitter.com/i/oauth2/authorize';
-    const options = {
-      redirect_uri: `${window.location?.origin}/auth/callback/twitter`,
-      client_id: 'UjZfREtGZlVIelpvS1NrbVhrRkY6MTpjaQ',
-      state: `${window.location?.origin}/auth/callback/twitter+++CONNECT`,
-      response_type: 'code',
-      code_challenge: 'challenge',
-      code_challenge_method: 'plain',
-      scope: ['users.read', 'tweet.read', 'follows.read'].join(' '),
-    };
-    const qs = new URLSearchParams(options).toString();
-    const url = `${rootUrl}?${qs}`;
-    const width = 450;
-    const height = 730;
-    const left = window.screen.width / 2 - width / 2;
-    const top = window.screen.height / 2 - height / 2;
-
-    const newWindow = window.open(
-      url,
-      'Twitter Auth',
-      `menubar=no,location=no,resizable=no,scrollbars=no,status=no, width=${width}, height=${height}, top=${top}, left=${left}`
-    );
-
-    newWindow?.focus();
-  }
   return (
     <Spin spinning={isFetchingUser || isDisconnecting}>
       <div className=" border-[2px] border-[#333] px-[22px] py-[30px] rounded-[16px] bg-white">
@@ -157,7 +96,7 @@ export default function AuthInfoCard() {
           </div>
         </div>
       </div>
-      <CModalWapper isOpen={isModalOpen} onCancel={handleCancelModal}>
+      <CModalWapper isOpen={isModalOpen} onCancel={cancelModal}>
         <div className="h-[383px] overflow-hidden  py-[8px] ">
           <div className=" flex flex-col items-center">
             <TwitterLogo />
@@ -174,7 +113,7 @@ export default function AuthInfoCard() {
             <div className="w-[206px] h-[53px]">
               <CButtonShadow
                 onClick={() => {
-                  handleCancelModal();
+                  cancelModal();
                   getTwitterOauthUrl();
                 }}
                 title="同意して連携する"

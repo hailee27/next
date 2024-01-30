@@ -34,6 +34,7 @@ import { ReactElement, useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { CampaignApiProvider } from '@/context/CampaignApiContext';
+import TwitterCallBackLayout from '@/components/layout/TwitterCallBackLayout';
 
 export type NextPageWithLayout<P = Record<string, never>, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => JSX.Element;
@@ -73,7 +74,9 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
   if (router.pathname.startsWith('/my-page')) {
     getLayout = (page) => <MainLayout>{page}</MainLayout>;
   }
-
+  if (router.pathname === '/auth/callback/twitter') {
+    getLayout = (page) => <TwitterCallBackLayout>{page}</TwitterCallBackLayout>;
+  }
   useEffect(() => {
     const start = () => {
       setLoading(true);

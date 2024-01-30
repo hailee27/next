@@ -20,8 +20,8 @@ function PaginationRouterControl({ total, countItems }: { total: number; countIt
   };
   return totalPage > 1 ? (
     <div className={styles.customPagination}>
-      <div className="flex flex-col items-center space-y-[16px]">
-        {countItems ? <span className="text-[14px] font-medium">{countItems}件</span> : ''}
+      <div className="flex flex-col items-center space-y-[16px] xl:flex-row xl:space-x-[41px] xl:justify-center">
+        {countItems ? <span className="text-[14px] font-medium xl:mt-[20px] xl:text-[16px]">{countItems}件</span> : ''}
         <Pagination
           className="text-center"
           current={currentPage}

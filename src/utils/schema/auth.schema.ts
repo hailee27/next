@@ -13,20 +13,20 @@ export const passwordSchema = yup.object({
   password: yup
     .string()
     .required('パスワードを入力してください')
-    .min(8, 'パスワードには少なくとも8文字が含まれている必要があります')
-    .matches(REGEX_PASSWORD, '英字以外の文字が1文字以上必要、スペースを含めないでください。'),
+    .min(8, '8文字以上入力してください。')
+    .matches(REGEX_PASSWORD, '英字以外の文字が1文字以上必要です、スペースを含めないでください。'),
 });
 
 export const newPasswordSchema = yup.object({
   newPassword: yup
     .string()
     .required('パスワードを入力してください')
-    .min(8, 'パスワードには少なくとも8文字が含まれている必要があります')
-    .matches(REGEX_PASSWORD, '英字以外の文字が1文字以上必要、スペースを含めないでください。'),
+    .min(8, '8文字以上入力してください。')
+    .matches(REGEX_PASSWORD, '英字以外の文字が1文字以上必要です、スペースを含めないでください。'),
   passwordConfirmation: yup
     .string()
     .required('パスワードを入力してください')
-    .min(8, 'パスワードには少なくとも8文字が含まれている必要があります')
+    .min(8, '8文字以上入力してください。')
     .oneOf([yup.ref('newPassword')], 'パスワードは一致していません'),
 });
 

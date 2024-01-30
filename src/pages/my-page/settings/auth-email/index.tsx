@@ -5,7 +5,7 @@ import useAuthEmailPassword from '@/hooks/useAuthEmailPassword';
 import { useUpdateMeMutation } from '@/redux/endpoints/me';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import toastMessage from '@/utils/func/toastMessage';
-import { LoginFormData } from '@/utils/schema/login-email';
+import { AuthEmailPasswordData } from '@/utils/schema/auth.schema';
 import { Spin } from 'antd';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
@@ -18,14 +18,14 @@ export default function SettingAuthEmailPage() {
 
   const { register, handleSubmit, errors, isDisableSubmit, onChangeRecaptcha } = useAuthEmailPassword();
 
-  const onUpdateEmail = async (data: LoginFormData) => {
+  const onUpdateEmail = async (data: AuthEmailPasswordData) => {
     try {
       if (data?.email && data?.password) {
         await updateMe({
           email: data?.email,
           newPassword: data?.password,
         }).unwrap();
-        toastMessage('Email, password has been updated successfully', 'error');
+        toastMessage('Email, password has been updated successfully', 'success');
         router.push('/my-page');
       }
     } catch (err) {
@@ -35,15 +35,15 @@ export default function SettingAuthEmailPage() {
 
   return (
     <AuthCheck>
-      <form onSubmit={handleSubmit(onUpdateEmail)}>
+      <div
+        className={clsx(
+          'container-min-height pb-[56px] h-full w-full bg-[#D5FFFF] py-[40px] px-[20px] transition-all duration-300'
+        )}
+      >
         <Spin spinning={isLoading}>
-          <div
-            className={clsx(
-              ' min-h-[100vh] h-full w-full bg-[#D5FFFF] py-[40px] px-[20px] transition-all duration-300'
-            )}
-          >
+          <form className="max-w-[335px] mx-auto" onSubmit={handleSubmit(onUpdateEmail)}>
             <h1 className="text-[20px] font-bold text-[#04AFAF] tracking-[0.6px] text-center ">
-              新しいメールアドレスを入力
+              メール・パスワード登録
             </h1>
             <p className="text-gray-1 text-[13px] leading-[22px] tracking-[0.39px]">
               ※キャンペーンの応募にはメールアドレス/パスワードの登録が必要です。
@@ -72,15 +72,15 @@ export default function SettingAuthEmailPage() {
                     classShadowColor="bg-[#fff]"
                     isDisable={isDisableSubmit}
                     textClass="text-white text-[14px] font-notoSans"
-                    title="保存する"
+                    title="登録する"
                     type="submit"
                   />
                 </div>
               </div>
             </div>
-          </div>
+          </form>
         </Spin>
-      </form>
+      </div>
     </AuthCheck>
   );
 }

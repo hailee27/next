@@ -1,0 +1,138 @@
+/* eslint-disable max-lines */
+/* eslint-disable react/no-danger */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-console */
+import CampaignDetail from '@/components/CampaignDetail';
+import CampaignDetailProvider from '@/components/CampaignDetail/CampainContext';
+import Completion from '@/components/CampaignDetail/Completion';
+import Loser from '@/components/CampaignDetail/Loser';
+import RecommedCampaignsSection from '@/components/CampaignDetail/RecommedCampaignsSection';
+import Winner from '@/components/CampaignDetail/Winner';
+import { CampaignApi, ListCampaignParams, TypeCampaign } from '@/redux/endpoints/campaign';
+import { useGetReWardsQuery } from '@/redux/endpoints/reWard';
+import { useGetTasksQuery } from '@/redux/endpoints/task';
+import { RootState, wrapper } from '@/redux/store';
+import { useRouter } from 'next/router';
+import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
+
+export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ params }) => {
+  if (
+    !Array.isArray(params?.slug) ||
+    (Array.isArray(params?.slug) && params?.slug && params?.slug?.length > 2) ||
+    (Array.isArray(params?.slug) &&
+      params?.slug &&
+      params?.slug?.length === 2 &&
+      ['completion', 'winning', 'losing']?.find((i) => params?.slug?.[1] === i) === undefined)
+  ) {
+    return {
+      notFound: true,
+    };
+  }
+
+  const id = params?.slug?.[0] ? params?.slug?.[0] : '';
+  const apiRequest: ListCampaignParams = {
+    orderBy: JSON.stringify({
+      totalViews: 'desc',
+    }),
+    skip: 0,
+    take: 3,
+    token: 'user',
+    except: id as string,
+  };
+
+  const { data: dataCampaigns } = await store.dispatch(CampaignApi.endpoints.getListCampaign.initiate(apiRequest));
+
+  const { data: dataCampaign } = await store.dispatch(
+    CampaignApi.endpoints.getDetailCampaign.initiate({
+      campaignId: id as string,
+      token: 'user',
+    })
+  );
+
+  if (!dataCampaign?.id) {
+    return {
+      notFound: true,
+    };
+  }
+  return {
+    props: {
+      viewType: params?.slug?.[1] ?? 'detail',
+      campaignDetail: dataCampaign ?? null,
+      campaignsRecommend: dataCampaigns?.campaigns ?? null,
+    },
+  };
+});
+
+// eslint-disable-next-line max-lines-per-function
+export default function CampaignDetailPage({
+  campaignDetail,
+  campaignsRecommend,
+  viewType,
+}: {
+  campaignDetail: TypeCampaign | null;
+  campaignsRecommend: TypeCampaign[] | null;
+  viewType: 'completion' | 'winning' | 'losing' | 'detail';
+}) {
+  const { accessToken } = useSelector((state: RootState) => state.auth);
+  const router = useRouter();
+
+  const { data: campaignDetailTasks } = useGetTasksQuery({
+    campaignId: router?.query?.slug?.[0] ?? '',
+    token: accessToken || 'user',
+  });
+  const { data: campaignDetailRewards } = useGetReWardsQuery({
+    campaignId: router?.query?.slug?.[0] ?? '',
+    token: accessToken || 'user',
+  });
+
+  const campaign = useMemo(() => {
+    let result: TypeCampaign | null = null;
+    if (campaignDetail?.id) {
+      result = { ...campaignDetail };
+      if (campaignDetailTasks?.tasks) {
+        result.Task = campaignDetailTasks?.tasks ?? null;
+      }
+      if (campaignDetailRewards?.rewards) {
+        result.CampaignReward = campaignDetailRewards?.rewards ?? null;
+      }
+    }
+    return result;
+  }, [campaignDetail, campaignDetailTasks, campaignDetailRewards]);
+
+  const contentRender = useMemo(() => {
+    switch (viewType) {
+      case 'completion':
+        return <Completion />;
+      case 'winning':
+        return <Winner />;
+      case 'losing':
+        return <Loser />;
+      case 'detail':
+      default:
+        return (
+          <CampaignDetailProvider campaign={campaignDetail}>
+            <CampaignDetail />
+          </CampaignDetailProvider>
+        );
+    }
+  }, [viewType, campaign]);
+
+  if (viewType === 'winning' && !accessToken) {
+    router.push('/auth/sign-in/campaign-implementer');
+  } else {
+    return (
+      <div className="font-notoSans">
+        {contentRender}
+        {Array.isArray(campaignsRecommend) && campaignsRecommend?.length > 0 ? (
+          <RecommedCampaignsSection campaignsRecommend={campaignsRecommend} />
+        ) : (
+          ''
+        )}
+
+        <div className="h-[56px]" />
+      </div>
+    );
+  }
+}

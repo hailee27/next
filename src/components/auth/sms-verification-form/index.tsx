@@ -6,9 +6,10 @@ import styles from './styles.module.scss';
 
 interface IComponentProps {
   onSubmitCode: (code: string) => void;
+  isSubmitError?: boolean;
 }
 const { useForm } = Form;
-export default function SmsVerificationForm({ onSubmitCode }: IComponentProps) {
+export default function SmsVerificationForm({ onSubmitCode, isSubmitError }: IComponentProps) {
   const [form] = useForm();
   const input1 = Form.useWatch('sms-item-1', form);
   const input2 = Form.useWatch('sms-item-2', form);
@@ -23,9 +24,15 @@ export default function SmsVerificationForm({ onSubmitCode }: IComponentProps) {
       }
     } catch (e) {
       // eslint-disable-next-line no-console
-      console.log(e);
+      console.log('E', e);
     }
   }, [input1, input2, input3, input4]);
+  useEffect(() => {
+    if (isSubmitError === true) {
+      form.resetFields();
+    }
+  }, [isSubmitError]);
+
   return (
     <Form className={styles.SmsVerificationForm} form={form}>
       {[1, 2, 3, 4].map((i) => (

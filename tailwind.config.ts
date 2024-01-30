@@ -34,6 +34,7 @@ const config: Config = {
         'btn-gradation': 'linear-gradient(90deg, #20FFFF 4.58%, #71FF6F 97.94%)',
         'campaign-detail-bg-1':
           'linear-gradient(2deg, rgba(160, 255, 158, 0.50) 1.61%, rgba(166, 255, 255, 0.50) 98.38%)',
+        'completion-task': 'linear-gradient(0deg, #FFF4EA 0%, #FFF4EA 100%)',
       },
       listStyleType: {
         square: 'square',

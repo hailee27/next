@@ -14,7 +14,7 @@ export default function VerificationPage() {
   const { query, push } = useRouter();
   const [sendVerificationCode, { isLoading: isSendVerificationCode }] = useAuthVerificationMutation();
 
-  const [smsAuth, { isLoading }] = useSmsVerifyMutation();
+  const [smsAuth, { isLoading, isError }] = useSmsVerifyMutation();
   const dispatch = useDispatch();
   const handleSubmitSMS = async (code: string) => {
     try {
@@ -25,9 +25,12 @@ export default function VerificationPage() {
         }).unwrap();
 
         if (data?.accessToken && data?.refreshToken && data?.user) {
-          localStorage.setItem('USER_LOGIN_FROM', 'CREATOR');
           dispatch(setSession({ ...data }));
-          push('/campaign-creator');
+          if (query?.authMethod === 'twitter') {
+            push('/');
+          } else {
+            push('/campaign-creator');
+          }
         }
       }
     } catch (err) {
@@ -55,7 +58,7 @@ export default function VerificationPage() {
         <div className="bg-[#fff] border-[2px] border-[#333] rounded-[16px] p-[16px] xxl:px-[24px] xxl:py-[32px] text-[#333] xxl:min-w-[625px] ">
           <p className="text-center font-bold text-[16px]">携帯電話に届いた認証コードを入力してください</p>
           <div className="h-[16px]" />
-          <SmsVerificationForm onSubmitCode={handleSubmitSMS} />
+          <SmsVerificationForm isSubmitError={isError} onSubmitCode={handleSubmitSMS} />
         </div>
         <div className="h-[24px]" />
         <p className="font-bold text-[12px]">SMSが届いていませんか？下記のいずれかをお試しください</p>

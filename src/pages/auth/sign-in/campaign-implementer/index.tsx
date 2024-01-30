@@ -7,18 +7,21 @@ import ArrowDown from '@/components/common/icons/ArrowDown';
 import useAuthEmailPassword from '@/hooks/useAuthEmailPassword';
 import { useSigninEmailMutation } from '@/redux/endpoints/auth';
 import { setSession } from '@/redux/slices/auth.slice';
+import { RootState } from '@/redux/store';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import toastMessage from '@/utils/func/toastMessage';
-import { LoginFormData } from '@/utils/schema/login-email';
+import { AuthEmailPasswordData } from '@/utils/schema/auth.schema';
+
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function CampaignImplementerSignin() {
   const { register, handleSubmit, errors, isDisableSubmit, onChangeRecaptcha } = useAuthEmailPassword();
-
+  const { accessToken, user } = useSelector((state: RootState) => state.auth);
+  console.log(accessToken, user);
   const [isShowMsg, setIsShowMsg] = useState(false);
 
   const [signinEmail] = useSigninEmailMutation();
@@ -27,12 +30,11 @@ export default function CampaignImplementerSignin() {
 
   const dispatch = useDispatch();
 
-  const onSigninEmail = async (formValue: LoginFormData) => {
+  const onSigninEmail = async (formValue: AuthEmailPasswordData) => {
     try {
       if (formValue.email && formValue.password) {
         const data = await signinEmail(formValue).unwrap();
         if (data?.accessToken && data?.refreshToken && data?.user) {
-          localStorage.setItem('USER_LOGIN_FROM', 'IMPLEMENTER');
           dispatch(setSession({ ...data }));
           setIsShowMsg(true);
           setTimeout(() => {
@@ -47,20 +49,21 @@ export default function CampaignImplementerSignin() {
         }
       }
     } catch (err) {
+      console.log(err, 'Errrrrrrrrrrrrrrrrrr');
       toastMessage(getErrorMessage(err), 'error');
     }
   };
 
   return (
-    <div className="min-h-[100vh] bg-[#D5FFFF] py-[40px] px-[20px]">
+    <div className="container-min-height pb-[56px] bg-[#D5FFFF] py-[40px] px-[20px]">
       <h1 className="text-[20px] text-[#04AFAF] font-bold tracking-[0.6px] text-center">ログイン</h1>
       <div className="h-[36px]" />
-      <div>
+      <div className="max-w-[345px] mx-auto">
         <div className="px-[24px] py-[14px] border-[2px] border-[#333] rounded-t-[16px] flex items-center justify-center bg-[#333] text-white text-[18px] font-bold">
           キャンペーン参加者の方
         </div>
-        <div className="border-[2px] border-[#333] rounded-b-[16px] px-[22px] py-[38px]">
-          <ConnectXModal actionType="SIGNUP" buttonLabel="X（twitter）でログインする" />
+        <div className="border-[2px] border-[#333] rounded-b-[16px] px-[22px] py-[38px] bg-white">
+          <ConnectXModal buttonLabel="X（twitter）でログインする" />
 
           <div className="h-[16px]" />
           <p className="text-gray-1 text-[13px] leading-[22px] tracking-[0.39px]">
@@ -69,11 +72,11 @@ export default function CampaignImplementerSignin() {
         </div>
       </div>
       <div className="h-[16px]" />
-      <div>
+      <div className="max-w-[345px] mx-auto">
         <div className="px-[24px] py-[14px] border-[2px] border-[#333] rounded-t-[16px] flex items-center justify-center bg-[#333] text-white text-[18px] font-bold">
           キャンペーン作成者の方
         </div>
-        <div className="border-[2px] border-[#333] rounded-b-[16px] px-[22px] py-[38px]">
+        <div className="border-[2px] border-[#333] rounded-b-[16px] px-[22px] py-[38px] bg-white">
           <form
             autoComplete="off"
             className="flex flex-col gap-[16px] max-w-[327px] mx-auto items-center"

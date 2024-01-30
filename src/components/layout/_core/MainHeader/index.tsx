@@ -10,6 +10,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
+import ArrowDown from '@/components/common/icons/ArrowDown';
 
 export default function MainHeader() {
   const { accessToken } = useSelector((store: RootState) => store.auth);
@@ -67,11 +68,11 @@ export default function MainHeader() {
   const onChangeAuth = async () => {
     try {
       dispatch(setIsOpenMainMenu(false));
+
       if (accessToken) {
-        await dispatch(logout());
-      } else {
-        router.push('/auth/sign-in/campaign-implementer');
+        dispatch(logout());
       }
+      router.push('/auth/sign-in/campaign-implementer');
     } catch (err) {
       // eslint-disable-next-line no-console
       console.log(err);
@@ -106,7 +107,7 @@ export default function MainHeader() {
       className="font-notoSans  bg-white"
       // /sticky z-[999999] top-0
     >
-      <div className="h-[64px] px-[20px] flex justify-between items-center w-full  border-t-[2px] border-b-[2px] border-[#333] border-solid">
+      <div className="h-[var(--main-header-height-mobile)] px-[20px] flex justify-between items-center w-full  border-t-[2px] border-b-[2px] border-[#333] border-solid">
         <Link className="w-[81px] h-[24px] hover:cursor-pointer" href="/">
           <Image
             alt="footer logo"
@@ -188,9 +189,21 @@ export default function MainHeader() {
                 </Link>
               ))}
             </div>
-            <div className="my-[40px] h-[53px]">
+            <div className="h-[40px]" />
+            <div className=" h-[53px]">
               <CButtonShadow onClick={onChangeAuth} title={accessToken ? 'ログアウト' : 'ログイン'} />
             </div>
+            {accessToken ? (
+              ''
+            ) : (
+              <Link
+                className="text-[13px] font-bold pb-[6px] border-b-[2px] border-b-[#333] flex items-center justify-center !w-fit mx-auto mt-[16px]"
+                href="/auth/sign-up"
+              >
+                新規会員登録の方はこちら <ArrowDown className=" rotate-[-90deg] w-[14px] h-[14px]" />
+              </Link>
+            )}
+            <div className="h-[40px]" />
             <div className="flex flex-col gap-[16px]">
               {SubNavigation.map((i) => (
                 <Link className={clsx('text-[13px]  tracking-[4px]  ')} href={i.to} key={i.key}>

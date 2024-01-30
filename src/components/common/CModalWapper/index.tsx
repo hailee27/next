@@ -12,7 +12,14 @@ interface IComponentProps {
   children: React.ReactNode;
 }
 
-export default function CModalWapper({ isOpen, onCancel, modalWidth, top, children }: IComponentProps) {
+export default function CModalWapper({
+  isOpen,
+  onCancel,
+  modalWidth,
+  top,
+
+  children,
+}: IComponentProps) {
   return (
     <Modal
       closeIcon={false}
