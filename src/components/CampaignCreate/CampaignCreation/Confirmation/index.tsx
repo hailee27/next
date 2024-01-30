@@ -1,28 +1,42 @@
-import React, { useContext } from 'react';
+/* eslint-disable max-lines-per-function */
+import React, { useContext, useEffect, useState } from 'react';
 import { Form } from 'antd';
 import BasicButton from '@/components/common/BasicButton';
-import BasicInput from '@/components/common/BasicInput';
+// import BasicInput from '@/components/common/BasicInput';
 import { StepContext, TypeTabContext } from '@/context/TabContext';
 import FlagItem from '@/components/common/FlagItem';
 import CButtonShadow from '@/components/common/CButtonShadow';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
+import { formatNumber } from '@/utils/formatNumber';
 import TableReWard from './TableReWard';
 
 function Confirmation() {
   const [form] = Form.useForm();
-  const typeWinnerWatch = Form.useWatch('typeWinner', form);
   const { user } = useSelector((state: RootState) => state.auth);
   const { prevTab } = useContext<TypeTabContext>(StepContext);
+  const typeWinnerWatch = Form.useWatch('typeWinner', form);
+  const priceWatch = Form.useWatch('price', form);
+  const [useDepositBalance, setUseDepositBalance] = useState<boolean>(false);
+  const [totalPaymentAmount, setTotalPaymentAmount] = useState<number>(0);
+  const [tax, setTax] = useState<number>(0);
+  const [fee, setFee] = useState<number>(0);
 
+  useEffect(() => {
+    if (priceWatch) {
+      setFee((priceWatch * 5) / 100);
+      setTax((fee * 10) / 100);
+      setTotalPaymentAmount(priceWatch + fee + tax);
+    }
+  }, [priceWatch, fee, tax]);
+  useEffect(() => {
+    if (totalPaymentAmount) {
+      form.setFieldValue('priceWithTax', totalPaymentAmount);
+    }
+  }, [totalPaymentAmount]);
   return (
     <>
       <div className="bg-white rounded-[4px] mt-[16px] p-[40px]">
-        {/* <Form name="saveDraft">
-          <BasicButton className="w-[138px] h-[56px]" htmlType="submit" type="primary">
-            プレビュー
-          </BasicButton>
-        </Form> */}
         <Form form={form} name="confirm">
           <div className="mt-[24px] grid grid-cols-3 gap-y-[24px]">
             <div className="flex flex-col space-y-[8px]">
@@ -79,6 +93,12 @@ function Confirmation() {
           <div className="w-full mt-[24px]">
             {typeWinnerWatch === 'AUTO_PRIZEE_DRAW' ? (
               <>
+                <Form.Item className="!hidden" name="priceWithTax">
+                  <FlagItem />
+                </Form.Item>
+                <Form.Item className="!hidden" initialValue={false} name="usePoint">
+                  <FlagItem />
+                </Form.Item>
                 <div className="text-[14px] font-semibold mb-[8px]">報酬</div>
                 <Form.Item name="tableReward">
                   <TableReWard />
@@ -97,22 +117,43 @@ function Confirmation() {
                   </div>
                 </div>
                 <div className="mt-[24px]">
-                  <span className="text-[14px] font-semibold leading-[16px]">デポジット残高 ※ 12,000円利用可能</span>
+                  <span className="text-[14px] font-semibold leading-[16px]">
+                    デポジット残高 ※ {formatNumber(user?.memberCompany?.pointTotal ?? 0, true, 1)}円利用可能
+                  </span>
                   <div className="flex space-x-[8px] mt-[8px]">
-                    <div className="w-[210px]">
-                      <Form.Item initialValue="12000" name="depositBalance" noStyle>
-                        <BasicInput type="number" />
+                    <div className="w-[210px] h-[50px] border-2 rounded-[6px] border-[#333]">
+                      <Form.Item initialValue={user?.memberCompany?.pointTotal ?? 0} name="depositBalance" noStyle>
+                        <FlagItem className="flex items-center  h-full p-[24px]" />
+                        {/* <BasicInput type="number" /> */}
                       </Form.Item>
                     </div>
-                    <BasicButton type="primary">適用</BasicButton>
+                    <BasicButton
+                      disabled={useDepositBalance}
+                      onClick={() => {
+                        setUseDepositBalance(true);
+                        form.setFieldValue('usePoint', true);
+                        setTotalPaymentAmount(totalPaymentAmount - Number(user?.memberCompany?.pointTotal ?? 0));
+                      }}
+                      type="primary"
+                    >
+                      適用
+                    </BasicButton>
                   </div>
                 </div>
                 <div className="mt-[24px]">
-                  <span className="text-[16px] font-semibold leading-[24px]">支払い金額合計: 104,050円</span>
+                  <div className="text-[16px] items-center flex font-bold leading-[24px]">
+                    支払い金額合計:&ensp;{formatNumber(totalPaymentAmount, true, 1)} 円
+                  </div>
                   <div className="flex flex-col space-y-[32px] text-[16px] pt-[12px]">
-                    <span>ギフト代金: 110,000円</span>
-                    <span>手数料: 5,500円</span>
-                    <span>消費税: 550円</span>
+                    <div className="flex items-center">
+                      ギフト代金:&nbsp;
+                      <Form.Item className="!m-0" name="price">
+                        <FlagItem className="text-[16px]" type="number" />
+                      </Form.Item>
+                      円
+                    </div>
+                    <span>手数料: {formatNumber(fee, true, 1)}円</span>
+                    <span>消費税: {formatNumber(tax, true, 1)}円</span>
                     <span>デポジット残高利用: 12,000円</span>
                   </div>
                 </div>

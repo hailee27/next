@@ -71,6 +71,7 @@ function CampaignCreation() {
           ...forms?.setUp?.getFieldsValue(),
           ...forms?.tasks?.getFieldsValue(),
           ...forms?.reWard?.getFieldsValue(),
+          ...forms?.confirm?.getFieldsValue(),
         };
         if (name !== 'delete' && name !== 'preview' && name !== 'saveDraft') {
           setTab((prev) => String(Number(prev) + 1));
@@ -93,19 +94,20 @@ function CampaignCreation() {
         });
         if (queryParams.typeWinner === 'AUTO_PRIZEE_DRAW') {
           forms?.confirm?.setFieldValue('tableReward', queryParams?.reWard);
+          forms?.confirm?.setFieldValue('price', queryParams.totalReWard);
         } else {
           forms?.confirm?.setFieldValue('compensationSummary', queryParams?.compensationSummary);
         }
 
         // SAVE
         if (name === 'confirm') {
+          // console.log(queryParams);
           handleCreateCampaign(queryParams, 'UNDER_REVIEW');
         }
 
         // SAVE DRAFT
         if (name === 'saveDraft') {
           if (router.query.id) {
-            // console.log(queryParams);
             handleUpdateCampaign(queryParams, 'DRAFT');
           } else {
             handleCreateCampaign(queryParams, 'DRAFT');

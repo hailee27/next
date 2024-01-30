@@ -3,6 +3,7 @@ import {
   usePostQuestsMutation,
   useUpdateCampaignMutation,
 } from '@/redux/endpoints/campaign';
+import { usePostPaymentMutation } from '@/redux/endpoints/payment';
 import { useDeleteReWardsMutation, usePostReWardsMutation, useUpdateReWardsMutation } from '@/redux/endpoints/reWard';
 import { useDeleteTaskMutation, usePostTaskMutation, useUpdateTaskMutation } from '@/redux/endpoints/task';
 import { TypeResponseFormCampaign } from '@/types/campaign.type';
@@ -50,8 +51,11 @@ export const CampaignApiProvider = ({ children }: { children: React.ReactNode })
   // DELETE
   const [deleteCampaign, { isLoading: isLoadingDeleteCampaign }] = useDeleteCampaignMutation();
   const [deleteTask, { isLoading: isLoadingDeleteTask }] = useDeleteTaskMutation();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [deleteReWard, { isLoading: isLoadingDeleteReWard }] = useDeleteReWardsMutation();
+
+  // PAYMENT
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [createPayment, { isLoading: isLoadingCreatePayment }] = usePostPaymentMutation();
 
   const handleCreateCampaign = useCallback(
     (
@@ -71,8 +75,23 @@ export const CampaignApiProvider = ({ children }: { children: React.ReactNode })
               data: adapterDataReWard(queryParams),
             });
             if (dataTask && dataReward) {
-              router.push('/campaign-creator/list');
-              toastMessage(type === 'DRAFT' ? 'save draft succses' : 'succses', 'success');
+              if (type === 'UNDER_REVIEW') {
+                createPayment({
+                  campaignId: res.newCampaign.id,
+                  price: Number(queryParams.price),
+                  priceWithTax: Number(queryParams.priceWithTax),
+                  usePoint: queryParams?.usePoint ?? false,
+                })
+                  .unwrap()
+                  .then(() => {
+                    router.push('/campaign-creator/list');
+                    toastMessage('send sucess (under reiew)', 'success');
+                  })
+                  .catch(() => toastMessage('paymnet error', 'success'));
+              } else {
+                router.push('/campaign-creator/list');
+                toastMessage(type === 'DRAFT' ? 'save draft succses' : 'succses', 'success');
+              }
             }
           } catch (err) {
             // eslint-disable-next-line no-console

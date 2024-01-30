@@ -133,7 +133,6 @@ function InstantWin() {
             <span className="text-[14px] font-bold">すべてのあたりが当選したあと、キャンペーンを終了する</span>
             <span className="text-[12px] ">※ オフの場合、キャンペーン期間が終了するまでハズレが出続けます。</span>
           </div>
-
           <Form.Item initialValue={false} name="statusCampaign" noStyle>
             <BasicSwitch />
           </Form.Item>
