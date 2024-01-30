@@ -33,6 +33,7 @@ import { useRouter } from 'next/router';
 import { ReactElement, useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+import { CampaignApiProvider } from '@/context/CampaignApiContext';
 
 export type NextPageWithLayout<P = Record<string, never>, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => JSX.Element;
@@ -49,7 +50,9 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
   if (router.pathname.startsWith('/campaign-creator')) {
     getLayout = (page) => (
       <AuthCheck type="CREATOR">
-        <CampaignLayout>{page}</CampaignLayout>
+        <CampaignApiProvider>
+          <CampaignLayout>{page}</CampaignLayout>
+        </CampaignApiProvider>
       </AuthCheck>
     );
   }
