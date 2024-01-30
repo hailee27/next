@@ -41,7 +41,7 @@ function Setup() {
         explanatoryText: dataCampaign.description,
         noDate: dataCampaign.dontSetExpiredTime,
         startDate: moment(dataCampaign.startTime),
-        thumbnail: undefined,
+        thumbnail: dataCampaign.image,
       });
     }
   }, [dataCampaign]);

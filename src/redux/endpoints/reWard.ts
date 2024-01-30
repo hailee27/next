@@ -42,7 +42,23 @@ const injectedRtkApi = api.injectEndpoints({
   }),
 });
 
-export type ReWardResponse = void;
+export type ReWardResponse = {
+  rewards: [
+    {
+      id: number;
+      title: string | null;
+      type: string;
+      campaignId: string;
+      index: number;
+      amountOfMoney: number;
+      numberOfWinningTicket: number;
+      updatedAt: string;
+      deleteAt: string | null;
+      createdAt: string;
+    },
+  ];
+  total: number;
+};
 export type GetReWardParameter = {
   campaignId: string;
   token?: string;
@@ -54,7 +70,7 @@ export type DeleteReWardParameter = {
 export type ReWardParameter = {
   campaignId: string;
   data: {
-    rewardId?: number;
+    rewardId?: number | null;
     type: string;
     index: number;
     amountOfMoney: number;

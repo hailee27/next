@@ -7,6 +7,7 @@ import BasicInput from '@/components/common/BasicInput';
 import BasicTextArea from '@/components/common/BasicTextArea';
 import BasicButton from '@/components/common/BasicButton';
 import { renderDataPlatform } from '@/utils/renderDataPlatform';
+import FlagItem from '@/components/common/FlagItem';
 import { TypeTasks } from './type';
 
 interface Props {
@@ -15,7 +16,6 @@ interface Props {
   onDelete: () => void;
   showDelete: boolean;
 }
-
 export interface DataPlatFormType {
   value?: string;
   label: string | null;
@@ -25,6 +25,7 @@ export interface DataPlatFormType {
     type: string;
     require?: boolean;
     name: string;
+    value?: string;
   }[];
 }
 const TaskCampain = ({ item, onDelete, showDelete }: Props) => {
@@ -32,24 +33,55 @@ const TaskCampain = ({ item, onDelete, showDelete }: Props) => {
   const platFormWatch = Form.useWatch(['optionTasks', `task${item.id}`, 'platForm'], form);
   const optionTasksWath = Form.useWatch(['optionTasks', `task${item.id}`, 'type'], form);
   const [listChoise, setListChoise] = useState([1, 2, 3]);
+
   const dataPlatForm = useMemo<DataPlatFormType[] | undefined>(
-    () => renderDataPlatform(platFormWatch),
-    [platFormWatch, item]
+    () => renderDataPlatform(platFormWatch, item.config?.taskTemplate.config),
+    [platFormWatch, item.config?.taskTemplate.config]
   );
 
   useEffect(() => {
-    form.setFieldValue(['optionTasks', `task${item.id}`, 'type'], dataPlatForm?.[0].value);
-  }, [dataPlatForm, item]);
+    if (platFormWatch) {
+      form.setFieldValue(['optionTasks', `task${item.id}`, 'type'], dataPlatForm?.[0].value);
+    }
+  }, [dataPlatForm, platFormWatch]);
+
+  useEffect(() => {
+    if (item.platForm && item.config) {
+      form.setFieldValue(['optionTasks', `task${item.id}`, 'type'], item.platForm.type);
+      form.setFieldValue(['optionTasks', `task${item.id}`, 'platForm'], item.platForm.name);
+      form.setFieldValue(['optionTasks', `task${item.id}`, 'taskId'], item.config.taskTemplateId);
+      if (item.config.taskTemplate.config.platForm === 'CUSTOM') {
+        const list: number[] = [];
+        Object.entries(item.config.taskTemplate.config.listChoice ?? {}).forEach(([key, value], i) => {
+          list.push(i + 1);
+          form.setFieldValue(['optionTasks', `task${item.id}`, 'listChoice', `${key}`], value);
+        });
+        form.setFieldValue(['optionTasks', `task${item.id}`, 'title'], item.config.taskTemplate.config.title);
+        form.setFieldValue(
+          ['optionTasks', `task${item.id}`, 'description'],
+          item.config.taskTemplate.config.description
+        );
+        form.setFieldValue(
+          ['optionTasks', `task${item.id}`, 'questionText'],
+          item.config.taskTemplate.config.questionText
+        );
+        form.setFieldValue(['optionTasks', `task${item.id}`, 'type'], item.config.taskTemplate.config.type);
+      }
+    }
+  }, [item.platForm, item.config, item.id]);
 
   return (
-    <div className=" ">
+    <>
+      <Form.Item className="hidden" name={['optionTasks', `task${item.id}`, 'taskId']}>
+        <FlagItem />
+      </Form.Item>
       <div className="flex items-end justify-between text-[16px] font-semibold mb-[20px]">
         {item.title ? <span>{item.title}</span> : <span>タスク_{item.id}</span>}
         {showDelete && (
           <Image
             alt=""
             className="cursor-pointer"
-            onClick={onDelete}
+            onClick={() => onDelete()}
             preview={false}
             src="/icons/icon-x-circle_new.svg"
           />
@@ -82,7 +114,7 @@ const TaskCampain = ({ item, onDelete, showDelete }: Props) => {
         </div>
         <div className="flex flex-col space-y-[24px]">
           {dataPlatForm
-            ?.find((e) => e.value === optionTasksWath)
+            ?.find((e) => e.value === form.getFieldValue(['optionTasks', `task${item.id}`, 'type']))
             ?.content?.map(
               (e) =>
                 (e.type === 'input' && (
@@ -90,6 +122,7 @@ const TaskCampain = ({ item, onDelete, showDelete }: Props) => {
                     <div className="text-[14px] font-semibold mb-[5px]">{e.title}</div>
                     <Form.Item
                       className="!mb-0"
+                      initialValue={e.value}
                       name={['optionTasks', `task${item.id}`, `${e.name}`]}
                       rules={[{ required: e.require, message: '' }]}
                     >
@@ -100,7 +133,11 @@ const TaskCampain = ({ item, onDelete, showDelete }: Props) => {
                 (e.type === 'textArea' && (
                   <div className="w-full" key={e.id}>
                     <div className="text-[14px] font-semibold mb-[5px]">{e.title}</div>
-                    <Form.Item className="!mb-0" name={['optionTasks', `task${item.id}`, `${e.name}`]}>
+                    <Form.Item
+                      className="!mb-0"
+                      initialValue={e.value}
+                      name={['optionTasks', `task${item.id}`, `${e.name}`]}
+                    >
                       <BasicTextArea style={{ height: 145, resize: 'none' }} />
                     </Form.Item>
                   </div>
@@ -135,7 +172,7 @@ const TaskCampain = ({ item, onDelete, showDelete }: Props) => {
                 name={['optionTasks', `task${item.id}`, 'type']}
                 options={dataPlatForm}
               />
-              {(optionTasksWath === 'formatSingle' || optionTasksWath === 'formatMultiple') && (
+              {optionTasksWath === 'formatSingle' && (
                 <div>
                   {listChoise.map((e) => (
                     <div className="w-full" key={e}>
@@ -172,8 +209,7 @@ const TaskCampain = ({ item, onDelete, showDelete }: Props) => {
           )}
         </div>
       </div>
-      {/* <InputLabel label="ユーザーネーム" /> */}
-    </div>
+    </>
   );
 };
 export default TaskCampain;

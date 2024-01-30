@@ -1,8 +1,9 @@
 import React, { useMemo } from 'react';
 import { Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { TypeCampaignReward } from '@/redux/endpoints/campaign';
 import { formatNumber } from '@/utils/formatNumber';
+import { useGetReWardsQuery } from '@/redux/endpoints/reWard';
+import { useRouter } from 'next/router';
 import styles from './index.module.scss';
 import { TypeReWard } from '../ReWard/InstantWin';
 
@@ -47,9 +48,15 @@ interface Props {
   value?: {
     reWard0: TypeReWard;
   };
-  valueTable?: TypeCampaignReward[];
+  // valueTable?: TypeCampaignReward[];
 }
-function TableReWard({ value, valueTable }: Props) {
+function TableReWard({ value }: Props) {
+  const { query } = useRouter();
+  const { data: valueTable } = useGetReWardsQuery(
+    { campaignId: String(query?.id) },
+    { refetchOnMountOrArgChange: true }
+  );
+
   const data = useMemo<DataType[]>(() => {
     if (value) {
       return Object.values(value ?? {})
@@ -78,7 +85,7 @@ function TableReWard({ value, valueTable }: Props) {
         ]);
     }
     if (valueTable) {
-      return valueTable
+      return valueTable.rewards
         .map((e, i) => ({
           key: String(i + 1),
           equalNumber: `${i + 1}等`,
@@ -88,13 +95,15 @@ function TableReWard({ value, valueTable }: Props) {
         }))
         .concat([
           {
-            key: String(valueTable.length + 1),
+            key: String(valueTable.rewards.length + 1),
             equalNumber: 'はずれ',
             amountOfMoney: '0円',
             numberOfWinners: '-',
             probabilityOfWinning: `${
               100 -
-              Number(valueTable?.map((e) => Number(e.numberOfWinningTicket))?.reduce((prev, cur) => prev + cur, 0))
+              Number(
+                valueTable?.rewards.map((e) => Number(e.numberOfWinningTicket))?.reduce((prev, cur) => prev + cur, 0)
+              )
             }%`,
           },
         ]);
@@ -139,6 +148,6 @@ function TableReWard({ value, valueTable }: Props) {
 }
 TableReWard.defaultProps = {
   value: undefined,
-  valueTable: undefined,
+  // valueTable: undefined,
 };
 export default TableReWard;

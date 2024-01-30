@@ -7,7 +7,7 @@ import Detail from './Detail';
 import CampaignParticipantsInstant from './CampaignParticipantsInstant';
 
 function DetailCampaign() {
-  const { push, query, back } = useRouter();
+  const { query, back } = useRouter();
   const { data } = useGetDetailCampaignQuery({ campaignId: String(query?.id) });
 
   return (
@@ -112,31 +112,6 @@ function DetailCampaign() {
         </div>
       </div>
       {query?.isChecking === 'true' ? <CampaignParticipantsInstant /> : <Detail data={data} />}
-      {query?.isChecking !== 'true' && (
-        <div className="flex space-x-[16px] justify-center  mt-[64px]">
-          <div className="w-[376px]  h-[56px]">
-            <CButtonShadow
-              classBgColor="bg-white"
-              classRounded="rounded-[6px]"
-              classShadowColor="bg-main-text"
-              shadowSize="normal"
-              textClass="text-main-text"
-              title="キャンペーンのステータスを完了にする"
-            />
-          </div>
-          <div className="w-[293px]  h-[56px]">
-            <CButtonShadow
-              classBgColor="bg-main-text"
-              classRounded="rounded-[6px]"
-              classShadowColor="bg-white"
-              onClick={() => push({ query: { ...query, isChecking: true } })}
-              shadowSize="normal"
-              title="キャンペーン参加状況を確認"
-              type="submit"
-            />
-          </div>
-        </div>
-      )}
     </div>
   );
 }
