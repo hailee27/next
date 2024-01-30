@@ -72,19 +72,6 @@ const injectedRtkApi = api.injectEndpoints({
         return config;
       },
     }),
-    createGacha: build.mutation<any, DetailCampaignParams>({
-      query: (queryArg) => {
-        const config: {
-          url: string;
-          method: string;
-        } = {
-          url: `/campaigns/${queryArg.campaignId}/gacha`,
-          method: 'POST',
-        };
-
-        return config;
-      },
-    }),
   }),
 });
 
@@ -187,6 +174,13 @@ export type TypeCampaign = {
     award: {
       id: number;
       isWin?: 'true' | 'false' | null;
+      campaignReward: {
+        amountOfMoney: number;
+        campaignId: string;
+        id: number;
+        index: number;
+        type: string;
+      };
     };
   }[];
 };
@@ -294,5 +288,4 @@ export const {
   useLazyGetListCampaignQuery,
   useGetDetailCampaignQuery,
   useLazyGetDetailCampaignQuery,
-  useCreateGachaMutation,
 } = injectedRtkApi;

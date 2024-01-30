@@ -12,7 +12,7 @@ import Winner from './Winner';
 
 export default function CampaignDetail() {
   const { campaignDetail, viewType } = useContext(CampaignDetailContext);
-  const { accessToken } = useSelector((state: RootState) => state.auth);
+  const { accessToken, user } = useSelector((state: RootState) => state.auth);
 
   const baseCondition = Boolean(
     accessToken &&
@@ -33,6 +33,7 @@ export default function CampaignDetail() {
   if (
     viewType === 'winning' &&
     baseCondition &&
+    campaignDetail?.UserClaimCampaign?.[0]?.userId === user?.id &&
     (campaignDetail?.UserClaimCampaign?.[0]?.award?.isWin === null ||
       campaignDetail?.UserClaimCampaign?.[0]?.award?.isWin === 'true')
   ) {
