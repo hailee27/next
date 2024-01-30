@@ -117,10 +117,13 @@ export type TypeTask = {
     id: number;
     userName: string;
     extra: string | null;
-    config: {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      name: any;
-    };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    config:
+      | any
+      | {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          name: any;
+        };
     link: string;
     quote: string | null;
     required: boolean;
@@ -177,7 +180,7 @@ export type TypeCampaign = {
     campaignId: string;
     award: {
       id: number;
-      isWin?: boolean | null;
+      isWin?: 'true' | 'false' | null;
     };
   }[];
 };

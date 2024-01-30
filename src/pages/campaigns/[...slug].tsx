@@ -24,6 +24,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
   }
 
   const id = params?.slug?.[0] ? params?.slug?.[0] : '';
+
   const apiRequest: ListCampaignParams = {
     orderBy: JSON.stringify({
       totalViews: 'desc',
@@ -67,53 +68,6 @@ export default function CampaignDetailPage({
   campaignsRecommend: TypeCampaign[] | null;
   viewType: 'completion' | 'winning' | 'losing' | 'detail';
 }) {
-  // const { accessToken } = useSelector((state: RootState) => state.auth);
-  // const router = useRouter();
-
-  // const { data } = useGetDetailCampaignQuery(
-  //   {
-  //     campaignId: router?.query?.slug?.[0] ?? '',
-  //     token: 'user',
-  //   },
-  //   {
-  //     refetchOnMountOrArgChange: true,
-  //   }
-  // );
-
-  // const contentRender = useMemo(() => {
-  //   switch (viewType) {
-  //     case 'completion':
-  //       return <Completion />;
-  //     case 'winning':
-  //       return <Winner />;
-  //     case 'losing':
-  //       return <Loser />;
-  //     case 'detail':
-  //     default:
-  //       return (
-  //         <CampaignDetailProvider>
-  //           <CampaignDetail />
-  //         </CampaignDetailProvider>
-  //       );
-  //   }
-  // }, [viewType, campaignInfo]);
-
-  // if (viewType === 'winning' && !accessToken) {
-  //   router.push('/auth/sign-in/campaign-implementer');
-  // } else {
-  //   return (
-  //     <div className="font-notoSans">
-  //       {contentRender}
-
-  //       {Array.isArray(campaignsRecommend) && campaignsRecommend?.length > 0 ? (
-  //         <RecommedCampaignsSection campaignsRecommend={campaignsRecommend} />
-  //       ) : (
-  //         ''
-  //       )}
-  //     </div>
-  //   );
-  // }
-
   return (
     <CampaignDetailProvider campaignDetail={campaignDetail} viewType={viewType}>
       <div className="font-notoSans">

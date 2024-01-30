@@ -24,14 +24,19 @@ export default function CampaignDetail() {
   if (viewType === 'detail') {
     return <InfoCampaign />;
   }
-  if (viewType === 'losing' && baseCondition && campaignDetail?.UserClaimCampaign?.[0]?.award?.isWin === false) {
+  if (viewType === 'losing' && baseCondition && campaignDetail?.UserClaimCampaign?.[0]?.award?.isWin === 'false') {
     return <Loser />;
   }
-  if (viewType === 'winning' && baseCondition && campaignDetail?.UserClaimCampaign?.[0]?.award?.isWin === true) {
-    return <Winner />;
-  }
-  if (viewType === 'completion' && baseCondition && campaignDetail?.UserClaimCampaign?.[0]?.award?.isWin === true) {
+  if (viewType === 'completion' && baseCondition && campaignDetail?.UserClaimCampaign?.[0]?.award?.isWin === 'true') {
     return <Completion />;
+  }
+  if (
+    viewType === 'winning' &&
+    baseCondition &&
+    (campaignDetail?.UserClaimCampaign?.[0]?.award?.isWin === null ||
+      campaignDetail?.UserClaimCampaign?.[0]?.award?.isWin === 'true')
+  ) {
+    return <Winner />;
   }
   return <div />;
 }
