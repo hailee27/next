@@ -1,6 +1,5 @@
 import { QuestsParams } from '@/redux/endpoints/campaign';
 import { TypeResponseFormCampaign } from '@/types/campaign.type';
-import { omitBy } from 'lodash';
 
 export default function adapterCampaignParams(
   data: TypeResponseFormCampaign,
@@ -9,40 +8,34 @@ export default function adapterCampaignParams(
 ): QuestsParams {
   switch (typeWinner) {
     case 'AUTO_PRIZEE_DRAW':
-      return omitBy(
-        {
-          title: data.campainName ?? '',
-          category: data.category ?? '',
-          dontSetExpiredTime: String(data.noDate ?? false),
-          startTime: data.startDate ?? '',
-          expiredTime: data.endDate,
-          methodOfselectWinners: typeWinner,
-          totalNumberOfUsersAllowedToWork: String(data.numberOfParticipants),
-          numberOfPrizes: String(data.totalTicket),
-          totalPrizeValue: String(data.totalReWard),
-          settingForNotWin: String(data.statusCampaign ?? false),
-          description: data.explanatoryText,
-          campaignImage: data.thumbnail,
-          status,
-        },
-        (value) => value === undefined || value === null
-      );
+      return {
+        title: data.campainName ?? '',
+        category: data.category ?? '',
+        dontSetExpiredTime: String(data.noDate ?? false),
+        startTime: data.startDate ?? '',
+        expiredTime: data.noDate ? undefined : data.endDate,
+        methodOfselectWinners: typeWinner,
+        totalNumberOfUsersAllowedToWork: Number(data.numberOfParticipants),
+        numberOfPrizes: String(data.totalTicket),
+        totalPrizeValue: String(data.totalReWard),
+        settingForNotWin: String(data.statusCampaign ?? false),
+        description: data.explanatoryText,
+        campaignImage: data.thumbnail,
+        status,
+      };
     default:
-      return omitBy(
-        {
-          title: data.campainName ?? '',
-          category: data.category ?? '',
-          dontSetExpiredTime: String(data.noDate ?? false),
-          startTime: data.startDate ?? '',
-          expiredTime: data.endDate,
-          methodOfselectWinners: typeWinner,
-          description: data.explanatoryText,
-          noteReward: data.compensationSummary ?? 'NONE',
-          campaignImage: data.thumbnail,
-          status,
-        },
-        (value) => value === undefined || value === null
-      );
+      return {
+        title: data.campainName ?? '',
+        category: data.category ?? '',
+        dontSetExpiredTime: String(data.noDate ?? false),
+        startTime: data.startDate ?? '',
+        expiredTime: data.noDate ? undefined : data.endDate,
+        methodOfselectWinners: typeWinner,
+        description: data.explanatoryText,
+        noteReward: data.compensationSummary ?? 'NONE',
+        campaignImage: data.thumbnail,
+        status,
+      };
   }
 }
 export const adapterDataTask = (data: TypeResponseFormCampaign) =>
@@ -50,18 +43,30 @@ export const adapterDataTask = (data: TypeResponseFormCampaign) =>
     {
       type: data.requireTask?.platForm ?? 'twitter',
       taskActionType: data.requireTask?.type,
-      taskTemplate: { userName: 'NONE', link: 'NONE', config: { name: data.requireTask } },
+      taskId: data.requireTask?.taskId,
+      taskTemplate: { userName: 'NONE', link: 'NONE', config: { ...data.requireTask, requireTask: true } },
     },
   ].concat(
     Object.values(data?.optionTasks ?? {}).map((e) => ({
       type: e.platForm,
       taskActionType: e?.type,
-      taskTemplate: { userName: 'NONE', link: 'NONE', config: { name: e } },
+      taskId: e.taskId,
+      taskTemplate: { userName: 'NONE', link: 'NONE', config: { ...e, requireTask: false } },
     }))
   );
+export const adapterNewTask = (data: TypeResponseFormCampaign) =>
+  Object.values(data?.optionTasks ?? {})
+    .map((e) => ({
+      type: e.platForm,
+      taskActionType: e?.type,
+      taskId: e.taskId,
+      taskTemplate: { userName: 'NONE', link: 'NONE', config: { ...e, requireTask: false } },
+    }))
+    .filter((v) => !v.taskId);
 
 export const adapterDataReWard = (data: TypeResponseFormCampaign) =>
   Object.values(data?.reWard ?? {}).map((e, i) => ({
+    rewardId: e.reWardId ? Number(e.reWardId) : undefined,
     type: e.receivingMethod.amazon ? 'AMAZON_GIFT' : 'PAYPAY_GIFT',
     index: i + 1,
     amountOfMoney: Number(e.money),

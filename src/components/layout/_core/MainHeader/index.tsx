@@ -1,18 +1,20 @@
+/* eslint-disable max-lines-per-function */
+import LogoutModal from '@/components/auth/LogoutModal';
+import CButtonShadow from '@/components/common/CButtonShadow';
+import ArrowDown from '@/components/common/icons/ArrowDown';
 import BarIcon from '@/components/common/icons/BarIcon';
 import XIcon from '@/components/common/icons/XIcon';
-import clsx from 'clsx';
-import { useEffect, useMemo } from 'react';
-import CButtonShadow from '@/components/common/CButtonShadow';
-import { logout } from '@/redux/slices/auth.slice';
 import { setIsOpenMainMenu } from '@/redux/slices/common.slice';
 import { RootState } from '@/redux/store';
+import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import ArrowDown from '@/components/common/icons/ArrowDown';
 
 export default function MainHeader() {
+  const [isOpenLogoutModal, setIsOpenLogoutModal] = useState(false);
   const { accessToken } = useSelector((store: RootState) => store.auth);
   const { isOpenMainMenu } = useSelector((store: RootState) => store.common);
 
@@ -68,9 +70,9 @@ export default function MainHeader() {
   const onChangeAuth = async () => {
     try {
       dispatch(setIsOpenMainMenu(false));
-
       if (accessToken) {
-        dispatch(logout());
+        setIsOpenLogoutModal(true);
+        return;
       }
       router.push('/auth/sign-in/campaign-implementer');
     } catch (err) {
@@ -103,12 +105,9 @@ export default function MainHeader() {
     };
   }, []);
   return (
-    <div
-      className="font-notoSans  bg-white"
-      // /sticky z-[999999] top-0
-    >
-      <div className="h-[var(--main-header-height-mobile)] px-[20px] flex justify-between items-center w-full  border-t-[2px] border-b-[2px] border-[#333] border-solid">
-        <Link className="w-[81px] h-[24px] hover:cursor-pointer" href="/">
+    <div className="font-notoSans  bg-white">
+      <div className="h-[var(--main-header-height-mobile)] xl:h-[var(--main-header-height-pc)]   px-[20px] flex justify-between items-center w-full  border-t-[2px] border-b-[2px] border-[#333] border-solid">
+        <Link className="w-[81px] h-[24px] xl:w-[100px] xl:h-[30px] hover:cursor-pointer" href="/">
           <Image
             alt="footer logo"
             className="w-full h-full object-cover"
@@ -118,7 +117,39 @@ export default function MainHeader() {
             width="0"
           />
         </Link>
-        <div className="w-[42px] h-[42px]">
+        <div className="hidden xl:flex items-center justify-end gap-[48px]">
+          <div className="flex items-center justify-end gap-[30px]">
+            {MainNavigation.slice(1, 5).map((item) => (
+              <Link
+                className={clsx(
+                  'text-[14px] font-bold tracking-[0.42px] leading-[21px] ',
+                  item.text === 'Home' ? 'font-montserrat' : '',
+                  router.pathname.startsWith(item.to) ? ' text-[#04AFAF]' : ''
+                )}
+                href={item.to}
+                key={item.key}
+              >
+                {item.text}
+              </Link>
+            ))}
+          </div>
+          <div className="flex items-center justify-end gap-[24px] ">
+            {accessToken ? (
+              ''
+            ) : (
+              <Link
+                className="text-[13px] font-bold pb-[6px] border-b-[2px] border-b-[#333] flex items-center justify-center gap-[4px] !w-fit mx-auto mt-[6px] "
+                href="/auth/sign-up"
+              >
+                新規会員登録の方はこちら <ArrowDown className=" rotate-[-90deg] w-[14px] h-[14px]" />
+              </Link>
+            )}
+            <div className="w-[206px] h-[53px]">
+              <CButtonShadow onClick={onChangeAuth} title={accessToken ? 'ログアウト' : 'ログイン'} />
+            </div>
+          </div>
+        </div>
+        <div className="w-[42px] h-[42px] xl:hidden">
           <CButtonShadow
             classBgColor="bg-white"
             classRounded="rounded-[4px]"
@@ -137,7 +168,7 @@ export default function MainHeader() {
       <div
         aria-hidden="true"
         className={clsx(
-          'fixed top-0 w-full h-screen z-[1000] duration-500 transition-all',
+          'fixed top-0 w-full h-screen z-[1000] duration-500 transition-all xl:hidden',
           isOpenMainMenu ? 'right-0' : 'right-[-100vw]'
         )}
         onClick={() => {
@@ -180,7 +211,10 @@ export default function MainHeader() {
                 <Link
                   className={clsx(
                     'text-[20px] font-bold tracking-[0.6px]  ',
-                    i.text === 'Home' ? 'font-montserrat' : ''
+                    i.text === 'Home' ? 'font-montserrat' : '',
+                    router.pathname === i.to || (router.pathname.startsWith(i.to) && i.to !== '/')
+                      ? ' text-[#04AFAF]'
+                      : ''
                   )}
                   href={i.to}
                   key={i.key}
@@ -197,7 +231,7 @@ export default function MainHeader() {
               ''
             ) : (
               <Link
-                className="text-[13px] font-bold pb-[6px] border-b-[2px] border-b-[#333] flex items-center justify-center !w-fit mx-auto mt-[16px]"
+                className="text-[13px] font-bold pb-[6px] border-b-[2px] border-b-[#333] flex items-center justify-center !w-fit mx-auto mt-[16px] gap-[4px]"
                 href="/auth/sign-up"
               >
                 新規会員登録の方はこちら <ArrowDown className=" rotate-[-90deg] w-[14px] h-[14px]" />
@@ -206,7 +240,14 @@ export default function MainHeader() {
             <div className="h-[40px]" />
             <div className="flex flex-col gap-[16px]">
               {SubNavigation.map((i) => (
-                <Link className={clsx('text-[13px]  tracking-[4px]  ')} href={i.to} key={i.key}>
+                <Link
+                  className={clsx(
+                    'text-[13px]  tracking-[4px]  ',
+                    router.pathname.startsWith(i.to) ? ' text-[#04AFAF]' : ''
+                  )}
+                  href={i.to}
+                  key={i.key}
+                >
                   {i.text}
                 </Link>
               ))}
@@ -214,6 +255,12 @@ export default function MainHeader() {
           </div>
         </div>
       </div>
+      <LogoutModal
+        isOpen={isOpenLogoutModal}
+        onCancel={() => {
+          setIsOpenLogoutModal(false);
+        }}
+      />
     </div>
   );
 }

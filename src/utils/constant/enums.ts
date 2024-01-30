@@ -33,4 +33,5 @@ export const USER_ROLE = {
   CREATOR: 'CREATOR',
 };
 
-export const PAGINATION_PAGE_SIZE = 20;
+export const PAGINATION_PAGE_SIZE = 10;
+export const HOME_PAGINATION_PAGE_SIZE = 4;

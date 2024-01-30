@@ -7,13 +7,20 @@ export default function implementTask(build: EndpointBuilder<BaseQueryFn, string
     any,
     {
       taskId: number;
+      body?: {
+        answer: {
+          question: string;
+          questionType: 'FREE_TEXT' | 'CHOOSE_MULTIPLE' | 'CHOOSE_ONE';
+          answer: string;
+        };
+      };
     }
   >({
-    query(body) {
+    query(request) {
       return {
-        url: `/me/tasks/${body?.taskId}`,
+        url: `/me/tasks/${request?.taskId}`,
         method: 'POST',
-        body,
+        body: request?.body ?? {},
       };
     },
   });

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { TypeConfig } from '@/components/CampaignCreate/CampaignCreation/Task/type';
 import { api } from '../api';
 import { TypeTask } from './campaign';
 
@@ -41,7 +42,31 @@ const injectedRtkApi = api.injectEndpoints({
   }),
 });
 
-export type TaskResponse = void;
+export type TaskResponse = {
+  tasks: [
+    {
+      id: number;
+      campaignId: string;
+      type: string;
+      taskActionType: string;
+      taskTemplateId: number;
+      updatedAt: string;
+      createdAt: string;
+      taskTemplate: {
+        id: number;
+        userName: string;
+        extra: string | null;
+        config: TypeConfig;
+        link: string;
+        quote: string | null;
+        required: boolean;
+        updatedAt: string;
+        createdAt: string;
+      };
+    },
+  ];
+  total: 37;
+};
 export type GetTaskParams = {
   campaignId: string;
   token?: string;

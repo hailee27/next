@@ -1,13 +1,32 @@
+/* eslint-disable import/no-cycle */
 import BasicInput from '@/components/common/BasicInput';
 import BasicSwitch from '@/components/common/BasicSwitch';
 import { Form, Image } from 'antd';
-import React from 'react';
+import React, { useEffect } from 'react';
+import FlagItem from '@/components/common/FlagItem';
+import { TypeReWard } from './InstantWin';
 
-function ListReWard({ index, onDelete }: { index: number; onDelete: () => void }) {
+function ListReWard({ index, item, onDelete }: { index: number; item: TypeReWard; onDelete: () => void }) {
   const form = Form.useFormInstance();
   // const paypayWatch = Form.useWatch(['reWard', `reWard${index}`, 'receivingMethod', 'paypay'], form) ?? false;
   const amazonWatch = Form.useWatch(['reWard', `reWard${index}`, 'receivingMethod', 'amazon'], form) ?? false;
 
+  useEffect(() => {
+    if (item) {
+      form.setFieldsValue({
+        reWard: {
+          [`reWard${index}`]: {
+            reWardId: item.id,
+            money: item.money,
+            tiketWinning: item.tiketWinning,
+            receivingMethod: {
+              amazon: item.receivingMethod?.amazon,
+            },
+          },
+        },
+      });
+    }
+  }, [item]);
   return (
     <div>
       {index !== 1 && (
@@ -21,6 +40,9 @@ function ListReWard({ index, onDelete }: { index: number; onDelete: () => void }
           />
         </div>
       )}
+      <Form.Item className="!hidden" name={['reWard', `reWard${index}`, 'reWardId']}>
+        <FlagItem />
+      </Form.Item>
       <div className="border-2 border-[#2D3648] rounded-[8px] p-[32px]">
         <div className="flex w-full border-b items-end justify-between text-[16px] font-semibold mb-[24px] pb-[24px]">
           <span>{index}等</span>
@@ -58,16 +80,6 @@ function ListReWard({ index, onDelete }: { index: number; onDelete: () => void }
                 <BasicSwitch />
               </Form.Item>
             </div>
-            {/* <div className="flex space-x-[12px]">
-              <span className="text-[16px]">Paypay gift</span>
-              <Form.Item
-                initialValue={paypayWatch}
-                name={['reWard', `reWard${index}`, 'receivingMethod', 'paypay']}
-                noStyle
-              >
-                <BasicSwitch />
-              </Form.Item>
-            </div> */}
           </div>
         </div>
       </div>

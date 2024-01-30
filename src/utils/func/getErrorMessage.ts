@@ -14,5 +14,5 @@ export function getErrorMessage(error: any) {
   // eslint-disable-next-line no-console
   console.log(error);
 
-  return ErrorCode?.[statusCode] || '内部サーバーエラー';
+  return ErrorCode?.[statusCode] || 'エラー！エラーが発生しました。後でもう一度やり直してください。';
 }

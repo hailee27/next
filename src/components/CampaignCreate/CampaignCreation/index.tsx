@@ -4,17 +4,14 @@ import moment from 'moment';
 import { Form, Spin } from 'antd';
 import type { TabsProps } from 'antd';
 import BasicTabs from '@/components/common/BasicTabs';
-import { useDeleteCampaignMutation, usePostQuestsMutation } from '@/redux/endpoints/campaign';
+import { useDeleteCampaignMutation } from '@/redux/endpoints/campaign';
 import { TypeResponseFormCampaign } from '@/types/campaign.type';
-import toastMessage from '@/utils/func/toastMessage';
-import adapterCampaignParams, { adapterDataReWard, adapterDataTask } from '@/utils/func/adapterCampaignParams';
 import { StepContext, TypeTabContext } from '@/context/TabContext';
 import { useGetMasterDataQuery } from '@/redux/endpoints/masterData';
 import CButtonShadow from '@/components/common/CButtonShadow';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
-import { usePostTaskMutation } from '@/redux/endpoints/task';
-import { usePostReWardsMutation } from '@/redux/endpoints/reWard';
+import { useCampaignApiContext } from '@/context/CampaignApiContext';
 import ReWard from './ReWard';
 import Confirmation from './Confirmation';
 import Setup from './Setup';
@@ -55,12 +52,10 @@ function CampaignCreation() {
   const router = useRouter();
   const { user } = useSelector((state: RootState) => state.auth);
   const [tab, setTab] = useState<string>('1');
-  const [trigger, { isLoading }] = usePostQuestsMutation();
-  const [triggerTask] = usePostTaskMutation();
-  const [triggerReWard] = usePostReWardsMutation();
+  const { handleCreateCampaign, handleUpdateCampaign, isLoadingCreate, isLoadingUpdate } = useCampaignApiContext();
   const [deleteCampaign] = useDeleteCampaignMutation();
-
   const { data: dataMaster } = useGetMasterDataQuery();
+
   const valueContext = useMemo<TypeTabContext>(
     () => ({
       prevTab: () => setTab((prev) => String(Number(prev) - 1)),
@@ -83,7 +78,7 @@ function CampaignCreation() {
         if (tab === '4') {
           setTab('4');
         }
-
+        // PASS VALUE TO FROM CONFIRM
         forms?.confirm?.setFieldsValue({
           nameCampagin: queryParams.campainName,
           typeCampagin: dataMaster?.CATEGORY_CAMPAIGN.find((e) => e.value === queryParams.category)?.label,
@@ -102,54 +97,22 @@ function CampaignCreation() {
           forms?.confirm?.setFieldValue('compensationSummary', queryParams?.compensationSummary);
         }
 
+        // SAVE
         if (name === 'confirm') {
-          trigger(adapterCampaignParams(queryParams, queryParams.typeWinner, 'UNDER_REVIEW'))
-            .unwrap()
-            .then(async (res) => {
-              try {
-                const dataTask = await triggerTask({
-                  campaignId: res.newCampaign.id,
-                  data: adapterDataTask(queryParams),
-                });
-                const dataReward = await triggerReWard({
-                  campaignId: res.newCampaign.id,
-                  data: adapterDataReWard(queryParams),
-                });
-                if (dataTask && dataReward) {
-                  router.push('/campaign-creator/list');
-                  toastMessage('succses', 'success');
-                }
-              } catch (err) {
-                // eslint-disable-next-line no-console
-                console.log(err);
-              }
-            })
-            .catch((err) => toastMessage(err.message || 'error', 'error'));
+          handleCreateCampaign(queryParams, 'UNDER_REVIEW');
         }
+
+        // SAVE DRAFT
         if (name === 'saveDraft') {
-          trigger(adapterCampaignParams(queryParams, queryParams.typeWinner, 'DRAFT'))
-            .unwrap()
-            .then(async (res) => {
-              try {
-                const dataTask = await triggerTask({
-                  campaignId: res.newCampaign.id,
-                  data: adapterDataTask(queryParams),
-                });
-                const dataReward = await triggerReWard({
-                  campaignId: res.newCampaign.id,
-                  data: adapterDataReWard(queryParams),
-                });
-                if (dataTask && dataReward) {
-                  router.push('/campaign-creator/list');
-                  toastMessage('save draft succses', 'success');
-                }
-              } catch (err) {
-                // eslint-disable-next-line no-console
-                console.log(err);
-              }
-            })
-            .catch(() => toastMessage('failed', 'error'));
+          if (router.query.id) {
+            // console.log(queryParams);
+            handleUpdateCampaign(queryParams, 'DRAFT');
+          } else {
+            handleCreateCampaign(queryParams, 'DRAFT');
+          }
         }
+
+        // DELETE
         if (name === 'delete') {
           if (router.query.id) {
             deleteCampaign({ campaignId: String(router.query.id) });
@@ -238,7 +201,7 @@ function CampaignCreation() {
           </div>
         </div>
         <div className="pt-[28px] pb-[55px]">
-          <Spin spinning={isLoading}>
+          <Spin spinning={isLoadingCreate || isLoadingUpdate}>
             <StepContext.Provider value={valueContext}>
               <BasicTabs activeKey={tab} items={items} onChange={(e) => setTab(e)} />
             </StepContext.Provider>

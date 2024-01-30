@@ -139,14 +139,7 @@ function TableAll({
         dataSource={data}
         loading={isLoading}
         onRow={(record) => ({
-          onClick: () => {
-            if (record.status === 'DRAFT') {
-              push(`/campaign-creator/create/draft/${record.key}`);
-            } else {
-              push(`/campaign-creator/list/${record.key}`);
-            }
-            // trigger({ campaignId: String(record.key) }); // click row
-          },
+          onClick: () => push(`/campaign-creator/list/${record.key}`),
         })}
         pagination={{
           position: ['bottomCenter'],

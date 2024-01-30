@@ -38,14 +38,15 @@ export const getMasterDataLabel = (
   return result;
 };
 
-export const convertCampaignTask = (task: TypeTask | null, masterData: MasterDataResponse | null) => {
+export const convertCampaignTask = (task: TypeTask | null) => {
   let result: TasksConvert | null = null;
   try {
+    const taskPlatForm = task?.taskTemplate?.config?.platForm;
     switch (task?.type) {
       case 'TWITTER':
-        switch (task?.taskTemplate?.config?.name?.type) {
+        switch (task?.taskTemplate?.config?.type) {
           case 'twitter_follow': {
-            const targetUser = task?.taskTemplate?.config?.name?.userFollow;
+            const targetUser = taskPlatForm === 'TWITTER' ? task?.taskTemplate?.config?.userFollow : '';
             const user =
               targetUser?.charAt(0) === '@' ? targetUser?.slice(1, (targetUser?.length ?? 0) - 1) : targetUser;
             result = {
@@ -64,7 +65,7 @@ export const convertCampaignTask = (task: TypeTask | null, masterData: MasterDat
             break;
           }
           case 'twitter_repost': {
-            const splitUrl = task?.taskTemplate?.config?.name?.postURL?.split('/');
+            const splitUrl = taskPlatForm === 'TWITTER' ? task?.taskTemplate?.config?.postURL?.split('/') : '';
             const postId = splitUrl?.[(splitUrl?.length ?? 0) - 1] ?? '';
             result = {
               id: task?.id ?? '',
@@ -83,7 +84,7 @@ export const convertCampaignTask = (task: TypeTask | null, masterData: MasterDat
             break;
           }
           case 'twitter_repost_quote': {
-            const splitUrl = task?.taskTemplate?.config?.name?.postURLQuote?.split('/');
+            const splitUrl = taskPlatForm === 'TWITTER' ? task?.taskTemplate?.config?.postURLQuote?.split('/') : '';
             const postId = splitUrl?.[(splitUrl?.length ?? 0) - 1] ?? '';
             result = {
               id: task?.id ?? '',
@@ -94,10 +95,10 @@ export const convertCampaignTask = (task: TypeTask | null, masterData: MasterDat
                   <p>
                     この引用をリツイート: <p className="line-clamp-1 text-ellipsis">ツイート URL</p>
                   </p>
-                  {task?.taskTemplate?.config?.name?.quotePost ? (
+                  {taskPlatForm === 'TWITTER' && task?.taskTemplate?.config?.quotePost ? (
                     <p>
                       リクエスト: <br />
-                      {task?.taskTemplate?.config?.name?.quotePost}
+                      {task?.taskTemplate?.config?.quotePost}
                     </p>
                   ) : (
                     ''
@@ -116,26 +117,26 @@ export const convertCampaignTask = (task: TypeTask | null, masterData: MasterDat
               title: 'X指定ハッシュタグ付きの投稿をさせる',
               description: (
                 <div className="text-[14px]">
-                  {task?.taskTemplate?.config?.name?.taskTitle ? (
+                  {taskPlatForm === 'TWITTER' && task?.taskTemplate?.config?.taskTitle ? (
                     <p>
                       タスクタイトル:
-                      <br /> {task?.taskTemplate?.config?.name?.taskTitle}
+                      <br /> {task?.taskTemplate?.config?.taskTitle}
                     </p>
                   ) : (
                     ''
                   )}
-                  {task?.taskTemplate?.config?.name?.taskDescription ? (
+                  {taskPlatForm === 'TWITTER' && task?.taskTemplate?.config?.taskDescription ? (
                     <p>
                       タスク説明:
-                      <br /> {task?.taskTemplate?.config?.name?.taskDescription}
+                      <br /> {task?.taskTemplate?.config?.taskDescription}
                     </p>
                   ) : (
                     ''
                   )}
-                  {task?.taskTemplate?.config?.name?.defaultPostText ? (
+                  {taskPlatForm === 'TWITTER' && task?.taskTemplate?.config?.defaultPostText ? (
                     <p>
                       デフォルト投稿テキスト:
-                      <br /> {task?.taskTemplate?.config?.name?.defaultPostText}
+                      <br /> {task?.taskTemplate?.config?.defaultPostText}
                     </p>
                   ) : (
                     ''
@@ -154,10 +155,10 @@ export const convertCampaignTask = (task: TypeTask | null, masterData: MasterDat
               title: 'X指定文言を投稿させる',
               description: (
                 <div className="text-[14px]">
-                  {task?.taskTemplate?.config?.name?.designatedClassicalChinese ? (
+                  {taskPlatForm === 'TWITTER' && task?.taskTemplate?.config?.designatedClassicalChinese ? (
                     <p>
                       指定文言:
-                      <br /> {task?.taskTemplate?.config?.name?.designatedClassicalChinese}
+                      <br /> {task?.taskTemplate?.config?.designatedClassicalChinese}
                     </p>
                   ) : (
                     ''
@@ -174,10 +175,8 @@ export const convertCampaignTask = (task: TypeTask | null, masterData: MasterDat
         }
         break;
       case 'VISIT_PAGE': {
-        const webUrl =
-          task?.taskTemplate?.config?.name?.url?.indexOf('http') !== 0
-            ? `https://${task?.taskTemplate?.config?.name?.url}`
-            : task?.taskTemplate?.config?.name?.url;
+        const respUrl = taskPlatForm === 'VISIT_PAGE' ? task?.taskTemplate?.config?.url : '';
+        const webUrl = respUrl?.indexOf('http') !== 0 ? `https://${respUrl}` : respUrl;
         result = {
           id: task?.id ?? '',
           campaignId: task?.campaignId ?? '',
@@ -200,11 +199,11 @@ export const convertCampaignTask = (task: TypeTask | null, masterData: MasterDat
           title: 'LINE友達登録させる',
           description: (
             <div className="text-[14px]">
-              {task?.taskTemplate?.config?.name?.url ? (
+              {taskPlatForm === 'LINE' && task?.taskTemplate?.config?.url ? (
                 <p>
                   リンク:
                   <br />
-                  <p className="line-clamp-1 text-ellipsis">{task?.taskTemplate?.config?.name?.url}</p>
+                  <p className="line-clamp-1 text-ellipsis">{task?.taskTemplate?.config?.url}</p>
                 </p>
               ) : (
                 ''
@@ -212,12 +211,12 @@ export const convertCampaignTask = (task: TypeTask | null, masterData: MasterDat
             </div>
           ),
           type: 'OPEN_LINK',
-          link: task?.taskTemplate?.config?.name?.url,
+          link: taskPlatForm === 'LINE' ? task?.taskTemplate?.config?.url : '',
         };
         break;
       }
       case 'TIKTOK':
-        switch (task?.taskTemplate?.config?.name?.type) {
+        switch (task?.taskTemplate?.config?.type) {
           case 'letThemWatch': {
             result = {
               id: task?.id ?? '',
@@ -226,12 +225,15 @@ export const convertCampaignTask = (task: TypeTask | null, masterData: MasterDat
               description: (
                 <div className="text-[14px]">
                   <p>
-                    リンク: <p className="line-clamp-1 text-ellipsis">{task?.taskTemplate?.config?.name?.linkWatch}</p>
+                    リンク:{' '}
+                    <p className="line-clamp-1 text-ellipsis">
+                      {taskPlatForm === 'TIKTOK' ? task?.taskTemplate?.config?.linkWatch : ''}
+                    </p>
                   </p>
                 </div>
               ),
               type: 'OPEN_LINK',
-              link: task?.taskTemplate?.config?.name?.linkWatch,
+              link: taskPlatForm === 'TIKTOK' ? task?.taskTemplate?.config?.linkWatch : '',
             };
             break;
           }
@@ -243,12 +245,15 @@ export const convertCampaignTask = (task: TypeTask | null, masterData: MasterDat
               description: (
                 <div className="text-[14px]">
                   <p>
-                    リンク: <p className="line-clamp-1 text-ellipsis">{task?.taskTemplate?.config?.name?.linkFollow}</p>
+                    リンク:{' '}
+                    <p className="line-clamp-1 text-ellipsis">
+                      {taskPlatForm === 'TIKTOK' ? task?.taskTemplate?.config?.linkFollow : ''}
+                    </p>
                   </p>
                 </div>
               ),
               type: 'OPEN_LINK',
-              link: task?.taskTemplate?.config?.name?.linkFollow,
+              link: taskPlatForm === 'TIKTOK' ? task?.taskTemplate?.config?.linkFollow : '',
             };
             break;
           }
@@ -257,7 +262,7 @@ export const convertCampaignTask = (task: TypeTask | null, masterData: MasterDat
         }
         break;
       case 'TELEGRAM':
-        switch (task?.taskTemplate?.config?.name?.type) {
+        switch (task?.taskTemplate?.config?.type) {
           case 'joinChannel': {
             result = {
               id: task?.id ?? '',
@@ -267,12 +272,14 @@ export const convertCampaignTask = (task: TypeTask | null, masterData: MasterDat
                 <div className="text-[14px]">
                   <p>
                     リンク:{' '}
-                    <p className="line-clamp-1 text-ellipsis">{task?.taskTemplate?.config?.name?.linkChannel}</p>
+                    <p className="line-clamp-1 text-ellipsis">
+                      {taskPlatForm === 'TELEGRAM' ? task?.taskTemplate?.config?.linkChannel : ''}
+                    </p>
                   </p>
                 </div>
               ),
               type: 'OPEN_LINK',
-              link: task?.taskTemplate?.config?.name?.linkChannel,
+              link: taskPlatForm === 'TELEGRAM' ? task?.taskTemplate?.config?.linkChannel : '',
             };
             break;
           }
@@ -284,12 +291,15 @@ export const convertCampaignTask = (task: TypeTask | null, masterData: MasterDat
               description: (
                 <div className="text-[14px]">
                   <p>
-                    リンク: <p className="line-clamp-1 text-ellipsis">{task?.taskTemplate?.config?.name?.linkPost}</p>
+                    リンク:{' '}
+                    <p className="line-clamp-1 text-ellipsis">
+                      {taskPlatForm === 'TELEGRAM' ? task?.taskTemplate?.config?.linkPost : ''}
+                    </p>
                   </p>
                 </div>
               ),
               type: 'OPEN_LINK',
-              link: task?.taskTemplate?.config?.name?.linkPost,
+              link: taskPlatForm === 'TELEGRAM' ? task?.taskTemplate?.config?.linkPost : '',
             };
             break;
           }
@@ -304,11 +314,11 @@ export const convertCampaignTask = (task: TypeTask | null, masterData: MasterDat
           title: 'DiscordサーバーにJoinする',
           description: (
             <div className="text-[14px]">
-              {task?.taskTemplate?.config?.name?.inviteLink ? (
+              {taskPlatForm === 'DISCORD' && task?.taskTemplate?.config?.inviteLink ? (
                 <p>
                   リンク:
                   <br />
-                  <p className="line-clamp-1 text-ellipsis">{task?.taskTemplate?.config?.name?.inviteLink}</p>
+                  <p className="line-clamp-1 text-ellipsis">{task?.taskTemplate?.config?.inviteLink}</p>
                 </p>
               ) : (
                 ''
@@ -316,12 +326,12 @@ export const convertCampaignTask = (task: TypeTask | null, masterData: MasterDat
             </div>
           ),
           type: 'OPEN_LINK',
-          link: task?.taskTemplate?.config?.name?.inviteLink,
+          link: taskPlatForm === 'DISCORD' ? task?.taskTemplate?.config?.inviteLink : '',
         };
         break;
       }
       case 'CUSTOM': {
-        switch (task?.taskTemplate?.config?.name?.type) {
+        switch (task?.taskTemplate?.config?.type) {
           case 'freeAnswer': {
             result = {
               id: task?.id ?? '',
@@ -329,7 +339,7 @@ export const convertCampaignTask = (task: TypeTask | null, masterData: MasterDat
               title: 'アンケートに回答する',
               description: '',
               type: 'FAQ_FREE_TEXT',
-              taskInfo: task?.taskTemplate?.config?.name ?? null,
+              taskInfo: task?.taskTemplate?.config ?? null,
             };
             break;
           }
@@ -340,7 +350,7 @@ export const convertCampaignTask = (task: TypeTask | null, masterData: MasterDat
               title: 'アンケートに回答する',
               description: '',
               type: 'FAQ_CHOOSE_MULTIPLE',
-              taskInfo: task?.taskTemplate?.config?.name ?? null,
+              taskInfo: task?.taskTemplate?.config ?? null,
             };
             break;
           }
@@ -351,7 +361,7 @@ export const convertCampaignTask = (task: TypeTask | null, masterData: MasterDat
               title: 'アンケートに回答する',
               description: '',
               type: 'FAQ_CHOOSE_ONE',
-              taskInfo: task?.taskTemplate?.config?.name ?? null,
+              taskInfo: task?.taskTemplate?.config ?? null,
             };
             break;
           }
