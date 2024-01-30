@@ -22,19 +22,18 @@ import MegaHead from '@/components/MegaHead';
 import CampaignCreatorAuthLayout from '@/components/layout/CampaignCreatorAuthLayout';
 import CampaignLayout from '@/components/layout/CampaignLayout';
 import MainLayout from '@/components/layout/MainLayout';
+import TwitterCallBackLayout from '@/components/layout/TwitterCallBackLayout';
 import { PopUpProvider } from '@/context/PopUpContext';
 import { wrapper } from '@/redux/store';
 import '@/styles/globals.css';
 import '@/styles/globals.scss';
 import { NextPage } from 'next';
-import { SessionProvider } from 'next-auth/react';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import { ReactElement, useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { CampaignApiProvider } from '@/context/CampaignApiContext';
-import TwitterCallBackLayout from '@/components/layout/TwitterCallBackLayout';
 
 export type NextPageWithLayout<P = Record<string, never>, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => JSX.Element;
@@ -96,7 +95,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
   }, []);
 
   return (
-    <SessionProvider session={session}>
+    <>
       <MegaHead />
       <Provider store={store}>
         <PersistGate loading={null} persistor={store.persistorData}>
@@ -110,7 +109,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
           {/* </main> */}
         </PersistGate>
       </Provider>
-    </SessionProvider>
+    </>
   );
 };
 

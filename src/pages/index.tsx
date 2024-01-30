@@ -1,12 +1,12 @@
 import HomePage from '@/components/Home';
 import { CampaignApi, ListCampaignParams, TypeCampaign } from '@/redux/endpoints/campaign';
 import { wrapper } from '@/redux/store';
-import { PAGINATION_PAGE_SIZE } from '@/utils/constant/enums';
+import { HOME_PAGINATION_PAGE_SIZE } from '@/utils/constant/enums';
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async () => {
   const apiRequest: ListCampaignParams = {
     skip: 0,
-    take: PAGINATION_PAGE_SIZE,
+    take: HOME_PAGINATION_PAGE_SIZE,
     token: 'user',
   };
 

@@ -77,9 +77,11 @@ export default function CampaignCardItem({
             <div className="text-[13px] text-[#777] flex flex-col space-y-[6px]">
               {item?.methodOfselectWinners !== 'MANUAL_SELECTION' && (
                 <>
-                  <span>
-                    報酬：
-                    <span>
+                  <div className="font-bold flex items-center justify-start  ">
+                    <div className="bg-[#04AFAF] w-[51px] h-[25px] text-white text-center flex justify-center items-center rounded-l-[2px]">
+                      <span className="text-[13px]">報酬</span>
+                    </div>
+                    <div className=" bg-[#EEEEEE]  text-main-text flex-1 rounded-r-[2px] min-h-[25px] flex items-center px-[8px] ">
                       {Array.isArray(sortCampaignReward) && sortCampaignReward?.length >= 2 ? (
                         <>
                           <span>
@@ -100,8 +102,8 @@ export default function CampaignCardItem({
                       ) : (
                         '--'
                       )}
-                    </span>
-                  </span>
+                    </div>
+                  </div>
                   <span>
                     当選者枠： <span className="font-montserrat">{item?.numberOfPrizes ?? '---'}</span>名
                   </span>
@@ -111,10 +113,14 @@ export default function CampaignCardItem({
                 報酬：
                 <span className="font-montserrat">
                   {moment(item?.startTime)?.isValid() ? moment(item?.startTime)?.format('MM/DD hh:mm') : '--/-- --:--'}
-                  <span> 〜 </span>
-                  {moment(item?.expiredTime)?.isValid()
-                    ? moment(item?.expiredTime)?.format('MM/DD hh:mm')
-                    : '--/-- --:--'}
+                  {item?.dontSetExpiredTime !== true && (
+                    <>
+                      <span> 〜 </span>
+                      {moment(item?.expiredTime)?.isValid()
+                        ? moment(item?.expiredTime)?.format('MM/DD hh:mm')
+                        : '--/-- --:--'}
+                    </>
+                  )}
                 </span>
               </span>
             </div>
