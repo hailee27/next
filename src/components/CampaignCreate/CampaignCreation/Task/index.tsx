@@ -44,13 +44,13 @@ function Task() {
 
   useEffect(() => {
     if (dataTask) {
-      form.setFieldValue(['requireTask', 'taskId'], dataTask.tasks.find((e) => e.taskTemplate.config.requireTask)?.id);
+      form.setFieldValue(['requireTask', 'taskId'], dataTask.tasks.find((e) => e.taskTemplate.config?.requireTask)?.id);
       setNumberTask(
         dataTask.tasks
-          .filter((e) => !e.taskTemplate.config.requireTask)
+          .filter((e) => !e.taskTemplate.config?.requireTask)
           .map((v, i) => ({
             id: i + 1,
-            platForm: { name: v.taskTemplate.config.platForm, type: v.taskTemplate.config.type },
+            platForm: { name: v?.taskTemplate?.config?.platForm, type: v.taskTemplate.config?.type },
             config: v,
           }))
       );

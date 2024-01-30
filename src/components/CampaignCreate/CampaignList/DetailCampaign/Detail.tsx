@@ -87,7 +87,7 @@ function Detail({ data }: { data?: TypeCampaign }) {
           <>
             <div className="flex flex-col space-y-[16px]">
               <h2 className="font-bold text-[18px] text-[#04AFAF] ">報酬</h2>
-              <TableReWard valueTable={data?.CampaignReward} />
+              <TableReWard />
             </div>
             <div className="flex flex-col space-y-[16px]">
               <h2 className="font-bold text-[18px] text-[#04AFAF] ">報酬</h2>
@@ -109,7 +109,7 @@ function Detail({ data }: { data?: TypeCampaign }) {
       </div>
       {query?.isChecking !== 'true' && (
         <div className="flex space-x-[16px] justify-center  mt-[64px]">
-          {status === '下書き' ? (
+          {status === '下書き' && (
             <div className="w-[293px]  h-[56px]">
               <CButtonShadow
                 classBgColor="bg-main-text"
@@ -121,7 +121,21 @@ function Detail({ data }: { data?: TypeCampaign }) {
                 type="submit"
               />
             </div>
-          ) : (
+          )}
+
+          {status === '公開待ち' && (
+            <div className="w-[376px]  h-[56px]">
+              <CButtonShadow
+                classBgColor="bg-white"
+                classRounded="rounded-[6px]"
+                classShadowColor="bg-main-text"
+                shadowSize="normal"
+                textClass="text-main-text"
+                title="キャンペーンのステータスを完了にする"
+              />
+            </div>
+          )}
+          {status === '公開中' && (
             <>
               <div className="w-[376px]  h-[56px]">
                 <CButtonShadow
@@ -145,6 +159,19 @@ function Detail({ data }: { data?: TypeCampaign }) {
                 />
               </div>
             </>
+          )}
+          {status === '完了' && (
+            <div className="w-[293px]  h-[56px]">
+              <CButtonShadow
+                classBgColor="bg-main-text"
+                classRounded="rounded-[6px]"
+                classShadowColor="bg-white"
+                onClick={() => push({ query: { ...query, isChecking: true } })}
+                shadowSize="normal"
+                title="キャンペーン参加状況を確認"
+                type="submit"
+              />
+            </div>
           )}
         </div>
       )}

@@ -70,7 +70,7 @@ export type DeleteReWardParameter = {
 export type ReWardParameter = {
   campaignId: string;
   data: {
-    rewardId?: number;
+    rewardId?: number | null;
     type: string;
     index: number;
     amountOfMoney: number;

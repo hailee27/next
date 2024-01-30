@@ -7,9 +7,11 @@ import FlagItem from '@/components/common/FlagItem';
 import CButtonClassic from '@/components/common/CButtonClassic';
 import { useRouter } from 'next/router';
 import { useGetReWardsQuery } from '@/redux/endpoints/reWard';
+import { useCampaignApiContext } from '@/context/CampaignApiContext';
 import ListReWard from '../ListReWard';
 
 export interface TypeReWard {
+  key?: number;
   id?: string | number;
   money?: string | number;
   tiketWinning?: string | number;
@@ -21,12 +23,13 @@ export interface TypeReWard {
 
 function InstantWin() {
   const router = useRouter();
-  const [reWard, setReWard] = useState<TypeReWard[]>([]);
+  const { setReWardIdDelete } = useCampaignApiContext();
+  const [reWard, setReWard] = useState<TypeReWard[]>([{ key: 1 }]);
   const form = Form.useFormInstance();
   const reWardWatch = Form.useWatch(['reWard'], form);
   const { data: dataReward } = useGetReWardsQuery(
     { campaignId: String(router?.query?.id) },
-    { skip: !router?.query?.id }
+    { skip: !router?.query?.id, refetchOnMountOrArgChange: true }
   );
 
   const totalReWard = useMemo(() => {
@@ -51,7 +54,7 @@ function InstantWin() {
     if (dataReward) {
       setReWard(
         dataReward.rewards.map((e) => ({
-          id: e.index,
+          id: String(e.id) ?? undefined,
           money: e.amountOfMoney,
           tiketWinning: e.numberOfWinningTicket,
           receivingMethod: { amazon: e.type === 'AMAZON_GIFT', paypay: e.type === 'PAYPAY_GIFT' },
@@ -84,20 +87,20 @@ function InstantWin() {
           <ListReWard
             index={i + 1}
             item={e}
-            key={e.id}
+            key={e.key}
             onDelete={() => {
               const newReWard = form.getFieldValue(['reWard']);
               delete newReWard[`reWard${i + 1}`];
               form.setFieldValue(['reWard'], newReWard);
               setReWard((prev) => prev.filter((v) => v !== e));
+              setReWardIdDelete((prev) => [...prev, Number(e.id)]);
             }}
           />
         ))}
         <div className="flex flex-col items-end justify-end w-full">
           <CButtonClassic
-            // className="w-[138px] h-[56px]"
             customClassName="!w-[149px] !h-[47px] !rounded-[6px]"
-            onClick={() => setReWard((prev) => [...prev, { id: Number(prev[prev.length - 1].id) + 1 }])}
+            onClick={() => setReWard((prev) => [...prev, { key: Number(prev[prev.length - 1]?.key ?? 0) + 1 }])}
             title="賞品を追加する"
           />
           <div className="flex mt-[32px] space-x-[40px]">

@@ -18,6 +18,7 @@ import React, { createContext, useCallback, useContext, useMemo, useState } from
 export type TypeCampaignContext = {
   taskIdDeletes: number[];
   setTaskIdDeletes: React.Dispatch<React.SetStateAction<number[]>>;
+  setReWardIdDelete: React.Dispatch<React.SetStateAction<number[]>>;
   handleCreateCampaign: (
     queryParams: TypeResponseFormCampaign,
     type: 'DRAFT' | 'WAITING_FOR_PURCASE' | 'UNDER_REVIEW' | 'WAITING_FOR_PUBLICATION' | 'PUBLIC' | 'COMPLETION'
@@ -35,7 +36,7 @@ const CampaignApiContext = createContext<TypeCampaignContext | undefined>(undefi
 export const CampaignApiProvider = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
   const [taskIdDeletes, setTaskIdDeletes] = useState<number[]>([]);
-
+  const [reWardIdDelete, setReWardIdDelete] = useState<number[]>([]);
   // CREATE
   const [createCampaign, { isLoading: isLoadingCreateCampaign }] = usePostQuestsMutation();
   const [createTask, { isLoading: isLoadingCreateTask }] = usePostTaskMutation();
@@ -96,14 +97,26 @@ export const CampaignApiProvider = ({ children }: { children: React.ReactNode })
           .unwrap()
           .then(async (res) => {
             const newTask = adapterNewTask(queryParams);
-            if (newTask) {
+            const newReward = adapterDataReWard(queryParams).filter((e) => !e.rewardId);
+
+            if (newTask.length > 0) {
               createTask({
                 campaignId: res.newCampaign.id,
                 data: newTask,
               });
             }
+            if (newReward.length > 0) {
+              createReWard({ campaignId: res.newCampaign.id, data: newReward });
+            }
             if (taskIdDeletes.length > 0) {
-              deleteTask({ campaignId: res.newCampaign.id, taskIds: taskIdDeletes });
+              deleteTask({ campaignId: res.newCampaign.id, taskIds: taskIdDeletes })
+                .unwrap()
+                .finally(() => setTaskIdDeletes([]));
+            }
+            if (reWardIdDelete.length > 0) {
+              deleteReWard({ campaignId: res.newCampaign.id, rewardIds: reWardIdDelete })
+                .unwrap()
+                .finally(() => setReWardIdDelete([]));
             }
 
             const dataTask = await updateTask({
@@ -112,18 +125,17 @@ export const CampaignApiProvider = ({ children }: { children: React.ReactNode })
             });
             const dataReward = await updateReWard({
               campaignId: res.newCampaign.id,
-              data: adapterDataReWard(queryParams),
+              data: adapterDataReWard(queryParams).filter((e) => e.rewardId),
             });
             if (dataTask && dataReward) {
-              setTaskIdDeletes([]);
-              router.push('/campaign-creator/list');
+              // router.push('/campaign-creator/list');
               toastMessage('save draft succses', 'success');
             }
           })
           .catch(() => toastMessage('failed', 'error'));
       }
     },
-    [router.isReady, router.query.id, taskIdDeletes]
+    [router.isReady, router.query.id, taskIdDeletes, reWardIdDelete]
   );
   const handleDeleteCampaign = useCallback((campaignId) => {
     deleteCampaign({ campaignId });
@@ -132,6 +144,7 @@ export const CampaignApiProvider = ({ children }: { children: React.ReactNode })
   const contextvalue = useMemo<TypeCampaignContext>(
     () => ({
       setTaskIdDeletes,
+      setReWardIdDelete,
       handleCreateCampaign,
       handleUpdateCampaign,
       handleDeleteCampaign,
@@ -142,8 +155,9 @@ export const CampaignApiProvider = ({ children }: { children: React.ReactNode })
     }),
     [
       setTaskIdDeletes,
-
+      setReWardIdDelete,
       taskIdDeletes,
+      reWardIdDelete,
       isLoadingCreateCampaign,
       isLoadingCreateTask,
       isLoadingCreateReWard,

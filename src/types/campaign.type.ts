@@ -82,6 +82,7 @@ export type TypeResponseFormCampaign = {
   compensationSummary?: string;
   reWard?: {
     reWard1: {
+      reWardId?: number;
       money: number;
       tiketWinning: string;
       receivingMethod: {

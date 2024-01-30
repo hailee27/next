@@ -15,7 +15,7 @@ export default function adapterCampaignParams(
         startTime: data.startDate ?? '',
         expiredTime: data.noDate ? undefined : data.endDate,
         methodOfselectWinners: typeWinner,
-        totalNumberOfUsersAllowedToWork: String(data.numberOfParticipants),
+        totalNumberOfUsersAllowedToWork: Number(data.numberOfParticipants),
         numberOfPrizes: String(data.totalTicket),
         totalPrizeValue: String(data.totalReWard),
         settingForNotWin: String(data.statusCampaign ?? false),
@@ -66,6 +66,7 @@ export const adapterNewTask = (data: TypeResponseFormCampaign) =>
 
 export const adapterDataReWard = (data: TypeResponseFormCampaign) =>
   Object.values(data?.reWard ?? {}).map((e, i) => ({
+    rewardId: e.reWardId ? Number(e.reWardId) : undefined,
     type: e.receivingMethod.amazon ? 'AMAZON_GIFT' : 'PAYPAY_GIFT',
     index: i + 1,
     amountOfMoney: Number(e.money),

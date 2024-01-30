@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { TypeConfig } from '@/components/CampaignCreate/CampaignCreation/Task/type';
 import { api } from '../api';
 
 const injectedRtkApi = api.injectEndpoints({
@@ -8,7 +10,7 @@ const injectedRtkApi = api.injectEndpoints({
         Object.entries(queryArg).forEach(([key, value]) =>
           queryArg[key] === 'undefined' || queryArg[key] === undefined
             ? delete queryArg[key]
-            : body.append(`${key}`, value)
+            : body.append(`${key}`, String(value))
         );
         return {
           url: '/campaigns',
@@ -33,7 +35,7 @@ const injectedRtkApi = api.injectEndpoints({
         Object.entries(queryArg.body).forEach(([key, value]) =>
           queryArg.body[key] === 'undefined' || queryArg.body[key] === undefined
             ? delete queryArg.body[key]
-            : body.append(`${key}`, value)
+            : body.append(`${key}`, String(value))
         );
         return {
           url: `/campaigns/${queryArg.campaignId}`,
@@ -95,7 +97,7 @@ export type TypeTask = {
   id: number;
   campaignId: string;
   type: string;
-  taskActionType: string | null;
+  taskActionType: string;
   taskTemplateId: number;
   updatedAt: string;
   createdAt: string;
@@ -103,10 +105,7 @@ export type TypeTask = {
     id: number;
     userName: string;
     extra: string | null;
-    config: {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      name: any;
-    };
+    config: TypeConfig;
     link: string;
     quote: string | null;
     required: boolean;
@@ -243,7 +242,7 @@ export type QuestsParams = {
   dontSetExpiredTime?: string;
   // tasks?: string;
   methodOfselectWinners?: string;
-  totalNumberOfUsersAllowedToWork?: string;
+  totalNumberOfUsersAllowedToWork?: string | number;
   numberOfPrizes?: string;
   totalPrizeValue?: string;
   // campaignReward?: string;

@@ -13,7 +13,7 @@ function ReWard() {
   const router = useRouter();
   const { data: dataCampaign } = useGetDetailCampaignQuery(
     { campaignId: String(router?.query?.id) },
-    { skip: !router?.query?.id }
+    { skip: !router?.query?.id, refetchOnMountOrArgChange: true }
   );
 
   const typeWinnerWatch = Form.useWatch('typeWinner', form);
@@ -28,6 +28,7 @@ function ReWard() {
       form.setFieldValue('typeWinner', dataCampaign.methodOfselectWinners);
       form.setFieldValue('numberOfParticipants', dataCampaign.totalNumberOfUsersAllowedToWork);
       form.setFieldValue('statusCampaign', dataCampaign.settingForNotWin);
+      form.setFieldValue('compensationSummary', dataCampaign.noteReward);
     }
   }, [dataCampaign]);
 
