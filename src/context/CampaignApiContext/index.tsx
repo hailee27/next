@@ -57,105 +57,100 @@ export const CampaignApiProvider = ({ children }: { children: React.ReactNode })
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [createPayment, { isLoading: isLoadingCreatePayment }] = usePostPaymentMutation();
 
-  const handleCreateCampaign = useCallback(
-    (
-      queryParams: TypeResponseFormCampaign,
-      type: 'DRAFT' | 'WAITING_FOR_PURCASE' | 'UNDER_REVIEW' | 'WAITING_FOR_PUBLICATION' | 'PUBLIC' | 'COMPLETION'
-    ) => {
-      createCampaign(adapterCampaignParams(queryParams, queryParams.typeWinner, 'DRAFT'))
+  const handleCreateCampaign = (
+    queryParams: TypeResponseFormCampaign,
+    type: 'DRAFT' | 'WAITING_FOR_PURCASE' | 'UNDER_REVIEW' | 'WAITING_FOR_PUBLICATION' | 'PUBLIC' | 'COMPLETION'
+  ) => {
+    createCampaign(adapterCampaignParams(queryParams, queryParams.typeWinner, 'DRAFT'))
+      .unwrap()
+      .then(async (res) => {
+        try {
+          const dataTask = await createTask({
+            campaignId: res.newCampaign.id,
+            data: adapterDataTask(queryParams),
+          });
+          const dataReward = await createReWard({
+            campaignId: res.newCampaign.id,
+            data: adapterDataReWard(queryParams),
+          });
+          if (dataTask && dataReward) {
+            if (type === 'UNDER_REVIEW') {
+              createPayment({
+                campaignId: res.newCampaign.id,
+                price: Number(queryParams.price),
+                priceWithTax: Number(queryParams.priceWithTax),
+                usePoint: queryParams?.usePoint ?? false,
+              })
+                .unwrap()
+                .then(() => {
+                  router.push('/campaign-creator/list');
+                  toastMessage('send sucess (under reiew)', 'success');
+                })
+                .catch(() => toastMessage('paymnet error', 'error'));
+            } else {
+              router.push('/campaign-creator/list');
+              toastMessage(type === 'DRAFT' ? 'save draft succses' : 'succses', 'success');
+            }
+          }
+        } catch (err) {
+          // eslint-disable-next-line no-console
+          console.log(err);
+        }
+      })
+      .catch((err) => toastMessage(err.message || 'error', 'error'));
+  };
+
+  const handleUpdateCampaign = (
+    queryParams: TypeResponseFormCampaign,
+    type: 'DRAFT' | 'WAITING_FOR_PURCASE' | 'UNDER_REVIEW' | 'WAITING_FOR_PUBLICATION' | 'PUBLIC' | 'COMPLETION'
+  ) => {
+    if (router.query.id) {
+      updateCampaign({
+        campaignId: String(router.query.id),
+        body: adapterCampaignParams(queryParams, queryParams.typeWinner, type),
+      })
         .unwrap()
         .then(async (res) => {
-          try {
-            const dataTask = await createTask({
+          const newTask = adapterNewTask(queryParams);
+          const newReward = adapterDataReWard(queryParams).filter((e) => !e.rewardId);
+
+          if (newTask.length > 0) {
+            createTask({
               campaignId: res.newCampaign.id,
-              data: adapterDataTask(queryParams),
+              data: newTask,
             });
-            const dataReward = await createReWard({
-              campaignId: res.newCampaign.id,
-              data: adapterDataReWard(queryParams),
-            });
-            if (dataTask && dataReward) {
-              if (type === 'UNDER_REVIEW') {
-                createPayment({
-                  campaignId: res.newCampaign.id,
-                  price: Number(queryParams.price),
-                  priceWithTax: Number(queryParams.priceWithTax),
-                  usePoint: queryParams?.usePoint ?? false,
-                })
-                  .unwrap()
-                  .then(() => {
-                    router.push('/campaign-creator/list');
-                    toastMessage('send sucess (under reiew)', 'success');
-                  })
-                  .catch(() => toastMessage('paymnet error', 'error'));
-              } else {
-                router.push('/campaign-creator/list');
-                toastMessage(type === 'DRAFT' ? 'save draft succses' : 'succses', 'success');
-              }
-            }
-          } catch (err) {
-            // eslint-disable-next-line no-console
-            console.log(err);
+          }
+          if (newReward.length > 0) {
+            createReWard({ campaignId: res.newCampaign.id, data: newReward });
+          }
+          if (taskIdDeletes.length > 0) {
+            deleteTask({ campaignId: res.newCampaign.id, taskIds: taskIdDeletes })
+              .unwrap()
+              .finally(() => setTaskIdDeletes([]));
+          }
+          if (reWardIdDelete.length > 0) {
+            deleteReWard({ campaignId: res.newCampaign.id, rewardIds: reWardIdDelete })
+              .unwrap()
+              .finally(() => setReWardIdDelete([]));
+          }
+
+          const dataTask = await updateTask({
+            campaignId: res.newCampaign.id,
+            data: adapterDataTask(queryParams).filter((e) => e.taskId),
+          });
+          const dataReward = await updateReWard({
+            campaignId: res.newCampaign.id,
+            data: adapterDataReWard(queryParams).filter((e) => e.rewardId),
+          });
+          if (dataTask && dataReward) {
+            // router.push('/campaign-creator/list');
+            toastMessage('save draft succses', 'success');
           }
         })
-        .catch((err) => toastMessage(err.message || 'error', 'error'));
-    },
-    []
-  );
+        .catch(() => toastMessage('failed', 'error'));
+    }
+  };
 
-  const handleUpdateCampaign = useCallback(
-    (
-      queryParams: TypeResponseFormCampaign,
-      type: 'DRAFT' | 'WAITING_FOR_PURCASE' | 'UNDER_REVIEW' | 'WAITING_FOR_PUBLICATION' | 'PUBLIC' | 'COMPLETION'
-    ) => {
-      if (router.query.id) {
-        updateCampaign({
-          campaignId: String(router.query.id),
-          body: adapterCampaignParams(queryParams, queryParams.typeWinner, type),
-        })
-          .unwrap()
-          .then(async (res) => {
-            const newTask = adapterNewTask(queryParams);
-            const newReward = adapterDataReWard(queryParams).filter((e) => !e.rewardId);
-
-            if (newTask.length > 0) {
-              createTask({
-                campaignId: res.newCampaign.id,
-                data: newTask,
-              });
-            }
-            if (newReward.length > 0) {
-              createReWard({ campaignId: res.newCampaign.id, data: newReward });
-            }
-            if (taskIdDeletes.length > 0) {
-              deleteTask({ campaignId: res.newCampaign.id, taskIds: taskIdDeletes })
-                .unwrap()
-                .finally(() => setTaskIdDeletes([]));
-            }
-            if (reWardIdDelete.length > 0) {
-              deleteReWard({ campaignId: res.newCampaign.id, rewardIds: reWardIdDelete })
-                .unwrap()
-                .finally(() => setReWardIdDelete([]));
-            }
-
-            const dataTask = await updateTask({
-              campaignId: res.newCampaign.id,
-              data: adapterDataTask(queryParams).filter((e) => e.taskId),
-            });
-            const dataReward = await updateReWard({
-              campaignId: res.newCampaign.id,
-              data: adapterDataReWard(queryParams).filter((e) => e.rewardId),
-            });
-            if (dataTask && dataReward) {
-              // router.push('/campaign-creator/list');
-              toastMessage('save draft succses', 'success');
-            }
-          })
-          .catch(() => toastMessage('failed', 'error'));
-      }
-    },
-    [taskIdDeletes, reWardIdDelete]
-  );
   const handleDeleteCampaign = useCallback((campaignId) => {
     deleteCampaign({ campaignId });
   }, []);
