@@ -11,8 +11,8 @@ import { useContext, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import toastMessage from '@/utils/func/toastMessage';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
-import { useCreateGachaMutation } from '@/redux/endpoints/campaign';
 import { Spin } from 'antd';
+import { useCreateGachaMutation } from '@/redux/endpoints/users';
 import { CampaignDetailContext } from '../CampainContext';
 import TaskItem from './TaskItem';
 
@@ -53,6 +53,7 @@ export default function CampaignTasksSection() {
         }
         const gacha = await onRegisterCampaign({
           campaignId: camapignId,
+          userId: user?.id ?? '',
         }).unwrap();
         if (onFetchCampaignInfo) {
           await onFetchCampaignInfo?.();
@@ -76,7 +77,7 @@ export default function CampaignTasksSection() {
       toastMessage(getErrorMessage(e), 'error');
     }
   };
-  console.log('campaignDetail', campaignDetail);
+
   return (
     <Spin spinning={isFetchingCampaignTasks}>
       <div className="py-[56px] px-[20px] md:py-[100px] md:px-[160px] xl:px-[35px]">

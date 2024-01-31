@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TypeConfig } from '@/components/CampaignCreate/CampaignCreation/Task/type';
 import { api } from '../api';
@@ -196,6 +197,13 @@ export type TypeCampaign = {
     award: {
       id: number;
       isWin?: 'true' | 'false' | null;
+      campaignReward: {
+        amountOfMoney: number;
+        campaignId: string;
+        id: number;
+        index: number;
+        type: string;
+      };
     };
   }[];
 };

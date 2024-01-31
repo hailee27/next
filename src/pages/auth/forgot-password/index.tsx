@@ -40,7 +40,7 @@ export default function ForgotPasswordPage() {
       )}
     >
       <form autoComplete="off" onSubmit={handleSubmit(onSubmitEmail)}>
-        <div className="bg-white border-[2px] border-[#333] px-[22px] py-[30px] rounded-[16px]">
+        <div className="bg-white border-[2px] border-[#333] px-[22px] py-[30px] rounded-[16px] max-w-[335px] mx-auto">
           <h1 className="text-[20px] font-bold text-[#04AFAF] tracking-[0.6px] text-center ">メールアドレスを入力</h1>
           <div className="h-[16px]" />
           <CFormInputShadow

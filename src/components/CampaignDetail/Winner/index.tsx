@@ -2,16 +2,47 @@
 /* eslint-disable max-lines-per-function */
 import CButtonClassic from '@/components/common/CButtonClassic';
 import CModalWapper from '@/components/common/CModalWapper';
+import { useCreateCouponMutation } from '@/redux/endpoints/coupons';
+import { RootState } from '@/redux/store';
+import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import toastMessage from '@/utils/func/toastMessage';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Spin } from 'antd';
+import { CampaignDetailContext } from '../CampainContext';
 
 export default function Winner() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { accessToken, user } = useSelector((state: RootState) => state.auth);
+  const { campaignDetail } = useContext(CampaignDetailContext);
 
-  const showModal = () => {
-    setIsModalOpen(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [rewardToken, setRewardToken] = useState('');
+  const [triggerCreateCoupon, { isLoading }] = useCreateCouponMutation();
+
+  const onCreateCoupon = async () => {
+    try {
+      if (
+        accessToken &&
+        campaignDetail?.UserClaimCampaign &&
+        Array.isArray(campaignDetail?.UserClaimCampaign) &&
+        campaignDetail?.UserClaimCampaign?.length &&
+        campaignDetail?.UserClaimCampaign?.[0]?.award?.isWin === null &&
+        campaignDetail?.UserClaimCampaign?.[0]?.userId === user?.id
+      ) {
+        const data = await triggerCreateCoupon({
+          couponType: 'AMAZON_GIFT',
+          campaignId: campaignDetail?.id,
+        }).unwrap();
+        if (data?.code) {
+          setRewardToken(data?.code);
+          setIsModalOpen(true);
+        }
+      }
+    } catch (error) {
+      toastMessage(getErrorMessage(error), 'error');
+    }
   };
 
   const handleCancel = () => {
@@ -657,21 +688,24 @@ export default function Winner() {
         <h2 className="text-[#333] text-[28px] font-bold leading-[43px] text-center tracking-[0.84px] mb-[8px]">
           おめでとうございます！
           <br />
-          1等 10,0000円 に<br />
+          {campaignDetail?.UserClaimCampaign?.[0]?.award?.campaignReward?.index ?? '---'}等{' '}
+          {campaignDetail?.UserClaimCampaign?.[0]?.award?.campaignReward?.amountOfMoney ?? '---'}円 に<br />
           当選されました
         </h2>
         <div className=" flex flex-col gap-[16px]">
-          <div className="rounded-[16px] border-[2px] border-[#333] py-[38px] px-[30px] bg-white">
-            <div aria-hidden className="hover:cursor-pointer w-[100px] h-[40px] " onClick={showModal}>
-              <Image
-                alt="amazon gift"
-                className="w-full h-full object-contain"
-                height={40}
-                src="/assets/images/amazon-gift.png"
-                width={100}
-              />
+          <Spin spinning={isLoading}>
+            <div className="rounded-[16px] border-[2px] border-[#333] py-[38px] px-[30px] bg-white">
+              <div aria-hidden className="hover:cursor-pointer w-[100px] h-[40px] " onClick={onCreateCoupon}>
+                <Image
+                  alt="amazon gift"
+                  className="w-full h-full object-contain"
+                  height={40}
+                  src="/assets/images/amazon-gift.png"
+                  width={100}
+                />
+              </div>
             </div>
-          </div>
+          </Spin>
           <div className="text-[#777] text-[13px] leading-[22px]">
             <p>※一度受取方法を選択すると変更できません。ご了承ください。</p>
             <div className="h-[4px]" />
@@ -703,7 +737,7 @@ export default function Winner() {
           <p className="text-[14px] font-medium">ギフトカード番号</p>
           <div className="h-[16px]" />
           <div className="bg-[#FFF4EA] px-[24px] py-[40px] rounded-[8px]">
-            <p className="text-[#F77803] text-[20px] font-bold text-center">DXVK-3C5WVM-JGCK</p>
+            <p className="text-[#F77803] text-[20px] font-bold text-center">{rewardToken}</p>
             <div className="h-[16px]" />
             <div className="flex justify-end">
               <div className="w-[138px] h-[42px] ">

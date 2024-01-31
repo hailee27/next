@@ -1,3 +1,4 @@
+import { User } from '@/types/auth.type';
 import { BaseQueryFn, EndpointBuilder } from '@reduxjs/toolkit/query';
 
 export default function me(build: EndpointBuilder<BaseQueryFn, string, string>) {
@@ -10,5 +11,5 @@ export default function me(build: EndpointBuilder<BaseQueryFn, string, string>) 
     },
   });
 }
-export type TypeMeResponse = void;
+export type TypeMeResponse = User;
 export type TypeMeParameters = void;
