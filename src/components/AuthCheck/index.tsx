@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useLazyMeQuery } from '@/redux/endpoints/auth';
-import { setUser } from '@/redux/slices/auth.slice';
+import { useMeQuery } from '@/redux/endpoints/auth';
 import { RootState } from '@/redux/store';
 import { useRouter } from 'next/router';
-import React, { useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import CreatorRoleFeedbackModal from '../CreatorRoleFeedbackModal';
 
 const FlagComponent = ({ type }: { type?: 'CREATOR' | 'IMPLEMENTER' }) => {
@@ -18,25 +17,11 @@ const FlagComponent = ({ type }: { type?: 'CREATOR' | 'IMPLEMENTER' }) => {
 function AuthCheck({ children, type }: { children: React.ReactElement; type?: 'CREATOR' | 'IMPLEMENTER' }) {
   const router = useRouter();
   const { accessToken, user } = useSelector((state: RootState) => state.auth);
-  const [triggerGetMe] = useLazyMeQuery();
-  const dispatch = useDispatch();
-  const getUserLoggedIn = useCallback(async () => {
-    try {
-      if (accessToken) {
-        const data = await triggerGetMe().unwrap();
-        if (data as any) {
-          dispatch(setUser(data));
-        }
-      }
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.log('err', err);
-    }
-  }, [accessToken]);
 
-  useEffect(() => {
-    getUserLoggedIn();
-  }, [getUserLoggedIn]);
+  useMeQuery(undefined, {
+    skip: !accessToken,
+    refetchOnMountOrArgChange: true,
+  });
 
   if ((!accessToken || accessToken === null) && type === 'IMPLEMENTER') {
     return <FlagComponent type="IMPLEMENTER" />;

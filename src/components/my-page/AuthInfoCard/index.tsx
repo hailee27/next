@@ -26,9 +26,13 @@ export default function AuthInfoCard() {
 
   const onUpdateTwoStepAuthState = async (newState: boolean) => {
     if (newState === false) {
-      router.push('/my-page/settings/two-step-auth?action=disable');
+      router.push(
+        `/my-page/settings/two-step-authentication/verification?action=disable&phoneNumber=${
+          user?.twoFactorPhone ?? ''
+        }`
+      );
     } else {
-      router.push('/my-page/settings/two-step-auth');
+      router.push('/my-page/settings/two-step-authentication/configure-phone-number');
     }
   };
 

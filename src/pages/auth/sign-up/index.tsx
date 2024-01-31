@@ -31,7 +31,7 @@ export default function SignupPage() {
         const data = await signupEmail(formValue).unwrap();
         if (data?.accessToken && data?.refreshToken && data?.user) {
           dispatch(setSession({ ...data }));
-          router.push('/my-page/settings/two-step-auth?from=sign-up');
+          router.push('/my-page/settings/two-step-authentication/configure-phone-number?from=sign-up');
         }
       }
     } catch (e: any) {

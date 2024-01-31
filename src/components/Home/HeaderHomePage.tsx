@@ -17,10 +17,10 @@ function HeaderHomePage() {
   return (
     <>
       {!matchesMD ? (
-        <div className="flex justify-between flex-col min-h-[693px] bg-[url('/assets/images/home_banner_bg_sp.png')] bg-no-repeat bg-cover bg-center">
-          <div className="flex-1 text-center relative w-[335px] mx-auto">
-            <Image alt="" className="mt-[25px]" preview={false} src="/assets/images/banner.png" />
-            <div className="absolute w-full top-[261px] ">
+        <div className="flex justify-between flex-col min-h-[693px] bg-[url('/assets/images/home_banner_bg_sp.png')] bg-no-repeat bg-cover bg-center gap-[16px]">
+          <div className="flex-1 text-center   w-[335px] mx-auto">
+            <Image alt="" className="relative top-[50px] left-[-6px]" preview={false} src="/assets/images/banner.png" />
+            <div className="relative z-[1] ">
               <div className="flex flex-col items-start space-y-[8px]">
                 <span className="text-[30px] font-bold  px-[14px] bg-white">お気に入りの</span>
                 <span className="text-[30px] font-bold  px-[14px] bg-white">コミュニティに</span>
