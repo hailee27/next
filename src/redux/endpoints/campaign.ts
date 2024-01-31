@@ -10,7 +10,7 @@ const injectedRtkApi = api.injectEndpoints({
         Object.entries(queryArg).forEach(([key, value]) =>
           queryArg[key] === 'undefined' || queryArg[key] === undefined
             ? delete queryArg[key]
-            : body.append(`${key}`, String(value))
+            : body.append(`${key}`, value)
         );
         return {
           url: '/campaigns',
@@ -35,7 +35,7 @@ const injectedRtkApi = api.injectEndpoints({
         Object.entries(queryArg.body).forEach(([key, value]) =>
           queryArg.body[key] === 'undefined' || queryArg.body[key] === undefined
             ? delete queryArg.body[key]
-            : body.append(`${key}`, String(value))
+            : body.append(`${key}`, value)
         );
         return {
           url: `/campaigns/${queryArg.campaignId}`,
@@ -269,7 +269,7 @@ export type QuestsParams = {
   dontSetExpiredTime?: string;
   // tasks?: string;
   methodOfselectWinners?: string;
-  totalNumberOfUsersAllowedToWork?: string | number;
+  totalNumberOfUsersAllowedToWork?: string;
   numberOfPrizes?: string;
   totalPrizeValue?: string;
   // campaignReward?: string;
