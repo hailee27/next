@@ -5,6 +5,7 @@ import TablePermission from './TablePermission';
 
 function PermissionManagement() {
   const router = useRouter();
+
   return (
     <div className="px-[48px] pt-[32px]">
       <div className="border-b-2 border-[#333] flex justify-between items-center pb-[24px] mb-[47px]">

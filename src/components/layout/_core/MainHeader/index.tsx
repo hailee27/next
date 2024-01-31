@@ -145,7 +145,11 @@ export default function MainHeader() {
               </Link>
             )}
             <div className="w-[206px] h-[53px]">
-              <CButtonShadow onClick={onChangeAuth} title={accessToken ? 'ログアウト' : 'ログイン'} />
+              <CButtonShadow
+                onClick={onChangeAuth}
+                textClass="text-white !text-[14px] font-notoSans"
+                title={accessToken ? 'ログアウト ' : 'ログイン '}
+              />
             </div>
           </div>
         </div>
@@ -225,7 +229,11 @@ export default function MainHeader() {
             </div>
             <div className="h-[40px]" />
             <div className=" h-[53px]">
-              <CButtonShadow onClick={onChangeAuth} title={accessToken ? 'ログアウト' : 'ログイン'} />
+              <CButtonShadow
+                onClick={onChangeAuth}
+                textClass="text-white !text-[14px] font-notoSans tracking-[0.42px]"
+                title={accessToken ? 'ログアウト' : 'ログイン'}
+              />
             </div>
             {accessToken ? (
               ''

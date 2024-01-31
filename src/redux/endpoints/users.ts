@@ -25,7 +25,7 @@ const injectedRtkApi = api.injectEndpoints({
     }),
     updateUser: build.mutation<UpdateUserResponse, UpdateUserParams>({
       query: (queryArg) => ({
-        url: `/users/${queryArg.userId}`,
+        url: `/companies/${queryArg.body.companyId}/users/${queryArg.userId}`,
         method: 'PUT',
         body: queryArg.body,
       }),
@@ -50,6 +50,7 @@ const injectedRtkApi = api.injectEndpoints({
 export type UpdateUserResponse = void;
 export type UpdateUserParams = {
   userId: string;
+  companyId?: string;
   body: {
     companyId?: number;
     membership?: string;

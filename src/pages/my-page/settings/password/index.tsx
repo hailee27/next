@@ -42,7 +42,7 @@ export default function SettingPasswordPage() {
           requestBody.password = data?.password ?? '';
         }
         await updateMe(requestBody).unwrap();
-        toastMessage('Password has been updated successfully', 'success');
+        toastMessage('パスワードの変更に成功されました。', 'success');
         router.push('/my-page');
       }
     } catch (err) {

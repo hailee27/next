@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { useContext, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Spin } from 'antd';
+import { copyFunc } from '@/utils/copyFunc';
 import { CampaignDetailContext } from '../CampainContext';
 
 export default function Winner() {
@@ -744,8 +745,7 @@ export default function Winner() {
                 <CButtonClassic
                   customClassName="!bg-white !text-[#333] !text-[12px] !border-white"
                   onClick={() => {
-                    navigator?.clipboard?.writeText('DXVK-3C5WVM-JGCK');
-                    toastMessage('Copied', 'success');
+                    copyFunc(rewardToken);
                   }}
                   title="番号をコピー"
                   withIcon={{

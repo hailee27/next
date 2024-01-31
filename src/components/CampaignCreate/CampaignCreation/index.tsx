@@ -66,19 +66,19 @@ function CampaignCreation() {
   return (
     <Form.Provider
       onFormFinish={(name, { forms }) => {
-        let queryParams: TypeResponseFormCampaign = {};
-        queryParams = {
-          ...forms?.setUp?.getFieldsValue(),
-          ...forms?.tasks?.getFieldsValue(),
-          ...forms?.reWard?.getFieldsValue(),
-          ...forms?.confirm?.getFieldsValue(),
-        };
         if (name !== 'delete' && name !== 'preview' && name !== 'saveDraft') {
           setTab((prev) => String(Number(prev) + 1));
         }
         if (tab === '4') {
           setTab('4');
         }
+        let queryParams: TypeResponseFormCampaign = {};
+        queryParams = {
+          ...forms?.setUp?.getFieldsValue(),
+          ...forms?.tasks?.getFieldsValue(),
+          ...forms?.confirm?.getFieldsValue(),
+          ...forms?.reWard?.getFieldsValue(),
+        };
         // PASS VALUE TO FROM CONFIRM
         forms?.confirm?.setFieldsValue({
           nameCampagin: queryParams.campainName,
@@ -88,7 +88,7 @@ function CampaignCreation() {
             : `${moment(String(queryParams.startDate)).format('YYYY/MM/DD HH:mm')} 〜 ${moment(
                 String(queryParams.endDate)
               ).format('YYYY/MM/DD  HH:mm')} `,
-          typeWinner: queryParams.typeWinner ?? 'AUTO_PRIZEE_DRAW',
+          typeWinner: queryParams.typeWinner,
           status: '下書き',
           campaginCreator: user?.email?.email,
         });
@@ -101,14 +101,23 @@ function CampaignCreation() {
 
         // SAVE
         if (name === 'confirm') {
-          // console.log(queryParams);
-          handleCreateCampaign(queryParams, 'UNDER_REVIEW');
+          if (router.query.id) {
+            if (queryParams.typeWinner === 'AUTO_PRIZEE_DRAW') {
+              handleUpdateCampaign(String(router.query.id), queryParams, 'DRAFT', 'CREATE');
+            } else {
+              handleUpdateCampaign(String(router.query.id), queryParams, 'WAITING_FOR_PUBLICATION');
+            }
+          } else if (queryParams.typeWinner === 'AUTO_PRIZEE_DRAW') {
+            handleCreateCampaign(queryParams, 'UNDER_REVIEW');
+          } else {
+            handleCreateCampaign(queryParams, 'WAITING_FOR_PUBLICATION');
+          }
         }
 
         // SAVE DRAFT
         if (name === 'saveDraft') {
           if (router.query.id) {
-            handleUpdateCampaign(queryParams, 'DRAFT');
+            handleUpdateCampaign(String(router.query.id), queryParams, 'DRAFT');
           } else {
             handleCreateCampaign(queryParams, 'DRAFT');
           }

@@ -25,7 +25,7 @@ export default function SettingAuthEmailPage() {
           email: data?.email,
           newPassword: data?.password,
         }).unwrap();
-        toastMessage('Email, password has been updated successfully', 'success');
+        toastMessage('メールアドレス、パスワードが正常に更新されました。', 'success');
         router.push('/my-page');
       }
     } catch (err) {

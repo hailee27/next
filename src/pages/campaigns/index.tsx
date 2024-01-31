@@ -114,7 +114,7 @@ export default function CampaignsPage({ campaigns, totals }: ICampaignsPage) {
       </div>
       <div />
       <div className="h-[32px] xl:h-[80px]" />
-      <div className="grid grid-cols-1 gap-[16px] xl:gap-[24px] md:grid-cols-2 xl:grid-cols-3 max-w-[1053px] mx-auto">
+      <div className="grid grid-cols-[repeat(auto-fit,_335px)]  gap-[10px] justify-center md:max-w-[680px] xxl:max-w-[1370px] md:mx-auto">
         {Array.isArray(campaigns) && campaigns?.length > 0
           ? campaigns?.map((item) => (
               <CampaignCardItem item={item as any} key={item.id} viewMode={matchesMD ? 'HAS_IMAGE' : 'NO_IMAGE'} />

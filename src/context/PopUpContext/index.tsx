@@ -60,7 +60,7 @@ export const PopUpProvider = ({ children }: { children: React.ReactNode }) => {
           contentPopUp.map((e) => (
             <Modal
               centered
-              className="!hidden"
+              // className="!hidden"
               closeIcon={false}
               footer={false}
               key={e.id}

@@ -42,16 +42,16 @@ export default function AuthInfoCard() {
         showModal();
       } else {
         if (user?.havePassword === false && user?.email === null) {
-          toastMessage('Please set email and password before disabling twitter connection');
+          toastMessage('X(Twitter)接続を無効にする前にメールアドレスとパスワードを設定してください');
           return;
         }
         const twitterIdentity = user?.identities?.find((item) => item?.type === 'TWITTER');
         if (twitterIdentity === undefined) {
-          toastMessage('Twitter connection not found', 'error');
+          toastMessage('X(Twitter)接続が見つかりません。', 'error');
           return;
         }
         await disconnectTwitter({ id: twitterIdentity?.id }).unwrap();
-        toastMessage('twitter has been disconnected successfully', 'success');
+        toastMessage('X(Twitter)接続が正常に切断されました。', 'success');
         await refreshUser();
       }
     } catch (error) {
