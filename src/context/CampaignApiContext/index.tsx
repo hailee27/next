@@ -62,7 +62,7 @@ export const CampaignApiProvider = ({ children }: { children: React.ReactNode })
       queryParams: TypeResponseFormCampaign,
       type: 'DRAFT' | 'WAITING_FOR_PURCASE' | 'UNDER_REVIEW' | 'WAITING_FOR_PUBLICATION' | 'PUBLIC' | 'COMPLETION'
     ) => {
-      createCampaign(adapterCampaignParams(queryParams, queryParams.typeWinner, type))
+      createCampaign(adapterCampaignParams(queryParams, queryParams.typeWinner, 'DRAFT'))
         .unwrap()
         .then(async (res) => {
           try {
@@ -87,7 +87,7 @@ export const CampaignApiProvider = ({ children }: { children: React.ReactNode })
                     router.push('/campaign-creator/list');
                     toastMessage('send sucess (under reiew)', 'success');
                   })
-                  .catch(() => toastMessage('paymnet error', 'success'));
+                  .catch(() => toastMessage('paymnet error', 'error'));
               } else {
                 router.push('/campaign-creator/list');
                 toastMessage(type === 'DRAFT' ? 'save draft succses' : 'succses', 'success');
@@ -100,7 +100,7 @@ export const CampaignApiProvider = ({ children }: { children: React.ReactNode })
         })
         .catch((err) => toastMessage(err.message || 'error', 'error'));
     },
-    [router.isReady]
+    []
   );
 
   const handleUpdateCampaign = useCallback(
@@ -154,7 +154,7 @@ export const CampaignApiProvider = ({ children }: { children: React.ReactNode })
           .catch(() => toastMessage('failed', 'error'));
       }
     },
-    [router.isReady, router.query.id, taskIdDeletes, reWardIdDelete]
+    [taskIdDeletes, reWardIdDelete]
   );
   const handleDeleteCampaign = useCallback((campaignId) => {
     deleteCampaign({ campaignId });

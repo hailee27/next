@@ -19,7 +19,24 @@ const injectedRtkApi = api.injectEndpoints({
   }),
 });
 
-export type PaymentListResponse = void;
+export type PaymentListResponse = {
+  payments: {
+    id: string;
+    amount: number;
+    trace_id: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    extra: any;
+    userId: number;
+    companyId: number;
+    campaignId: string;
+    campaignName: string;
+    updatedAt: string;
+    createdAt: string;
+    type: string;
+    amountAfterTransaction: number;
+  }[];
+  total: number;
+};
 export type PaymentListParams = {
   skip: number;
   take: number;
@@ -40,4 +57,4 @@ export type PaymentParams = {
 };
 
 export { injectedRtkApi as PaymentApi };
-export const { usePostPaymentMutation } = injectedRtkApi;
+export const { usePostPaymentMutation, useGetPaymentQuery, useLazyGetPaymentQuery } = injectedRtkApi;

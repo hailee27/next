@@ -85,9 +85,18 @@ const injectedRtkApi = api.injectEndpoints({
         return config;
       },
     }),
+    getListCampaignUsers: build.query<ListCampaignUsersResponse, ListCampaignUsersParams>({
+      query: (queryArg) => ({
+        url: `campaigns/${queryArg.campaignId}/users`,
+        method: 'GET',
+      }),
+    }),
   }),
 });
-
+export type ListCampaignUsersParams = {
+  campaignId: string;
+};
+export type ListCampaignUsersResponse = void;
 export type DetailCampaignResponse = TypeCampaign;
 export type DetailCampaignParams = {
   campaignId: string;
@@ -203,6 +212,7 @@ export type ListCampaignParams = {
   include?: string;
   token?: string;
   except?: string;
+  actionFrom?: 'ADMIN';
 };
 export type QuestsResponse = {
   newCampaign: {
@@ -295,4 +305,6 @@ export const {
   useGetDetailCampaignQuery,
   useLazyGetDetailCampaignQuery,
   useCreateGachaMutation,
+  useGetListCampaignUsersQuery,
+  useLazyGetListCampaignUsersQuery,
 } = injectedRtkApi;
