@@ -34,7 +34,7 @@ stages:
     - ssh -T $SSH_USER@$SSH_SERVER_IP "pwd; source ~/.nvm/nvm.sh; pm2 restart clout-frontend;"
 
 .build_develop:
-  stage: reload
+  stage: build
   image:
     name: alpine:latest
   before_script:
