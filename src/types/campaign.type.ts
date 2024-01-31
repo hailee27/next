@@ -94,4 +94,7 @@ export type TypeResponseFormCampaign = {
   statusCampaign?: boolean;
   totalReWard?: number;
   totalTicket?: number;
+  price?: number;
+  priceWithTax?: number;
+  usePoint?: boolean;
 };

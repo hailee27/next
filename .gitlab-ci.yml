@@ -1,42 +1,5 @@
 stages:
   - build
-  - test
-  - deploy # dummy stage to follow the template guidelines
-  - review
-  - dast
-  - staging
-  - canary
-  - production
-  - incremental rollout 10%
-  - incremental rollout 25%
-  - incremental rollout 50%
-  - incremental rollout 100%
-  - performance
-  - cleanup
-
-include:
-  - template: Auto-DevOps.gitlab-ci.yml
-
-variables:
-  CI_DEPENDENCY_PROXY_SERVER: ''
-
-build:
-  image: 'registry.gitlab.com/gitlab-org/cluster-integration/auto-build-image:v1.49.0'
-  script:
-    - |
-      cp .env.develop.example .env;
-
-      if [[ -z "$CI_COMMIT_TAG" ]]; then
-        export CI_APPLICATION_REPOSITORY=${CI_APPLICATION_REPOSITORY:-$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG}
-        export CI_APPLICATION_TAG=${CI_APPLICATION_TAG:-$CI_COMMIT_SHA}
-      else
-        export CI_APPLICATION_REPOSITORY=${CI_APPLICATION_REPOSITORY:-$CI_REGISTRY_IMAGE}
-        export CI_APPLICATION_TAG=${CI_APPLICATION_TAG:-$CI_COMMIT_TAG}
-      fi
-    - /build/build.sh
-
-.auto-deploy:
-  image: 'registry.gitlab.com/gitlab-org/cluster-integration/auto-deploy-image:v2.64.0'
 
 .build_staging:
   stage: build
@@ -70,6 +33,23 @@ build:
 
     - ssh -T $SSH_USER@$SSH_SERVER_IP "pwd; source ~/.nvm/nvm.sh; pm2 restart clout-frontend;"
 
+.build_develop:
+  stage: build
+  image:
+    name: alpine:latest
+  before_script:
+    - apk update && apk add openssh-client bash rsync yarn sshpass
+    - apk --no-cache --virtual build-dependencies add python3 make g++
+    - eval $(ssh-agent -s)
+    # - bash -c 'ssh-add <(echo "$SSH_PRIVATE_KEY")'
+    - mkdir -p ~/.ssh
+    - ssh-keyscan -H $SSH_SERVER_IP >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+  script:
+    - sshpass -p $SSH_PASSWORD ssh -T $SSH_USER@$SSH_SERVER_IP "pwd; cd $REMOTE_PROJECT_DIR; git pull; cp .env.$CI_ENVIRONMENT_NAME.example .env; docker compose build; docker compose up -d; docker system prune -f"
+  tags:
+    - local_sv
+
 build_staging:
   extends: .build_staging
   only:
@@ -78,3 +58,12 @@ build_staging:
   environment:
     name: staging
     url: https://staging.clout-fi.com/
+
+build_develop:
+  extends: .build_develop
+  only:
+    refs:
+      - develop
+  environment:
+    name: develop
+    url: https://test.clout.k.lisod.vn/

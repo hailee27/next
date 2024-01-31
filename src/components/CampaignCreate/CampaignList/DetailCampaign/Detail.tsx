@@ -6,9 +6,12 @@ import { formatNumber } from '@/utils/formatNumber';
 import moment from 'moment';
 import CButtonShadow from '@/components/common/CButtonShadow';
 import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 import TableReWard from '../../CampaignCreation/Confirmation/TableReWard';
 
 function Detail({ data }: { data?: TypeCampaign }) {
+  const { user } = useSelector((state: RootState) => state.auth);
   const { push, query } = useRouter();
   const { data: masterData } = useGetMasterDataQuery();
   const status = useMemo(() => {
@@ -27,6 +30,11 @@ function Detail({ data }: { data?: TypeCampaign }) {
         return '下書き';
     }
   }, [data?.status]);
+  const fee = useMemo(() => Number((Number(data?.totalPrizeValue) * 5) / 100), [data?.totalPrizeValue]);
+  const tax = useMemo(
+    () => Number((((Number(data?.totalPrizeValue) ?? 0 * 5) / 100) * 10) / 100),
+    [data?.totalPrizeValue]
+  );
 
   return (
     <>
@@ -96,12 +104,14 @@ function Detail({ data }: { data?: TypeCampaign }) {
             <div className="flex flex-col space-y-[16px]">
               <h2 className="font-bold text-[18px] text-[#04AFAF] ">報酬</h2>
               <div className="flex flex-col space-y-[8px] text-[14px]">
-                <span className="text-[16px] font-bold">合計 {formatNumber(data?.totalPrizeValue ?? 0, true)}円</span>
-                <span>ギフト代金：110,000円</span>
-                <span>手数料：0円</span>
-                <span>その他：0円</span>
-                <span>消費税：0円</span>
-                <span>デポジット残高利用：0円</span>
+                <span className="text-[16px] font-bold">
+                  合計 {formatNumber(Number(data?.totalPrizeValue) + fee + tax, true, 1)}円
+                </span>
+                <span>ギフト代金：{formatNumber(data?.totalPrizeValue ?? 0, true, 1)}円</span>
+                <span>手数料：{formatNumber(fee, true)}円</span>
+                {/* <span>その他：0円</span> */}
+                <span>消費税：{formatNumber(tax, true)}円</span>
+                <span>デポジット残高利用：{user?.memberCompany.pointTotal}円</span>
               </div>
             </div>
           </>

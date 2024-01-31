@@ -35,7 +35,7 @@ function ReWard() {
   return (
     <>
       <div className=" bg-white rounded-[16px] mt-[16px] p-[48px]">
-        <Form form={form} name="reWard">
+        <Form form={form} name="reWard" scrollToFirstError={{ behavior: 'smooth', inline: 'start', block: 'end' }}>
           <SelectLabel
             initialValue="AUTO_PRIZEE_DRAW"
             label="当選者選定方法"
