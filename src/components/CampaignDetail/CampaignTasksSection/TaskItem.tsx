@@ -87,7 +87,7 @@ export default function TaskItem({
       const nowClone = now.clone().toISOString();
 
       if (moment(campaignInfo?.expiredTime)?.isValid() && moment(campaignInfo?.expiredTime)?.isSameOrBefore(nowClone)) {
-        toastMessage('The campaign has expired', 'error');
+        toastMessage('キャンペーンは終了しました。', 'error');
         return;
       }
 

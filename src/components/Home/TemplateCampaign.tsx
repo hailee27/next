@@ -18,7 +18,7 @@ function TemplateCampaign({ bgColor, listCampaign, title, viewMoreLink }: Props)
       <h2 className="text-[24px] font-bold text-center mb-[24px] md:mb-[72px] md:text-[32px] md:leading-[47px] md:tracking-[0.96px]">
         {title}
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 xxl:grid-cols-4 gap-[16px] md:max-w-[680px] xxl:max-w-[1370px] md:mx-auto">
+      <div className="grid grid-cols-[repeat(auto-fit,_335px)]  gap-[10px] justify-center md:max-w-[680px] xxl:max-w-[1370px] md:mx-auto">
         {Array.isArray(listCampaign) && listCampaign?.length > 0
           ? listCampaign?.slice(0, matchesMD ? 4 : 3)?.map((item) => {
               if (item) {

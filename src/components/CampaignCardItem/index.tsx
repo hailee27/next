@@ -1,7 +1,6 @@
 /* eslint-disable react/no-danger */
 /* eslint-disable no-nested-ternary */
 import React from 'react';
-import { useRouter } from 'next/router';
 import { TypeCampaign } from '@/redux/endpoints/campaign';
 import Image from 'next/image';
 import moment from 'moment';
@@ -16,14 +15,19 @@ export default function CampaignCardItem({
   item?: TypeCampaign;
   viewMode?: 'HAS_IMAGE' | 'NO_IMAGE';
 }) {
-  const router = useRouter();
   const sortCampaignReward = Array.isArray(item?.CampaignReward)
     ? item?.CampaignReward?.sort((a, b) => a.amountOfMoney - b.amountOfMoney)
     : [];
   return (
-    <CShadowCard onClickCard={() => router.push(`/campaigns/${item?.id}`)}>
+    <CShadowCard
+      onClickCard={() => {
+        if (typeof window !== undefined) {
+          window?.open(`${window.location?.origin}/campaigns/${item?.id}`, '_blank');
+        }
+      }}
+    >
       <div className="font-notoSans px-[24px] py-[32px] flex flex-col gap-[16px] h-full justify-between">
-        <div className=" flex flex-col gap-[16px]  ">
+        <div className=" flex flex-col gap-[16px]">
           <div className=" flex gap-[10px] items-center  ">
             <div className="w-[32px] h-[32px] rounded-full  overflow-hidden">
               <Image
@@ -126,6 +130,7 @@ export default function CampaignCardItem({
             </div>
           </div>
         </div>
+
         <div className="min-w-[279px] h-[47px]">
           <CButtonClassic
             customClassName="!bg-btn-gradation !text-[14px] !text-main-text"

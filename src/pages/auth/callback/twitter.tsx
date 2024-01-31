@@ -5,8 +5,11 @@
 'use client';
 
 import { useConnectTwitterMutation } from '@/redux/endpoints/auth';
+import clsx from 'clsx';
+import Image from 'next/image';
 
 import { useCallback, useEffect } from 'react';
+import styles from './styles.module.scss';
 
 export default function TwitterAuthCallBack() {
   const searchParams = new URLSearchParams(window.location.search);
@@ -49,7 +52,7 @@ export default function TwitterAuthCallBack() {
           localStorage.setItem(
             'twitter_callback_data',
             JSON.stringify({
-              error: 'twitter connect failed',
+              error: 'Twitterに接続できません。',
             })
           );
         }
@@ -57,7 +60,7 @@ export default function TwitterAuthCallBack() {
         localStorage.setItem(
           'twitter_callback_data',
           JSON.stringify({
-            error: 'Missing params for connect twitter',
+            error: 'Twitter に接続するためのパラメータが不足しています。',
           })
         );
       }
@@ -65,7 +68,7 @@ export default function TwitterAuthCallBack() {
       localStorage.setItem(
         'twitter_callback_data',
         JSON.stringify({
-          error: err?.data?.message || err?.message || 'Something went wrong',
+          error: err?.data?.message || err?.message || '何か問題が発生しました',
         })
       );
     } finally {
@@ -76,5 +79,23 @@ export default function TwitterAuthCallBack() {
   useEffect(() => {
     handleTwitterAuth();
   }, [handleTwitterAuth]);
-  return <div className="w-full h-full pt-[300px] text-center">Waiting a moment ...</div>;
+  return (
+    <div className="min-h-[calc(100vh-64px)] w-full h-full text-center flex justify-center items-center">
+      <div className={clsx(styles.loader)}>
+        <span />
+        <span />
+        <span />
+        <span />
+        <div className="w-[101px] h-[30px]">
+          <Image
+            alt="footer logo"
+            className="w-full h-full object-cover"
+            height={30}
+            src="/assets/images/logo 1.png"
+            width={101}
+          />
+        </div>
+      </div>
+    </div>
+  );
 }

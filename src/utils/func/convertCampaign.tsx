@@ -6,6 +6,7 @@
 import { TypeTask } from '@/redux/endpoints/campaign';
 import { MasterDataResponse } from '@/redux/endpoints/masterData';
 import toastMessage from './toastMessage';
+import { getErrorMessage } from './getErrorMessage';
 
 export interface TasksConvert {
   id: number;
@@ -33,7 +34,7 @@ export const getMasterDataLabel = (
       return item?.label ?? '';
     }
   } catch (err: any) {
-    toastMessage(err?.message ?? JSON.stringify(err), 'error');
+    toastMessage(getErrorMessage(err), 'error');
   }
   return result;
 };
@@ -374,7 +375,7 @@ export const convertCampaignTask = (task: TypeTask | null) => {
         return null;
     }
   } catch (err: any) {
-    toastMessage(err?.message ?? JSON.stringify(err), 'error');
+    toastMessage(getErrorMessage(err), 'error');
   }
 
   return result;

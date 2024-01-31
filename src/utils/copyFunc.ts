@@ -3,8 +3,8 @@ import toastMessage from './func/toastMessage';
 export const copyFunc = async (text) => {
   try {
     await navigator.clipboard.writeText(text);
-    toastMessage('Copied!', 'success');
+    toastMessage('コピーしました！', 'success');
   } catch (err) {
-    toastMessage('Failed to copy!', 'error');
+    toastMessage('コピーに失敗しました!', 'error');
   }
 };

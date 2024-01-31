@@ -26,7 +26,7 @@ export default function CreatorRoleFeedbackModal() {
                 onClick={() => {
                   router.push('/my-page');
                 }}
-                title="Go Setting"
+                title="設定"
                 type="button"
               />
             </div>
