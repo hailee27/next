@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import FlagItem from '@/components/common/FlagItem';
-import { TypeCampaign } from '@/redux/endpoints/campaign';
+import { TypeCampaign, useUpdateCampaignMutation } from '@/redux/endpoints/campaign';
 import { useGetMasterDataQuery } from '@/redux/endpoints/masterData';
 import { formatNumber } from '@/utils/formatNumber';
 import moment from 'moment';
@@ -14,6 +14,7 @@ function Detail({ data }: { data?: TypeCampaign }) {
   const { user } = useSelector((state: RootState) => state.auth);
   const { push, query } = useRouter();
   const { data: masterData } = useGetMasterDataQuery();
+  const [updateStatusCampaign] = useUpdateCampaignMutation();
   const status = useMemo(() => {
     switch (data?.status) {
       case 'DRAFT':
@@ -139,6 +140,11 @@ function Detail({ data }: { data?: TypeCampaign }) {
                 classBgColor="bg-white"
                 classRounded="rounded-[6px]"
                 classShadowColor="bg-main-text"
+                onClick={() =>
+                  updateStatusCampaign({ campaignId: data?.id ?? '', body: { status: 'COMPLETION' } })
+                    .unwrap()
+                    .then(() => push('/campaign-creator/list'))
+                }
                 shadowSize="normal"
                 textClass="text-main-text"
                 title="キャンペーンのステータスを完了にする"
@@ -152,6 +158,11 @@ function Detail({ data }: { data?: TypeCampaign }) {
                   classBgColor="bg-white"
                   classRounded="rounded-[6px]"
                   classShadowColor="bg-main-text"
+                  onClick={() =>
+                    updateStatusCampaign({ campaignId: data?.id ?? '', body: { status: 'COMPLETION' } })
+                      .unwrap()
+                      .then(() => push('/campaign-creator/list'))
+                  }
                   shadowSize="normal"
                   textClass="text-main-text"
                   title="キャンペーンのステータスを完了にする"
