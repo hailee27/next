@@ -101,14 +101,23 @@ function CampaignCreation() {
 
         // SAVE
         if (name === 'confirm') {
-          // console.log(queryParams);
-          handleCreateCampaign(queryParams, 'UNDER_REVIEW');
+          if (router.query.id) {
+            if (queryParams.typeWinner === 'AUTO_PRIZEE_DRAW') {
+              handleUpdateCampaign(String(router.query.id), queryParams, 'DRAFT', 'CREATE');
+            } else {
+              handleUpdateCampaign(String(router.query.id), queryParams, 'WAITING_FOR_PUBLICATION');
+            }
+          } else if (queryParams.typeWinner === 'AUTO_PRIZEE_DRAW') {
+            handleCreateCampaign(queryParams, 'UNDER_REVIEW');
+          } else {
+            handleCreateCampaign(queryParams, 'WAITING_FOR_PUBLICATION');
+          }
         }
 
         // SAVE DRAFT
         if (name === 'saveDraft') {
           if (router.query.id) {
-            handleUpdateCampaign(queryParams, 'DRAFT');
+            handleUpdateCampaign(String(router.query.id), queryParams, 'DRAFT');
           } else {
             handleCreateCampaign(queryParams, 'DRAFT');
           }
