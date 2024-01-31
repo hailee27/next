@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TypeConfig } from '@/components/CampaignCreate/CampaignCreation/Task/type';
 import { api } from '../api';
@@ -72,9 +73,31 @@ const injectedRtkApi = api.injectEndpoints({
         return config;
       },
     }),
+    createGacha: build.mutation<any, DetailCampaignParams>({
+      query: (queryArg) => {
+        const config: {
+          url: string;
+          method: string;
+        } = {
+          url: `/campaigns/${queryArg.campaignId}/gacha`,
+          method: 'POST',
+        };
+
+        return config;
+      },
+    }),
+    getListCampaignUsers: build.query<ListCampaignUsersResponse, ListCampaignUsersParams>({
+      query: (queryArg) => ({
+        url: `campaigns/${queryArg.campaignId}/users`,
+        method: 'GET',
+      }),
+    }),
   }),
 });
-
+export type ListCampaignUsersParams = {
+  campaignId: string;
+};
+export type ListCampaignUsersResponse = void;
 export type DetailCampaignResponse = TypeCampaign;
 export type DetailCampaignParams = {
   campaignId: string;
@@ -197,6 +220,7 @@ export type ListCampaignParams = {
   include?: string;
   token?: string;
   except?: string;
+  actionFrom?: 'ADMIN';
 };
 export type QuestsResponse = {
   newCampaign: {
@@ -288,4 +312,7 @@ export const {
   useLazyGetListCampaignQuery,
   useGetDetailCampaignQuery,
   useLazyGetDetailCampaignQuery,
+  useCreateGachaMutation,
+  useGetListCampaignUsersQuery,
+  useLazyGetListCampaignUsersQuery,
 } = injectedRtkApi;

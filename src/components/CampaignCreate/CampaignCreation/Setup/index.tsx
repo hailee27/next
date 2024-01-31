@@ -37,10 +37,11 @@ function Setup() {
       form.setFieldsValue({
         campainName: dataCampaign.title,
         category: dataCampaign.category,
-        endDate: !dataCampaign.dontSetExpiredTime && moment(dataCampaign.expiredTime),
+        endDate:
+          !dataCampaign.dontSetExpiredTime && dataCampaign.expiredTime ? moment(dataCampaign.expiredTime) : undefined,
         explanatoryText: dataCampaign.description,
         noDate: dataCampaign.dontSetExpiredTime,
-        startDate: moment(dataCampaign.startTime),
+        startDate: dataCampaign.startTime ? moment(dataCampaign.startTime) : undefined,
         thumbnail: dataCampaign.image,
       });
     }

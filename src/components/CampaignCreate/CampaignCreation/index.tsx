@@ -76,8 +76,8 @@ function CampaignCreation() {
         queryParams = {
           ...forms?.setUp?.getFieldsValue(),
           ...forms?.tasks?.getFieldsValue(),
-          ...forms?.reWard?.getFieldsValue(),
           ...forms?.confirm?.getFieldsValue(),
+          ...forms?.reWard?.getFieldsValue(),
         };
         // PASS VALUE TO FROM CONFIRM
         forms?.confirm?.setFieldsValue({
@@ -88,7 +88,7 @@ function CampaignCreation() {
             : `${moment(String(queryParams.startDate)).format('YYYY/MM/DD HH:mm')} 〜 ${moment(
                 String(queryParams.endDate)
               ).format('YYYY/MM/DD  HH:mm')} `,
-          typeWinner: queryParams.typeWinner ?? 'AUTO_PRIZEE_DRAW',
+          typeWinner: queryParams.typeWinner,
           status: '下書き',
           campaginCreator: user?.email?.email,
         });

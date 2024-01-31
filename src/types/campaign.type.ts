@@ -77,6 +77,7 @@ export type TypeResponseFormCampaign = {
   optionTasks?: {
     task1: TaskType;
   };
+  typeWinnerFormReWard?: 'AUTO_PRIZEE_DRAW' | 'MANUAL_SELECTION';
   typeWinner?: 'AUTO_PRIZEE_DRAW' | 'MANUAL_SELECTION';
   numberOfParticipants?: number;
   compensationSummary?: string;
