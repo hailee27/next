@@ -6,14 +6,17 @@ import styles from '@/components/common/BasicTable/index.module.scss';
 import CircleArrow from '@/components/common/icons/CircleArrow';
 import { useRouter } from 'next/router';
 import { ColumnsType } from 'antd/es/table';
+import { useGetPaymentQuery } from '@/redux/endpoints/payment';
+import moment from 'moment';
+import { formatNumber } from '@/utils/formatNumber';
 
 interface DataType {
   key: React.Key;
   date: string;
-  payment: string;
-  withdrawal: string;
+  payment?: string | number;
+  withdrawal?: string | number;
   content: string;
-  depositBalance: string;
+  depositBalance: string | number;
 }
 
 const columns: ColumnsType<DataType> = [
@@ -24,10 +27,12 @@ const columns: ColumnsType<DataType> = [
   {
     title: '入金',
     dataIndex: 'payment',
+    render: (value) => <span>{value ? `${formatNumber(value, true, 1)}円` : '-'} </span>,
   },
   {
     title: '出金',
     dataIndex: 'withdrawal',
+    render: (value) => <span>{value ? `${formatNumber(value, true, 1)}円` : '-'} </span>,
   },
   {
     title: '内容',
@@ -41,80 +46,36 @@ const columns: ColumnsType<DataType> = [
   {
     title: 'デポジット残高',
     dataIndex: 'depositBalance',
+    render: (value) => <span>{formatNumber(value, true, 1)}円 </span>,
   },
 ];
 
 function TablePayment() {
   const [pageTable, setPageTable] = useState<number>(0);
   const { push, query, isReady } = useRouter();
+  const { data: dataListPayment } = useGetPaymentQuery(
+    { skip: pageTable ?? 0, take: 10 },
+    { refetchOnMountOrArgChange: true }
+  );
 
   useEffect(() => {
     if (query.page) {
       setPageTable(Number(Number(query.page) - 1) * 10);
     }
   }, [isReady, query?.page]);
+  console.log(pageTable);
 
   const data = useMemo<DataType[] | undefined>(
-    () => [
-      {
-        key: '1',
-        date: '2023/12/05',
-        payment: '50,000円',
-        withdrawal: '90,000円',
-        content: 'test_ikeyama_3',
-        depositBalance: 'デポジット残高',
-      },
-      {
-        key: '2',
-        date: '2023/12/05',
-        payment: '-',
-        withdrawal: '90,000円',
-        content: 'test_ikeyama_3',
-        depositBalance: 'デポジット残高',
-      },
-      {
-        key: '3',
-        date: '2023/12/05',
-        payment: '50,000円',
-        withdrawal: '-',
-        content: 'test_ikeyama_3',
-        depositBalance: 'デポジット残高',
-      },
-
-      {
-        key: '4',
-        date: '2023/12/05',
-        payment: '50,000円',
-        withdrawal: '-',
-        content: 'test_ikeyama_3',
-        depositBalance: 'デポジット残高',
-      },
-      {
-        key: '5',
-        date: '2023/12/05',
-        payment: '50,000円',
-        withdrawal: '-',
-        content: 'test_ikeyama_3',
-        depositBalance: 'デポジット残高',
-      },
-      {
-        key: '6',
-        date: '2023/12/05',
-        payment: '50,000円',
-        withdrawal: '-',
-        content: 'test_ikeyama_3',
-        depositBalance: 'デポジット残高',
-      },
-      {
-        key: '7',
-        date: '2023/12/05',
-        payment: '50,000円',
-        withdrawal: '-',
-        content: 'test_ikeyama_3',
-        depositBalance: 'デポジット残高',
-      },
-    ],
-    []
+    () =>
+      dataListPayment?.payments.map((e) => ({
+        key: e.id,
+        date: moment(e.createdAt).format('YYYY/MM/DD'),
+        payment: e.type === 'PAYMENT' ? e.amount : undefined,
+        withdrawal: e.type !== 'PAYMENT' ? e.amount : undefined,
+        content: e.campaignName,
+        depositBalance: e.amountAfterTransaction,
+      })),
+    [dataListPayment?.payments]
   );
   return (
     <div className={styles.customTable}>
@@ -128,15 +89,15 @@ function TablePayment() {
         })}
         pagination={{
           position: ['bottomCenter'],
-          pageSize: 5,
-          // total: 10,
+          pageSize: 10,
+          total: dataListPayment?.total,
           showSizeChanger: false,
           jumpNextIcon: <span className="text-[16px] font-medium tracking-[0.48px]">...</span>,
           jumpPrevIcon: <span className="text-[16px] font-medium tracking-[0.48px]">...</span>,
           prevIcon: <CircleArrow position="left" />,
           nextIcon: <CircleArrow />,
           // eslint-disable-next-line react/no-unstable-nested-components
-          showTotal: () => <span>{data?.length} 件</span>,
+          showTotal: () => <span>{dataListPayment?.total} 件</span>,
           onChange: (page) => {
             push({ query: { page } }, undefined, { shallow: true, scroll: true });
           },

@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TypeConfig } from '@/components/CampaignCreate/CampaignCreation/Task/type';
 import { api } from '../api';
@@ -10,7 +11,7 @@ const injectedRtkApi = api.injectEndpoints({
         Object.entries(queryArg).forEach(([key, value]) =>
           queryArg[key] === 'undefined' || queryArg[key] === undefined
             ? delete queryArg[key]
-            : body.append(`${key}`, String(value))
+            : body.append(`${key}`, value)
         );
         return {
           url: '/campaigns',
@@ -35,7 +36,7 @@ const injectedRtkApi = api.injectEndpoints({
         Object.entries(queryArg.body).forEach(([key, value]) =>
           queryArg.body[key] === 'undefined' || queryArg.body[key] === undefined
             ? delete queryArg.body[key]
-            : body.append(`${key}`, String(value))
+            : body.append(`${key}`, value)
         );
         return {
           url: `/campaigns/${queryArg.campaignId}`,
@@ -72,9 +73,31 @@ const injectedRtkApi = api.injectEndpoints({
         return config;
       },
     }),
+    createGacha: build.mutation<any, DetailCampaignParams>({
+      query: (queryArg) => {
+        const config: {
+          url: string;
+          method: string;
+        } = {
+          url: `/campaigns/${queryArg.campaignId}/gacha`,
+          method: 'POST',
+        };
+
+        return config;
+      },
+    }),
+    getListCampaignUsers: build.query<ListCampaignUsersResponse, ListCampaignUsersParams>({
+      query: (queryArg) => ({
+        url: `campaigns/${queryArg.campaignId}/users`,
+        method: 'GET',
+      }),
+    }),
   }),
 });
-
+export type ListCampaignUsersParams = {
+  campaignId: string;
+};
+export type ListCampaignUsersResponse = void;
 export type DetailCampaignResponse = TypeCampaign;
 export type DetailCampaignParams = {
   campaignId: string;
@@ -197,6 +220,7 @@ export type ListCampaignParams = {
   include?: string;
   token?: string;
   except?: string;
+  actionFrom?: 'ADMIN';
 };
 export type QuestsResponse = {
   newCampaign: {
@@ -269,7 +293,7 @@ export type QuestsParams = {
   dontSetExpiredTime?: string;
   // tasks?: string;
   methodOfselectWinners?: string;
-  totalNumberOfUsersAllowedToWork?: string | number;
+  totalNumberOfUsersAllowedToWork?: string;
   numberOfPrizes?: string;
   totalPrizeValue?: string;
   // campaignReward?: string;
@@ -288,4 +312,7 @@ export const {
   useLazyGetListCampaignQuery,
   useGetDetailCampaignQuery,
   useLazyGetDetailCampaignQuery,
+  useCreateGachaMutation,
+  useGetListCampaignUsersQuery,
+  useLazyGetListCampaignUsersQuery,
 } = injectedRtkApi;
