@@ -130,7 +130,7 @@ export default function CampaignCardItem({
             </div>
           </div>
         </div>
-        <div className="flex-grow-1" />
+
         <div className="min-w-[279px] h-[47px]">
           <CButtonClassic
             customClassName="!bg-btn-gradation !text-[14px] !text-main-text"
