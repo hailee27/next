@@ -16,7 +16,7 @@ export default function RecommedCampaignsSection({ campaignsRecommend }: { campa
       </h3>
       <div className="h-[40px] md:h-[72px]" />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xxl:grid-cols-4 gap-[16px] md:max-w-[680px] xxl:max-w-[1370px] md:mx-auto">
+      <div className="grid grid-cols-[repeat(auto-fit,_335px)]  gap-[10px] justify-center md:max-w-[680px] xxl:max-w-[1370px] md:mx-auto">
         {Array.isArray(campaignsRecommend) && campaignsRecommend?.length > 0
           ? campaignsRecommend?.slice(0, matchesMD ? 4 : 3)?.map((item) => {
               if (item) {
