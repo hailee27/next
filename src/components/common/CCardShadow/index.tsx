@@ -4,12 +4,12 @@ import React, { useEffect, useRef } from 'react';
 import styles from './styles.module.scss';
 
 interface ICCardShadowProps {
-  disableClick?: boolean;
+  disableAnimation?: boolean;
   onClickCard?: () => void;
   children: JSX.Element;
 }
 
-export default function CCardShadow({ disableClick, onClickCard, children }: ICCardShadowProps) {
+export default function CCardShadow({ disableAnimation, onClickCard, children }: ICCardShadowProps) {
   const cardRef = useRef<HTMLDivElement | null>(null);
 
   const onTouchStart = () => {
@@ -19,7 +19,7 @@ export default function CCardShadow({ disableClick, onClickCard, children }: ICC
     cardRef?.current?.classList.remove('shadow-card--tounched');
   };
   useEffect(() => {
-    if (cardRef && cardRef?.current) {
+    if (cardRef && cardRef?.current && disableAnimation === false) {
       cardRef?.current?.addEventListener('touchstart', onTouchStart);
       cardRef?.current?.addEventListener('touchend', onTouchEnd);
     }
@@ -31,12 +31,12 @@ export default function CCardShadow({ disableClick, onClickCard, children }: ICC
   return (
     <div
       aria-hidden="true"
-      className={clsx(styles.shadowCardContainer, disableClick ? 'pointer-events-none' : '')}
+      className={clsx(styles.shadowCardContainer)}
       onClick={() => {
         onClickCard?.();
       }}
     >
-      <div className={clsx('shadowCardInner')}>
+      <div className={clsx('shadowCardInner', disableAnimation ? '' : 'contentHover')}>
         <div className="card-inner">
           <div className="card-shadow" />
           <div className="card-content" ref={cardRef}>
@@ -50,5 +50,5 @@ export default function CCardShadow({ disableClick, onClickCard, children }: ICC
 
 CCardShadow.defaultProps = {
   onClickCard: () => {},
-  disableClick: false,
+  disableAnimation: false,
 };

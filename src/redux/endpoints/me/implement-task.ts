@@ -8,11 +8,7 @@ export default function implementTask(build: EndpointBuilder<BaseQueryFn, string
     {
       taskId: number;
       body?: {
-        answer: {
-          question: string;
-          questionType: 'FREE_TEXT' | 'CHOOSE_MULTIPLE' | 'CHOOSE_ONE';
-          answer: string;
-        };
+        answer: string;
       };
     }
   >({

@@ -2,7 +2,7 @@
 /* eslint-disable no-console */
 
 import { useLazyMeQuery } from '@/redux/endpoints/auth';
-import { setSession, setUser } from '@/redux/slices/auth.slice';
+import { setSession } from '@/redux/slices/auth.slice';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import toastMessage from '@/utils/func/toastMessage';
 import { useRouter } from 'next/router';
@@ -21,12 +21,8 @@ export default function useConnectX({ handleAction }: IProps) {
 
   const refreshUser = async () => {
     try {
-      const data = await triggerGetMe().unwrap();
-      if (data as any) {
-        dispatch(setUser(data));
-      }
+      await triggerGetMe().unwrap();
     } catch (error) {
-      // console.log(error, 'Errrrrrrrrrrrrrrrrrr');
       toastMessage(getErrorMessage(error), 'error');
     }
   };
