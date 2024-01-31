@@ -42,11 +42,7 @@ export default function ModalChooseOne({
               await onImplementTask({
                 taskId: task?.id,
                 body: {
-                  answer: {
-                    question: task?.taskInfo?.questionText ?? '',
-                    questionType: 'CHOOSE_ONE',
-                    answer: values?.answer ? JSON.stringify([values?.answer] || []) : '',
-                  },
+                  answer: values?.answer ? JSON.stringify([values?.answer] || []) : '',
                 },
               });
               await onRefetchCampaignTasks();

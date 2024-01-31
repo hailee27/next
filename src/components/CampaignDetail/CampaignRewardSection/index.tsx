@@ -3,11 +3,13 @@ import CButtonShadow from '@/components/common/CButtonShadow';
 import CModalWapper from '@/components/common/CModalWapper';
 import ArrowDown from '@/components/common/icons/ArrowDown';
 import { useContext, useMemo, useState } from 'react';
+import { useMediaQuery } from 'usehooks-ts';
 import { CampaignDetailContext } from '../CampainContext';
 
 export default function CampaignRewardSection() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { campaignDetail, campaignRewards } = useContext(CampaignDetailContext);
+  const matchesMD = useMediaQuery('(min-width: 768px)');
 
   const sortCampaignRewardIndex = useMemo(() => {
     const results = campaignRewards && Array.isArray(campaignRewards) ? [...campaignRewards] : [];
@@ -49,10 +51,10 @@ export default function CampaignRewardSection() {
           )}
         </div>
       )}
-      <CModalWapper isOpen={isModalOpen} modalWidth={368} onCancel={handleCancel} top={10}>
+      <CModalWapper isOpen={isModalOpen} modalWidth={matchesMD ? 575 : 368} onCancel={handleCancel} top={10}>
         <div className="h-[50vh] overflow-hidden">
-          <div className="h-full overflow-y-auto flex flex-col gap-[8px] custom-scroll  pr-[8px]  ">
-            <div>
+          <div className="h-full overflow-y-auto  custom-scroll  pr-[8px]  ">
+            <div className="flex flex-col gap-[8px]">
               {sortCampaignRewardIndex?.map((item) => <CampaignRewardCardItem campaignReward={item} key={item?.id} />)}
             </div>
           </div>

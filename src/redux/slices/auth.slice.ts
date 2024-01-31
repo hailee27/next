@@ -1,5 +1,6 @@
 import { User } from '@/types/auth.type';
 import { createSlice } from '@reduxjs/toolkit';
+import { authApi } from '../endpoints/auth';
 
 export interface AuthState {
   accessToken: string | null;
@@ -39,6 +40,14 @@ const authSlice = createSlice({
       state.accessToken = actions?.payload?.accessToken;
       state.refreshToken = actions?.payload?.refreshToken;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addMatcher(authApi.endpoints.me.matchPending, () => {})
+      .addMatcher(authApi.endpoints.me.matchFulfilled, (state, { payload }) => {
+        state.user = payload;
+      })
+      .addMatcher(authApi.endpoints.me.matchRejected, () => {});
   },
 });
 
