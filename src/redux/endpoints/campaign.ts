@@ -73,19 +73,6 @@ const injectedRtkApi = api.injectEndpoints({
         return config;
       },
     }),
-    createGacha: build.mutation<any, DetailCampaignParams>({
-      query: (queryArg) => {
-        const config: {
-          url: string;
-          method: string;
-        } = {
-          url: `/campaigns/${queryArg.campaignId}/gacha`,
-          method: 'POST',
-        };
-
-        return config;
-      },
-    }),
     getListCampaignUsers: build.query<ListCampaignUsersResponse, ListCampaignUsersParams>({
       query: (queryArg) => ({
         url: `campaigns/${queryArg.campaignId}/users`,
@@ -312,7 +299,6 @@ export const {
   useLazyGetListCampaignQuery,
   useGetDetailCampaignQuery,
   useLazyGetDetailCampaignQuery,
-  useCreateGachaMutation,
   useGetListCampaignUsersQuery,
   useLazyGetListCampaignUsersQuery,
 } = injectedRtkApi;
