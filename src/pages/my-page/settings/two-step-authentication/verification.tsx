@@ -65,7 +65,12 @@ export default function Verification() {
                 twoFactorPhone: userPhone,
               }
         ).unwrap();
-        toastMessage('Phone number has been updated successfully. ', 'success');
+        if (userAction === 'disable') {
+          toastMessage('2段階認証のオフに成功です。');
+        } else {
+          toastMessage('電話番号の更新に成功されました。', 'success');
+        }
+
         router.push('/my-page');
       }
     } catch (err) {
