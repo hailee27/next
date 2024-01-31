@@ -15,7 +15,7 @@ export default function adapterCampaignParams(
         startTime: data.startDate ?? '',
         expiredTime: data.noDate ? undefined : data.endDate,
         methodOfselectWinners: typeWinner,
-        totalNumberOfUsersAllowedToWork: Number(data.numberOfParticipants),
+        totalNumberOfUsersAllowedToWork: String(data.numberOfParticipants ?? undefined),
         numberOfPrizes: String(data.totalTicket),
         totalPrizeValue: String(data.totalReWard),
         settingForNotWin: String(data.statusCampaign ?? false),

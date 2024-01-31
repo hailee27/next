@@ -66,6 +66,12 @@ function CampaignCreation() {
   return (
     <Form.Provider
       onFormFinish={(name, { forms }) => {
+        if (name !== 'delete' && name !== 'preview' && name !== 'saveDraft') {
+          setTab((prev) => String(Number(prev) + 1));
+        }
+        if (tab === '4') {
+          setTab('4');
+        }
         let queryParams: TypeResponseFormCampaign = {};
         queryParams = {
           ...forms?.setUp?.getFieldsValue(),
@@ -73,12 +79,6 @@ function CampaignCreation() {
           ...forms?.reWard?.getFieldsValue(),
           ...forms?.confirm?.getFieldsValue(),
         };
-        if (name !== 'delete' && name !== 'preview' && name !== 'saveDraft') {
-          setTab((prev) => String(Number(prev) + 1));
-        }
-        if (tab === '4') {
-          setTab('4');
-        }
         // PASS VALUE TO FROM CONFIRM
         forms?.confirm?.setFieldsValue({
           nameCampagin: queryParams.campainName,

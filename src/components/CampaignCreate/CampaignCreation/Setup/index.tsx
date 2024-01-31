@@ -49,12 +49,7 @@ function Setup() {
   return (
     <>
       <div className="mt-[16px]  bg-white rounded-[4px] p-[40px]">
-        <Form
-          form={form}
-          name="setUp"
-          // onFinishFailed={(e) => console.log(e)}
-          scrollToFirstError={{ behavior: 'smooth', inline: 'center', block: 'center' }}
-        >
+        <Form form={form} name="setUp" scrollToFirstError={{ behavior: 'smooth', inline: 'center', block: 'center' }}>
           <InputLabel
             label="キャンペーン名"
             name="campainName"
