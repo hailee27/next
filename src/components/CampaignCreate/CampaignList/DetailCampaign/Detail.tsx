@@ -104,15 +104,27 @@ function Detail({ data }: { data?: TypeCampaign }) {
             </div>
             <div className="flex flex-col space-y-[16px]">
               <h2 className="font-bold text-[18px] text-[#04AFAF] ">報酬</h2>
-              <div className="flex flex-col space-y-[8px] text-[14px]">
+
+              <div className="flex flex-col text-[14px] space-y-[8px] ">
                 <span className="text-[16px] font-bold">
                   合計 {formatNumber(Number(data?.totalPrizeValue) + fee + tax, true, 1)}円
                 </span>
-                <span>ギフト代金：{formatNumber(data?.totalPrizeValue ?? 0, true, 1)}円</span>
-                <span>手数料：{formatNumber(fee, true)}円</span>
-                {/* <span>その他：0円</span> */}
-                <span>消費税：{formatNumber(tax, true)}円</span>
-                <span>デポジット残高利用：{user?.memberCompany.pointTotal}円</span>
+                <div className="flex justify-between ">
+                  <span className="flex-1">ギフト代金: </span>
+                  <span className="flex-[6]">{formatNumber(data?.totalPrizeValue ?? 0, true, 1)}円</span>
+                </div>
+                <div className="flex justify-between ">
+                  <span className="flex-1">手数料: </span>
+                  <span className="flex-[6]">{formatNumber(fee, true)}円</span>
+                </div>
+                <div className="flex justify-between ">
+                  <span className="flex-1">消費税: </span>
+                  <span className="flex-[6]">{formatNumber(tax, true)}円</span>
+                </div>
+                <div className="flex justify-between ">
+                  <span className="flex-1">デポジット残高利用: </span>
+                  <span className="flex-[6]">{user?.memberCompany.pointTotal}円</span>
+                </div>
               </div>
             </div>
           </>

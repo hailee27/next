@@ -3,12 +3,17 @@ import CButtonShadow from '@/components/common/CButtonShadow';
 import { useRouter } from 'next/router';
 import { useGetDetailCampaignQuery } from '@/redux/endpoints/campaign';
 import { copyFunc } from '@/utils/copyFunc';
-import Detail from './Detail';
+
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 import CampaignParticipantsInstant from './CampaignParticipantsInstant';
+import Detail from './Detail';
 
 function DetailCampaign() {
-  const { query, back } = useRouter();
+  const { query, back, reload } = useRouter();
   const { data } = useGetDetailCampaignQuery({ campaignId: String(query?.id) });
+  const { accessToken } = useSelector((state: RootState) => state.auth);
 
   return (
     <div className="px-[48px] pb-[77px]">
@@ -39,12 +44,37 @@ function DetailCampaign() {
                   }}
                 />
               </div>
+
               <div className="w-[166px]  h-[56px]">
                 <CButtonShadow
                   classBgColor="bg-main-text"
                   classRounded="rounded-[6px]"
                   classShadowColor="bg-white"
-                  // onClick={() => router.push('/campaign-creator/create')}
+                  onClick={async () => {
+                    try {
+                      const response = await axios.get(
+                        `${process.env.NEXT_PUBLIC_API_URL}campaigns/${query?.id}/users`,
+                        {
+                          headers: { Authorization: `Bearer ${accessToken}` },
+                          params: { action: 'csv' },
+                        }
+                      );
+                      if (response) {
+                        const url = window.URL.createObjectURL(
+                          new Blob([`\ufeff${response.data}`], {
+                            type: 'text/csv;charset=utf-8;',
+                          })
+                        );
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.setAttribute('download', 'list_users.csv');
+                        document.body.appendChild(link);
+                        link.click();
+                      }
+                    } catch (error) {
+                      reload();
+                    }
+                  }}
                   shadowSize="normal"
                   // textClass='"bg-main-text"'
                   title="CSV出力"
@@ -91,7 +121,6 @@ function DetailCampaign() {
                   classBgColor="bg-main-text"
                   classRounded="rounded-[6px]"
                   classShadowColor="bg-white"
-                  // onClick={() => router.push('/campaign-creator/create')}
                   shadowSize="normal"
                   title="公開中のページ"
                   withIcon={{

@@ -66,6 +66,7 @@ function CampaignCreation() {
   return (
     <Form.Provider
       onFormFinish={(name, { forms }) => {
+        // await forms[name].validateFields();
         if (name !== 'delete' && name !== 'preview' && name !== 'saveDraft') {
           setTab((prev) => String(Number(prev) + 1));
         }
@@ -126,7 +127,9 @@ function CampaignCreation() {
         // DELETE
         if (name === 'delete') {
           if (router.query.id) {
-            deleteCampaign({ campaignId: String(router.query.id) });
+            deleteCampaign({ campaignId: String(router.query.id) })
+              .unwrap()
+              .then(() => router.push('/campaign-creator/list'));
           } else {
             router.push('/campaign-creator/list');
           }

@@ -1,18 +1,26 @@
 /* eslint-disable max-lines-per-function */
 import React, { useContext, useEffect, useState } from 'react';
-import { Form } from 'antd';
+import { Form, Spin } from 'antd';
 import BasicButton from '@/components/common/BasicButton';
 // import BasicInput from '@/components/common/BasicInput';
 import { StepContext, TypeTabContext } from '@/context/TabContext';
 import FlagItem from '@/components/common/FlagItem';
 import CButtonShadow from '@/components/common/CButtonShadow';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import { formatNumber } from '@/utils/formatNumber';
+import PopUpCreditOrDebitCard from '@/components/OrganizeInformation/PopUpCreditOrDebitCard';
+import { usePopUpContext } from '@/context/PopUpContext';
+import { useUpdateCompaniesMutation } from '@/redux/endpoints/companies';
+import { useLazyMeQuery } from '@/redux/endpoints/auth';
+import { setUser } from '@/redux/slices/auth.slice';
+import toastMessage from '@/utils/func/toastMessage';
 import TableReWard from './TableReWard';
 
 function Confirmation() {
+  const dispatch = useDispatch();
   const [form] = Form.useForm();
+  const { openPopUp } = usePopUpContext();
   const { user } = useSelector((state: RootState) => state.auth);
   const { prevTab } = useContext<TypeTabContext>(StepContext);
   const typeWinnerWatch = Form.useWatch('typeWinner', form);
@@ -21,6 +29,8 @@ function Confirmation() {
   const [totalPaymentAmount, setTotalPaymentAmount] = useState<number>(0);
   const [tax, setTax] = useState<number>(0);
   const [fee, setFee] = useState<number>(0);
+  const [trigger, { isLoading: loadingUpdate }] = useUpdateCompaniesMutation();
+  const [triggerMe] = useLazyMeQuery();
 
   useEffect(() => {
     if (priceWatch) {
@@ -35,7 +45,7 @@ function Confirmation() {
     }
   }, [totalPaymentAmount]);
   return (
-    <>
+    <Spin spinning={loadingUpdate}>
       <div className="bg-white rounded-[4px] mt-[16px] p-[40px]">
         <Form form={form} name="confirm">
           <div className="mt-[24px] grid grid-cols-3 gap-y-[24px]">
@@ -112,9 +122,45 @@ function Confirmation() {
                 <div className="flex flex-col mt-[24px]">
                   <span className="text-[16px] font-semibold leading-[20px]">支払方法</span>
                   <div className="flex flex-col p-[12px] space-y-[18px] text-[16px]  leading-[24px]">
-                    <span className="font-semibold">Mastercard</span>
-                    <span>末尾が•••• 7274のクレジットカード</span>
+                    <span className="font-semibold">{user?.memberCompany.cardInfo.cardBrand}</span>
+                    <span>末尾が•••• {user?.memberCompany.cardInfo.lastFour}のクレジットカード</span>
                   </div>
+                  <span
+                    className="text-[#4158D0] cursor-pointer"
+                    onClick={() =>
+                      openPopUp({
+                        contents: (
+                          <PopUpCreditOrDebitCard
+                            getCardPayment={(value) =>
+                              trigger({
+                                companyId: String(user?.companyId),
+                                cardInfo: JSON.stringify({
+                                  cardholderName: value?.cardholderName,
+                                  lastFour: value?.details?.card.last4,
+                                  cardBrand: value?.details?.card.brand,
+                                }),
+                                sourceId: value?.token,
+                              })
+                                .unwrap()
+                                .then(() => {
+                                  triggerMe()
+                                    .unwrap()
+                                    .then((res) => {
+                                      dispatch(setUser(res));
+                                    });
+                                  toastMessage('update success', 'success');
+                                })
+                            }
+                          />
+                        ),
+                      })
+                    }
+                    onKeyPress={undefined}
+                    role="button"
+                    tabIndex={0}
+                  >
+                    編集
+                  </span>
                 </div>
                 <div className="mt-[24px]">
                   <span className="text-[14px] font-semibold leading-[16px]">
@@ -218,7 +264,7 @@ function Confirmation() {
           </div>
         )}
       </div>
-    </>
+    </Spin>
   );
 }
 

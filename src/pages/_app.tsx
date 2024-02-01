@@ -34,6 +34,23 @@ import { ReactElement, useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { CampaignApiProvider } from '@/context/CampaignApiContext';
+import jaJP from 'antd/locale/ja_JP';
+import { ConfigProvider } from 'antd';
+
+import dayjs from 'dayjs';
+import advancedFormat from 'dayjs/plugin/advancedFormat';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import localeData from 'dayjs/plugin/localeData';
+import weekday from 'dayjs/plugin/weekday';
+import weekOfYear from 'dayjs/plugin/weekOfYear';
+import weekYear from 'dayjs/plugin/weekYear';
+
+dayjs.extend(customParseFormat);
+dayjs.extend(advancedFormat);
+dayjs.extend(weekday);
+dayjs.extend(localeData);
+dayjs.extend(weekOfYear);
+dayjs.extend(weekYear);
 
 export type NextPageWithLayout<P = Record<string, never>, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => JSX.Element;
@@ -102,10 +119,12 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
           {/* <main
             className={` ${dmSans.variable} ${inter.variable}  ${mPlus1.variable} ${notoSans.variable} ${montserrat.variable}`}
           > */}
-          <PopUpProvider>
-            {loading && <Loading />}
-            {getLayout(<Component {...props} />)}
-          </PopUpProvider>
+          <ConfigProvider locale={jaJP}>
+            <PopUpProvider>
+              {loading && <Loading />}
+              {getLayout(<Component {...props} />)}
+            </PopUpProvider>
+          </ConfigProvider>
           {/* </main> */}
         </PersistGate>
       </Provider>
