@@ -86,7 +86,7 @@ export default function CampaignCreatorSigninPage() {
           {/* eslint-disable-next-line react/jsx-no-bind */}
           <ReCAPTCHA onChange={onChangeRecaptcha} sitekey={process?.env?.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? ''} />
 
-          <div className="w-[287px] h-[53px]">
+          <div className="w-[287px] h-[53px] mt-[8px]">
             <CButtonShadow
               classBgColor={isDisableSubmit ? 'bg-[#c2c2c2]' : 'bg-[#333]'}
               classBorderColor={isDisableSubmit ? 'border-[#c2c2c2]' : 'border-[#333]'}

@@ -47,12 +47,12 @@ function Inquiry() {
             </div>
             <div className="flex space-x-[8px] ">
               <div className="flex-1">
-                <Form.Item name="firstName" rules={[{ required: true, message: '' }]}>
+                <Form.Item name="firstName" rules={[{ required: true, message: '入力してください' }]}>
                   <BasicInput placeholder="田中" />
                 </Form.Item>
               </div>
               <div className="flex-1">
-                <Form.Item name="lastName" rules={[{ required: true, message: '' }]}>
+                <Form.Item name="lastName" rules={[{ required: true, message: '入力してください' }]}>
                   <BasicInput placeholder="太郎" />
                 </Form.Item>
               </div>
@@ -63,10 +63,10 @@ function Inquiry() {
               placeholder="tanaka@clout.com"
               required
               rules={[
-                { required: true, message: '' },
+                { required: true, message: '入力してください' },
                 {
                   type: 'email',
-                  message: '',
+                  message: '有効なメールアドレスを入力してください',
                 },
               ]}
             />
@@ -77,7 +77,7 @@ function Inquiry() {
               rules={[
                 {
                   pattern: /^[0-9]{10,11}$/,
-                  message: '',
+                  message: '有効な電話番号を入力してください',
                 },
               ]}
             />
@@ -93,7 +93,7 @@ function Inquiry() {
               ]}
               placeholder="選択してください"
               required
-              rules={[{ required: true, message: '' }]}
+              rules={[{ required: true, message: '選択してください' }]}
             />
             <div className="flex space-x-[8px] items-center mb-[10px]">
               <div className="text-[14px] font-bold ">お問い合わせ内容</div>
@@ -101,7 +101,7 @@ function Inquiry() {
                 必須
               </div>
             </div>
-            <Form.Item name="contentOfInquiry" rules={[{ required: true, message: '' }]}>
+            <Form.Item name="contentOfInquiry" rules={[{ required: true, message: '入力してください' }]}>
               <BasicTextArea placeholder="ここに記入してください" style={{ height: 116, resize: 'none' }} />
             </Form.Item>
             <div className="flex items-center justify-center mt-[40px]">

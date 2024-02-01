@@ -58,7 +58,7 @@ export default function ForgotPasswordPage() {
         <div className="h-[24px]" />
         <div className="flex items-center justify-center">
           <div className="w-[259px] h-[53px] ">
-            <CButtonShadow title="パスワードをリセットする" type="submit" />
+            <CButtonShadow formNoValidate title="パスワードをリセットする" type="submit" />
           </div>
         </div>
       </form>

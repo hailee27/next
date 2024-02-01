@@ -29,7 +29,7 @@ function PaginationRouterControl({ total, countItems }: { total: number; countIt
           jumpPrevIcon={<span className="text-[16px] font-medium tracking-[0.48px]">...</span>}
           nextIcon={<CircleArrow />}
           onChange={handlePageChange}
-          pageSize={20}
+          pageSize={PAGINATION_PAGE_SIZE}
           prevIcon={<CircleArrow position="left" />}
           showLessItems
           showSizeChanger={false}

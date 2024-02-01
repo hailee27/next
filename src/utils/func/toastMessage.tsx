@@ -5,7 +5,7 @@ import { notification } from 'antd';
 type MessageType = 'success' | 'error' | 'default';
 
 notification.config({
-  top: 70,
+  // top: 70,
   duration: 5,
   closeIcon: (
     <div

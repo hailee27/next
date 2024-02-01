@@ -21,6 +21,7 @@ export default function ConnectXModal({ buttonLabel, buttonIcon }: ConnectXModal
       <div className="h-[53px]">
         <CButtonShadow
           onClick={showModal}
+          textClass="text-white text-[14px] font-notoSans"
           title={buttonLabel}
           type="button"
           withIcon={{

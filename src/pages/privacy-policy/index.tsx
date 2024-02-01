@@ -3,7 +3,7 @@ import React from 'react';
 
 function PrivacyPolicyPage() {
   return (
-    <div className="px-[20px]">
+    <div className="px-[20px] max-w-[820px] mx-auto">
       <div className="flex flex-col items-center space-y-[32px] mt-[40px]">
         <h2 className="text-[28px] font-bold text-[#04AFAF]">プライバシーポリシー</h2>
         <p className="text-[13px] text-[#777] leading-[22px]">

@@ -4,7 +4,7 @@ import { REGEX_EMAIL, REGEX_PASSWORD } from '../constant/regex';
 export const emailSchema = yup.object({
   email: yup
     .string()
-    .required('メールアドレスを入力してください')
+    .required('入力してください')
     .email('有効なメールアドレスを入力してください')
     .matches(REGEX_EMAIL, '有効なメールアドレスを入力してください'),
 });
@@ -12,7 +12,7 @@ export const emailSchema = yup.object({
 export const passwordSchema = yup.object({
   password: yup
     .string()
-    .required('パスワードを入力してください')
+    .required('入力してください')
     .min(8, '8文字以上入力してください。')
     .matches(REGEX_PASSWORD, '英字以外の文字が1文字以上必要です、スペースを含めないでください。'),
 });
@@ -20,12 +20,12 @@ export const passwordSchema = yup.object({
 export const newPasswordSchema = yup.object({
   newPassword: yup
     .string()
-    .required('パスワードを入力してください')
+    .required('入力してください')
     .min(8, '8文字以上入力してください。')
     .matches(REGEX_PASSWORD, '英字以外の文字が1文字以上必要です、スペースを含めないでください。'),
   passwordConfirmation: yup
     .string()
-    .required('パスワードを入力してください')
+    .required('入力してください')
     .min(8, '8文字以上入力してください。')
     .oneOf([yup.ref('newPassword')], 'パスワードは一致していません'),
 });
@@ -33,7 +33,7 @@ export const newPasswordSchema = yup.object({
 export const phoneSchema = yup.object({
   phone: yup
     .string()
-    .required('電話番号を入力してください')
+    .required('入力してください')
     .matches(/^[0-9]+$/, '数字だけ入力してください')
     .min(10, '有効な電話番号を入力してください')
     .max(11, '11文字以内入力してください'),

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import CButtonShadow from '@/components/common/CButtonShadow';
 import CFormInputShadow from '@/components/common/CFormInputShadow';
 import CModalWapper from '@/components/common/CModalWapper';
@@ -33,7 +34,11 @@ export default function SettingPasswordPage() {
         }).unwrap();
         setIsOpenFeedbackModal(true);
       }
-    } catch (err) {
+    } catch (err: any) {
+      if (err?.data?.statusCode === 401) {
+        toastMessage('無効なトークンです。またメールアドレスを入力してください。', 'error');
+        return;
+      }
       toastMessage(getErrorMessage(err), 'error');
     }
   };
@@ -45,7 +50,7 @@ export default function SettingPasswordPage() {
           'container-min-height pb-[56px] h-full w-full bg-[#D5FFFF] py-[40px] px-[20px] transition-all duration-300'
         )}
       >
-        <form autoComplete="off" onSubmit={handleSubmit(onUpdatePassword)}>
+        <form autoComplete="off" className="max-w-[335px] mx-auto" onSubmit={handleSubmit(onUpdatePassword)}>
           <div className="bg-white border-[2px] border-[#333] px-[22px] py-[30px] rounded-[16px]">
             <h1 className="text-[20px] font-bold text-[#04AFAF] tracking-[0.6px] text-center ">
               新しいパスワードを入力
@@ -70,7 +75,7 @@ export default function SettingPasswordPage() {
           <div className="h-[24px]" />
           <div className="flex items-center justify-center">
             <div className="w-[155px] h-[53px] ">
-              <CButtonShadow onClick={() => {}} title="保存する" type="submit" />
+              <CButtonShadow formNoValidate onClick={() => {}} title="保存する" type="submit" />
             </div>
           </div>
         </form>
