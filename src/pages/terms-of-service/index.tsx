@@ -2,7 +2,7 @@ import React from 'react';
 
 function TermsOfServicePage() {
   return (
-    <div className="px-[20px] text-[13px] leading-normal">
+    <div className="px-[20px] text-[13px] leading-normal max-w-[820px] mx-auto">
       <div className="flex flex-col items-center space-y-[32px] mt-[40px] mb-[48px]">
         <h2 className="text-[28px] font-bold text-[#04AFAF] text-center">利用規約</h2>
         <p className="text-[13px] text-[#777] leading-[22px]">

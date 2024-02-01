@@ -89,12 +89,21 @@ export default function CampaignCardItem({
                       {Array.isArray(sortCampaignReward) && sortCampaignReward?.length >= 2 ? (
                         <>
                           <span>
-                            <span className="font-montserrat">{sortCampaignReward[0]?.amountOfMoney ?? '--'}</span>円
+                            <span className="font-montserrat">
+                              {sortCampaignReward?.[0]?.amountOfMoney &&
+                              typeof sortCampaignReward?.[0]?.amountOfMoney === 'number'
+                                ? sortCampaignReward[0].amountOfMoney.toLocaleString()
+                                : '--'}
+                            </span>
+                            円
                           </span>
                           <span> 〜 </span>
                           <span>
                             <span className="font-montserrat">
-                              {sortCampaignReward[sortCampaignReward.length - 1]?.amountOfMoney ?? '--'}
+                              {sortCampaignReward?.[sortCampaignReward.length - 1]?.amountOfMoney &&
+                              typeof sortCampaignReward?.[sortCampaignReward.length - 1]?.amountOfMoney === 'number'
+                                ? sortCampaignReward[sortCampaignReward.length - 1].amountOfMoney.toLocaleString()
+                                : '--'}
                             </span>
                             円
                           </span>
@@ -114,7 +123,7 @@ export default function CampaignCardItem({
                 </>
               )}
               <span>
-                報酬：
+                期限：
                 <span className="font-montserrat">
                   {moment(item?.startTime)?.isValid() ? moment(item?.startTime)?.format('MM/DD hh:mm') : '--/-- --:--'}
                   {item?.dontSetExpiredTime !== true && (

@@ -2,14 +2,14 @@ import React from 'react';
 
 export default function TwitterIcon() {
   return (
-    <div>
+    <div className="w-[40px] h-[40px]">
       <svg
         fill="none"
-        height="40"
+        height="100%"
+        preserveAspectRatio="xMidYMid meet"
         viewBox="0 0 41 40"
-        width="41"
+        width="100%"
         xmlns="http://www.w3.org/2000/svg"
-        xmlnsXlink="http://www.w3.org/1999/xlink"
       >
         <rect fill="white" height="38" rx="3" stroke="#333333" strokeWidth="2" width="38" x="1.5" y="1" />
         <rect fill="url(#pattern0)" height="18" width="17.6604" x="12" y="11" />

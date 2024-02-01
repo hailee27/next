@@ -35,6 +35,7 @@ interface Props {
   classBorderColor?: string;
   isDisable?: boolean;
   shadowSize?: 'small' | 'normal';
+  formNoValidate?: boolean;
 }
 export type Ref = HTMLButtonElement | null;
 const CButtonShadow = React.forwardRef<Ref, Props>((props, ref) => {
@@ -50,6 +51,7 @@ const CButtonShadow = React.forwardRef<Ref, Props>((props, ref) => {
     classBorderColor,
     isDisable,
     shadowSize,
+    formNoValidate,
   } = props;
   const btnCardRef = useRef<HTMLDivElement | null>(null);
 
@@ -78,6 +80,7 @@ const CButtonShadow = React.forwardRef<Ref, Props>((props, ref) => {
         isDisable ? 'pointer-events-none' : '',
         shadowSize === 'small' ? 'pl-[2px] pt-[2px]' : 'pl-[6px] pt-[6px]'
       )}
+      formNoValidate={formNoValidate}
       onClick={onClick}
       ref={ref}
       type={type}
@@ -133,5 +136,6 @@ CButtonShadow.defaultProps = {
   isDisable: false,
   classBorderColor: 'border-[#333]',
   shadowSize: 'normal',
+  formNoValidate: undefined,
 };
 export default CButtonShadow;
