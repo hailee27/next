@@ -36,14 +36,14 @@ const TaskCampain = ({ item, onDelete, showDelete }: Props) => {
 
   const dataPlatForm = useMemo<DataPlatFormType[] | undefined>(
     () => renderDataPlatform(platFormWatch, item.config?.taskTemplate.config),
-    [platFormWatch, item.config?.taskTemplate.config]
+    [platFormWatch, item, item.config?.taskTemplate.config]
   );
 
   useEffect(() => {
-    if (platFormWatch) {
-      form.setFieldValue(['optionTasks', `task${item.id}`, 'type'], dataPlatForm?.[0].value);
-    }
-  }, [dataPlatForm, platFormWatch]);
+    dataPlatForm
+      ?.find((e) => e.value === optionTasksWath)
+      ?.content?.forEach((v) => form.setFieldValue(['optionTasks', `task${item.id}`, `${v.name}`], v.value));
+  }, [dataPlatForm, optionTasksWath]);
 
   useEffect(() => {
     if (item.platForm && item.config) {
@@ -56,6 +56,7 @@ const TaskCampain = ({ item, onDelete, showDelete }: Props) => {
           list.push(i + 1);
           form.setFieldValue(['optionTasks', `task${item.id}`, 'listChoice', `${key}`], value);
         });
+        setListChoise(list);
         form.setFieldValue(['optionTasks', `task${item.id}`, 'title'], item.config.taskTemplate.config.title);
         form.setFieldValue(
           ['optionTasks', `task${item.id}`, 'description'],
@@ -69,6 +70,11 @@ const TaskCampain = ({ item, onDelete, showDelete }: Props) => {
       }
     }
   }, [item.platForm, item.config, item.id]);
+  useEffect(() => {
+    if (platFormWatch) {
+      form.setFieldValue(['optionTasks', `task${item.id}`, 'type'], dataPlatForm?.[0].value);
+    }
+  }, [dataPlatForm, platFormWatch]);
 
   return (
     <>
@@ -104,7 +110,7 @@ const TaskCampain = ({ item, onDelete, showDelete }: Props) => {
           />
           {dataPlatForm?.[0].value && platFormWatch !== 'CUSTOM' ? (
             <SelectLabel
-              initialValue={dataPlatForm?.[0].value}
+              // initialValue={dataPlatForm?.[0].value}
               name={['optionTasks', `task${item.id}`, 'type']}
               options={dataPlatForm}
             />
@@ -114,7 +120,7 @@ const TaskCampain = ({ item, onDelete, showDelete }: Props) => {
         </div>
         <div className="flex flex-col space-y-[24px]">
           {dataPlatForm
-            ?.find((e) => e.value === form.getFieldValue(['optionTasks', `task${item.id}`, 'type']))
+            ?.find((e) => e.value === optionTasksWath)
             ?.content?.map(
               (e) =>
                 (e.type === 'input' && (
