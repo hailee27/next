@@ -63,7 +63,6 @@ function TablePayment() {
       setPageTable(Number(Number(query.page) - 1) * 10);
     }
   }, [isReady, query?.page]);
-  console.log(pageTable);
 
   const data = useMemo<DataType[] | undefined>(
     () =>

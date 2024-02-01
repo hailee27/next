@@ -100,7 +100,7 @@ function TableAll({
   const [pageTable, setPageTable] = useState<number>(0);
   const { push, query, isReady } = useRouter();
   const { data: dataTable, isLoading } = useGetListCampaignQuery(
-    { skip: pageTable ?? 0, take: 10, actionFrom: 'ADMIN' },
+    { skip: pageTable ?? 0, take: 10, actionFrom: 'ADMIN', status: status === 'ALL' ? undefined : status },
     { refetchOnMountOrArgChange: true }
   );
   // eslint-disable-next-line no-console

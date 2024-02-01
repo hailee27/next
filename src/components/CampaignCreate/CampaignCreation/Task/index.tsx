@@ -11,6 +11,7 @@ import { usePopUpContext } from '@/context/PopUpContext';
 import { useRouter } from 'next/router';
 import { useGetTasksQuery } from '@/redux/endpoints/task';
 import { useCampaignApiContext } from '@/context/CampaignApiContext';
+import Link from 'next/link';
 import TaskCampain from './TaskCampain';
 import { TypeTasks } from './type';
 
@@ -87,10 +88,10 @@ function Task() {
           scrollToFirstError={{ behavior: 'smooth', inline: 'center' }}
         >
           <div className="hidden">
-            <Form.Item name="checkNumberTask" noStyle rules={[{ required: numberTask.length < 2 }]}>
+            <Form.Item name="checkNumberTask" noStyle rules={[{ required: numberTask.length < 1 }]}>
               <FlagItem />
             </Form.Item>
-            <Form.Item name={['requireTask', 'taskId']} noStyle rules={[{ required: numberTask.length < 2 }]}>
+            <Form.Item name={['requireTask', 'taskId']} noStyle rules={[{ required: numberTask.length < 1 }]}>
               <FlagItem />
             </Form.Item>
           </div>
@@ -118,7 +119,11 @@ function Task() {
           />
           <div className="border-2 border-[#2D3648] rounded-[8px] p-[40px] ">
             <span>
-              {numberTask.length === 0 ? '必須タスク ※このタスクは削除できません。詳細はこちら。' : '必須タスク'}
+              必須タスク ※このタスクは削除できません。詳細は
+              <Link className="underline font-bold text-[#2675BE]" href="/">
+                こちら
+              </Link>
+              。
             </span>
             <div className="flex justify-between space-x-[24px] w-full">
               <SelectLabel

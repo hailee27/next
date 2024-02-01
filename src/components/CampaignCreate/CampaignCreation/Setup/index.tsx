@@ -12,6 +12,7 @@ import moment from 'moment';
 import { range } from '@/utils/range';
 import { useGetDetailCampaignQuery } from '@/redux/endpoints/campaign';
 import { useRouter } from 'next/router';
+import dayjs from 'dayjs';
 import ExplanatoryText from './ExplanatoryText';
 
 function Setup() {
@@ -38,10 +39,12 @@ function Setup() {
         campainName: dataCampaign.title,
         category: dataCampaign.category,
         endDate:
-          !dataCampaign.dontSetExpiredTime && dataCampaign.expiredTime ? moment(dataCampaign.expiredTime) : undefined,
+          !dataCampaign.dontSetExpiredTime && dataCampaign.expiredTime
+            ? dayjs(dataCampaign.expiredTime, 'YYYY-MM-DD HH:mm')
+            : undefined,
         explanatoryText: dataCampaign.description,
         noDate: dataCampaign.dontSetExpiredTime,
-        startDate: dataCampaign.startTime ? moment(dataCampaign.startTime) : undefined,
+        startDate: dataCampaign.startTime ? dayjs(dataCampaign.startTime, 'YYYY-MM-DD HH:mm') : undefined,
         thumbnail: dataCampaign.image,
       });
     }
@@ -99,10 +102,18 @@ function Setup() {
             <Form.Item className="!flex-1" name="startDate" rules={[{ required: true, message: '' }]}>
               <BasicDatePicker
                 disabledDate={(current) => moment(current.format('YYYY-MM-DD')) < moment().add(-1, 'day')}
-                disabledTime={() => ({
-                  disabledHours: () => range(0, Number(moment().format('HH'))),
-                  disabledMinutes: () => range(0, Number(moment().format('mm'))),
-                })}
+                disabledTime={(current) => {
+                  if (dayjs(current).format('DD') === dayjs().format('DD')) {
+                    return {
+                      disabledHours: () => range(0, Number(dayjs().format('HH'))),
+                      disabledMinutes: () => range(0, Number(dayjs().format('mm'))),
+                    };
+                  }
+                  return {
+                    disabledHours: () => range(0, Number(dayjs(current).startOf('day').format('HH'))),
+                    disabledMinutes: () => range(0, Number(dayjs(current).startOf('day').format('mm'))),
+                  };
+                }}
                 format="YYYY-MM-DD HH:mm"
                 placeholder="開始日時を選択してください"
                 showTime
