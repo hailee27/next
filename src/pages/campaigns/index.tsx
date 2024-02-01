@@ -28,10 +28,10 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
     token: 'user',
   };
   if (orderBy) {
-    if (orderBy === 'expiredTime') {
+    if (orderBy === 'expiredTime' || orderBy === 'totalPrizeValue') {
       apiRequest.orderBy = JSON.stringify({
-        expiredTime: {
-          sort: 'asc',
+        [`${orderBy}`]: {
+          sort: orderBy === 'expiredTime' ? 'asc' : 'desc',
           nulls: 'last',
         },
       });
