@@ -51,6 +51,7 @@ export default function AuthInfoCard() {
           return;
         }
         await disconnectTwitter({ id: twitterIdentity?.id }).unwrap();
+        window?.open('https://twitter.com', '_blank')?.focus();
         toastMessage('X(Twitter)接続が正常に切断されました。', 'success');
         await refreshUser();
       }

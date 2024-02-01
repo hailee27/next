@@ -28,7 +28,7 @@ export default function VerificationPage() {
         if (data?.accessToken && data?.refreshToken && data?.user) {
           dispatch(setSession({ ...data }));
           if (query?.authMethod === 'twitter') {
-            push('/');
+            push('/my-page');
           } else {
             push('/campaign-creator');
           }

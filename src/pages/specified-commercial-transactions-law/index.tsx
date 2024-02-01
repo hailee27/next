@@ -2,7 +2,7 @@ import React from 'react';
 
 function SpecifiedCommercialTransactionsLawPage() {
   return (
-    <div className="px-[20px] ">
+    <div className="px-[20px] max-w-[820px] mx-auto">
       <div className="flex flex-col items-center space-y-[32px] mt-[40px]">
         <h2 className="text-[28px] font-bold text-[#04AFAF] text-center">
           特定商取引法に

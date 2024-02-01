@@ -2,8 +2,15 @@ import React from 'react';
 
 export default function InstagramIcon() {
   return (
-    <div>
-      <svg fill="none" height="40" viewBox="0 0 41 40" width="41" xmlns="http://www.w3.org/2000/svg">
+    <div className="w-[40px] h-[40px]">
+      <svg
+        fill="none"
+        height="100%"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 41 40"
+        width="100%"
+        xmlns="http://www.w3.org/2000/svg"
+      >
         <rect fill="white" height="38" rx="3" stroke="#333333" strokeWidth="2" width="38" x="1.5" y="1" />
         <path
           clipRule="evenodd"

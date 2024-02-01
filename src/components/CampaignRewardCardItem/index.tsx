@@ -31,7 +31,11 @@ export default function CampaignRewardCardItem({ campaignReward }: { campaignRew
               <span className=" text-[20px] ">等</span>
             </span>
             <span>
-              <span className="text-[34px] font-montserrat">{campaignReward?.amountOfMoney ?? '--'}</span>
+              <span className="text-[34px] font-montserrat">
+                {campaignReward?.amountOfMoney && typeof campaignReward?.amountOfMoney === 'number'
+                  ? campaignReward.amountOfMoney.toLocaleString()
+                  : '--'}
+              </span>
               <span className=" text-[24px] ">円</span>
             </span>
           </div>

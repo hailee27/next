@@ -250,7 +250,7 @@ export default function MainHeader() {
               {SubNavigation.map((i) => (
                 <Link
                   className={clsx(
-                    'text-[13px]  tracking-[4px]  ',
+                    'text-[13px]  tracking-[0.4px]  ',
                     router.pathname.startsWith(i.to) ? ' text-[#04AFAF]' : ''
                   )}
                   href={i.to}
