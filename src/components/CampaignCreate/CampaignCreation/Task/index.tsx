@@ -7,11 +7,11 @@ import { StepContext, TypeTabContext } from '@/context/TabContext';
 import CButtonShadow from '@/components/common/CButtonShadow';
 import FlagItem from '@/components/common/FlagItem';
 import CButtonClassic from '@/components/common/CButtonClassic';
-import { usePopUpContext } from '@/context/PopUpContext';
 import { useRouter } from 'next/router';
 import { useGetTasksQuery } from '@/redux/endpoints/task';
 import { useCampaignApiContext } from '@/context/CampaignApiContext';
 import Link from 'next/link';
+import toastMessage from '@/utils/func/toastMessage';
 import TaskCampain from './TaskCampain';
 import { TypeTasks } from './type';
 
@@ -20,7 +20,6 @@ function Task() {
   const router = useRouter();
   const { setTaskIdDeletes } = useCampaignApiContext();
   const { prevTab } = useContext<TypeTabContext>(StepContext);
-  const { openPopUp } = usePopUpContext();
   const { data: dataTask } = useGetTasksQuery(
     { campaignId: String(router?.query?.id) },
     { skip: !router?.query?.id, refetchOnReconnect: true, refetchOnMountOrArgChange: true }
@@ -57,6 +56,11 @@ function Task() {
       );
     }
   }, [dataTask]);
+  useEffect(() => {
+    if (numberTask.length === 29) {
+      toastMessage('warning', 'warning');
+    }
+  }, [numberTask]);
 
   return (
     <>
@@ -64,25 +68,18 @@ function Task() {
         <Form
           form={form}
           name="tasks"
+          onFinishFailed={() => toastMessage('タスクの最小数は1タスクです。（ デフォルトタスク除きます）', 'error')}
           onValuesChange={(e, values) => {
             const { optionTasks } = values;
             const arrayCustom = Object.values(optionTasks).filter((v: any) => v.platForm === 'CUSTOM');
             if (arrayCustom.length > 2) {
-              openPopUp({
-                contents: (
-                  <div className="w-[350px] h-[150px] flex items-center justify-center text-[20px] font-bold text-center">
-                    自由形式質問は最大2問までです。
-                  </div>
-                ),
-                onCancel: () => {
-                  const id = Number(
-                    Object.keys(e.optionTasks)
-                      .map((v) => v)[0]
-                      .slice(4)
-                  );
-                  handleDelete(id);
-                },
-              });
+              toastMessage('自由形式質問は最大2問までです。', 'error');
+              const id = Number(
+                Object.keys(e.optionTasks)
+                  .map((v) => v)[0]
+                  .slice(4)
+              );
+              handleDelete(id);
             }
           }}
           scrollToFirstError={{ behavior: 'smooth', inline: 'center' }}
@@ -100,23 +97,25 @@ function Task() {
               <TaskCampain item={e} key={e.id} onDelete={() => handleDelete(e.id)} showDelete />
             ))}
           </div>
-          <CButtonClassic
-            customClassName="!w-[175px] !h-[48px] !mb-[24px] !rounded-[8px]"
-            onClick={() => {
-              setNumberTask([
-                ...numberTask,
-                {
-                  id: Number(numberTask[numberTask.length - 1]?.id ?? 0) + 1,
-                  require: false,
-                  platForm: {
-                    name: 'twitter',
-                    type: 'follow',
+          {numberTask.length < 29 && (
+            <CButtonClassic
+              customClassName="!w-[175px] !h-[48px] !mb-[24px] !rounded-[8px]"
+              onClick={() => {
+                setNumberTask([
+                  ...numberTask,
+                  {
+                    id: Number(numberTask[numberTask.length - 1]?.id ?? 0) + 1,
+                    require: false,
+                    platForm: {
+                      name: 'twitter',
+                      type: 'follow',
+                    },
                   },
-                },
-              ]);
-            }}
-            title="タスクを追加"
-          />
+                ]);
+              }}
+              title="タスクを追加"
+            />
+          )}
           <div className="border-2 border-[#2D3648] rounded-[8px] p-[40px] ">
             <span>
               必須タスク ※このタスクは削除できません。詳細は
@@ -145,7 +144,7 @@ function Task() {
             <div className="w-full ">
               <div className="text-[14px] font-semibold mb-[5px]">ユーザーネーム</div>
               <Form.Item initialValue="@clout" name={['requireTask', 'userFollow']} noStyle>
-                <BasicInput />
+                <BasicInput disabled />
               </Form.Item>
             </div>
           </div>
