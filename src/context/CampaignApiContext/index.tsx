@@ -145,6 +145,7 @@ export const CampaignApiProvider = ({ children }: { children: React.ReactNode })
           campaignId: res.newCampaign.id,
           data: adapterDataReWard(queryParams).filter((e) => e.rewardId),
         });
+
         if (dataTask && dataReward) {
           if (method === 'CREATE') {
             createPayment({

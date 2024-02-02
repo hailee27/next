@@ -47,7 +47,7 @@ export function renderDataPlatform(platForm: TypePlatForm, data?: TypeConfig | u
           content: [
             {
               id: 1,
-              title: 'リンク',
+              title: 'Username',
               type: 'input',
               require: true,
               name: 'linkWatch',
@@ -61,7 +61,7 @@ export function renderDataPlatform(platForm: TypePlatForm, data?: TypeConfig | u
           content: [
             {
               id: 1,
-              title: 'リンク',
+              title: 'Username',
               type: 'input',
               require: true,
               name: 'linkFollow',
@@ -78,7 +78,7 @@ export function renderDataPlatform(platForm: TypePlatForm, data?: TypeConfig | u
           content: [
             {
               id: 1,
-              title: 'リンク',
+              title: '共有リンク',
               type: 'input',
               require: true,
               name: 'linkChannel',
@@ -134,6 +134,7 @@ export function renderDataPlatform(platForm: TypePlatForm, data?: TypeConfig | u
               id: 1,
               title: 'ユーザーネーム',
               type: 'input',
+              require: true,
               name: 'userFollow',
               value: data?.platForm === 'TWITTER' && data?.type === 'twitter_follow' ? data?.userFollow : undefined,
             },
@@ -147,6 +148,7 @@ export function renderDataPlatform(platForm: TypePlatForm, data?: TypeConfig | u
               id: 1,
               title: 'Post URL',
               type: 'input',
+              require: true,
               name: 'postURL',
               value: data?.platForm === 'TWITTER' && data?.type === 'twitter_repost' ? data?.postURL : undefined,
             },
@@ -158,9 +160,10 @@ export function renderDataPlatform(platForm: TypePlatForm, data?: TypeConfig | u
           content: [
             {
               id: 1,
-              title: 'Quote Post You can include hashtag and link. If not filled in, there will be no template',
+              title: 'Quote Post',
               type: 'textArea',
               name: 'quotePost',
+              require: true,
               value:
                 data?.platForm === 'TWITTER' && data?.type === 'twitter_repost_quote' ? data?.quotePost : undefined,
             },
@@ -169,6 +172,7 @@ export function renderDataPlatform(platForm: TypePlatForm, data?: TypeConfig | u
               title: 'Post URL',
               type: 'input',
               name: 'postURLQuote',
+              require: true,
               value:
                 data?.platForm === 'TWITTER' && data?.type === 'twitter_repost_quote' ? data?.postURLQuote : undefined,
             },
@@ -180,7 +184,7 @@ export function renderDataPlatform(platForm: TypePlatForm, data?: TypeConfig | u
           content: [
             {
               id: 1,
-              title: 'タスクタイトル ※必須',
+              title: 'タスクタイトル',
               type: 'input',
               require: true,
               name: 'taskTitle',
@@ -191,7 +195,7 @@ export function renderDataPlatform(platForm: TypePlatForm, data?: TypeConfig | u
             },
             {
               id: 2,
-              title: 'タスク説明 ※必須',
+              title: 'タスク説明 ',
               type: 'input',
               require: true,
               name: 'taskDescription',
@@ -220,6 +224,7 @@ export function renderDataPlatform(platForm: TypePlatForm, data?: TypeConfig | u
               id: 1,
               title: '指定文言',
               type: 'input',
+              require: true,
               name: 'designatedClassicalChinese',
               value:
                 data?.platForm === 'TWITTER' && data?.type === 'twitter_make_post'

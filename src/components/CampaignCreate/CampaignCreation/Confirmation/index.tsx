@@ -15,9 +15,15 @@ import { useUpdateCompaniesMutation } from '@/redux/endpoints/companies';
 import { useLazyMeQuery } from '@/redux/endpoints/auth';
 import { setUser } from '@/redux/slices/auth.slice';
 import toastMessage from '@/utils/func/toastMessage';
+import { useRouter } from 'next/router';
+import { useGetDetailCampaignQuery } from '@/redux/endpoints/campaign';
+import { useGetMasterDataQuery } from '@/redux/endpoints/masterData';
+import moment from 'moment';
+import { useGetReWardsQuery } from '@/redux/endpoints/reWard';
 import TableReWard from './TableReWard';
 
 function Confirmation() {
+  const router = useRouter();
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const { openPopUp } = usePopUpContext();
@@ -31,6 +37,15 @@ function Confirmation() {
   const [fee, setFee] = useState<number>(0);
   const [trigger, { isLoading: loadingUpdate }] = useUpdateCompaniesMutation();
   const [triggerMe] = useLazyMeQuery();
+  const { data: dataReward } = useGetReWardsQuery(
+    { campaignId: String(router?.query?.id) },
+    { skip: !router?.query?.id, refetchOnMountOrArgChange: true }
+  );
+  const { data: dataCampaign } = useGetDetailCampaignQuery(
+    { campaignId: String(router?.query?.id) },
+    { skip: !router?.query?.id }
+  );
+  const { data: masterData } = useGetMasterDataQuery(undefined, { skip: !router?.query?.id });
 
   useEffect(() => {
     if (priceWatch) {
@@ -44,6 +59,25 @@ function Confirmation() {
       form.setFieldValue('priceWithTax', totalPaymentAmount);
     }
   }, [totalPaymentAmount]);
+  useEffect(() => {
+    if (dataCampaign && masterData && dataReward) {
+      form.setFieldsValue({
+        nameCampagin: dataCampaign.title,
+        typeCampagin: masterData?.CATEGORY_CAMPAIGN.find((e) => e.value === dataCampaign.category)?.label,
+        dateCampagin: !dataCampaign.expiredTime
+          ? `${moment(dataCampaign.startTime).format('YYYY/MM/DD HH:mm')}`
+          : `${moment(dataCampaign.startTime).format('YYYY/MM/DD HH:mm')} ~ ${moment(dataCampaign.expiredTime).format(
+              'YYYY/MM/DD HH:mm'
+            )}`,
+        typeWinner: dataCampaign.methodOfselectWinners,
+        campaginCreator: dataCampaign.createdUser.email.email,
+        price: dataReward?.rewards
+          ?.map((e) => e.amountOfMoney * e.numberOfWinningTicket)
+          ?.reduce((prev, cur) => prev + cur, 1),
+      });
+    }
+  }, [dataCampaign, masterData, dataReward]);
+
   return (
     <Spin spinning={loadingUpdate}>
       <div className="bg-white rounded-[4px] mt-[16px] p-[40px]">
@@ -53,14 +87,14 @@ function Confirmation() {
               <span className="text-[16px] font-bold border-l-2 border-[#04AFAF] h-[24px] pl-[14px]">
                 キャンペーン名
               </span>
-              <Form.Item initialValue="test_ikeyama" name="nameCampagin" noStyle>
+              <Form.Item name="nameCampagin" noStyle>
                 <FlagItem className="pl-[16px]" />
               </Form.Item>
             </div>
 
             <div className="flex flex-col space-y-[8px]">
               <span className="text-[16px] font-bold border-l-2 border-[#04AFAF] h-[24px] pl-[14px]">カテゴリー</span>
-              <Form.Item initialValue="マーケティング" name="typeCampagin" noStyle>
+              <Form.Item name="typeCampagin" noStyle>
                 <FlagItem className="pl-[16px]" />
               </Form.Item>
             </div>
@@ -76,10 +110,10 @@ function Confirmation() {
               <span className="text-[16px] font-bold border-l-2 border-[#04AFAF] h-[24px] pl-[14px]">
                 当選者選定方法
               </span>
-              <Form.Item initialValue={typeWinnerWatch ?? 'AUTO_PRIZEE_DRAW'} name="typeWinner" noStyle>
+              <Form.Item initialValue={typeWinnerWatch} name="typeWinner" noStyle>
                 <FlagItem className="hidden" />
               </Form.Item>
-              <span className="p-[12px] h-[48px] text-[16px] leading-[24px]">
+              <span className="pl-[16px]  text-[16px] leading-[24px]">
                 {typeWinnerWatch === 'AUTO_PRIZEE_DRAW' ? 'インスタントウィン' : 'マニュアル'}
               </span>
             </div>
@@ -95,7 +129,7 @@ function Confirmation() {
               <span className="text-[16px] font-bold border-l-2 border-[#04AFAF] h-[24px] pl-[14px]">
                 キャンペーン作成者
               </span>
-              <Form.Item initialValue="池山智隆" name="campaginCreator" noStyle>
+              <Form.Item initialValue={user?.email.email} name="campaginCreator" noStyle>
                 <FlagItem className="pl-[16px]" />
               </Form.Item>
             </div>
@@ -209,7 +243,7 @@ function Confirmation() {
                 <div className="text-[14px] font-semibold leading-[24px]">
                   報酬要約文（TOPページ、及び、一覧ページに表示されます）※100文字以内
                 </div>
-                <Form.Item initialValue="Value" name="compensationSummary">
+                <Form.Item name="compensationSummary">
                   <FlagItem className="mt-[8px] px-[12px]" />
                 </Form.Item>
               </div>
