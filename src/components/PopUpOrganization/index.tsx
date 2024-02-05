@@ -5,8 +5,7 @@ import { Form, Spin } from 'antd';
 import { usePostCompaniesMutation } from '@/redux/endpoints/companies';
 import toastMessage from '@/utils/func/toastMessage';
 import { useLazyMeQuery } from '@/redux/endpoints/auth';
-import { setUser } from '@/redux/slices/auth.slice';
-import { useDispatch } from 'react-redux';
+
 import { TypeTokenPayment } from '@/types/paymentCard.type';
 import InputLabel from '../common/BasicInput/InputLabel';
 import PopUpCreditOrDebitCard from '../OrganizeInformation/PopUpCreditOrDebitCard';
@@ -22,7 +21,7 @@ function PopUpOrganization() {
   const [form] = Form.useForm();
   const [trigger, { isLoading }] = usePostCompaniesMutation();
   const [getMe] = useLazyMeQuery();
-  const dispatch = useDispatch();
+
   const [paymentMethod, setPaymentMethod] = useState<TypeTokenPayment | undefined>(undefined);
   const [errorValidate, setErrorValidate] = useState<string[]>([]);
   const companyImageWatch = Form.useWatch('companyImage', form);
@@ -55,9 +54,7 @@ function PopUpOrganization() {
             trigger({ ...e })
               .unwrap()
               .then(() => {
-                getMe()
-                  .unwrap()
-                  .then((res) => dispatch(setUser(res)));
+                getMe();
                 toastMessage('success', 'success');
                 closePopUp();
               })

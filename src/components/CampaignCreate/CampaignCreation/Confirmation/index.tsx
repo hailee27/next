@@ -7,14 +7,14 @@ import BasicButton from '@/components/common/BasicButton';
 import { StepContext, TypeTabContext } from '@/context/TabContext';
 import FlagItem from '@/components/common/FlagItem';
 import CButtonShadow from '@/components/common/CButtonShadow';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import { formatNumber } from '@/utils/formatNumber';
 import PopUpCreditOrDebitCard from '@/components/OrganizeInformation/PopUpCreditOrDebitCard';
 import { usePopUpContext } from '@/context/PopUpContext';
 import { useUpdateCompaniesMutation } from '@/redux/endpoints/companies';
 import { useLazyMeQuery } from '@/redux/endpoints/auth';
-import { setUser } from '@/redux/slices/auth.slice';
+
 import toastMessage from '@/utils/func/toastMessage';
 import { useRouter } from 'next/router';
 import { useGetDetailCampaignQuery } from '@/redux/endpoints/campaign';
@@ -25,7 +25,7 @@ import TableReWard from './TableReWard';
 
 function Confirmation() {
   const router = useRouter();
-  const dispatch = useDispatch();
+
   const [form] = Form.useForm();
   const { openPopUp } = usePopUpContext();
   const { user } = useSelector((state: RootState) => state.auth);
@@ -182,11 +182,7 @@ function Confirmation() {
                               })
                                 .unwrap()
                                 .then(() => {
-                                  triggerMe()
-                                    .unwrap()
-                                    .then((res) => {
-                                      dispatch(setUser(res));
-                                    });
+                                  triggerMe();
                                   toastMessage('update success', 'success');
                                 })
                             }

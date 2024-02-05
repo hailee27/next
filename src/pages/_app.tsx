@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable import/first */
 /* eslint-disable import/order */
 import { init as initApm } from '@elastic/apm-rum';
@@ -30,7 +31,7 @@ import '@/styles/globals.scss';
 import { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
-import { ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useCallback, useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { CampaignApiProvider } from '@/context/CampaignApiContext';
@@ -44,6 +45,7 @@ import localeData from 'dayjs/plugin/localeData';
 import weekday from 'dayjs/plugin/weekday';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import weekYear from 'dayjs/plugin/weekYear';
+import UserRoleWapper from '@/components/AuthCheck/UserRoleWapper';
 
 dayjs.extend(customParseFormat);
 dayjs.extend(advancedFormat);
@@ -93,9 +95,12 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
   if (router.pathname === '/auth/callback/twitter') {
     getLayout = (page) => <TwitterCallBackLayout>{page}</TwitterCallBackLayout>;
   }
+
   useEffect(() => {
-    const start = () => {
-      setLoading(true);
+    const start = (url) => {
+      if (!url?.startsWith('/campaigns')) {
+        setLoading(true);
+      }
     };
     const end = () => {
       setLoading(false);
@@ -122,7 +127,11 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
           <ConfigProvider locale={jaJP}>
             <PopUpProvider>
               {loading && <Loading />}
-              {getLayout(<Component {...props} />)}
+              {getLayout(
+                <UserRoleWapper>
+                  <Component {...props} />
+                </UserRoleWapper>
+              )}
             </PopUpProvider>
           </ConfigProvider>
           {/* </main> */}

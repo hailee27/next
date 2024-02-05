@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Form, Image, Spin } from 'antd';
 import { usePopUpContext } from '@/context/PopUpContext';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import { TypeTokenPayment } from '@/types/paymentCard.type';
 import { CompaniesParams, useUpdateCompaniesMutation } from '@/redux/endpoints/companies';
 import { useLazyMeQuery } from '@/redux/endpoints/auth';
 import toastMessage from '@/utils/func/toastMessage';
-import { setUser } from '@/redux/slices/auth.slice';
+
 import BasicInput from '../common/BasicInput';
 import UploadButton from '../common/UploadButton';
 import PopUpCreditOrDebitCard from './PopUpCreditOrDebitCard';
@@ -22,7 +22,6 @@ function OrganizeInformation() {
   const [paymentMethod, setPaymentMethod] = useState<TypeTokenPayment | undefined>(undefined);
   const [trigger, { isLoading: loadingUpdate }] = useUpdateCompaniesMutation();
   const [triggerMe] = useLazyMeQuery();
-  const dispatch = useDispatch();
 
   return (
     <Spin spinning={loadingUpdate}>
@@ -54,9 +53,8 @@ function OrganizeInformation() {
             .then(() => {
               triggerMe()
                 .unwrap()
-                .then((res) => {
+                .then(() => {
                   setIsEdit(false);
-                  dispatch(setUser(res));
                 });
 
               toastMessage('update success', 'success');

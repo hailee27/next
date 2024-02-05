@@ -40,7 +40,7 @@ export default function Verification() {
           userId: user?.id,
           sendBy,
           phoneNumber: userPhone,
-          isCheckPhone: true,
+          isCheckPhone: userAction !== 'disable',
         }).unwrap();
         setTotpToken(data?.totpToken ?? '');
       }
@@ -66,9 +66,9 @@ export default function Verification() {
               }
         ).unwrap();
         if (userAction === 'disable') {
-          toastMessage('2段階認証のオフに成功です。');
+          toastMessage('2段階認証をオフにしました。');
         } else {
-          toastMessage('電話番号の更新に成功されました。', 'success');
+          toastMessage('2段階認証をONにしました。', 'success');
         }
 
         router.push('/my-page');

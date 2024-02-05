@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-console */
@@ -18,6 +19,7 @@ import { useImplementTaskMutation } from '@/redux/endpoints/me';
 import { useLazyGetDetailCampaignQuery } from '@/redux/endpoints/campaign';
 import moment from 'moment';
 import { Spin } from 'antd';
+import { openWindowPopup } from '@/utils/func/openWindowPopup';
 import ModalFreeTextContent from './ModalFreeTextContent';
 import ModalConnectX from './ModalConnectX';
 import ModalChooseMultiple from './ModalChooseMultiple';
@@ -47,24 +49,7 @@ export default function TaskItem({
   });
 
   const handleOpenPopup = (url: string) => {
-    const dualScreenLeft = window.screenLeft ?? window.screenX;
-    const dualScreenTop = window.screenTop ?? window.screenY;
-    const width = window.innerWidth ?? document.documentElement.clientWidth ?? 475;
-
-    const height = window.innerHeight ?? document.documentElement.clientHeight ?? 768;
-
-    const systemZoom = width / window.screen.availWidth;
-
-    const left = (width - 500) / 2 / systemZoom + dualScreenLeft;
-    const top = (height - 550) / 2 / systemZoom + dualScreenTop;
-
-    const newWindow = window.open(
-      url,
-      'CLOUT',
-      `width=${500 / systemZoom},height=${550 / systemZoom},top=${top},left=${left}`
-    );
-
-    newWindow?.focus();
+    openWindowPopup(url, 'CLOUT', 1280, 768);
   };
 
   const onClickCard = async () => {
@@ -95,10 +80,17 @@ export default function TaskItem({
         switch (task?.type) {
           case 'OPEN_LINK': {
             if (task?.link) handleOpenPopup(task?.link);
-            await onImplementTask({
-              taskId: task?.id ?? '',
-            });
-            await onRefetchCampaignTasks();
+            setTimeout(async () => {
+              try {
+                await onImplementTask({
+                  taskId: task?.id ?? '',
+                });
+                await onRefetchCampaignTasks();
+              } catch (e) {
+                toastMessage(getErrorMessage(e), 'error');
+              }
+            }, 5000);
+
             break;
           }
           case 'FAQ_FREE_TEXT':
