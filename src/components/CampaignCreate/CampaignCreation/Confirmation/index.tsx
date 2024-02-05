@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
 import React, { useContext, useEffect, useState } from 'react';
 import { Form, Spin } from 'antd';
@@ -31,6 +32,7 @@ function Confirmation() {
   const { prevTab } = useContext<TypeTabContext>(StepContext);
   const typeWinnerWatch = Form.useWatch('typeWinner', form);
   const priceWatch = Form.useWatch('price', form);
+  const totalWinnerWatch = Form.useWatch('totalWinner', form);
   const [useDepositBalance, setUseDepositBalance] = useState<boolean>(false);
   const [totalPaymentAmount, setTotalPaymentAmount] = useState<number>(0);
   const [tax, setTax] = useState<number>(0);
@@ -143,9 +145,12 @@ function Confirmation() {
                 <Form.Item className="!hidden" initialValue={false} name="usePoint">
                   <FlagItem />
                 </Form.Item>
+                <Form.Item className="!hidden" name="totalWinner">
+                  <FlagItem />
+                </Form.Item>
                 <div className="text-[14px] font-semibold mb-[8px]">報酬</div>
                 <Form.Item name="tableReward">
-                  <TableReWard />
+                  <TableReWard totalWinner={totalWinnerWatch} />
                 </Form.Item>
                 <div className="flex flex-col mt-[24px]">
                   <span className="text-[16px] font-semibold leading-[24px]">
@@ -234,7 +239,7 @@ function Confirmation() {
                     </div>
                     <span>手数料: {formatNumber(fee, true, 1)}円</span>
                     <span>消費税: {formatNumber(tax, true, 1)}円</span>
-                    <span>デポジット残高利用: 12,000円</span>
+                    <span>デポジット残高利用: {useDepositBalance ? user?.memberCompany?.pointTotal : 0}円</span>
                   </div>
                 </div>
               </>

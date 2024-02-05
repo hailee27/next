@@ -86,18 +86,7 @@ function PopUpOrganization() {
             name="code"
             placeholder="選択してください"
             required
-            rules={[
-              { required: true, message: 'ご入力いただいた組織IDは既に使用されています。' },
-              // {
-              //   validator() {
-              //     if (error?.data?.error === 'Conflict') {
-              //       // eslint-disable-next-line prefer-promise-reject-errors
-              //       return Promise.reject('ご入力いただいた組織名は既に使用されています。');
-              //     }
-              //     return Promise.resolve(' ');
-              //   },
-              // },
-            ]}
+            rules={[{ required: true, message: 'ご入力いただいた組織IDは既に使用されています。' }]}
           />
           <InputLabel
             label="組織 代表メールアドレス"

@@ -100,7 +100,7 @@ function TableAll({
   const [pageTable, setPageTable] = useState<number>(0);
   const { push, query, isReady } = useRouter();
   const { data: dataTable, isLoading } = useGetListCampaignQuery(
-    { skip: pageTable ?? 0, take: 10, actionFrom: 'ADMIN', status: status === 'ALL' ? undefined : status },
+    { skip: pageTable ?? 0, take: 20, actionFrom: 'ADMIN', status: status === 'ALL' ? undefined : status },
     { refetchOnMountOrArgChange: true }
   );
   // eslint-disable-next-line no-console
@@ -108,7 +108,7 @@ function TableAll({
 
   useEffect(() => {
     if (query.page) {
-      setPageTable(Number(Number(query.page) - 1) * 10);
+      setPageTable(Number(Number(query.page) - 1) * 20);
     }
   }, [isReady, query?.page]);
 
@@ -143,7 +143,7 @@ function TableAll({
         })}
         pagination={{
           position: ['bottomCenter'],
-          pageSize: 10,
+          pageSize: 20,
           total: dataTable?.total ?? 10,
           showSizeChanger: false,
           jumpNextIcon: <span className="text-[16px] font-medium tracking-[0.48px]">...</span>,

@@ -10,7 +10,7 @@ import InputLabel from '../common/BasicInput/InputLabel';
 import CButtonShadow from '../common/CButtonShadow';
 
 function SearchoOganizationID() {
-  const { closePopUp } = usePopUpContext();
+  const { closeAllPopUp } = usePopUpContext();
   const [trigger] = useRequestJoinCompaniesMutation();
   const [getMe] = useLazyMeQuery();
   const dispatch = useDispatch();
@@ -25,7 +25,7 @@ function SearchoOganizationID() {
                 .unwrap()
                 .then((res) => {
                   dispatch(setUser(res));
-                  closePopUp();
+                  closeAllPopUp();
                 });
               toastMessage('send request success', 'success');
             })

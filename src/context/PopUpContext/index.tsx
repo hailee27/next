@@ -18,6 +18,7 @@ interface PropsOpenPopUp {
 interface TypePopUpContext {
   openPopUp: ({ contents }: PropsOpenPopUp) => void;
   closePopUp: () => void;
+  closeAllPopUp: () => void;
 }
 const PopUpContext = createContext<TypePopUpContext | undefined>(undefined);
 const ModalRender = (node: React.ReactNode, classNameWrapper?: string) => (
@@ -44,12 +45,17 @@ export const PopUpProvider = ({ children }: { children: React.ReactNode }) => {
     callBack?.();
     setContentPopUp((prev) => prev.filter((e) => e.id !== prev[prev.length - 1].id));
   };
+  const closeAllPopUp = () => {
+    setContentPopUp([]);
+  };
+
   const contextvalue = useMemo<TypePopUpContext>(
     () => ({
       openPopUp,
       closePopUp,
+      closeAllPopUp,
     }),
-    [openPopUp, classNameWrapper, type]
+    [openPopUp, classNameWrapper, type, closeAllPopUp]
   );
   return (
     <PopUpContext.Provider value={contextvalue}>

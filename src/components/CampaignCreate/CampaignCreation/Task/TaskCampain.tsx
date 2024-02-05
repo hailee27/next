@@ -1,20 +1,22 @@
+/* eslint-disable import/no-cycle */
 /* eslint-disable max-lines-per-function */
 // import InputLabel from '@/components/common/BasicInput/InputLabel';
 import SelectLabel from '@/components/common/BasicSelect/SelectLabel';
 import { Form, Image } from 'antd';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import BasicInput from '@/components/common/BasicInput';
 import BasicTextArea from '@/components/common/BasicTextArea';
-import BasicButton from '@/components/common/BasicButton';
 import { renderDataPlatform } from '@/utils/renderDataPlatform';
 import FlagItem from '@/components/common/FlagItem';
 import { TypeTasks } from './type';
+import TaskQuestionCostom from './TaskQuestionCostom';
 
 interface Props {
   item: TypeTasks;
   // id: number;
   onDelete: () => void;
   showDelete: boolean;
+  index: number;
 }
 export interface DataPlatFormType {
   value?: string;
@@ -28,54 +30,36 @@ export interface DataPlatFormType {
     value?: string;
   }[];
 }
-const TaskCampain = ({ item, onDelete, showDelete }: Props) => {
+const TaskCampain = ({ item, onDelete, showDelete, index }: Props) => {
   const form = Form.useFormInstance();
   const platFormWatch = Form.useWatch(['optionTasks', `task${item.id}`, 'platForm'], form);
   const optionTasksWath = Form.useWatch(['optionTasks', `task${item.id}`, 'type'], form);
-  const [listChoise, setListChoise] = useState([1, 2, 3]);
 
   const dataPlatForm = useMemo<DataPlatFormType[] | undefined>(
     () => renderDataPlatform(platFormWatch, item.config?.taskTemplate.config),
     [platFormWatch, item, item.config?.taskTemplate.config]
   );
-
-  useEffect(() => {
-    dataPlatForm
-      ?.find((e) => e.value === optionTasksWath)
-      ?.content?.forEach((v) => form.setFieldValue(['optionTasks', `task${item.id}`, `${v.name}`], v.value));
-  }, [dataPlatForm, optionTasksWath]);
-
   useEffect(() => {
     if (item.platForm && item.config) {
       form.setFieldValue(['optionTasks', `task${item.id}`, 'type'], item.platForm.type);
       form.setFieldValue(['optionTasks', `task${item.id}`, 'platForm'], item.platForm.name);
       form.setFieldValue(['optionTasks', `task${item.id}`, 'taskId'], item.config.taskTemplateId);
-      if (item.config.taskTemplate.config.platForm === 'CUSTOM') {
-        const list: number[] = [];
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        Object.entries(item.config.taskTemplate.config.listChoice ?? {}).forEach(([key, value], i) => {
-          list.push(i + 1);
-          form.setFieldValue(['optionTasks', `task${item.id}`, 'listChoice', `listChoice${i + 1}`], value);
-        });
-        setListChoise(list);
-        form.setFieldValue(['optionTasks', `task${item.id}`, 'title'], item.config.taskTemplate.config.title);
-        form.setFieldValue(
-          ['optionTasks', `task${item.id}`, 'description'],
-          item.config.taskTemplate.config.description
-        );
-        form.setFieldValue(
-          ['optionTasks', `task${item.id}`, 'questionText'],
-          item.config.taskTemplate.config.questionText
-        );
-        form.setFieldValue(['optionTasks', `task${item.id}`, 'type'], item.config.taskTemplate.config.type);
-      }
     }
   }, [item.platForm, item.config, item.id]);
+
   useEffect(() => {
-    if (platFormWatch) {
-      form.setFieldValue(['optionTasks', `task${item.id}`, 'type'], dataPlatForm?.[0].value);
-    }
-  }, [dataPlatForm?.[0].value, platFormWatch]);
+    dataPlatForm
+      ?.find((e) => e.value === optionTasksWath)
+      ?.content?.forEach((v) => {
+        form.setFieldValue(['optionTasks', `task${item.id}`, `${v.name}`], v.value);
+      });
+  }, [dataPlatForm, optionTasksWath]);
+
+  // useEffect(() => {
+  //   if (platFormWatch && item.config) {
+  //     form.setFieldValue(['optionTasks', `task${item.id}`, 'type'], dataPlatForm?.[0].value);
+  //   }
+  // }, []);
 
   return (
     <>
@@ -83,7 +67,7 @@ const TaskCampain = ({ item, onDelete, showDelete }: Props) => {
         <FlagItem />
       </Form.Item>
       <div className="flex items-end justify-between text-[16px] font-semibold mb-[20px]">
-        {item.title ? <span>{item.title}</span> : <span>タスク_{item.id}</span>}
+        {item.title ? <span>{item.title}</span> : <span>タスク_{index + 1}</span>}
         {showDelete && (
           <Image
             alt=""
@@ -111,7 +95,7 @@ const TaskCampain = ({ item, onDelete, showDelete }: Props) => {
           />
           {dataPlatForm?.[0].value && platFormWatch !== 'CUSTOM' ? (
             <SelectLabel
-              // initialValue={dataPlatForm?.find((e) => e.value === item.platForm.type)?.value}
+              initialValue={dataPlatForm?.[0].value}
               name={['optionTasks', `task${item.id}`, 'type']}
               options={dataPlatForm}
             />
@@ -163,74 +147,7 @@ const TaskCampain = ({ item, onDelete, showDelete }: Props) => {
                 ))
             )}
           {/* TASK QUESTION */}
-          {platFormWatch === 'CUSTOM' && (
-            <div>
-              <div className="w-full">
-                <div className="text-[14px] font-semibold mb-[5px]">タスクタイトル ※必須</div>
-                <Form.Item name={['optionTasks', `task${item.id}`, 'title']} rules={[{ required: true, message: '' }]}>
-                  <BasicInput />
-                </Form.Item>
-              </div>
-              <div className="w-full">
-                <div className="text-[14px] font-semibold mb-[5px]">タスク説明 ※必須</div>
-                <Form.Item
-                  name={['optionTasks', `task${item.id}`, 'description']}
-                  rules={[{ required: true, message: '' }]}
-                >
-                  <BasicInput />
-                </Form.Item>
-              </div>
-              <div className="w-full">
-                <div className="text-[14px] font-semibold mb-[5px]">質問文 ※必須</div>
-                <Form.Item
-                  name={['optionTasks', `task${item.id}`, 'questionText']}
-                  rules={[{ required: true, message: '' }]}
-                >
-                  <BasicTextArea style={{ height: 145, resize: 'none' }} />
-                </Form.Item>
-              </div>
-              <SelectLabel
-                initialValue={dataPlatForm?.[0].value}
-                label="回答形式 ※必須"
-                name={['optionTasks', `task${item.id}`, 'type']}
-                options={dataPlatForm}
-                rules={[{ required: true, message: '' }]}
-              />
-              {optionTasksWath === 'formatSingle' && (
-                <div>
-                  {listChoise.map((e) => (
-                    <div className="w-full" key={e}>
-                      <div className="text-[14px] font-semibold mb-[5px] flex items-center justify-between">
-                        <span>選択肢_{e}</span>
-                        <Image
-                          alt=""
-                          className="cursor-pointer"
-                          onClick={() => {
-                            setListChoise((prev) => prev.filter((v) => v !== e));
-                            form.setFieldValue(['optionTasks', `task${item.id}`, 'listChoice', `listChoice${e}`], null);
-                          }}
-                          preview={false}
-                          src="/icons/icon-x-circle.svg"
-                        />
-                      </div>
-                      <Form.Item
-                        name={['optionTasks', `task${item.id}`, 'listChoice', `listChoice${e}`]}
-                        // rules={[{ required: true, message: '' }]}
-                      >
-                        <BasicInput />
-                      </Form.Item>
-                    </div>
-                  ))}
-                  <BasicButton
-                    className="w-[175px] h-[48px]"
-                    onClick={() => setListChoise([...listChoise, Number(listChoise[listChoise.length - 1] || 0) + 1])}
-                  >
-                    選択肢を追加
-                  </BasicButton>
-                </div>
-              )}
-            </div>
-          )}
+          {platFormWatch === 'CUSTOM' && <TaskQuestionCostom dataPlatForm={dataPlatForm ?? []} item={item} />}
         </div>
       </div>
     </>
