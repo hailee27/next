@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable import/first */
 /* eslint-disable import/order */
 import { init as initApm } from '@elastic/apm-rum';
@@ -30,7 +31,7 @@ import '@/styles/globals.scss';
 import { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
-import { ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useCallback, useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { CampaignApiProvider } from '@/context/CampaignApiContext';
@@ -93,8 +94,24 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
   if (router.pathname === '/auth/callback/twitter') {
     getLayout = (page) => <TwitterCallBackLayout>{page}</TwitterCallBackLayout>;
   }
+
+  const throwRouterError = () => {
+    // Throwing an actual error class trips the Next.JS 500 Page, this string literal does not.
+    // eslint-disable-next-line no-throw-literal, @typescript-eslint/no-throw-literal
+    throw ' 👍 Abort route change due to user not enough condition to view page site. Triggered by useNavigationObserver. Please ignore this error.';
+  };
+
+  const killRouterEvent = useCallback(() => {
+    router.events.emit('routeChangeError');
+    throwRouterError();
+  }, [router]);
+
   useEffect(() => {
-    const start = () => {
+    const start = (url) => {
+      // if (url?.startsWith('/campaign-creator')) {
+      //   killRouterEvent();
+      //   return;
+      // }
       setLoading(true);
     };
     const end = () => {

@@ -92,7 +92,7 @@ export default function CampaignCardItem({
                             <span className="font-montserrat">
                               {sortCampaignReward?.[0]?.amountOfMoney &&
                               typeof sortCampaignReward?.[0]?.amountOfMoney === 'number'
-                                ? sortCampaignReward[0].amountOfMoney.toLocaleString()
+                                ? sortCampaignReward[0].amountOfMoney.toLocaleString('ja-JP')
                                 : '--'}
                             </span>
                             円
@@ -102,7 +102,9 @@ export default function CampaignCardItem({
                             <span className="font-montserrat">
                               {sortCampaignReward?.[sortCampaignReward.length - 1]?.amountOfMoney &&
                               typeof sortCampaignReward?.[sortCampaignReward.length - 1]?.amountOfMoney === 'number'
-                                ? sortCampaignReward[sortCampaignReward.length - 1].amountOfMoney.toLocaleString()
+                                ? sortCampaignReward[sortCampaignReward.length - 1].amountOfMoney.toLocaleString(
+                                    'ja-JP'
+                                  )
                                 : '--'}
                             </span>
                             円
