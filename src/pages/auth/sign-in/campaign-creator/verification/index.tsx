@@ -8,16 +8,21 @@ import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import toastMessage from '@/utils/func/toastMessage';
 import { Spin } from 'antd';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 export default function VerificationPage() {
   const { query, push } = useRouter();
   const [sendVerificationCode, { isLoading: isSendVerificationCode }] = useAuthVerificationMutation();
 
-  const [smsAuth, { isLoading, isError }] = useSmsVerifyMutation();
+  const [smsAuth, { isError }] = useSmsVerifyMutation();
   const dispatch = useDispatch();
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleSubmitSMS = async (code: string) => {
     try {
+      setIsSubmitting(true);
       if (query?.code && query?.totpToken) {
         const data = await smsAuth({
           code,
@@ -26,7 +31,11 @@ export default function VerificationPage() {
 
         if (data?.accessToken && data?.refreshToken && data?.user) {
           dispatch(setSession({ ...data }));
-          if (query?.authMethod === 'twitter') {
+          if (
+            query?.authMethod === 'twitter' ||
+            data?.user?.twoFactorMethod === 'NONE' ||
+            data?.user?.emailId === null
+          ) {
             push('/my-page');
           } else {
             push('/campaign-creator');
@@ -35,6 +44,8 @@ export default function VerificationPage() {
       }
     } catch (err) {
       toastMessage(getErrorMessage(err), 'error');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -49,7 +60,7 @@ export default function VerificationPage() {
   };
 
   return (
-    <Spin spinning={isLoading || isSendVerificationCode}>
+    <Spin spinning={isSubmitting || isSendVerificationCode}>
       <div className="bg-[#D5FFFF] border-[2px] border-[#333] rounded-[16px] px-[16px] xxl:px-[56px] py-[48px] text-[#333] ">
         <h3 className="text-center text-[#04AFAF]  text-[30px] font-bold tracking-[0.9px]">ログイン</h3>
         <div className="h-[8px]" />

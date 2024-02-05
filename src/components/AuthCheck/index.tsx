@@ -4,7 +4,6 @@ import { RootState } from '@/redux/store';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import CreatorRoleFeedbackModal from '../CreatorRoleFeedbackModal';
 
 const FlagComponent = ({ type }: { type?: 'CREATOR' | 'IMPLEMENTER' }) => {
   const router = useRouter();
@@ -15,8 +14,7 @@ const FlagComponent = ({ type }: { type?: 'CREATOR' | 'IMPLEMENTER' }) => {
 };
 
 function AuthCheck({ children, type }: { children: React.ReactElement; type?: 'CREATOR' | 'IMPLEMENTER' }) {
-  const router = useRouter();
-  const { accessToken, user } = useSelector((state: RootState) => state.auth);
+  const { accessToken } = useSelector((state: RootState) => state.auth);
 
   useMeQuery(undefined, {
     skip: !accessToken,
@@ -29,13 +27,7 @@ function AuthCheck({ children, type }: { children: React.ReactElement; type?: 'C
   if ((!accessToken || accessToken === null) && type === 'CREATOR') {
     return <FlagComponent type="CREATOR" />;
   }
-  if (
-    accessToken &&
-    router.pathname.startsWith('/campaign-creator') &&
-    (user?.twoFactorMethod === 'NONE' || user?.emailId === null)
-  ) {
-    return <CreatorRoleFeedbackModal />;
-  }
+
   return children;
 }
 
