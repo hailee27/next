@@ -7,7 +7,9 @@ import ArrowDown from '../common/icons/ArrowDown';
 
 export default function CampaignRewardCardItem({ campaignReward }: { campaignReward: TypeCampaignReward }) {
   const [isViewMoreRewardMethod, setIsViewMoreRewardMethod] = useState(false);
-  const rewardMethod = Array(campaignReward?.numberOfWinningTicket ?? 0).fill('item');
+  // const rewardMethod = Array(campaignReward?.numberOfWinningTicket ?? 0).fill('item');
+  const rewardMethod = campaignReward?.numberOfWinningTicket > 0 && campaignReward?.type === 'AMAZON_GIFT' ? [1] : [];
+
   const renderRewardItem = useMemo(() => {
     if (!Array.isArray(rewardMethod)) {
       return [];
@@ -33,7 +35,7 @@ export default function CampaignRewardCardItem({ campaignReward }: { campaignRew
             <span>
               <span className="text-[34px] font-montserrat">
                 {campaignReward?.amountOfMoney && typeof campaignReward?.amountOfMoney === 'number'
-                  ? campaignReward.amountOfMoney.toLocaleString()
+                  ? campaignReward.amountOfMoney.toLocaleString('ja-JP')
                   : '--'}
               </span>
               <span className=" text-[24px] ">円</span>
