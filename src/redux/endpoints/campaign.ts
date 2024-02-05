@@ -89,7 +89,7 @@ const injectedRtkApi = api.injectEndpoints({
         //   window.location.assign(
         //     window.URL.createObjectURL(await new Blob([response.blob()], { type: 'text/csv;charset=utf-8;' }))
         //   ),
-        cache: 'no-cache',
+        // cache: 'no-cache',
       }),
     }),
   }),
@@ -233,6 +233,23 @@ export type TypeCampaign = {
     image: {
       id: number;
       imageUrl: string;
+    };
+  };
+  createdUser: {
+    name: string;
+    emailId: number;
+    profilePictureUrl: string;
+    isVerified: boolean;
+    companyId: number;
+    email: {
+      id: number;
+      email: string;
+      isVerified: boolean;
+      userId: number;
+      companyId: string | null;
+      createdAt: string;
+      updatedAt: string;
+      deletedAt: string | null;
     };
   };
   UserClaimCampaign?: {

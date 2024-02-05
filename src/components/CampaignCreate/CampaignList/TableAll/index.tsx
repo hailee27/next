@@ -67,7 +67,7 @@ const columns: ColumnsType<DataType> = [
   {
     title: '終了日時',
     dataIndex: 'endDate',
-    render: (value) => moment(value).format('YYYY/MM/DD hh:mm'),
+    render: (value) => (value ? moment(value).format('YYYY/MM/DD hh:mm') : '-'),
     sorter: {
       compare: (a, b) => moment(a?.endDate).diff(moment(b?.endDate)),
     },
