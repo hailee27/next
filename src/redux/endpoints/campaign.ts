@@ -77,14 +77,72 @@ const injectedRtkApi = api.injectEndpoints({
       query: (queryArg) => ({
         url: `campaigns/${queryArg.campaignId}/users`,
         method: 'GET',
+        params: queryArg.params,
+      }),
+    }),
+
+    getTest: build.query({
+      query: () => ({
+        url: 'campaigns/template',
+        method: 'GET',
+        // responseHandler: async (response) =>
+        //   window.location.assign(
+        //     window.URL.createObjectURL(await new Blob([response.blob()], { type: 'text/csv;charset=utf-8;' }))
+        //   ),
+        // cache: 'no-cache',
       }),
     }),
   }),
 });
 export type ListCampaignUsersParams = {
   campaignId: string;
+  params?: {
+    action: string;
+  };
 };
-export type ListCampaignUsersResponse = void;
+export type ListCampaignUsersResponse = {
+  users: {
+    id: number;
+    userId: number;
+    campaignId: string;
+    identityAccountName: string;
+    updatedAt: string;
+    createdAt: string;
+    user: {
+      id: number;
+      createdAt: string;
+      name: string;
+      notificationEmail: string;
+      password: string;
+      prefersLanguage: string;
+      emailId: number;
+      profilePictureUrl: string;
+      timezone: string;
+      twoFactorMethod: string;
+      twoFactorPhone: string;
+      twoFactorSecret: string;
+      updatedAt: string;
+      uuid: string;
+      deleteFlg: boolean;
+      deletedAt: string | null;
+      lastActive: string;
+      isVerified: boolean;
+      companyId: string;
+      pointTotal: number;
+      email: {
+        id: number;
+        email: string;
+        isVerified: boolean;
+        userId: number;
+        companyId: string | null;
+        createdAt: string;
+        updatedAt: string;
+        deletedAt: string | null;
+      };
+    };
+  }[];
+  total: number;
+};
 export type DetailCampaignResponse = TypeCampaign;
 export type DetailCampaignParams = {
   campaignId: string;
@@ -177,6 +235,23 @@ export type TypeCampaign = {
       imageUrl: string;
     };
   };
+  createdUser: {
+    name: string;
+    emailId: number;
+    profilePictureUrl: string;
+    isVerified: boolean;
+    companyId: number;
+    email: {
+      id: number;
+      email: string;
+      isVerified: boolean;
+      userId: number;
+      companyId: string | null;
+      createdAt: string;
+      updatedAt: string;
+      deletedAt: string | null;
+    };
+  };
   UserClaimCampaign?: {
     id: number;
     userId: number;
@@ -208,6 +283,7 @@ export type ListCampaignParams = {
   token?: string;
   except?: string;
   actionFrom?: 'ADMIN';
+  status?: 'ALL' | 'DRAFT' | 'UNDER_REVIEW' | 'WAITING_FOR_PUBLICATION' | 'PUBLIC' | 'COMPLETION';
 };
 export type QuestsResponse = {
   newCampaign: {
@@ -301,4 +377,5 @@ export const {
   useLazyGetDetailCampaignQuery,
   useGetListCampaignUsersQuery,
   useLazyGetListCampaignUsersQuery,
+  useLazyGetTestQuery,
 } = injectedRtkApi;

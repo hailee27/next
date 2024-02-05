@@ -40,7 +40,7 @@ export default function Verification() {
           userId: user?.id,
           sendBy,
           phoneNumber: userPhone,
-          isCheckPhone: true,
+          isCheckPhone: userAction !== 'disable',
         }).unwrap();
         setTotpToken(data?.totpToken ?? '');
       }

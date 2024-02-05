@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable import/first */
 /* eslint-disable import/order */
 import { init as initApm } from '@elastic/apm-rum';
@@ -30,10 +31,27 @@ import '@/styles/globals.scss';
 import { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
-import { ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useCallback, useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { CampaignApiProvider } from '@/context/CampaignApiContext';
+import jaJP from 'antd/locale/ja_JP';
+import { ConfigProvider } from 'antd';
+
+import dayjs from 'dayjs';
+import advancedFormat from 'dayjs/plugin/advancedFormat';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import localeData from 'dayjs/plugin/localeData';
+import weekday from 'dayjs/plugin/weekday';
+import weekOfYear from 'dayjs/plugin/weekOfYear';
+import weekYear from 'dayjs/plugin/weekYear';
+
+dayjs.extend(customParseFormat);
+dayjs.extend(advancedFormat);
+dayjs.extend(weekday);
+dayjs.extend(localeData);
+dayjs.extend(weekOfYear);
+dayjs.extend(weekYear);
 
 export type NextPageWithLayout<P = Record<string, never>, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => JSX.Element;
@@ -76,8 +94,24 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
   if (router.pathname === '/auth/callback/twitter') {
     getLayout = (page) => <TwitterCallBackLayout>{page}</TwitterCallBackLayout>;
   }
+
+  const throwRouterError = () => {
+    // Throwing an actual error class trips the Next.JS 500 Page, this string literal does not.
+    // eslint-disable-next-line no-throw-literal, @typescript-eslint/no-throw-literal
+    throw ' 👍 Abort route change due to user not enough condition to view page site. Triggered by useNavigationObserver. Please ignore this error.';
+  };
+
+  const killRouterEvent = useCallback(() => {
+    router.events.emit('routeChangeError');
+    throwRouterError();
+  }, [router]);
+
   useEffect(() => {
-    const start = () => {
+    const start = (url) => {
+      // if (url?.startsWith('/campaign-creator')) {
+      //   killRouterEvent();
+      //   return;
+      // }
       setLoading(true);
     };
     const end = () => {
@@ -102,10 +136,12 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
           {/* <main
             className={` ${dmSans.variable} ${inter.variable}  ${mPlus1.variable} ${notoSans.variable} ${montserrat.variable}`}
           > */}
-          <PopUpProvider>
-            {loading && <Loading />}
-            {getLayout(<Component {...props} />)}
-          </PopUpProvider>
+          <ConfigProvider locale={jaJP}>
+            <PopUpProvider>
+              {loading && <Loading />}
+              {getLayout(<Component {...props} />)}
+            </PopUpProvider>
+          </ConfigProvider>
           {/* </main> */}
         </PersistGate>
       </Provider>

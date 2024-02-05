@@ -49,10 +49,10 @@ export type CompanyUserParams = {
   action?: string;
 };
 export type CompaniesParams = {
-  name: string;
+  name?: string;
   code?: string;
-  email: string;
-  companyImage: string;
+  email?: string;
+  companyImage?: string;
   cardInfo?: string;
   sourceId?: string;
   companyId?: string;

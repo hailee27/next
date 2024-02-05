@@ -36,14 +36,14 @@ const TaskCampain = ({ item, onDelete, showDelete }: Props) => {
 
   const dataPlatForm = useMemo<DataPlatFormType[] | undefined>(
     () => renderDataPlatform(platFormWatch, item.config?.taskTemplate.config),
-    [platFormWatch, item.config?.taskTemplate.config]
+    [platFormWatch, item, item.config?.taskTemplate.config]
   );
 
   useEffect(() => {
-    if (platFormWatch) {
-      form.setFieldValue(['optionTasks', `task${item.id}`, 'type'], dataPlatForm?.[0].value);
-    }
-  }, [dataPlatForm, platFormWatch]);
+    dataPlatForm
+      ?.find((e) => e.value === optionTasksWath)
+      ?.content?.forEach((v) => form.setFieldValue(['optionTasks', `task${item.id}`, `${v.name}`], v.value));
+  }, [dataPlatForm, optionTasksWath]);
 
   useEffect(() => {
     if (item.platForm && item.config) {
@@ -52,10 +52,12 @@ const TaskCampain = ({ item, onDelete, showDelete }: Props) => {
       form.setFieldValue(['optionTasks', `task${item.id}`, 'taskId'], item.config.taskTemplateId);
       if (item.config.taskTemplate.config.platForm === 'CUSTOM') {
         const list: number[] = [];
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         Object.entries(item.config.taskTemplate.config.listChoice ?? {}).forEach(([key, value], i) => {
           list.push(i + 1);
-          form.setFieldValue(['optionTasks', `task${item.id}`, 'listChoice', `${key}`], value);
+          form.setFieldValue(['optionTasks', `task${item.id}`, 'listChoice', `listChoice${i + 1}`], value);
         });
+        setListChoise(list);
         form.setFieldValue(['optionTasks', `task${item.id}`, 'title'], item.config.taskTemplate.config.title);
         form.setFieldValue(
           ['optionTasks', `task${item.id}`, 'description'],
@@ -69,6 +71,11 @@ const TaskCampain = ({ item, onDelete, showDelete }: Props) => {
       }
     }
   }, [item.platForm, item.config, item.id]);
+  useEffect(() => {
+    if (platFormWatch) {
+      form.setFieldValue(['optionTasks', `task${item.id}`, 'type'], dataPlatForm?.[0].value);
+    }
+  }, [dataPlatForm?.[0].value, platFormWatch]);
 
   return (
     <>
@@ -104,7 +111,7 @@ const TaskCampain = ({ item, onDelete, showDelete }: Props) => {
           />
           {dataPlatForm?.[0].value && platFormWatch !== 'CUSTOM' ? (
             <SelectLabel
-              initialValue={dataPlatForm?.[0].value}
+              // initialValue={dataPlatForm?.find((e) => e.value === item.platForm.type)?.value}
               name={['optionTasks', `task${item.id}`, 'type']}
               options={dataPlatForm}
             />
@@ -114,12 +121,16 @@ const TaskCampain = ({ item, onDelete, showDelete }: Props) => {
         </div>
         <div className="flex flex-col space-y-[24px]">
           {dataPlatForm
-            ?.find((e) => e.value === form.getFieldValue(['optionTasks', `task${item.id}`, 'type']))
+            ?.find((e) => e.value === optionTasksWath)
             ?.content?.map(
               (e) =>
                 (e.type === 'input' && (
                   <div className="w-full" key={e.id}>
-                    <div className="text-[14px] font-semibold mb-[5px]">{e.title}</div>
+                    <div className="text-[14px] font-semibold mb-[5px] space-x-[8px]">
+                      <span>{e.title}</span>
+                      {e.require && <span>※必須</span>}
+                    </div>
+
                     <Form.Item
                       className="!mb-0"
                       initialValue={e.value}
@@ -132,7 +143,15 @@ const TaskCampain = ({ item, onDelete, showDelete }: Props) => {
                 )) ||
                 (e.type === 'textArea' && (
                   <div className="w-full" key={e.id}>
-                    <div className="text-[14px] font-semibold mb-[5px]">{e.title}</div>
+                    <div className="text-[14px] font-semibold mb-[5px] space-x-[8px]">
+                      <span>{e.title}</span>
+                      {e.require && <span>※必須</span>}
+                    </div>
+                    {e.name === 'quotePost' && (
+                      <div className="text-[14px] font-semibold mb-[5px]">
+                        You can include hashtag and link. If not filled in, there will be no template
+                      </div>
+                    )}
                     <Form.Item
                       className="!mb-0"
                       initialValue={e.value}
@@ -162,15 +181,20 @@ const TaskCampain = ({ item, onDelete, showDelete }: Props) => {
                 </Form.Item>
               </div>
               <div className="w-full">
-                <div className="text-[14px] font-semibold mb-[5px]">質問文</div>
-                <Form.Item name={['optionTasks', `task${item.id}`, 'questionText']}>
+                <div className="text-[14px] font-semibold mb-[5px]">質問文 ※必須</div>
+                <Form.Item
+                  name={['optionTasks', `task${item.id}`, 'questionText']}
+                  rules={[{ required: true, message: '' }]}
+                >
                   <BasicTextArea style={{ height: 145, resize: 'none' }} />
                 </Form.Item>
               </div>
               <SelectLabel
                 initialValue={dataPlatForm?.[0].value}
+                label="回答形式 ※必須"
                 name={['optionTasks', `task${item.id}`, 'type']}
                 options={dataPlatForm}
+                rules={[{ required: true, message: '' }]}
               />
               {optionTasksWath === 'formatSingle' && (
                 <div>

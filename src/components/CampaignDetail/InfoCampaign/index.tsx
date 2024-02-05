@@ -125,7 +125,7 @@ export default function InfoCampaign() {
                             <span className="font-montserrat">
                               {sortCampaignRewardPrice?.[0]?.amountOfMoney &&
                               typeof sortCampaignRewardPrice?.[0]?.amountOfMoney === 'number'
-                                ? sortCampaignRewardPrice[0].amountOfMoney.toLocaleString()
+                                ? sortCampaignRewardPrice[0].amountOfMoney.toLocaleString('ja-JP')
                                 : '--'}
                             </span>
                             円
@@ -138,7 +138,7 @@ export default function InfoCampaign() {
                                 'number'
                                 ? sortCampaignRewardPrice[
                                     sortCampaignRewardPrice.length - 1
-                                  ].amountOfMoney.toLocaleString()
+                                  ].amountOfMoney.toLocaleString('ja-JP')
                                 : '--'}
                             </span>
                             円
