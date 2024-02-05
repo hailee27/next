@@ -1,9 +1,11 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-console */
 
 import { useLazyMeQuery } from '@/redux/endpoints/auth';
 import { setSession } from '@/redux/slices/auth.slice';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
+import { openWindowPopup } from '@/utils/func/openWindowPopup';
 import toastMessage from '@/utils/func/toastMessage';
 import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
@@ -65,6 +67,7 @@ export default function useConnectX({ handleAction }: IProps) {
         }
       } else if (handleAction === 'CONNECT') {
         await refreshUser();
+        toastMessage('X連携をONにしました。', 'success');
       }
     } catch (error) {
       console.log(error);
@@ -87,18 +90,8 @@ export default function useConnectX({ handleAction }: IProps) {
     };
     const qs = new URLSearchParams(options).toString();
     const url = `${rootUrl}?${qs}`;
-    const width = 450;
-    const height = 730;
-    const left = window.screen.width / 2 - width / 2;
-    const top = window.screen.height / 2 - height / 2;
 
-    const newWindow = window.open(
-      url,
-      'Twitter Auth',
-      `menubar=no,location=no,resizable=no,scrollbars=no,status=no, width=${width}, height=${height}, top=${top}, left=${left}`
-    );
-
-    newWindow?.focus();
+    openWindowPopup(url, 'Twitter Auth', 450, 680);
   }
   return {
     isModalOpen,

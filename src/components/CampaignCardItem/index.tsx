@@ -1,6 +1,6 @@
 /* eslint-disable react/no-danger */
 /* eslint-disable no-nested-ternary */
-import React from 'react';
+import React, { useMemo } from 'react';
 import { TypeCampaign } from '@/redux/endpoints/campaign';
 import Image from 'next/image';
 import moment from 'moment';
@@ -15,9 +15,11 @@ export default function CampaignCardItem({
   item?: TypeCampaign;
   viewMode?: 'HAS_IMAGE' | 'NO_IMAGE';
 }) {
-  const sortCampaignReward = Array.isArray(item?.CampaignReward)
-    ? item?.CampaignReward?.sort((a, b) => a.amountOfMoney - b.amountOfMoney)
-    : [];
+  const sortCampaignReward = useMemo(() => {
+    const results = item?.CampaignReward && Array.isArray(item?.CampaignReward) ? [...item.CampaignReward] : [];
+
+    return results?.sort((a, b) => a.amountOfMoney - b.amountOfMoney);
+  }, [item?.CampaignReward]);
   return (
     <CShadowCard
       onClickCard={() => {
