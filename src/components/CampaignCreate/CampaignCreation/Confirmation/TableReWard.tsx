@@ -27,7 +27,7 @@ const columns: ColumnsType<DataType> = [
     key: 'amountOfMoney',
     title: '金額',
     align: 'center',
-    // render:(value)=> `${formatNumber(value)}`
+    // render: (value) => `${formatNumber(value)}`,
   },
   {
     dataIndex: 'numberOfWinners',
@@ -40,6 +40,7 @@ const columns: ColumnsType<DataType> = [
     key: 'probabilityOfWinning',
     title: '当選確率',
     align: 'center',
+    render: (value) => `${Number(value).toFixed(1)}%`,
   },
 ];
 
@@ -48,9 +49,10 @@ interface Props {
   value?: {
     reWard0: TypeReWard;
   };
+  totalWinner?: number | string;
   // valueTable?: TypeCampaignReward[];
 }
-function TableReWard({ value }: Props) {
+function TableReWard({ value, totalWinner }: Props) {
   const { query } = useRouter();
   const { data: valueTable } = useGetReWardsQuery(
     { campaignId: String(query?.id) },
@@ -63,9 +65,9 @@ function TableReWard({ value }: Props) {
         .map((e, i) => ({
           key: String(i + 1),
           equalNumber: `${i + 1}等`,
-          amountOfMoney: `${e.money}円`,
+          amountOfMoney: `${formatNumber(e.money ?? 0, true, 1)}円`,
           numberOfWinners: `${e.tiketWinning}本`,
-          probabilityOfWinning: `${e.tiketWinning}%`,
+          probabilityOfWinning: `${100 * (Number(e.tiketWinning) / Number(totalWinner ?? 100))}`,
         }))
         .concat([
           {
@@ -77,10 +79,10 @@ function TableReWard({ value }: Props) {
               100 -
               Number(
                 Object.values(value ?? {})
-                  ?.map((e) => Number(e.tiketWinning))
+                  ?.map((e) => Number(100 * (Number(e.tiketWinning) / Number(totalWinner ?? 100))))
                   ?.reduce((prev, cur) => prev + cur, 0)
               )
-            }%`,
+            }`,
           },
         ]);
     }
@@ -91,7 +93,7 @@ function TableReWard({ value }: Props) {
           equalNumber: `${i + 1}等`,
           amountOfMoney: `${formatNumber(e.amountOfMoney, true)}円`,
           numberOfWinners: `${e.numberOfWinningTicket}本`,
-          probabilityOfWinning: `${e.numberOfWinningTicket}%`,
+          probabilityOfWinning: `${100 * (Number(e.numberOfWinningTicket) / Number(totalWinner))}`,
         }))
         .concat([
           {
@@ -102,43 +104,16 @@ function TableReWard({ value }: Props) {
             probabilityOfWinning: `${
               100 -
               Number(
-                valueTable?.rewards.map((e) => Number(e.numberOfWinningTicket))?.reduce((prev, cur) => prev + cur, 0)
+                valueTable?.rewards
+                  .map((e) => Number(100 * (Number(e.numberOfWinningTicket) / Number(totalWinner))))
+                  ?.reduce((prev, cur) => prev + cur, 0)
               )
-            }%`,
+            }`,
           },
         ]);
     }
-    return [
-      {
-        key: '1',
-        equalNumber: '1等',
-        amountOfMoney: '10,000円',
-        numberOfWinners: '1本',
-        probabilityOfWinning: '1%',
-      },
-      {
-        key: '2',
-        equalNumber: '2等',
-        amountOfMoney: '5,000円',
-        numberOfWinners: '5本',
-        probabilityOfWinning: '5%',
-      },
-      {
-        key: '3',
-        equalNumber: '3等',
-        amountOfMoney: '1,000円',
-        numberOfWinners: '10本',
-        probabilityOfWinning: '10%',
-      },
-      {
-        key: '4',
-        equalNumber: 'はずれ',
-        amountOfMoney: '0円',
-        numberOfWinners: '-',
-        probabilityOfWinning: '84%',
-      },
-    ];
-  }, [value, valueTable]);
+    return [];
+  }, [value, valueTable, totalWinner]);
 
   return (
     <div className={styles.customeTable}>
@@ -148,6 +123,7 @@ function TableReWard({ value }: Props) {
 }
 TableReWard.defaultProps = {
   value: undefined,
+  totalWinner: 100,
   // valueTable: undefined,
 };
 export default TableReWard;
