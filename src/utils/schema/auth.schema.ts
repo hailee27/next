@@ -22,7 +22,15 @@ export const newPasswordSchema = yup.object({
     .string()
     .required('入力してください')
     .min(8, '8文字以上入力してください。')
-    .matches(REGEX_PASSWORD, '英字以外の文字が1文字以上必要です、スペースを含めないでください。'),
+    .matches(REGEX_PASSWORD, '英字以外の文字が1文字以上必要です、スペースを含めないでください。')
+    .test(
+      'conflicting password',
+      'パスワードが重複しています、再度確認お願いします。',
+      function checkSamePassword(value) {
+        const { password: currentPassword } = this.parent;
+        return currentPassword ? !(value === currentPassword) : true;
+      }
+    ),
   passwordConfirmation: yup
     .string()
     .required('入力してください')

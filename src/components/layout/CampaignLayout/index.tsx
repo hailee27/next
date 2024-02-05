@@ -1,13 +1,27 @@
 import React from 'react';
 
-import Header from './Header';
+import CreatorRoleFeedbackModal from '@/components/CreatorRoleFeedbackModal';
+import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 import SideBar from './SideBar';
+import Header from './Header';
 
 interface Props {
   children: JSX.Element;
 }
 
 function CampaignLayout({ children }: Props) {
+  const router = useRouter();
+  const { accessToken, user } = useSelector((state: RootState) => state.auth);
+
+  if (
+    accessToken &&
+    router.pathname.startsWith('/campaign-creator') &&
+    (user?.twoFactorMethod === 'NONE' || user?.emailId === null)
+  ) {
+    return <CreatorRoleFeedbackModal />;
+  }
   return (
     <div className="min-h-screen flex flex-col bg-white text-[#333] font-notoSans">
       <header className="h-[76px] sticky top-0 bg-white z-10">

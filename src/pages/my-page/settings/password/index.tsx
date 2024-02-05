@@ -127,7 +127,7 @@ export default function SettingPasswordPage() {
                   />
                 </div>
                 <div className="flex-1">
-                  <CButtonShadow onClick={() => {}} title="保存する" type="submit" />
+                  <CButtonShadow formNoValidate title="保存する" type="submit" />
                 </div>
               </div>
             </div>

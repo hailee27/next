@@ -3,16 +3,15 @@ import SelectLabel from '@/components/common/BasicSelect/SelectLabel';
 import CButtonShadow from '@/components/common/CButtonShadow';
 import { useLazyMeQuery } from '@/redux/endpoints/auth';
 import { useGetUserDetailQuery, useUpdateUserMutation } from '@/redux/endpoints/users';
-import { setUser } from '@/redux/slices/auth.slice';
+
 import toastMessage from '@/utils/func/toastMessage';
 import { Form } from 'antd';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 
 function EditPermmission() {
   const router = useRouter();
-  const dispatch = useDispatch();
+
   const [form] = Form.useForm();
   const [triggerMe] = useLazyMeQuery();
   const { data } = useGetUserDetailQuery(
@@ -41,9 +40,8 @@ function EditPermmission() {
             })
               .unwrap()
               .then(() => {
-                triggerMe()
-                  .unwrap()
-                  .then((res) => dispatch(setUser(res)));
+                triggerMe();
+
                 router.back();
                 toastMessage('update succses', 'success');
               })

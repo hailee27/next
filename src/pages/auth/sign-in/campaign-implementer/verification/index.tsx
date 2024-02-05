@@ -9,16 +9,21 @@ import toastMessage from '@/utils/func/toastMessage';
 import { Spin } from 'antd';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 export default function VerificationPage() {
   const { query, push } = useRouter();
   const [sendVerificationCode, { isLoading: isSendVerificationCode }] = useAuthVerificationMutation();
 
-  const [smsAuth, { isLoading, isError }] = useSmsVerifyMutation();
+  const [smsAuth, { isError }] = useSmsVerifyMutation();
   const dispatch = useDispatch();
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleSubmitSMS = async (code: string) => {
     try {
+      setIsSubmitting(true);
       if (query?.code && query?.totpToken) {
         const data = await smsAuth({
           code,
@@ -27,7 +32,11 @@ export default function VerificationPage() {
 
         if (data?.accessToken && data?.refreshToken && data?.user) {
           dispatch(setSession({ ...data }));
-          if (query?.authMethod === 'twitter') {
+          if (
+            query?.authMethod === 'twitter' ||
+            data?.user?.twoFactorMethod === 'NONE' ||
+            data?.user?.emailId === null
+          ) {
             push('/my-page');
           } else {
             push('/campaign-creator');
@@ -36,6 +45,8 @@ export default function VerificationPage() {
       }
     } catch (err) {
       toastMessage(getErrorMessage(err), 'error');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -50,7 +61,7 @@ export default function VerificationPage() {
   };
 
   return (
-    <Spin spinning={isLoading || isSendVerificationCode}>
+    <Spin spinning={isSubmitting || isSendVerificationCode}>
       <div
         className={clsx(
           'container-min-height pb-[56px] h-full w-full bg-[#D5FFFF] py-[40px] px-[20px] transition-all duration-300'

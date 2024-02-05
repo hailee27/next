@@ -78,7 +78,7 @@ export default function SettingEmailPage() {
                   />
                 </div>
                 <div className="flex-1">
-                  <CButtonShadow title="保存する" type="submit" />
+                  <CButtonShadow formNoValidate title="保存する" type="submit" />
                 </div>
               </div>
             </div>

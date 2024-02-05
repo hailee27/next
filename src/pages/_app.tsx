@@ -45,6 +45,7 @@ import localeData from 'dayjs/plugin/localeData';
 import weekday from 'dayjs/plugin/weekday';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import weekYear from 'dayjs/plugin/weekYear';
+import UserRoleWapper from '@/components/AuthCheck/UserRoleWapper';
 
 dayjs.extend(customParseFormat);
 dayjs.extend(advancedFormat);
@@ -95,24 +96,11 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
     getLayout = (page) => <TwitterCallBackLayout>{page}</TwitterCallBackLayout>;
   }
 
-  const throwRouterError = () => {
-    // Throwing an actual error class trips the Next.JS 500 Page, this string literal does not.
-    // eslint-disable-next-line no-throw-literal, @typescript-eslint/no-throw-literal
-    throw ' 👍 Abort route change due to user not enough condition to view page site. Triggered by useNavigationObserver. Please ignore this error.';
-  };
-
-  const killRouterEvent = useCallback(() => {
-    router.events.emit('routeChangeError');
-    throwRouterError();
-  }, [router]);
-
   useEffect(() => {
     const start = (url) => {
-      // if (url?.startsWith('/campaign-creator')) {
-      //   killRouterEvent();
-      //   return;
-      // }
-      setLoading(true);
+      if (!url?.startsWith('/campaigns')) {
+        setLoading(true);
+      }
     };
     const end = () => {
       setLoading(false);
@@ -139,7 +127,11 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
           <ConfigProvider locale={jaJP}>
             <PopUpProvider>
               {loading && <Loading />}
-              {getLayout(<Component {...props} />)}
+              {getLayout(
+                <UserRoleWapper>
+                  <Component {...props} />
+                </UserRoleWapper>
+              )}
             </PopUpProvider>
           </ConfigProvider>
           {/* </main> */}

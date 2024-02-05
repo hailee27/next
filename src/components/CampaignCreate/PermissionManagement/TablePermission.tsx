@@ -6,11 +6,11 @@ import CButtonClassic from '@/components/common/CButtonClassic';
 
 import { useRouter } from 'next/router';
 import { useUpdateUserMutation } from '@/redux/endpoints/users';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import toastMessage from '@/utils/func/toastMessage';
 import { useLazyMeQuery } from '@/redux/endpoints/auth';
-import { setUser } from '@/redux/slices/auth.slice';
+
 import { useLazyGetCompanyUsersQuery } from '@/redux/endpoints/companies';
 
 interface DataType {
@@ -23,7 +23,7 @@ interface DataType {
 
 function TablePermission() {
   const router = useRouter();
-  const dispatch = useDispatch();
+
   const { user } = useSelector((state: RootState) => state.auth);
   const [trigger] = useUpdateUserMutation();
   const [triggerMe] = useLazyMeQuery();
@@ -61,9 +61,7 @@ function TablePermission() {
               })
                 .unwrap()
                 .then(() => {
-                  triggerMe()
-                    .unwrap()
-                    .then((res) => dispatch(setUser(res)));
+                  triggerMe();
                   toastMessage('success delete', 'success');
                   setData((prev) => prev?.filter((e) => e.id !== value));
                 })
