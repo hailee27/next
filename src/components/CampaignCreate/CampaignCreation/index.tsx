@@ -96,6 +96,7 @@ function CampaignCreation() {
         if (queryParams.typeWinner === 'AUTO_PRIZEE_DRAW') {
           forms?.confirm?.setFieldValue('tableReward', queryParams?.reWard);
           forms?.confirm?.setFieldValue('price', queryParams.totalReWard);
+          forms?.confirm?.setFieldValue('totalWinner', queryParams.numberOfParticipants);
         } else {
           forms?.confirm?.setFieldValue('compensationSummary', queryParams?.compensationSummary);
         }

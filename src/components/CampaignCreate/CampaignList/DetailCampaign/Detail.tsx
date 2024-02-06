@@ -82,7 +82,7 @@ function Detail({ data }: { data?: TypeCampaign }) {
               <div className="text-[16px] font-bold border-l-2 border-[#04AFAF] h-[24px] pl-[14px]">
                 キャンペーン作成者
               </div>
-              <FlagItem className="pl-[16px]" value="池山智隆" />
+              <FlagItem className="pl-[16px]" value={data?.createdUser.email.email} />
             </div>
           </div>
         </div>
@@ -96,7 +96,7 @@ function Detail({ data }: { data?: TypeCampaign }) {
           <>
             <div className="flex flex-col space-y-[16px]">
               <h2 className="font-bold text-[18px] text-[#04AFAF] ">報酬</h2>
-              <TableReWard />
+              <TableReWard totalWinner={data?.totalNumberOfUsersAllowedToWork} />
             </div>
             <div className="flex flex-col space-y-[16px]">
               <h2 className="font-bold text-[18px] text-[#04AFAF] ">報酬</h2>
