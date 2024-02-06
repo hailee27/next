@@ -16,7 +16,7 @@ export const CampaignDetailContext = React.createContext<{
   viewType: 'completion' | 'winning' | 'losing' | 'detail';
   isFetchingCampaignTasks: boolean;
   isFetchingCampaignRewards: boolean;
-  onFetchCampaignInfo?: () => Promise<void>;
+  onFetchCampaignInfo?: () => Promise<TypeCampaign | null>;
 }>({
   campaignDetail: null,
   campaignTasks: null,
@@ -30,7 +30,6 @@ export const CampaignDetailContext = React.createContext<{
 export default function CampaignDetailProvider({
   viewType,
   campaignDetail,
-
   children,
 }: {
   children: React.ReactNode;
@@ -71,6 +70,7 @@ export default function CampaignDetailProvider({
   );
 
   const fetchInitCampaignInfo = useCallback(async () => {
+    let result: TypeCampaign | null = null;
     try {
       if (accessToken) {
         const data = await triggerGetInfo({
@@ -78,10 +78,12 @@ export default function CampaignDetailProvider({
           token: accessToken || 'user',
         }).unwrap();
         setCampaignInfo(data);
+        result = data;
       }
     } catch (error) {
       toastMessage(getErrorMessage(error), 'error');
     }
+    return result;
   }, [accessToken, router?.query?.slug?.[0]]);
 
   useEffect(() => {

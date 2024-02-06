@@ -29,8 +29,8 @@ export default function InfoCampaign() {
     const now = moment();
     const nowClone = now.clone().toISOString();
     if (
-      moment(campaignDetail?.expiredTime)?.isValid() &&
-      moment(campaignDetail?.expiredTime)?.isSameOrBefore(nowClone)
+      campaignDetail?.status !== 'PUBLIC' ||
+      (moment(campaignDetail?.expiredTime)?.isValid() && moment(campaignDetail?.expiredTime)?.isSameOrBefore(nowClone))
     ) {
       result = true;
     }

@@ -53,7 +53,8 @@ function InstantWin() {
   useEffect(() => {
     if (dataReward) {
       setReWard(
-        dataReward.rewards.map((e) => ({
+        dataReward.rewards.map((e, i) => ({
+          key: i + 1,
           id: String(e.id) ?? undefined,
           money: e.amountOfMoney,
           tiketWinning: e.numberOfWinningTicket,
@@ -92,7 +93,7 @@ function InstantWin() {
               const newReWard = form.getFieldValue(['reWard']);
               delete newReWard[`reWard${i + 1}`];
               form.setFieldValue(['reWard'], newReWard);
-              setReWard((prev) => prev.filter((v) => v !== e));
+              setReWard((prev) => prev.filter((v) => v.key !== e.key));
               setReWardIdDelete((prev) => [...prev, Number(e.id)]);
             }}
           />
@@ -109,7 +110,7 @@ function InstantWin() {
               <div className="py-[12px]">
                 <span className="text-[14px] flex">
                   <Form.Item name="totalReWard" noStyle>
-                    <FlagItem />
+                    <FlagItem type="number" />
                   </Form.Item>
                   <span>&nbsp;円</span>
                 </span>

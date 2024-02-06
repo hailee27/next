@@ -7,12 +7,17 @@ import { copyFunc } from '@/utils/copyFunc';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
+import { Spin } from 'antd';
 import CampaignParticipantsInstant from './CampaignParticipantsInstant';
 import Detail from './Detail';
 
 function DetailCampaign() {
   const { query, back, reload } = useRouter();
-  const { data } = useGetDetailCampaignQuery({ campaignId: String(query?.id) });
+  const { data, isFetching } = useGetDetailCampaignQuery(
+    { campaignId: String(query?.id) },
+
+    { skip: !query?.id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
+  );
   const { accessToken } = useSelector((state: RootState) => state.auth);
 
   return (
@@ -140,7 +145,13 @@ function DetailCampaign() {
           )}
         </div>
       </div>
-      {query?.isChecking === 'true' ? <CampaignParticipantsInstant /> : <Detail data={data} />}
+      {query?.isChecking === 'true' ? (
+        <CampaignParticipantsInstant />
+      ) : (
+        <Spin spinning={isFetching}>
+          <Detail data={data} />
+        </Spin>
+      )}
     </div>
   );
 }

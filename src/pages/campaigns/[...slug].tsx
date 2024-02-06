@@ -44,7 +44,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
     })
   );
 
-  if (!dataCampaign?.id) {
+  if (!dataCampaign?.id || (dataCampaign?.status !== 'PUBLIC' && dataCampaign?.status !== 'COMPLETION')) {
     return {
       notFound: true,
     };
@@ -68,6 +68,7 @@ export default function CampaignDetailPage({
   campaignsRecommend: TypeCampaign[] | null;
   viewType: 'completion' | 'winning' | 'losing' | 'detail';
 }) {
+  console.log(campaignDetail);
   return (
     <CampaignDetailProvider campaignDetail={campaignDetail} viewType={viewType}>
       <div className="font-notoSans">

@@ -4,15 +4,17 @@
 import CButtonShadow from '@/components/common/CButtonShadow';
 import CModalWapper from '@/components/common/CModalWapper';
 import ArrowDown from '@/components/common/icons/ArrowDown';
+import { useCreateGachaMutation } from '@/redux/endpoints/users';
 import { RootState } from '@/redux/store';
 import { convertCampaignTask } from '@/utils/func/convertCampaign';
+import { getErrorMessage } from '@/utils/func/getErrorMessage';
+import toastMessage from '@/utils/func/toastMessage';
+import { Spin } from 'antd';
 import { useRouter } from 'next/router';
 import { useContext, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import toastMessage from '@/utils/func/toastMessage';
-import { getErrorMessage } from '@/utils/func/getErrorMessage';
-import { Spin } from 'antd';
-import { useCreateGachaMutation } from '@/redux/endpoints/users';
+
+import moment from 'moment';
 import { CampaignDetailContext } from '../CampainContext';
 import TaskItem from './TaskItem';
 
@@ -21,8 +23,11 @@ export default function CampaignTasksSection() {
   const router = useRouter();
   const [isOpenModalSetupAuthEmail, setIsOpenModalSetupAuthEmail] = useState(false);
   const [onRegisterCampaign] = useCreateGachaMutation();
+
   const { campaignDetail, campaignTasks, isFetchingCampaignTasks, onFetchCampaignInfo } =
     useContext(CampaignDetailContext);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const isDisableRegisterBtn = useMemo(() => {
     if (!user?.id) {
@@ -45,7 +50,22 @@ export default function CampaignTasksSection() {
 
   const handleRegisterCampaign = async () => {
     try {
+      setIsLoading(true);
       if (user?.id) {
+        const infoCampaign = await onFetchCampaignInfo?.();
+
+        const now = moment();
+        const nowClone = now.clone().toISOString();
+
+        if (
+          !infoCampaign ||
+          infoCampaign?.status !== 'PUBLIC' ||
+          (moment(infoCampaign?.expiredTime)?.isValid() && moment(infoCampaign?.expiredTime)?.isSameOrBefore(nowClone))
+        ) {
+          router?.reload();
+          return;
+        }
+
         const camapignId = router?.query?.slug?.[0] ?? '';
         if (campaignDetail?.methodOfselectWinners === 'MANUAL_SELECTION' && (!user?.emailId || !user?.havePassword)) {
           setIsOpenModalSetupAuthEmail(true);
@@ -55,6 +75,7 @@ export default function CampaignTasksSection() {
           campaignId: camapignId,
           userId: user?.id ?? '',
         }).unwrap();
+
         if (onFetchCampaignInfo) {
           await onFetchCampaignInfo?.();
         }
@@ -75,11 +96,13 @@ export default function CampaignTasksSection() {
       }
     } catch (e) {
       toastMessage(getErrorMessage(e), 'error');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <Spin spinning={isFetchingCampaignTasks}>
+    <Spin spinning={isLoading || isFetchingCampaignTasks}>
       <div className="py-[56px] px-[20px] md:py-[100px] md:px-[160px] xl:px-[35px]">
         <h3 className="text-[24px] font-bold tracking-[0.72px] text-center md:text-[28px] ">タスク</h3>
         <div className="h-[24px] md:h-[64px]" />
@@ -112,7 +135,7 @@ export default function CampaignTasksSection() {
               classBgColor={isDisableRegisterBtn ? 'bg-[#c2c2c2]' : 'bg-[#333]'}
               classBorderColor={isDisableRegisterBtn ? 'border-[#c2c2c2]' : 'border-[#333]'}
               classShadowColor="bg-[#fff]"
-              isDisable={isDisableRegisterBtn}
+              // isDisable={isDisableRegisterBtn}
               onClick={handleRegisterCampaign}
               textClass="text-white text-[14px] font-bold tracking-[0.42px]"
               title="キャンペーンに応募する"

@@ -58,7 +58,7 @@ function Task() {
   }, [dataTask]);
   useEffect(() => {
     if (numberTask.length === 29) {
-      toastMessage('warning', 'warning');
+      toastMessage('タスクの最大数は30タスクです。（ デフォルトタスク除きます）', 'warning');
     }
   }, [numberTask]);
 
@@ -93,8 +93,8 @@ function Task() {
             </Form.Item>
           </div>
           <div className="flex flex-col space-y-[24px] pb-[24px]">
-            {numberTask.map((e) => (
-              <TaskCampain item={e} key={e.id} onDelete={() => handleDelete(e.id)} showDelete />
+            {numberTask.map((e, i) => (
+              <TaskCampain index={i} item={e} key={e.id} onDelete={() => handleDelete(e.id)} showDelete />
             ))}
           </div>
           {numberTask.length < 29 && (

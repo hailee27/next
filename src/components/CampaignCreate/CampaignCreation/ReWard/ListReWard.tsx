@@ -8,14 +8,14 @@ import { TypeReWard } from './InstantWin';
 
 function ListReWard({ index, item, onDelete }: { index: number; item: TypeReWard; onDelete: () => void }) {
   const form = Form.useFormInstance();
-  // const paypayWatch = Form.useWatch(['reWard', `reWard${index}`, 'receivingMethod', 'paypay'], form) ?? false;
-  const amazonWatch = Form.useWatch(['reWard', `reWard${index}`, 'receivingMethod', 'amazon'], form) ?? false;
+  // const paypayWatch = Form.useWatch(['reWard', `reWard${item.key}`, 'receivingMethod', 'paypay'], form) ?? false;
+  const amazonWatch = Form.useWatch(['reWard', `reWard${item.key}`, 'receivingMethod', 'amazon'], form);
 
   useEffect(() => {
     if (item) {
       form.setFieldsValue({
         reWard: {
-          [`reWard${index}`]: {
+          [`reWard${item.key}`]: {
             reWardId: item.id,
             money: item.money,
             tiketWinning: item.tiketWinning,
@@ -27,6 +27,7 @@ function ListReWard({ index, item, onDelete }: { index: number; item: TypeReWard
       });
     }
   }, [item]);
+
   return (
     <div>
       {index !== 1 && (
@@ -40,7 +41,7 @@ function ListReWard({ index, item, onDelete }: { index: number; item: TypeReWard
           />
         </div>
       )}
-      <Form.Item className="!hidden" name={['reWard', `reWard${index}`, 'reWardId']}>
+      <Form.Item className="!hidden" name={['reWard', `reWard${item.key}`, 'reWardId']}>
         <FlagItem />
       </Form.Item>
       <div className="border-2 border-[#2D3648] rounded-[8px] p-[32px]">
@@ -51,7 +52,7 @@ function ListReWard({ index, item, onDelete }: { index: number; item: TypeReWard
           <div className="flex space-y-[8px]  w-full items-center space-x-[16px]">
             <span className="text-[14px] font-semibold">金額</span>
             <div className="flex-1 relative ">
-              <Form.Item className="!mb-0" name={['reWard', `reWard${index}`, 'money']}>
+              <Form.Item className="!mb-0" name={['reWard', `reWard${item.key}`, 'money']}>
                 <BasicInput placeholder="記入してください" type="currency" />
               </Form.Item>
               <span className="absolute top-[50%] -translate-y-[50%] right-[24px] font-medium text-[14px]">円</span>
@@ -60,7 +61,7 @@ function ListReWard({ index, item, onDelete }: { index: number; item: TypeReWard
           <div className="flex space-y-[8px]  w-full items-center space-x-[16px]">
             <span className="text-[14px] font-semibold">当選本数</span>
             <div className="flex-1 relative ">
-              <Form.Item className="!mb-0" name={['reWard', `reWard${index}`, 'tiketWinning']}>
+              <Form.Item className="!mb-0" name={['reWard', `reWard${item.key}`, 'tiketWinning']}>
                 <BasicInput placeholder="記入してください" type="number" />
               </Form.Item>
               <span className="absolute top-[50%] -translate-y-[50%] right-[24px] font-medium text-[14px]">本</span>
@@ -73,9 +74,20 @@ function ListReWard({ index, item, onDelete }: { index: number; item: TypeReWard
             <div className="flex items-center space-x-[12px]">
               <span className="text-[16px]">Amazon gift card</span>
               <Form.Item
-                initialValue={amazonWatch}
-                name={['reWard', `reWard${index}`, 'receivingMethod', 'amazon']}
-                noStyle
+                className="!mb-0"
+                initialValue={amazonWatch ?? false}
+                name={['reWard', `reWard${item.key}`, 'receivingMethod', 'amazon']}
+                // noStyle
+                rules={[
+                  {
+                    validator: (_, checked) => {
+                      if (!checked) {
+                        return Promise.reject(new Error('受取方法を選択する必要があります。'));
+                      }
+                      return Promise.resolve();
+                    },
+                  },
+                ]}
               >
                 <BasicSwitch />
               </Form.Item>
