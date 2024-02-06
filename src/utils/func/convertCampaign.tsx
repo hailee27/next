@@ -66,7 +66,8 @@ export const convertCampaignTask = (task: TypeTask | null) => {
             break;
           }
           case 'twitter_repost': {
-            const splitUrl = taskPlatForm === 'TWITTER' ? task?.taskTemplate?.config?.postURL?.split('/') : '';
+            const taskUrl = taskPlatForm === 'TWITTER' ? task?.taskTemplate?.config?.postURL : '';
+            const splitUrl = taskUrl?.split('/');
             const postId = splitUrl?.[(splitUrl?.length ?? 0) - 1] ?? '';
             result = {
               id: task?.id ?? '',
@@ -75,7 +76,10 @@ export const convertCampaignTask = (task: TypeTask | null) => {
               description: (
                 <div className="text-[14px]">
                   <p>
-                    この投稿をリツイート: <p className="line-clamp-1 text-ellipsis">ツイート URL</p>
+                    この投稿をリツイート:{' '}
+                    <a className="line-clamp-1 text-ellipsis" href={taskUrl} rel="noreferrer" target="_blank">
+                      {taskUrl}
+                    </a>
                   </p>
                 </div>
               ),
@@ -85,7 +89,8 @@ export const convertCampaignTask = (task: TypeTask | null) => {
             break;
           }
           case 'twitter_repost_quote': {
-            const splitUrl = taskPlatForm === 'TWITTER' ? task?.taskTemplate?.config?.postURLQuote?.split('/') : '';
+            const taskUrl = taskPlatForm === 'TWITTER' ? task?.taskTemplate?.config?.postURLQuote : '';
+            const splitUrl = taskUrl?.split('/');
             const postId = splitUrl?.[(splitUrl?.length ?? 0) - 1] ?? '';
             result = {
               id: task?.id ?? '',
@@ -94,7 +99,10 @@ export const convertCampaignTask = (task: TypeTask | null) => {
               description: (
                 <div className="text-[14px]">
                   <p>
-                    この引用をリツイート: <p className="line-clamp-1 text-ellipsis">ツイート URL</p>
+                    この引用をリツイート:{' '}
+                    <a className="line-clamp-1 text-ellipsis" href={taskUrl} rel="noreferrer" target="_blank">
+                      {taskUrl}
+                    </a>
                   </p>
                   {taskPlatForm === 'TWITTER' && task?.taskTemplate?.config?.quotePost ? (
                     <p>
