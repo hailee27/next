@@ -3,6 +3,7 @@ import CampaignCardItem from '@/components/CampaignCardItem';
 import PaginationRouterControl from '@/components/common/BasicPaination/PaginationRouterControl';
 import CButtonShadow from '@/components/common/CButtonShadow';
 import useGetCampaigns from '@/hooks/useGetCampaigns';
+// import { PAGINATION_PAGE_SIZE } from '@/utils/constant/enums';
 import { Spin } from 'antd';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';

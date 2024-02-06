@@ -1,6 +1,5 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-console */
 import CShadowCard from '@/components/common/CCardShadow';
 import ArrowDown from '@/components/common/icons/ArrowDown';
@@ -8,23 +7,22 @@ import ArrowUpRightFormIcon from '@/components/common/icons/ArrowUpRightFormIcon
 import { TasksConvert } from '@/utils/func/convertCampaign';
 import clsx from 'clsx';
 
-import Image from 'next/image';
-import { useContext, useState } from 'react';
-import { useRouter } from 'next/router';
-import { getErrorMessage } from '@/utils/func/getErrorMessage';
-import toastMessage from '@/utils/func/toastMessage';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/redux/store';
 import { useImplementTaskMutation } from '@/redux/endpoints/me';
-import { useLazyGetDetailCampaignQuery } from '@/redux/endpoints/campaign';
-import moment from 'moment';
-import { Spin } from 'antd';
+import { RootState } from '@/redux/store';
+import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import { openWindowPopup } from '@/utils/func/openWindowPopup';
-import ModalFreeTextContent from './ModalFreeTextContent';
-import ModalConnectX from './ModalConnectX';
+import toastMessage from '@/utils/func/toastMessage';
+import { Spin } from 'antd';
+import moment from 'moment';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { useContext, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { CampaignDetailContext } from '../CampainContext';
 import ModalChooseMultiple from './ModalChooseMultiple';
 import ModalChooseOne from './ModalChooseOne';
-import { CampaignDetailContext } from '../CampainContext';
+import ModalConnectX from './ModalConnectX';
+import ModalFreeTextContent from './ModalFreeTextContent';
 
 export default function TaskItem({
   task,
@@ -36,9 +34,8 @@ export default function TaskItem({
   const [onImplementTask] = useImplementTaskMutation();
   const router = useRouter();
   const { accessToken, user } = useSelector((state: RootState) => state.auth);
-  const { onRefetchCampaignTasks } = useContext(CampaignDetailContext);
+  const { onRefetchCampaignTasks, onFetchCampaignInfo } = useContext(CampaignDetailContext);
 
-  const [triggerGetCampaignInfo] = useLazyGetDetailCampaignQuery();
   const [isLoading, setIsLoading] = useState(false);
   const [modalState, setModalState] = useState<{
     isOpenModal: boolean;
@@ -63,16 +60,17 @@ export default function TaskItem({
         return;
       }
 
-      const campaignInfo = await triggerGetCampaignInfo({
-        campaignId: router?.query?.slug?.[0] ?? '',
-        token: 'user',
-      }).unwrap();
+      const infoCampaign = await onFetchCampaignInfo?.();
 
       const now = moment();
       const nowClone = now.clone().toISOString();
 
-      if (moment(campaignInfo?.expiredTime)?.isValid() && moment(campaignInfo?.expiredTime)?.isSameOrBefore(nowClone)) {
-        toastMessage('キャンペーンは終了しました。', 'error');
+      if (
+        !infoCampaign ||
+        infoCampaign?.status !== 'PUBLIC' ||
+        (moment(infoCampaign?.expiredTime)?.isValid() && moment(infoCampaign?.expiredTime)?.isSameOrBefore(nowClone))
+      ) {
+        router?.reload();
         return;
       }
 
