@@ -95,7 +95,7 @@ function OrganizeInformation() {
               <span className="text-[18px] font-bold text-[#04AFAF] leading-[16px]">ロゴ</span>
               {isEdit ? (
                 <div className="mt-[12px]">
-                  <Form.Item name="companyImage" noStyle>
+                  <Form.Item initialValue={user?.memberCompany.image} name="companyImage" noStyle>
                     <UploadButton className="w-[175px]" />
                   </Form.Item>
                 </div>

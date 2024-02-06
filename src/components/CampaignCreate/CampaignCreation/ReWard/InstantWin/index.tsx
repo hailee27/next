@@ -8,6 +8,7 @@ import CButtonClassic from '@/components/common/CButtonClassic';
 import { useRouter } from 'next/router';
 import { useGetReWardsQuery } from '@/redux/endpoints/reWard';
 import { useCampaignApiContext } from '@/context/CampaignApiContext';
+import toastMessage from '@/utils/func/toastMessage';
 import ListReWard from '../ListReWard';
 
 export interface TypeReWard {
@@ -109,7 +110,22 @@ function InstantWin() {
               <span className="text-[14px] font-bold">合計金額</span>
               <div className="py-[12px]">
                 <span className="text-[14px] flex">
-                  <Form.Item name="totalReWard" noStyle>
+                  <Form.Item
+                    name="totalReWard"
+                    noStyle
+                    rules={[
+                      {
+                        validator: (_, value) => {
+                          if (Number(value) === 0) {
+                            return Promise.reject(new Error('')).finally(() =>
+                              toastMessage('キャンペーンには少なくとも 1 つの賞品が必要です。', 'error')
+                            );
+                          }
+                          return Promise.resolve();
+                        },
+                      },
+                    ]}
+                  >
                     <FlagItem type="number" />
                   </Form.Item>
                   <span>&nbsp;円</span>
