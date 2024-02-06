@@ -101,12 +101,17 @@ function Setup() {
 
             <Form.Item className="!flex-1" name="startDate" rules={[{ required: true, message: '' }]}>
               <BasicDatePicker
-                disabledDate={(current) => moment(current.format('YYYY-MM-DD')) < moment().add(-1, 'day')}
+                disabledDate={(current) => dayjs(current) < dayjs().add(-1, 'day')}
                 disabledTime={(current) => {
                   if (dayjs(current).format('DD') === dayjs().format('DD')) {
                     return {
                       disabledHours: () => range(0, Number(dayjs().format('HH'))),
-                      disabledMinutes: () => range(0, Number(dayjs().format('mm'))),
+                      disabledMinutes: () => {
+                        if (dayjs(current).format('HH') === dayjs().format('HH')) {
+                          return range(0, Number(dayjs().format('mm')));
+                        }
+                        return range(0, 0);
+                      },
                     };
                   }
                   return {

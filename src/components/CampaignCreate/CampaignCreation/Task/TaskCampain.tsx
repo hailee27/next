@@ -28,6 +28,7 @@ export interface DataPlatFormType {
     require?: boolean;
     name: string;
     value?: string;
+    isUrl?: boolean;
   }[];
 }
 const TaskCampain = ({ item, onDelete, showDelete, index }: Props) => {
@@ -119,7 +120,18 @@ const TaskCampain = ({ item, onDelete, showDelete, index }: Props) => {
                       className="!mb-0"
                       initialValue={e.value}
                       name={['optionTasks', `task${item.id}`, `${e.name}`]}
-                      rules={[{ required: e.require, message: '' }]}
+                      rules={
+                        e.isUrl
+                          ? [
+                              { required: e.require, message: `Xの ${e.title}を入力してください。` },
+                              {
+                                pattern:
+                                  /(https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z]{2,}(\.[a-zA-Z]{2,})(\.[a-zA-Z]{2,})?\/[a-zA-Z0-9]{2,}|((https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z]{2,}(\.[a-zA-Z]{2,})(\.[a-zA-Z]{2,})?)|(https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z0-9]{2,}\.[a-zA-Z0-9]{2,}\.[a-zA-Z0-9]{2,}(\.[a-zA-Z0-9]{2,})?/g,
+                                message: 'mush url',
+                              },
+                            ]
+                          : [{ required: e.require, message: `Xの ${e.title}を入力してください。` }]
+                      }
                     >
                       <BasicInput />
                     </Form.Item>

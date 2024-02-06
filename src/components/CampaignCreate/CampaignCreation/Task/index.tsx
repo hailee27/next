@@ -71,6 +71,24 @@ function Task() {
           onFinishFailed={() => toastMessage('タスクの最小数は1タスクです。（ デフォルトタスク除きます）', 'error')}
           onValuesChange={(e, values) => {
             const { optionTasks } = values;
+            Object.entries(e.optionTasks).forEach(([key, value]: [key: any, value: any]) => {
+              if (value?.platForm === 'TWITTER') {
+                form.setFieldValue(['optionTasks', `${key}`, 'type'], 'twitter_follow');
+              }
+              if (value?.platForm === 'TIKTOK') {
+                form.setFieldValue(['optionTasks', `${key}`, 'type'], 'letThemWatch');
+              }
+              if (value?.platForm === 'TELEGRAM') {
+                form.setFieldValue(['optionTasks', `${key}`, 'type'], 'joinChannel');
+              }
+              if (value?.platForm === 'DISCORD') {
+                form.setFieldValue(['optionTasks', `${key}`, 'type'], 'discord_invite');
+              }
+              if (value?.platForm === 'CUSTOM') {
+                form.setFieldValue(['optionTasks', `${key}`, 'type'], 'formatSingle');
+              }
+            });
+
             const arrayCustom = Object.values(optionTasks).filter((v: any) => v.platForm === 'CUSTOM');
             if (arrayCustom.length > 2) {
               toastMessage('自由形式質問は最大2問までです。', 'error');
