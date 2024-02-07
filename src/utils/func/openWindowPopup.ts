@@ -29,7 +29,7 @@ export const openWindowPopup = (url: string, title: string, w: number, h: number
         h / systemZoom
       }, top=${top}, left=${left}`
     );
-    toastMessage(`hello:${url}`);
+
     newWindow?.focus();
   } catch (e) {
     toastMessage(getErrorMessage(e), 'error');
