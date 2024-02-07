@@ -48,6 +48,7 @@ function OrganizeInformation() {
               delete obj[key];
             }
           });
+
           trigger(obj)
             .unwrap()
             .then(() => {
@@ -167,6 +168,8 @@ function OrganizeInformation() {
               onClick={() => {
                 if (!isEdit) {
                   setIsEdit(true);
+                } else if (user?.companyRole.membership === 'MEMBER') {
+                  toastMessage('組織情報を変更できるのは管理者だけです。', 'error');
                 } else {
                   form.submit();
                 }

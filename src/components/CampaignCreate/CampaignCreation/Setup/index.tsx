@@ -33,6 +33,7 @@ function Setup() {
       })),
     [data?.CATEGORY_CAMPAIGN]
   );
+
   useEffect(() => {
     if (dataCampaign) {
       form.setFieldsValue({
@@ -40,11 +41,13 @@ function Setup() {
         category: dataCampaign.category,
         endDate:
           !dataCampaign.dontSetExpiredTime && dataCampaign.expiredTime
-            ? dayjs(dataCampaign.expiredTime, 'YYYY-MM-DD HH:mm')
+            ? dayjs(moment(dataCampaign.expiredTime).format(), 'YYYY-MM-DD HH:mm')
             : undefined,
         explanatoryText: dataCampaign.description,
         noDate: dataCampaign.dontSetExpiredTime,
-        startDate: dataCampaign.startTime ? dayjs(dataCampaign.startTime, 'YYYY-MM-DD HH:mm') : undefined,
+        startDate: dataCampaign.startTime
+          ? dayjs(moment(dataCampaign.startTime).format(), 'YYYY-MM-DD HH:mm')
+          : undefined,
         thumbnail: dataCampaign.image,
       });
     }
