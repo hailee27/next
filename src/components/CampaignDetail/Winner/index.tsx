@@ -24,14 +24,16 @@ export default function Winner() {
 
   const onCreateCoupon = async () => {
     try {
-      if (
+      const baseCondition =
         accessToken &&
         campaignDetail?.UserClaimCampaign &&
         Array.isArray(campaignDetail?.UserClaimCampaign) &&
         campaignDetail?.UserClaimCampaign?.length &&
-        campaignDetail?.UserClaimCampaign?.[0]?.award?.isWin === null &&
-        campaignDetail?.UserClaimCampaign?.[0]?.userId === user?.id
-      ) {
+        campaignDetail?.UserClaimCampaign?.[0]?.userId === user?.id;
+      if (baseCondition && campaignDetail?.UserClaimCampaign?.[0]?.award?.isWin === 'true') {
+        toastMessage('あなたはすでに報酬を受け取っています', 'error');
+      }
+      if (baseCondition && campaignDetail?.UserClaimCampaign?.[0]?.award?.isWin === null) {
         const data = await triggerCreateCoupon({
           couponType: 'AMAZON_GIFT',
           campaignId: campaignDetail?.id,
