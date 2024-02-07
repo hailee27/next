@@ -14,7 +14,6 @@ import { useRouter } from 'next/router';
 import { useContext, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import moment from 'moment';
 import { CampaignDetailContext } from '../CampainContext';
 import TaskItem from './TaskItem';
 
@@ -54,14 +53,7 @@ export default function CampaignTasksSection() {
       if (user?.id) {
         const infoCampaign = await onFetchCampaignInfo?.();
 
-        const now = moment();
-        const nowClone = now.clone().toISOString();
-
-        if (
-          !infoCampaign ||
-          infoCampaign?.status !== 'PUBLIC' ||
-          (moment(infoCampaign?.expiredTime)?.isValid() && moment(infoCampaign?.expiredTime)?.isSameOrBefore(nowClone))
-        ) {
+        if (!infoCampaign || infoCampaign?.status !== 'PUBLIC') {
           router?.reload();
           return;
         }

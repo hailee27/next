@@ -42,7 +42,7 @@ export default function ModalChooseOne({
               await onImplementTask({
                 taskId: task?.id,
                 body: {
-                  answer: values?.answer ? JSON.stringify([values?.answer] || []) : '',
+                  answer: values?.answer,
                 },
               });
               await onRefetchCampaignTasks();
@@ -84,7 +84,7 @@ export default function ModalChooseOne({
                         <Radio.Group>
                           <Space className="flex flex-col gap-[16px]" direction="vertical">
                             {convertListItem.map((item) => (
-                              <Radio key={item?.value} value={item?.value}>
+                              <Radio key={item?.value} value={item?.lable}>
                                 {item?.lable ?? ''}
                               </Radio>
                             ))}
