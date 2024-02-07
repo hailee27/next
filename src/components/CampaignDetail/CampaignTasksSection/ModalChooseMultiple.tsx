@@ -38,12 +38,13 @@ export default function ModalChooseMultiple({
     <CModalWapper isOpen={isOpen} onCancel={onCancel}>
       <Form
         onFinish={async (values) => {
+          const answer = values?.answer ?? [];
           try {
             if (task?.id) {
               await onImplementTask({
                 taskId: task?.id,
                 body: {
-                  answer: values?.answer ? JSON.stringify(values?.answer || []) : '',
+                  answer: answer?.join(', '),
                 },
               });
               await onRefetchCampaignTasks();
@@ -84,7 +85,7 @@ export default function ModalChooseMultiple({
                       >
                         <Checkbox.Group className="flex flex-col gap-[16px]">
                           {convertListItem.map((item) => (
-                            <Checkbox key={item?.value} value={item?.value}>
+                            <Checkbox key={item?.value} value={item?.lable}>
                               {item?.lable ?? ''}
                             </Checkbox>
                           ))}

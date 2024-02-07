@@ -13,11 +13,11 @@ import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import { openWindowPopup } from '@/utils/func/openWindowPopup';
 import toastMessage from '@/utils/func/toastMessage';
 import { Spin } from 'antd';
-import moment from 'moment';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useContext, useState } from 'react';
 import { useSelector } from 'react-redux';
+// import { isChrome, isChromium } from 'react-device-detect';
 import { CampaignDetailContext } from '../CampainContext';
 import ModalChooseMultiple from './ModalChooseMultiple';
 import ModalChooseOne from './ModalChooseOne';
@@ -47,6 +47,7 @@ export default function TaskItem({
 
   const handleOpenPopup = (url: string) => {
     openWindowPopup(url, 'CLOUT', 1280, 768);
+    // console.log('isChrome', isChrome, isChromium);
   };
 
   const onClickCard = async () => {
@@ -62,14 +63,7 @@ export default function TaskItem({
 
       const infoCampaign = await onFetchCampaignInfo?.();
 
-      const now = moment();
-      const nowClone = now.clone().toISOString();
-
-      if (
-        !infoCampaign ||
-        infoCampaign?.status !== 'PUBLIC' ||
-        (moment(infoCampaign?.expiredTime)?.isValid() && moment(infoCampaign?.expiredTime)?.isSameOrBefore(nowClone))
-      ) {
+      if (!infoCampaign || infoCampaign?.status !== 'PUBLIC') {
         router?.reload();
         return;
       }
@@ -78,6 +72,7 @@ export default function TaskItem({
         switch (task?.type) {
           case 'OPEN_LINK': {
             if (task?.link) handleOpenPopup(task?.link);
+
             setTimeout(async () => {
               try {
                 await onImplementTask({

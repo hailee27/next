@@ -26,12 +26,8 @@ export default function InfoCampaign() {
 
   const isCampaignExpired = useMemo(() => {
     let result = false;
-    const now = moment();
-    const nowClone = now.clone().toISOString();
-    if (
-      campaignDetail?.status !== 'PUBLIC' ||
-      (moment(campaignDetail?.expiredTime)?.isValid() && moment(campaignDetail?.expiredTime)?.isSameOrBefore(nowClone))
-    ) {
+
+    if (campaignDetail?.status !== 'PUBLIC') {
       result = true;
     }
     return result;
