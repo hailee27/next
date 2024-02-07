@@ -53,15 +53,19 @@ function InstantWin() {
 
   useEffect(() => {
     if (dataReward) {
-      setReWard(
-        dataReward.rewards.map((e, i) => ({
-          key: i + 1,
-          id: String(e.id) ?? undefined,
-          money: e.amountOfMoney,
-          tiketWinning: e.numberOfWinningTicket,
-          receivingMethod: { amazon: e.type === 'AMAZON_GIFT', paypay: e.type === 'PAYPAY_GIFT' },
-        }))
-      );
+      if (dataReward?.rewards?.length === 0) {
+        setReWard([{ key: 1 }]);
+      } else {
+        setReWard(
+          dataReward.rewards.map((e, i) => ({
+            key: i + 1,
+            id: String(e.id) ?? undefined,
+            money: e.amountOfMoney,
+            tiketWinning: e.numberOfWinningTicket,
+            receivingMethod: { amazon: e.type === 'AMAZON_GIFT', paypay: e.type === 'PAYPAY_GIFT' },
+          }))
+        );
+      }
     }
   }, [dataReward]);
 

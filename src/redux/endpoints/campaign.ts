@@ -109,6 +109,15 @@ export type ListCampaignUsersResponse = {
     updatedAt: string;
     createdAt: string;
     user: {
+      UserTask: {
+        id: number;
+        userId: number;
+        taskId: number;
+        answer: string;
+        createdAt: string;
+        updatedAt: string;
+        deletedAt: string | null;
+      }[];
       id: number;
       createdAt: string;
       name: string;
