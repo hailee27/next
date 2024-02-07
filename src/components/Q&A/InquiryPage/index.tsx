@@ -72,7 +72,7 @@ function Inquiry() {
             />
             <InputLabel
               label="電話番号"
-              name="phone"
+              name="phoneNumber"
               placeholder="0312345678"
               rules={[
                 {
@@ -81,7 +81,7 @@ function Inquiry() {
                 },
               ]}
             />
-            <InputLabel label="組織名" name="organizationName" placeholder="Clout" />
+            <InputLabel label="組織名" name="companyName" placeholder="Clout" />
             <SelectLabel
               label="お問い合わせの目的"
               name="purposeOfInquiry"
