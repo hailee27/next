@@ -23,6 +23,12 @@ const injectedRtkApi = api.injectEndpoints({
         method: 'GET',
       }),
     }),
+    deleteUserCompany: build.mutation<DeleteUserCompanyResponse, DeleteUserCompanyParams>({
+      query: (queryArg) => ({
+        url: `/companies/${queryArg.companyId}/users/${queryArg.userId}`,
+        method: 'DELETE',
+      }),
+    }),
     updateUser: build.mutation<UpdateUserResponse, UpdateUserParams>({
       query: (queryArg) => ({
         url: `/companies/${queryArg.body.companyId}/users/${queryArg.userId}`,
@@ -47,6 +53,13 @@ const injectedRtkApi = api.injectEndpoints({
     }),
   }),
 });
+
+export type DeleteUserCompanyResponse = void;
+export type DeleteUserCompanyParams = {
+  companyId: string;
+  userId: string;
+};
+
 export type UpdateUserResponse = void;
 export type UpdateUserParams = {
   userId: string;
@@ -141,4 +154,5 @@ export const {
   useLazyGetCompaniesListQuery,
   useUpdateUserMutation,
   useCreateGachaMutation,
+  useDeleteUserCompanyMutation,
 } = injectedRtkApi;
