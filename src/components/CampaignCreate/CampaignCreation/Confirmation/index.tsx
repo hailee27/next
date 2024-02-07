@@ -56,6 +56,7 @@ function Confirmation() {
       setTotalPaymentAmount(priceWatch + fee + tax);
     }
   }, [priceWatch, fee, tax]);
+
   useEffect(() => {
     if (totalPaymentAmount) {
       form.setFieldValue('priceWithTax', totalPaymentAmount);
@@ -75,7 +76,7 @@ function Confirmation() {
         campaginCreator: dataCampaign.createdUser.email.email,
         price: dataReward?.rewards
           ?.map((e) => e.amountOfMoney * e.numberOfWinningTicket)
-          ?.reduce((prev, cur) => prev + cur, 1),
+          ?.reduce((prev, cur) => prev + cur, 0),
       });
     }
   }, [dataCampaign, masterData, dataReward]);

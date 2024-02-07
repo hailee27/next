@@ -154,7 +154,7 @@ function TablePermission() {
   ];
 
   useEffect(() => {
-    triggerListCompanies({ companyId: String(user?.companyId), skip: 0, take: 10 });
+    triggerListCompanies({ companyId: String(user?.companyId) });
   }, [router.isReady]);
   useEffect(() => {
     if (dataCompanies?.users) {

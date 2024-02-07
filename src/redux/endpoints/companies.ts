@@ -39,8 +39,8 @@ const injectedRtkApi = api.injectEndpoints({
 export type CompaniesResponse = void;
 export type CompanyUserParams = {
   companyId: string;
-  skip: number;
-  take: number;
+  skip?: number;
+  take?: number;
   where?: string;
   orderBy?: string;
   q?: string;
