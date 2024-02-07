@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-console */
@@ -17,7 +18,8 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useContext, useState } from 'react';
 import { useSelector } from 'react-redux';
-// import { isChrome, isChromium } from 'react-device-detect';
+import { isSafari } from 'react-device-detect';
+import { useMediaQuery } from 'usehooks-ts';
 import { CampaignDetailContext } from '../CampainContext';
 import ModalChooseMultiple from './ModalChooseMultiple';
 import ModalChooseOne from './ModalChooseOne';
@@ -31,6 +33,8 @@ export default function TaskItem({
   task: TasksConvert;
   isLoggedUserImplementedTask: boolean;
 }) {
+  const matchesXXL = useMediaQuery('(min-width: 1440px)');
+
   const [onImplementTask] = useImplementTaskMutation();
   const router = useRouter();
   const { accessToken, user } = useSelector((state: RootState) => state.auth);
@@ -46,10 +50,12 @@ export default function TaskItem({
   });
 
   const handleOpenPopup = (url: string) => {
-    openWindowPopup(url, 'CLOUT', 1280, 768);
-    // console.log('isChrome', isChrome, isChromium);
+    if (matchesXXL) {
+      openWindowPopup(url, 'CLOUT', 1280, 768);
+    } else {
+      window?.open(url, '_blank');
+    }
   };
-
   const onClickCard = async () => {
     try {
       setIsLoading(true);
@@ -60,51 +66,61 @@ export default function TaskItem({
       if (isLoggedUserImplementedTask) {
         return;
       }
-
-      const infoCampaign = await onFetchCampaignInfo?.();
-
-      if (!infoCampaign || infoCampaign?.status !== 'PUBLIC') {
-        router?.reload();
-        return;
-      }
-
-      if (user?.identities && user?.identities?.length > 0) {
-        switch (task?.type) {
-          case 'OPEN_LINK': {
-            if (task?.link) handleOpenPopup(task?.link);
-
-            setTimeout(async () => {
-              try {
-                await onImplementTask({
-                  taskId: task?.id ?? '',
-                });
-                await onRefetchCampaignTasks();
-              } catch (e) {
-                toastMessage(getErrorMessage(e), 'error');
-              }
-            }, 5000);
-
-            break;
+      // fix safari bug
+      const windowReference = isSafari ? window.open('about:blank', '_blank') : null;
+      onFetchCampaignInfo?.()
+        ?.then((info) => {
+          if (!info || info?.status !== 'PUBLIC') {
+            router?.reload();
+            return;
           }
-          case 'FAQ_FREE_TEXT':
-          case 'FAQ_CHOOSE_ONE':
-          case 'FAQ_CHOOSE_MULTIPLE': {
+          if (user?.identities && user?.identities?.length > 0) {
+            switch (task?.type) {
+              case 'OPEN_LINK': {
+                if (task?.link) {
+                  if (isSafari && windowReference) {
+                    windowReference.location = task.link;
+                  } else {
+                    handleOpenPopup(task?.link);
+                  }
+                }
+
+                setTimeout(async () => {
+                  try {
+                    await onImplementTask({
+                      taskId: task?.id ?? '',
+                    });
+                    await onRefetchCampaignTasks();
+                  } catch (e) {
+                    toastMessage(getErrorMessage(e), 'error');
+                  }
+                }, 5000);
+
+                break;
+              }
+              case 'FAQ_FREE_TEXT':
+              case 'FAQ_CHOOSE_ONE':
+              case 'FAQ_CHOOSE_MULTIPLE': {
+                setModalState({
+                  isOpenModal: true,
+                  content: task?.type,
+                });
+                break;
+              }
+
+              default:
+                break;
+            }
+          } else {
             setModalState({
               isOpenModal: true,
-              content: task?.type,
+              content: 'CONNECT_X',
             });
-            break;
           }
-
-          default:
-            break;
-        }
-      } else {
-        setModalState({
-          isOpenModal: true,
-          content: 'CONNECT_X',
+        })
+        .catch((error) => {
+          toastMessage(getErrorMessage(error), 'error');
         });
-      }
     } catch (err: any) {
       toastMessage(getErrorMessage(err), 'error');
     } finally {
