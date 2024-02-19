@@ -11,6 +11,7 @@ import { Spin, Switch } from 'antd';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
 import styles from './styles.module.scss';
 
 export default function AuthInfoCard() {
@@ -18,7 +19,7 @@ export default function AuthInfoCard() {
 
   const router = useRouter();
 
-  const [disconnectTwitter, { isLoading: isDisconnecting }] = useDisconnectTwitterMutation();
+  const [disconnectTwitter, { isLoading: isDisconnecting, isSuccess: isDisconnected }] = useDisconnectTwitterMutation();
 
   const { isModalOpen, showModal, cancelModal, getTwitterOauthUrl, isFetchingUser, refreshUser } = useConnectX({
     handleAction: 'CONNECT',
@@ -36,6 +37,13 @@ export default function AuthInfoCard() {
     }
   };
 
+  useEffect(() => {
+    if (isDisconnected) {
+      window?.open('https://twitter.com', '_blank')?.focus();
+      toastMessage('X(Twitter)接続が正常に切断されました。', 'success');
+    }
+  }, [isDisconnected]);
+
   const onUpdateAuthTwitter = async (newState: boolean) => {
     try {
       if (newState === true) {
@@ -51,8 +59,7 @@ export default function AuthInfoCard() {
           return;
         }
         await disconnectTwitter({ id: twitterIdentity?.id }).unwrap();
-        window?.open('https://twitter.com', '_blank')?.focus();
-        toastMessage('X(Twitter)接続が正常に切断されました。', 'success');
+
         await refreshUser();
       }
     } catch (error) {

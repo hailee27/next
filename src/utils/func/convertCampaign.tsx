@@ -48,8 +48,8 @@ export const convertCampaignTask = (task: TypeTask | null) => {
         switch (task?.taskTemplate?.config?.type) {
           case 'twitter_follow': {
             const targetUser = taskPlatForm === 'TWITTER' ? task?.taskTemplate?.config?.userFollow : '';
-            const user =
-              targetUser?.charAt(0) === '@' ? targetUser?.slice(1, (targetUser?.length ?? 0) - 1) : targetUser;
+            const user = targetUser?.charAt(0) === '@' ? targetUser?.slice(1) : targetUser;
+
             result = {
               id: task?.id ?? '',
               campaignId: task?.campaignId ?? '',
