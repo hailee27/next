@@ -30,7 +30,7 @@ export default function ModalFreeTextContent({
               await onImplementTask({
                 taskId: task?.id,
                 body: {
-                  answer: values?.answer ? JSON.stringify([values?.answer] || []) : '',
+                  answer: values?.answer,
                 },
               });
               await onRefetchCampaignTasks();
