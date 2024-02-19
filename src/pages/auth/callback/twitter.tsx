@@ -9,6 +9,7 @@ import clsx from 'clsx';
 import Image from 'next/image';
 
 import { useCallback, useEffect } from 'react';
+import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import styles from './styles.module.scss';
 
 export default function TwitterAuthCallBack() {
@@ -36,7 +37,7 @@ export default function TwitterAuthCallBack() {
           };
         }
         const resp = await connectTwitter(request).unwrap();
-        console.log(resp);
+
         if (
           (resp?.accessToken && resp?.refreshToken && resp?.user) ||
           (resp?.user && resp?.totpToken) ||
@@ -68,7 +69,7 @@ export default function TwitterAuthCallBack() {
       localStorage.setItem(
         'twitter_callback_data',
         JSON.stringify({
-          error: err?.data?.message || err?.message || '何か問題が発生しました',
+          error: getErrorMessage(err),
         })
       );
     } finally {
