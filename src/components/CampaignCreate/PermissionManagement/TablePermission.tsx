@@ -5,7 +5,7 @@ import styles from '@/components/common/BasicTable/index.module.scss';
 import CButtonClassic from '@/components/common/CButtonClassic';
 
 import { useRouter } from 'next/router';
-import { useUpdateUserMutation } from '@/redux/endpoints/users';
+import { useDeleteUserCompanyMutation, useUpdateUserMutation } from '@/redux/endpoints/users';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import toastMessage from '@/utils/func/toastMessage';
@@ -26,6 +26,7 @@ function TablePermission() {
 
   const { user } = useSelector((state: RootState) => state.auth);
   const [trigger] = useUpdateUserMutation();
+  const [deleteUser] = useDeleteUserCompanyMutation();
   const [triggerMe] = useLazyMeQuery();
   const [triggerListCompanies, { data: dataCompanies, isLoading }] = useLazyGetCompanyUsersQuery();
   const [data, setData] = useState<DataType[] | undefined>(undefined);
@@ -55,10 +56,7 @@ function TablePermission() {
           <CButtonClassic
             customClassName="!bg-white !text-[#333] !w-[95px] !h-[37px]"
             onClick={() => {
-              trigger({
-                userId: String(value),
-                body: { companyId: Number(user?.companyId), isAccept: false },
-              })
+              deleteUser({ companyId: String(user?.companyId), userId: String(value) })
                 .unwrap()
                 .then(() => {
                   triggerMe();
@@ -66,6 +64,17 @@ function TablePermission() {
                   setData((prev) => prev?.filter((e) => e.id !== value));
                 })
                 .catch(() => toastMessage('error', 'error'));
+              // trigger({
+              //   userId: String(value),
+              //   body: { companyId: Number(user?.companyId), isAccept: false },
+              // })
+              //   .unwrap()
+              //   .then(() => {
+              //     triggerMe();
+              //     toastMessage('success delete', 'success');
+              //     setData((prev) => prev?.filter((e) => e.id !== value));
+              //   })
+              //   .catch(() => toastMessage('error', 'error'));
             }}
             title="削除"
             withIcon={{
@@ -145,7 +154,7 @@ function TablePermission() {
   ];
 
   useEffect(() => {
-    triggerListCompanies({ companyId: String(user?.companyId), skip: 0, take: 10 });
+    triggerListCompanies({ companyId: String(user?.companyId) });
   }, [router.isReady]);
   useEffect(() => {
     if (dataCompanies?.users) {
