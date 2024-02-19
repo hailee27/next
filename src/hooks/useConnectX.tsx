@@ -41,33 +41,33 @@ export default function useConnectX({ handleAction }: IProps) {
     try {
       const storageData = JSON.parse(localStorage.getItem('twitter_callback_data') || '{}');
 
-      localStorage.removeItem('twitter_callback_data');
       if (storageData?.data || storageData?.error) {
+        localStorage.setItem('twitter_callback_data', '{}');
         window.removeEventListener('storage', onChangeLocalStorage, false);
       }
       if (storageData?.error) {
         toastMessage(storageData?.error, 'error');
         return;
       }
-      if (handleAction === 'SIGNUP') {
-        console.log(storageData, 'storageData');
-        if (storageData?.data?.accessToken && storageData?.data?.refreshToken && storageData?.data?.user) {
-          console.log('twitter data', storageData);
-          dispatch(setSession({ ...storageData?.data }));
+      if (storageData?.data) {
+        if (handleAction === 'SIGNUP') {
+          if (storageData?.data?.accessToken && storageData?.data?.refreshToken && storageData?.data?.user) {
+            dispatch(setSession({ ...storageData?.data }));
 
-          router.replace('/my-page');
-        } else if (storageData?.data?.totpToken && storageData?.data?.user) {
-          router.push(
-            `/auth/sign-in/${
-              router.pathname?.includes('campaign-creator') ? 'campaign-creator' : 'campaign-implementer'
-            }/verification?code=${storageData?.data?.code ?? undefined}&totpToken=${
-              storageData?.data?.totpToken ?? undefined
-            }&userId=${storageData?.data?.user?.id ?? undefined}&authMethod=twitter`
-          );
+            router.replace('/my-page');
+          } else if (storageData?.data?.totpToken && storageData?.data?.user) {
+            router.push(
+              `/auth/sign-in/${
+                router.pathname?.includes('campaign-creator') ? 'campaign-creator' : 'campaign-implementer'
+              }/verification?code=${storageData?.data?.code ?? undefined}&totpToken=${
+                storageData?.data?.totpToken ?? undefined
+              }&userId=${storageData?.data?.user?.id ?? undefined}&authMethod=twitter`
+            );
+          }
+        } else if (handleAction === 'CONNECT') {
+          await refreshUser();
+          toastMessage('X連携をONにしました。', 'success');
         }
-      } else if (handleAction === 'CONNECT') {
-        await refreshUser();
-        toastMessage('X連携をONにしました。', 'success');
       }
     } catch (error) {
       console.log(error);
