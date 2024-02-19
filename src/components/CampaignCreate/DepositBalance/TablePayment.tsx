@@ -25,12 +25,12 @@ const columns: ColumnsType<DataType> = [
     dataIndex: 'date',
   },
   {
-    title: '入金',
+    title: '購入額',
     dataIndex: 'payment',
     render: (value) => <span>{value ? `${formatNumber(value, true, 1)}円` : '-'} </span>,
   },
   {
-    title: '出金',
+    title: '配布済み金額',
     dataIndex: 'withdrawal',
     render: (value) => <span>{value ? `${formatNumber(value, true, 1)}円` : '-'} </span>,
   },

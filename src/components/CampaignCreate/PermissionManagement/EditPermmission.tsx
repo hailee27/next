@@ -41,11 +41,16 @@ function EditPermmission() {
               .unwrap()
               .then(() => {
                 triggerMe();
-
+                toastMessage('更新に成功しました。', 'success');
                 router.back();
-                toastMessage('update succses', 'success');
               })
-              .catch(() => toastMessage('error', 'error'))
+              .catch((error) => {
+                if (error.status === 403) {
+                  toastMessage('管理者は1人以上必要となります。', 'error');
+                } else {
+                  toastMessage('error', 'error');
+                }
+              })
           }
         >
           <InputLabel disabled label="アカウントアドレス" name="accountAddress" />

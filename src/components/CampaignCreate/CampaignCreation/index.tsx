@@ -12,6 +12,8 @@ import CButtonShadow from '@/components/common/CButtonShadow';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import { useCampaignApiContext } from '@/context/CampaignApiContext';
+import { usePopUpContext } from '@/context/PopUpContext';
+import PopupAlert from '@/components/common/PopupAlert';
 import ReWard from './ReWard';
 import Confirmation from './Confirmation';
 import Setup from './Setup';
@@ -53,6 +55,7 @@ function CampaignCreation() {
   const { user } = useSelector((state: RootState) => state.auth);
   const [tab, setTab] = useState<string>('1');
   const { handleCreateCampaign, handleUpdateCampaign, isLoadingCreate, isLoadingUpdate } = useCampaignApiContext();
+  const { openPopUp } = usePopUpContext();
   const [deleteCampaign] = useDeleteCampaignMutation();
   const { data: dataMaster } = useGetMasterDataQuery();
 
@@ -128,9 +131,18 @@ function CampaignCreation() {
         // DELETE
         if (name === 'delete') {
           if (router.query.id) {
-            deleteCampaign({ campaignId: String(router.query.id) })
-              .unwrap()
-              .then(() => router.push('/campaign-creator/list'));
+            openPopUp({
+              contents: (
+                <PopupAlert
+                  message="本当に削除してもよろしいですか？"
+                  onOk={() => {
+                    deleteCampaign({ campaignId: String(router.query.id) })
+                      .unwrap()
+                      .then(() => router.push('/campaign-creator/list'));
+                  }}
+                />
+              ),
+            });
           } else {
             router.push('/campaign-creator/list');
           }

@@ -133,6 +133,7 @@ function DetailCampaign() {
                     classBgColor="bg-main-text"
                     classRounded="rounded-[6px]"
                     classShadowColor="bg-white"
+                    onClick={() => push({ pathname: '/campaign-creator/list', query: { type: 'public' } })}
                     shadowSize="normal"
                     title="公開中のページ"
                     withIcon={{
@@ -186,6 +187,7 @@ function DetailCampaign() {
                       classBgColor="bg-main-text"
                       classRounded="rounded-[6px]"
                       classShadowColor="bg-white"
+                      onClick={() => push({ pathname: '/campaign-creator/list', query: { type: 'public' } })}
                       shadowSize="normal"
                       title="公開中のページ"
                       withIcon={{
