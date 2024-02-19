@@ -86,7 +86,7 @@ export const CampaignApiProvider = ({ children }: { children: React.ReactNode })
                 .unwrap()
                 .then(() => {
                   router.push('/campaign-creator/list');
-                  toastMessage('send sucess (under reiew)', 'success');
+                  toastMessage('ステータスを更新に成功です。', 'success');
                 })
                 .catch(() => toastMessage('paymnet error', 'error'));
             } else {
@@ -157,7 +157,7 @@ export const CampaignApiProvider = ({ children }: { children: React.ReactNode })
               .unwrap()
               .then(() => {
                 router.push('/campaign-creator/list');
-                toastMessage('send sucess (under reiew)', 'success');
+                toastMessage('ステータスを更新に成功です。', 'success');
               })
               .catch(() => toastMessage('paymnet error', 'error'));
           } else {

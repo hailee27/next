@@ -161,6 +161,7 @@ function Setup() {
             classBgColor="bg-white"
             classRounded="rounded-[6px]"
             classShadowColor="bg-main-text"
+            onClick={() => router.back()}
             shadowSize="normal"
             textClass="bg-main-text"
             title="戻る"

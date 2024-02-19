@@ -26,7 +26,7 @@ function SearchoOganizationID() {
                 .then(() => {
                   closeAllPopUp();
                 });
-              toastMessage('send request success', 'success');
+              toastMessage('リクエストを送信しました。', 'success');
             })
             .catch(() => toastMessage('error', 'error'));
         }}
