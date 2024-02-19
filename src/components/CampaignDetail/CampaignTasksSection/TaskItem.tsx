@@ -18,7 +18,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useContext, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { isSafari } from 'react-device-detect';
+import { isMobile, isSafari } from 'react-device-detect';
 import { useMediaQuery } from 'usehooks-ts';
 import { CampaignDetailContext } from '../CampainContext';
 import ModalChooseMultiple from './ModalChooseMultiple';
@@ -67,7 +67,7 @@ export default function TaskItem({
         return;
       }
       // fix safari bug
-      const windowReference = isSafari ? window.open('about:blank', '_blank') : null;
+      const windowReference = isMobile || isSafari ? window.open('about:blank', '_blank') : null;
       onFetchCampaignInfo?.()
         ?.then((info) => {
           if (!info || info?.status !== 'PUBLIC') {
@@ -78,7 +78,7 @@ export default function TaskItem({
             switch (task?.type) {
               case 'OPEN_LINK': {
                 if (task?.link) {
-                  if (isSafari && windowReference) {
+                  if ((isMobile || isSafari) && windowReference) {
                     windowReference.location = task.link;
                   } else {
                     handleOpenPopup(task?.link);

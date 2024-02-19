@@ -32,10 +32,7 @@ function Detail({ data }: { data?: TypeCampaign }) {
     }
   }, [data?.status]);
   const fee = useMemo(() => Number((Number(data?.totalPrizeValue) * 5) / 100), [data?.totalPrizeValue]);
-  const tax = useMemo(
-    () => Number((((Number(data?.totalPrizeValue) ?? 0 * 5) / 100) * 10) / 100),
-    [data?.totalPrizeValue]
-  );
+  const tax = useMemo(() => Number((fee * 10) / 100), [data?.totalPrizeValue, fee]);
 
   return (
     <>
@@ -115,11 +112,11 @@ function Detail({ data }: { data?: TypeCampaign }) {
                 </div>
                 <div className="flex justify-between ">
                   <span className="flex-1">手数料: </span>
-                  <span className="flex-[6]">{formatNumber(fee, true)}円</span>
+                  <span className="flex-[6]">{formatNumber(fee, true, 1)}円</span>
                 </div>
                 <div className="flex justify-between ">
                   <span className="flex-1">消費税: </span>
-                  <span className="flex-[6]">{formatNumber(tax, true)}円</span>
+                  <span className="flex-[6]">{formatNumber(tax, true, 1)}円</span>
                 </div>
                 <div className="flex justify-between ">
                   <span className="flex-1">デポジット残高利用: </span>

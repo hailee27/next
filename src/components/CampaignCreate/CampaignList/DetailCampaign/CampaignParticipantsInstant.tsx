@@ -69,10 +69,12 @@ function CampaignParticipantsInstant() {
       {
         title: '自由形式質問_1',
         dataIndex: 'question_1',
+        ellipsis: true,
       },
       {
         title: '自由形式質問_2',
         dataIndex: 'question_2',
+        ellipsis: true,
       },
     ];
   }, []);
@@ -82,11 +84,11 @@ function CampaignParticipantsInstant() {
       return listDataCampaignUser.users.map((e) => ({
         key: e.id,
         accountName: e.identityAccountName,
-        email: e.user.email.email,
+        email: e.user?.email?.email ?? '-',
         date: moment(e.createdAt).format('YYYY/MM/DD HH:mm'),
         prize: '10,000円',
-        question_1: '1.すごく興味がある',
-        question_2: '自由なテキスト回答...',
+        question_1: e.user?.UserTask?.[0]?.answer ?? '-',
+        question_2: e.user?.UserTask?.[1]?.answer ?? '-',
       }));
     }
     return undefined;
