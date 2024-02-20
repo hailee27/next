@@ -52,7 +52,7 @@ export default function CampaignRewardSection() {
         </div>
       )}
       <CModalWapper isOpen={isModalOpen} modalWidth={matchesMD ? 575 : 368} onCancel={handleCancel} top={10}>
-        <div className="h-[50vh] overflow-hidden">
+        <div className="mb-h:h-[200px] h-[50vh] overflow-hidden">
           <div className="h-full overflow-y-auto  custom-scroll  pr-[8px]  ">
             <div className="flex flex-col gap-[8px]">
               {sortCampaignRewardIndex?.map((item) => <CampaignRewardCardItem campaignReward={item} key={item?.id} />)}

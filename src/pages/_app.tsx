@@ -126,20 +126,18 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
       <MegaHead />
       <Provider store={store}>
         <PersistGate loading={null} persistor={store.persistorData}>
-          {/* <main
-            className={` ${dmSans.variable} ${inter.variable}  ${mPlus1.variable} ${notoSans.variable} ${montserrat.variable}`}
-          > */}
-          <ConfigProvider locale={jaJP}>
-            <PopUpProvider>
-              {loading && <Loading />}
-              {getLayout(
-                <UserRoleWapper>
-                  <Component {...props} />
-                </UserRoleWapper>
-              )}
-            </PopUpProvider>
-          </ConfigProvider>
-          {/* </main> */}
+          <main id="clout_spa_page">
+            <ConfigProvider locale={jaJP}>
+              <PopUpProvider>
+                {loading && <Loading />}
+                {getLayout(
+                  <UserRoleWapper>
+                    <Component {...props} />
+                  </UserRoleWapper>
+                )}
+              </PopUpProvider>
+            </ConfigProvider>
+          </main>
         </PersistGate>
       </Provider>
     </>

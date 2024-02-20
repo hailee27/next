@@ -33,7 +33,7 @@ export default function ConfigurePhoneNumber() {
         const data = await sendVerificationCode({
           type: 'SMS',
           userId: user?.id,
-          phoneNumber: values?.phone,
+          phoneNumber: values?.phone?.replaceAll('-', ''),
           isCheckPhone: true,
         }).unwrap();
 
