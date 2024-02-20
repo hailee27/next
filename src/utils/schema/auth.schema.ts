@@ -42,9 +42,10 @@ export const phoneSchema = yup.object({
   phone: yup
     .string()
     .required('入力してください')
-    .matches(/^[0-9]+$/, '数字だけ入力してください')
-    .min(10, '有効な電話番号を入力してください')
-    .max(11, '11文字以内入力してください'),
+    .matches(
+      /^(?:\d{10}|\d{3}-\d{3}-\d{4}|\d{2}-\d{4}-\d{4}|\d{3}-\d{4}-\d{4})$/,
+      '有効な携帯電話番号を入力してください'
+    ),
 });
 
 export const authEmailPasswordSchema = emailSchema.concat(passwordSchema);

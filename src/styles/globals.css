@@ -99,3 +99,8 @@ body {
     transform: translateY(-100%);
   }
 }
+
+.fixed-page {
+  touch-action: none !important;
+  overflow: hidden !important;
+}

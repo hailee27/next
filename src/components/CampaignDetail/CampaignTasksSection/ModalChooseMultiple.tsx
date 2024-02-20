@@ -44,7 +44,7 @@ export default function ModalChooseMultiple({
               await onImplementTask({
                 taskId: task?.id,
                 body: {
-                  answer: answer?.join(', '),
+                  answer: answer?.join('、'),
                 },
               });
               await onRefetchCampaignTasks();

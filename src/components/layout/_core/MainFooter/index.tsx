@@ -27,7 +27,7 @@ const FooterNavigation = [
   },
   {
     key: 5,
-    text: '問い合わせ',
+    text: 'お問い合わせ',
     to: '/inquiry',
   },
   {
