@@ -14,6 +14,7 @@ import { useLazyMeQuery } from '@/redux/endpoints/auth';
 import { useLazyGetCompanyUsersQuery } from '@/redux/endpoints/companies';
 import { usePopUpContext } from '@/context/PopUpContext';
 import PopupAlert from '@/components/common/PopupAlert';
+import { getErrorMessage } from '@/utils/func/getErrorMessage';
 
 interface DataType {
   key: string;
@@ -63,18 +64,18 @@ function TablePermission() {
                   <PopupAlert
                     message="本当に削除してもよろしいですか？"
                     onOk={() => {
-                      if (dataCompanies?.users.filter((e) => e.companyRole.membership === 'MANAGER').length === 1) {
-                        toastMessage('管理者は1人以上必要となります', 'error');
-                      } else {
-                        deleteUser({ companyId: String(user?.companyId), userId: String(value) })
-                          .unwrap()
-                          .then(() => {
-                            triggerMe();
-                            toastMessage('success delete', 'success');
-                            setData((prev) => prev?.filter((e) => e.id !== value));
-                          })
-                          .catch(() => toastMessage('組織情報を変更できるのは管理者だけです。', 'error'));
-                      }
+                      // if (dataCompanies?.users.filter((e) => e.companyRole.membership === 'MANAGER').length === 1) {
+                      //   toastMessage('管理者は1人以上必要となります', 'error');
+                      // } else {
+                      deleteUser({ companyId: String(user?.companyId), userId: String(value) })
+                        .unwrap()
+                        .then(() => {
+                          triggerMe();
+                          toastMessage('success delete', 'success');
+                          setData((prev) => prev?.filter((e) => e.id !== value));
+                        })
+                        .catch((err) => toastMessage(getErrorMessage(err), 'error'));
+                      // }s
                     }}
                   />
                 ),
