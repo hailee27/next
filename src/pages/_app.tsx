@@ -48,6 +48,7 @@ import weekYear from 'dayjs/plugin/weekYear';
 import UserRoleWapper from '@/components/AuthCheck/UserRoleWapper';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import { isMobile } from 'react-device-detect';
 
 dayjs.extend(customParseFormat);
 dayjs.extend(advancedFormat);

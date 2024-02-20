@@ -31,6 +31,7 @@ function Detail({ data }: { data?: TypeCampaign }) {
         return '下書き';
     }
   }, [data?.status]);
+
   const fee = useMemo(() => Number((Number(data?.totalPrizeValue) * 5) / 100), [data?.totalPrizeValue]);
   const tax = useMemo(() => Number((fee * 10) / 100), [data?.totalPrizeValue, fee]);
 
