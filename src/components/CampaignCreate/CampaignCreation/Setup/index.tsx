@@ -140,9 +140,9 @@ function Setup() {
             </Form.Item>
           </div>
           <div className="mt-[16px]">
-            <Form.Item className="!flex-1 !mb-0" name="endDate" rules={[{ required: !noDateWatch, message: '' }]}>
+            <Form.Item className="!flex-1 !mb-0" name="endDate" rules={[{ required: noDateWatch, message: '' }]}>
               <BasicDatePicker
-                disabled={noDateWatch}
+                disabled={!noDateWatch}
                 disabledDate={(current) =>
                   moment(current.format('YYYY-MM-DD')) < moment(startDateWatch?.format('YYYY-MM-DD'))
                 }

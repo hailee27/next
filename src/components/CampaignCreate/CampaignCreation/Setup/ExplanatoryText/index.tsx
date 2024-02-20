@@ -35,9 +35,9 @@ const QuillWrapper = dynamic(
     icons.color = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" >
           <rect class='ql-color-label ql-stroke ' width="20" height="20" rx="4" fill="#212529"/>
         </svg>`;
-    icons.align[''] = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <path d="M7.5 3.75H16.25V5H7.5V3.75ZM7.5 7.5H13.75V8.75H7.5V7.5ZM7.5 11.25H16.25V12.5H7.5V11.25ZM7.5 15H13.75V16.25H7.5V15ZM3.75 2.5H5V17.5H3.75V2.5Z" fill="#212529"/>
-        </svg>`;
+    // icons.align[''] = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+    //       <path d="M7.5 3.75H16.25V5H7.5V3.75ZM7.5 7.5H13.75V8.75H7.5V7.5ZM7.5 11.25H16.25V12.5H7.5V11.25ZM7.5 15H13.75V16.25H7.5V15ZM3.75 2.5H5V17.5H3.75V2.5Z" fill="#212529"/>
+    //     </svg>`;
     icons.undo = `<svg  xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
           <path  d="M12.5 6.25H4.88438L7.12625 4.00875L6.25 3.125L2.5 6.875L6.25 10.625L7.12625 9.74062L4.88625 7.5H12.5C13.4946 7.5 14.4484 7.89509 15.1517 8.59835C15.8549 9.30161 16.25 10.2554 16.25 11.25C16.25 12.2446 15.8549 13.1984 15.1517 13.9017C14.4484 14.6049 13.4946 15 12.5 15H7.5V16.25H12.5C13.8261 16.25 15.0979 15.7232 16.0355 14.7855C16.9732 13.8479 17.5 12.5761 17.5 11.25C17.5 9.92392 16.9732 8.65215 16.0355 7.71447C15.0979 6.77678 13.8261 6.25 12.5 6.25Z" fill="#212529"/>
         </svg>`;

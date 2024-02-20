@@ -44,10 +44,12 @@ const QuillToolbar = () => (
       </svg>
     </span>
     <span className="ql-formats !flex !items-center !justify-center">
-      <select className="ql-color" />
-      <svg fill="none" height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
-        <path d="M8 11.0008L3 6.00078L3.7 5.30078L8 9.60078L12.3 5.30078L13 6.00078L8 11.0008Z" fill="#212529" />
-      </svg>
+      <select className="ql-color  " />
+      <div className="ql-color">
+        <svg fill="none" height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 11.0008L3 6.00078L3.7 5.30078L8 9.60078L12.3 5.30078L13 6.00078L8 11.0008Z" fill="#212529" />
+        </svg>
+      </div>
     </span>
     <span className="ql-formats">
       <button className="ql-list" value="bullet" />

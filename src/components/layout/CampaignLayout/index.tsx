@@ -1,11 +1,13 @@
 import React from 'react';
-
+import { isMobile } from 'react-device-detect';
 import CreatorRoleFeedbackModal from '@/components/CreatorRoleFeedbackModal';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import SideBar from './SideBar';
 import Header from './Header';
+import MainFooter from '../_core/MainFooter';
+import HeaderMo from './HeaderMo';
 
 interface Props {
   children: JSX.Element;
@@ -21,6 +23,15 @@ function CampaignLayout({ children }: Props) {
     (user?.twoFactorMethod === 'NONE' || user?.emailId === null)
   ) {
     return <CreatorRoleFeedbackModal />;
+  }
+  if (isMobile) {
+    return (
+      <div>
+        <HeaderMo />
+        <div className="container-min-height">{children}</div>
+        <MainFooter />
+      </div>
+    );
   }
   return (
     <div className="min-h-screen flex flex-col bg-white text-[#333] font-notoSans">

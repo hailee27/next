@@ -3,6 +3,7 @@ import SelectLabel from '@/components/common/BasicSelect/SelectLabel';
 import CButtonShadow from '@/components/common/CButtonShadow';
 import { useLazyMeQuery } from '@/redux/endpoints/auth';
 import { useGetUserDetailQuery, useUpdateUserMutation } from '@/redux/endpoints/users';
+import { getErrorMessage } from '@/utils/func/getErrorMessage';
 
 import toastMessage from '@/utils/func/toastMessage';
 import { Form } from 'antd';
@@ -44,13 +45,7 @@ function EditPermmission() {
                 toastMessage('更新に成功しました。', 'success');
                 router.back();
               })
-              .catch((error) => {
-                if (error.status === 403) {
-                  toastMessage('管理者は1人以上必要となります。', 'error');
-                } else {
-                  toastMessage('error', 'error');
-                }
-              })
+              .catch((error) => toastMessage(getErrorMessage(error), 'error'))
           }
         >
           <InputLabel disabled label="アカウントアドレス" name="accountAddress" />
