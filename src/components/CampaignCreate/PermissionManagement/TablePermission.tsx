@@ -113,11 +113,10 @@ function TablePermission() {
                   .then(() => {
                     triggerListCompanies({ companyId: String(user?.companyId), skip: 0, take: 10 })
                       .unwrap()
-                      .then(() => toastMessage('success delete', 'success'));
+                      .then(() => toastMessage('承認に成功しました。', 'success'));
                   })
                   .catch(() => toastMessage('組織情報を変更できるのは管理者だけです。', 'error'));
               }}
-              // onClick={() => router.push(`/campaign-creator/permission-management/edit/${value}`)}
               title="承認"
               withIcon={{
                 position: 'left',
