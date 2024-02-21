@@ -1,3 +1,4 @@
+import AuthCheck from '@/components/AuthCheck';
 import CButtonShadow from '@/components/common/CButtonShadow';
 import CFormInputShadow from '@/components/common/CFormInputShadow';
 import { useAuthVerificationMutation } from '@/redux/endpoints/auth';
@@ -9,12 +10,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Spin } from 'antd';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
-import React from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
 export default function ConfigurePhoneNumber() {
-  const { user, accessToken } = useSelector((store: RootState) => store.auth);
+  const { user } = useSelector((store: RootState) => store.auth);
   const {
     register,
     handleSubmit,
@@ -48,12 +49,14 @@ export default function ConfigurePhoneNumber() {
     }
   };
 
-  if (!accessToken) {
-    router.replace('/auth/sign-in/campaign-implementer');
-  } else if (user?.twoFactorMethod === 'TOTP' && user.twoFactorPhone) {
-    router.push('/my-page');
-  } else {
-    return (
+  useEffect(() => {
+    if (user?.twoFactorMethod === 'TOTP' && user.twoFactorPhone) {
+      router.push('/my-page');
+    }
+  }, [user]);
+
+  return (
+    <AuthCheck>
       <Spin spinning={isSendVerificationCode}>
         <div className="  w-full container-min-height pb-[16px] overflow-x-hidden bg-[#D5FFFF]">
           <div className={clsx(' h-full w-full bg-[#D5FFFF] py-[40px] px-[20px] transition-all duration-300')}>
@@ -93,6 +96,6 @@ export default function ConfigurePhoneNumber() {
           </div>
         </div>
       </Spin>
-    );
-  }
+    </AuthCheck>
+  );
 }

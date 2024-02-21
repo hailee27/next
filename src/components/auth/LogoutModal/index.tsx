@@ -1,11 +1,10 @@
 import CButtonShadow from '@/components/common/CButtonShadow';
 import CModalWapper from '@/components/common/CModalWapper';
 import { logout } from '@/redux/slices/auth.slice';
-import { useRouter } from 'next/router';
+
 import { useDispatch } from 'react-redux';
 
 export default function LogoutModal({ isOpen, onCancel }: { isOpen: boolean; onCancel: () => void }) {
-  const router = useRouter();
   const dispatch = useDispatch();
 
   return (
@@ -24,7 +23,6 @@ export default function LogoutModal({ isOpen, onCancel }: { isOpen: boolean; onC
           <CButtonShadow
             onClick={() => {
               dispatch(logout());
-              router.push('/auth/sign-in/campaign-implementer');
               onCancel();
             }}
             title="ログアウトする"
