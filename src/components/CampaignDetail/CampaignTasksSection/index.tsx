@@ -147,7 +147,6 @@ export default function CampaignTasksSection() {
       </div>
       <CModalWapper
         isOpen={isOpenModalSetupAuthEmail}
-        modalWidth={368}
         onCancel={() => {
           setIsOpenModalSetupAuthEmail(false);
         }}

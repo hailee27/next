@@ -53,18 +53,6 @@ body {
   background: #a9a9a9;
 }
 
-.clout-custom-modal.ant-modal-root .ant-modal-mask {
-  background-color: rgba(51, 51, 51, 0.9) !important;
-}
-
-.clout-custom-modal.ant-modal-root .ant-modal .ant-modal-content {
-  background-color: transparent !important;
-  box-shadow: none !important;
-  padding: 8px !important;
-}
-.clout-custom-modal.ant-modal-root .ant-modal-wrap {
-  z-index: 9999999;
-}
 @keyframes animate1 {
   0% {
     transform: translateX(-100%);
@@ -100,7 +88,18 @@ body {
   }
 }
 
-.fixed-page {
+body.fixed-page {
   touch-action: none !important;
   overflow: hidden !important;
+}
+
+@keyframes modalDropTop {
+  0% {
+    transform: translate(-100%, -100%) scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
 }

@@ -189,7 +189,7 @@ export default function MainHeader() {
         <div
           aria-hidden="true"
           className={clsx(
-            ' bg-white  w-[302px]  mb-h:h-[100vh] h-[75vh] border-[2px] border-[#333] border-r-[0px] absolute z-[1001]  duration-500 transition-all  py-[88px] pb-[10px] px-[48px] pr-[20px]',
+            ' bg-white w-[302px] h-[75vh] border-[2px] border-[#333] border-r-[0px] absolute z-[1001]  duration-500 transition-all  py-[88px] pb-[10px] px-[48px] pr-[20px]',
             isOpenMainMenu ? ' right-0 top-0' : ' right-[-500px] top-0'
           )}
           onClick={(e) => e.stopPropagation()}
