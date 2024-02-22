@@ -18,8 +18,8 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useContext, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { isMobile, isSafari } from 'react-device-detect';
-import { useMediaQuery } from 'usehooks-ts';
+import { isFirefox, isMobile, isSafari } from 'react-device-detect';
+
 import { CampaignDetailContext } from '../CampainContext';
 import ModalChooseMultiple from './ModalChooseMultiple';
 import ModalChooseOne from './ModalChooseOne';
@@ -33,8 +33,6 @@ export default function TaskItem({
   task: TasksConvert;
   isLoggedUserImplementedTask: boolean;
 }) {
-  const matchesXXL = useMediaQuery('(min-width: 1440px)');
-
   const [onImplementTask] = useImplementTaskMutation();
   const router = useRouter();
   const { accessToken, user } = useSelector((state: RootState) => state.auth);
@@ -50,12 +48,9 @@ export default function TaskItem({
   });
 
   const handleOpenPopup = (url: string) => {
-    if (matchesXXL) {
-      openWindowPopup(url, 'CLOUT', 1280, 768);
-    } else {
-      window?.open(url, '_blank');
-    }
+    openWindowPopup(url, 'CLOUT', 1280, 768);
   };
+
   const onClickCard = async () => {
     try {
       setIsLoading(true);
@@ -66,61 +61,63 @@ export default function TaskItem({
       if (isLoggedUserImplementedTask) {
         return;
       }
-      // fix safari bug
-      const windowReference = isMobile || isSafari ? window.open('about:blank', '_blank') : null;
-      onFetchCampaignInfo?.()
-        ?.then((info) => {
-          if (!info || info?.status !== 'PUBLIC') {
-            router?.reload();
-            return;
-          }
-          if (user?.identities && user?.identities?.length > 0) {
-            switch (task?.type) {
-              case 'OPEN_LINK': {
-                if (task?.link) {
-                  if ((isMobile || isSafari) && windowReference) {
-                    windowReference.location = task.link;
-                  } else {
-                    handleOpenPopup(task?.link);
-                  }
-                }
 
-                setTimeout(async () => {
-                  try {
-                    await onImplementTask({
-                      taskId: task?.id ?? '',
-                    });
-                    await onRefetchCampaignTasks();
-                  } catch (e) {
-                    toastMessage(getErrorMessage(e), 'error');
-                  }
-                }, 5000);
+      if (user?.identities && user?.identities?.length > 0) {
+        // fix safari bug
+        const windowReference =
+          task?.type === 'OPEN_LINK' && (isMobile || isSafari || isFirefox)
+            ? window.open('about:blank', '_blank')
+            : null;
 
-                break;
+        const campaignInfo = await onFetchCampaignInfo?.();
+        if (!campaignInfo || campaignInfo?.status !== 'PUBLIC') {
+          windowReference?.close();
+          router?.reload();
+          return;
+        }
+
+        switch (task?.type) {
+          case 'OPEN_LINK': {
+            if (task?.link) {
+              if (windowReference) {
+                windowReference.location = task.link;
+              } else {
+                handleOpenPopup(task?.link);
               }
-              case 'FAQ_FREE_TEXT':
-              case 'FAQ_CHOOSE_ONE':
-              case 'FAQ_CHOOSE_MULTIPLE': {
-                setModalState({
-                  isOpenModal: true,
-                  content: task?.type,
-                });
-                break;
-              }
-
-              default:
-                break;
             }
-          } else {
+
+            setTimeout(async () => {
+              try {
+                await onImplementTask({
+                  taskId: task?.id ?? '',
+                });
+                await onRefetchCampaignTasks();
+              } catch (e) {
+                toastMessage(getErrorMessage(e), 'error');
+              }
+            }, 5000);
+
+            break;
+          }
+          case 'FAQ_FREE_TEXT':
+          case 'FAQ_CHOOSE_ONE':
+          case 'FAQ_CHOOSE_MULTIPLE': {
             setModalState({
               isOpenModal: true,
-              content: 'CONNECT_X',
+              content: task?.type,
             });
+            break;
           }
-        })
-        .catch((error) => {
-          toastMessage(getErrorMessage(error), 'error');
+
+          default:
+            break;
+        }
+      } else {
+        setModalState({
+          isOpenModal: true,
+          content: 'CONNECT_X',
         });
+      }
     } catch (err: any) {
       toastMessage(getErrorMessage(err), 'error');
     } finally {

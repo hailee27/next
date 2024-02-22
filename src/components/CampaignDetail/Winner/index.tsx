@@ -723,7 +723,7 @@ export default function Winner() {
         </div>
       </div>
       <div className="h-[56px]" />
-      <CModalWapper isOpen={isModalOpen} modalWidth={368} onCancel={handleCancel} top={10}>
+      <CModalWapper isOpen={isModalOpen} onCancel={handleCancel}>
         <div>
           <div className="flex items-center justify-center ">
             <div className="hover:cursor-pointer w-[232px] h-[40px] ">
