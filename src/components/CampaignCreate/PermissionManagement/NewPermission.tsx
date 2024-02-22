@@ -31,7 +31,7 @@ function NewPermission() {
               .unwrap()
               .then(() => {
                 router.push('/campaign-creator/permission-management');
-                toastMessage('succses', 'success');
+                toastMessage('権限の変更に成功しました。', 'success');
               })
               .catch((err) => toastMessage(err.data.message, 'error'))
           }

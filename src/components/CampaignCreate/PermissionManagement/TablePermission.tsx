@@ -12,6 +12,9 @@ import toastMessage from '@/utils/func/toastMessage';
 import { useLazyMeQuery } from '@/redux/endpoints/auth';
 
 import { useLazyGetCompanyUsersQuery } from '@/redux/endpoints/companies';
+import { usePopUpContext } from '@/context/PopUpContext';
+import PopupAlert from '@/components/common/PopupAlert';
+import { getErrorMessage } from '@/utils/func/getErrorMessage';
 
 interface DataType {
   key: string;
@@ -23,7 +26,7 @@ interface DataType {
 
 function TablePermission() {
   const router = useRouter();
-
+  const { openPopUp } = usePopUpContext();
   const { user } = useSelector((state: RootState) => state.auth);
   const [trigger] = useUpdateUserMutation();
   const [deleteUser] = useDeleteUserCompanyMutation();
@@ -56,25 +59,27 @@ function TablePermission() {
           <CButtonClassic
             customClassName="!bg-white !text-[#333] !w-[95px] !h-[37px]"
             onClick={() => {
-              deleteUser({ companyId: String(user?.companyId), userId: String(value) })
-                .unwrap()
-                .then(() => {
-                  triggerMe();
-                  toastMessage('success delete', 'success');
-                  setData((prev) => prev?.filter((e) => e.id !== value));
-                })
-                .catch(() => toastMessage('error', 'error'));
-              // trigger({
-              //   userId: String(value),
-              //   body: { companyId: Number(user?.companyId), isAccept: false },
-              // })
-              //   .unwrap()
-              //   .then(() => {
-              //     triggerMe();
-              //     toastMessage('success delete', 'success');
-              //     setData((prev) => prev?.filter((e) => e.id !== value));
-              //   })
-              //   .catch(() => toastMessage('error', 'error'));
+              openPopUp({
+                contents: (
+                  <PopupAlert
+                    message="本当に削除してもよろしいですか？"
+                    onOk={() => {
+                      // if (dataCompanies?.users.filter((e) => e.companyRole.membership === 'MANAGER').length === 1) {
+                      //   toastMessage('管理者は1人以上必要となります', 'error');
+                      // } else {
+                      deleteUser({ companyId: String(user?.companyId), userId: String(value) })
+                        .unwrap()
+                        .then(() => {
+                          triggerMe();
+                          toastMessage('success delete', 'success');
+                          setData((prev) => prev?.filter((e) => e.id !== value));
+                        })
+                        .catch((err) => toastMessage(getErrorMessage(err), 'error'));
+                      // }s
+                    }}
+                  />
+                ),
+              });
             }}
             title="削除"
             withIcon={{
@@ -108,11 +113,10 @@ function TablePermission() {
                   .then(() => {
                     triggerListCompanies({ companyId: String(user?.companyId), skip: 0, take: 10 })
                       .unwrap()
-                      .then(() => toastMessage('success delete', 'success'));
+                      .then(() => toastMessage('承認に成功しました。', 'success'));
                   })
-                  .catch(() => toastMessage('error', 'error'));
+                  .catch(() => toastMessage('組織情報を変更できるのは管理者だけです。', 'error'));
               }}
-              // onClick={() => router.push(`/campaign-creator/permission-management/edit/${value}`)}
               title="承認"
               withIcon={{
                 position: 'left',

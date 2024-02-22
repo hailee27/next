@@ -1,10 +1,14 @@
 import React from 'react';
 import CButtonShadow from '@/components/common/CButtonShadow';
 import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
+import toastMessage from '@/utils/func/toastMessage';
 import TablePermission from './TablePermission';
 
 function PermissionManagement() {
   const router = useRouter();
+  const { user } = useSelector((state: RootState) => state.auth);
 
   return (
     <div className="px-[48px] pt-[32px]">
@@ -15,7 +19,12 @@ function PermissionManagement() {
             classBgColor="bg-main-text"
             classRounded="rounded-[6px]"
             classShadowColor="bg-white"
-            onClick={() => router.push('/campaign-creator/permission-management/new')}
+            onClick={() => {
+              // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+              user?.companyRole.membership === 'MEMBER'
+                ? toastMessage('管理者のみがユーザーを組織に追加できます。', 'error')
+                : router.push('/campaign-creator/permission-management/new');
+            }}
             shadowSize="normal"
             title="追加する"
             withIcon={{

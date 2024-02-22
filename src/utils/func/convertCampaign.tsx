@@ -53,7 +53,7 @@ export const convertCampaignTask = (task: TypeTask | null) => {
             result = {
               id: task?.id ?? '',
               campaignId: task?.campaignId ?? '',
-              title: 'Xフォローさせる',
+              title: 'X(Twitter)でフォローする',
               description: (
                 <div className="text-[14px]">
                   <h3>{targetUser ?? ''}</h3>
@@ -72,7 +72,7 @@ export const convertCampaignTask = (task: TypeTask | null) => {
             result = {
               id: task?.id ?? '',
               campaignId: task?.campaignId ?? '',
-              title: 'Xリツイートさせる',
+              title: 'X(Twitter)でリツイートする',
               description: (
                 <div className="text-[14px]">
                   <p>
@@ -95,7 +95,7 @@ export const convertCampaignTask = (task: TypeTask | null) => {
             result = {
               id: task?.id ?? '',
               campaignId: task?.campaignId ?? '',
-              title: 'X引用リツイートさせる',
+              title: 'X(Twitter)で引用リツイートする',
               description: (
                 <div className="text-[14px]">
                   <p>
@@ -123,7 +123,7 @@ export const convertCampaignTask = (task: TypeTask | null) => {
             result = {
               id: task?.id ?? '',
               campaignId: task?.campaignId ?? '',
-              title: 'X指定ハッシュタグ付きの投稿をさせる',
+              title: 'X(Twitter)で指定ハッシュタグ付きの投稿をする',
               description: (
                 <div className="text-[14px]">
                   {taskPlatForm === 'TWITTER' && task?.taskTemplate?.config?.taskTitle ? (
@@ -161,7 +161,7 @@ export const convertCampaignTask = (task: TypeTask | null) => {
             result = {
               id: task?.id ?? '',
               campaignId: task?.campaignId ?? '',
-              title: 'X指定文言を投稿させる',
+              title: 'X(Twitter)で指定文言を投稿する',
               description: (
                 <div className="text-[14px]">
                   {taskPlatForm === 'TWITTER' && task?.taskTemplate?.config?.designatedClassicalChinese ? (
@@ -189,7 +189,7 @@ export const convertCampaignTask = (task: TypeTask | null) => {
         result = {
           id: task?.id ?? '',
           campaignId: task?.campaignId ?? '',
-          title: 'Webサイトを訪問させる',
+          title: 'Webサイトを訪問する',
           description: (
             <div className="text-[14px]">
               Web URL: <br />
@@ -205,7 +205,7 @@ export const convertCampaignTask = (task: TypeTask | null) => {
         result = {
           id: task?.id ?? '',
           campaignId: task?.campaignId ?? '',
-          title: 'LINE友達登録させる',
+          title: 'LINEで友だち登録をする',
           description: (
             <div className="text-[14px]">
               {taskPlatForm === 'LINE' && task?.taskTemplate?.config?.url ? (
@@ -230,7 +230,7 @@ export const convertCampaignTask = (task: TypeTask | null) => {
             result = {
               id: task?.id ?? '',
               campaignId: task?.campaignId ?? '',
-              title: 'Tiktok視聴させる',
+              title: 'TikTokで視聴する',
               description: (
                 <div className="text-[14px]">
                   <p>
@@ -250,7 +250,7 @@ export const convertCampaignTask = (task: TypeTask | null) => {
             result = {
               id: task?.id ?? '',
               campaignId: task?.campaignId ?? '',
-              title: 'Tiktokフォローさせる',
+              title: 'TikTokでフォローする',
               description: (
                 <div className="text-[14px]">
                   <p>
@@ -276,7 +276,7 @@ export const convertCampaignTask = (task: TypeTask | null) => {
             result = {
               id: task?.id ?? '',
               campaignId: task?.campaignId ?? '',
-              title: 'Telegramチャンネルに参加させる',
+              title: 'Telegramでチャンネルに参加する',
               description: (
                 <div className="text-[14px]">
                   <p>
@@ -296,7 +296,7 @@ export const convertCampaignTask = (task: TypeTask | null) => {
             result = {
               id: task?.id ?? '',
               campaignId: task?.campaignId ?? '',
-              title: 'Telegram投稿を閲覧させる',
+              title: 'Telegramで投稿を閲覧する',
               description: (
                 <div className="text-[14px]">
                   <p>
@@ -320,7 +320,7 @@ export const convertCampaignTask = (task: TypeTask | null) => {
         result = {
           id: task?.id ?? '',
           campaignId: task?.campaignId ?? '',
-          title: 'DiscordサーバーにJoinする',
+          title: 'DiscordでサーバーにJoinする',
           description: (
             <div className="text-[14px]">
               {taskPlatForm === 'DISCORD' && task?.taskTemplate?.config?.inviteLink ? (

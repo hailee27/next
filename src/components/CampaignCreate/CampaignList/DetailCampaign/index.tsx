@@ -14,7 +14,10 @@ import Detail from './Detail';
 
 function DetailCampaign() {
   const { query, back, reload, push } = useRouter();
-  const { data, isFetching } = useGetDetailCampaignQuery({ campaignId: String(query?.id) });
+  const { data, isFetching } = useGetDetailCampaignQuery(
+    { campaignId: String(query?.id) },
+    { refetchOnMountOrArgChange: true }
+  );
   const { accessToken } = useSelector((state: RootState) => state.auth);
   const [deleteCampaign, { isLoading }] = useDeleteCampaignMutation();
 
@@ -133,6 +136,7 @@ function DetailCampaign() {
                     classBgColor="bg-main-text"
                     classRounded="rounded-[6px]"
                     classShadowColor="bg-white"
+                    onClick={() => push({ pathname: '/campaign-creator/list', query: { type: 'public' } })}
                     shadowSize="normal"
                     title="公開中のページ"
                     withIcon={{
@@ -186,6 +190,7 @@ function DetailCampaign() {
                       classBgColor="bg-main-text"
                       classRounded="rounded-[6px]"
                       classShadowColor="bg-white"
+                      onClick={() => push({ pathname: '/campaign-creator/list', query: { type: 'public' } })}
                       shadowSize="normal"
                       title="公開中のページ"
                       withIcon={{
@@ -214,7 +219,7 @@ function DetailCampaign() {
         </div>
       </div>
       {query?.isChecking === 'true' ? (
-        <CampaignParticipantsInstant />
+        <CampaignParticipantsInstant totalPrizeValue={data?.totalPrizeValue ?? 0} />
       ) : (
         <Spin spinning={isFetching || isLoading}>
           <Detail data={data} />

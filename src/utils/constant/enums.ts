@@ -24,7 +24,7 @@ export const ErrorCodeENG: { [key: string]: string } = {
   '401001': 'Insufficient permission',
   '401002': 'Invalid credentials',
   '401003': 'Invalid token',
-
+  '400014': 'Need at least 1 member to be a manager in the company',
   '409001': 'This email already exists',
   '409002': 'User using this twitter account already exists',
   '409003': 'This code already exists',
@@ -59,7 +59,7 @@ export const ErrorCode: { [key: string]: string } = {
   '401001': '権限不足',
   '401002': '無効な認証情報',
   '401003': '無効なトークン',
-
+  '400014': '管理者は1人以上必要となります',
   '409001': 'このメールはすでに存在しています',
   '409002': 'このX(Twitter)アカウントはすでに存在しています',
   '409003': 'このコードはすでに存在しています',

@@ -9,7 +9,7 @@ import BriefcaseIcon from '@/components/common/icons/BriefcaseIcon';
 import YenIcon from '@/components/common/icons/YenIcon';
 import styles from './index.module.scss';
 
-const ListItem = ({ title, to, icon }: { title: string; to: string; icon?: JSX.Element }) => {
+export const ListItem = ({ title, to, icon }: { title: string; to: string; icon?: JSX.Element }) => {
   const router = useRouter();
   return (
     <Link href={to}>
@@ -28,7 +28,6 @@ function SideBar() {
   return (
     <div className=" border-[#2D3648] rounded-tr-[48px] bg-[#04AFAF] h-full flex flex-col py-[24px] text-white">
       <div className="flex-1 pl-[32px]">
-        {/* <ListItem title="TOP" to="/top" /> */}
         <div className="py-[12px]  flex items-center space-x-[10px]">
           <span className="text-[11px] font-medium">キャンペーン</span>
         </div>

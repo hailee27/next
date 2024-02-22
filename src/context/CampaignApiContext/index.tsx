@@ -86,12 +86,12 @@ export const CampaignApiProvider = ({ children }: { children: React.ReactNode })
                 .unwrap()
                 .then(() => {
                   router.push('/campaign-creator/list');
-                  toastMessage('send sucess (under reiew)', 'success');
+                  toastMessage('ステータスを更新に成功です。', 'success');
                 })
                 .catch(() => toastMessage('paymnet error', 'error'));
             } else {
               router.push('/campaign-creator/list');
-              toastMessage(type === 'DRAFT' ? 'save draft succses' : 'succses', 'success');
+              toastMessage(type === 'DRAFT' ? '下書き保存に成功しました。' : 'succses', 'success');
             }
           }
         } catch (err) {
@@ -157,12 +157,12 @@ export const CampaignApiProvider = ({ children }: { children: React.ReactNode })
               .unwrap()
               .then(() => {
                 router.push('/campaign-creator/list');
-                toastMessage('send sucess (under reiew)', 'success');
+                toastMessage('ステータスを更新に成功です。', 'success');
               })
               .catch(() => toastMessage('paymnet error', 'error'));
           } else {
             router.push('/campaign-creator/list');
-            toastMessage('save draft succses', 'success');
+            toastMessage('下書き保存に成功しました。', 'success');
           }
         }
       })

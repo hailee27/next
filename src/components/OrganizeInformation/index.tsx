@@ -66,7 +66,7 @@ function OrganizeInformation() {
           <span className="text-[32px] font-bold">組織情報</span>
         </div>
         <div className="bg-white rounded-[16px] p-[48px] mt-[56px]">
-          {user?.isRequestMemberCompany ? (
+          {user?.isRequestMemberCompany || user?.companyId === null ? (
             <div className="text-center text-[#ccc]">データがありません!</div>
           ) : (
             <div className="flex flex-col space-y-[32px]">
@@ -150,7 +150,7 @@ function OrganizeInformation() {
             </div>
           )}
         </div>
-        {!user?.isRequestMemberCompany && (
+        {!(user?.isRequestMemberCompany || user?.companyId === null) && (
           <div className=" pt-[48px]  h-full flex space-x-[24px] items-center justify-center">
             {isEdit && (
               <div className="w-[146px]  h-[56px]">

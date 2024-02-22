@@ -18,9 +18,12 @@ function Inquiry() {
   const [postContact] = usePostContactMutation();
   const onSubmit = async (values) => {
     try {
-      console.log(values);
+      const body = { ...values };
+      if (body?.phoneNumber) {
+        body.phoneNumber = body.phoneNumber.replaceAll('-', '');
+      }
       await postContact({
-        ...values,
+        ...body,
       }).unwrap();
       router.push('/inquiry/feedback');
     } catch (err) {
@@ -73,10 +76,10 @@ function Inquiry() {
             <InputLabel
               label="電話番号"
               name="phoneNumber"
-              placeholder="0312345678"
+              placeholder="03-1234-5678"
               rules={[
                 {
-                  pattern: /^[0-9]{10,11}$/,
+                  pattern: /^(?:\d{10}|\d{11}|\d{3}-\d{3}-\d{4}|\d{2}-\d{4}-\d{4}|\d{3}-\d{4}-\d{4})$/,
                   message: '有効な電話番号を入力してください',
                 },
               ]}

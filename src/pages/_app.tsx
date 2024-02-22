@@ -48,6 +48,7 @@ import weekYear from 'dayjs/plugin/weekYear';
 import UserRoleWapper from '@/components/AuthCheck/UserRoleWapper';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import { isMobile } from 'react-device-detect';
 
 dayjs.extend(customParseFormat);
 dayjs.extend(advancedFormat);
@@ -126,20 +127,18 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
       <MegaHead />
       <Provider store={store}>
         <PersistGate loading={null} persistor={store.persistorData}>
-          {/* <main
-            className={` ${dmSans.variable} ${inter.variable}  ${mPlus1.variable} ${notoSans.variable} ${montserrat.variable}`}
-          > */}
-          <ConfigProvider locale={jaJP}>
-            <PopUpProvider>
-              {loading && <Loading />}
-              {getLayout(
-                <UserRoleWapper>
-                  <Component {...props} />
-                </UserRoleWapper>
-              )}
-            </PopUpProvider>
-          </ConfigProvider>
-          {/* </main> */}
+          <main id="clout_spa_page">
+            <ConfigProvider locale={jaJP}>
+              <PopUpProvider>
+                {loading && <Loading />}
+                {getLayout(
+                  <UserRoleWapper>
+                    <Component {...props} />
+                  </UserRoleWapper>
+                )}
+              </PopUpProvider>
+            </ConfigProvider>
+          </main>
         </PersistGate>
       </Provider>
     </>

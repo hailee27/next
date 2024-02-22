@@ -91,7 +91,7 @@ function TableReWard({ value, totalWinner }: Props) {
         .map((e, i) => ({
           key: String(i + 1),
           equalNumber: `${i + 1}等`,
-          amountOfMoney: `${formatNumber(e.amountOfMoney, true)}円`,
+          amountOfMoney: `${formatNumber(e.amountOfMoney, true, 1)}円`,
           numberOfWinners: `${e.numberOfWinningTicket}本`,
           probabilityOfWinning: `${100 * (Number(e.numberOfWinningTicket) / Number(totalWinner))}`,
         }))

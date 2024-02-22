@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import AuthCheck from '@/components/AuthCheck';
 import SmsVerificationForm from '@/components/auth/sms-verification-form';
 import { useAuthVerificationMutation, useSmsVerifyMutation } from '@/redux/endpoints/auth';
 import { useUpdateMeMutation } from '@/redux/endpoints/me';
@@ -12,7 +13,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 export default function Verification() {
-  const { user, accessToken } = useSelector((store: RootState) => store.auth);
+  const { user } = useSelector((store: RootState) => store.auth);
 
   const [verifiSMS, { isLoading: isVerifiSMS, isError: isVerifySMSError }] = useSmsVerifyMutation();
 
@@ -25,7 +26,7 @@ export default function Verification() {
   const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window?.location?.search) : null;
 
   const userAction = searchParams?.get('action');
-  const urlPhone = searchParams?.get('phoneNumber');
+  const urlPhone = searchParams?.get('phoneNumber')?.replaceAll('-', '');
   const urlToken = searchParams?.get('token');
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -123,10 +124,8 @@ export default function Verification() {
       </div>
     </div>
   );
-  if (!accessToken) {
-    router.replace('/auth/sign-in/campaign-implementer');
-  } else {
-    return (
+  return (
+    <AuthCheck>
       <Spin spinning={isSendVerificationCode || isVerifiSMS || isUpdateUser}>
         <div className="  w-full container-min-height overflow-x-hidden bg-[#D5FFFF]">
           <div
@@ -138,6 +137,6 @@ export default function Verification() {
           </div>
         </div>
       </Spin>
-    );
-  }
+    </AuthCheck>
+  );
 }

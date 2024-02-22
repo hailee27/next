@@ -103,6 +103,17 @@ export type ListCampaignUsersParams = {
 export type ListCampaignUsersResponse = {
   users: {
     id: number;
+    award: {
+      id: number;
+      campaignRewardId: string | null;
+      userCampaignId: number;
+      value: number;
+      isWin: boolean;
+      createdAt: string;
+      updatedAt: string;
+      deletedAt: string | null;
+      isFinalPrize: boolean;
+    } | null;
     userId: number;
     campaignId: string;
     identityAccountName: string;
@@ -150,6 +161,7 @@ export type ListCampaignUsersResponse = {
       };
     };
   }[];
+  amountAwarded: number;
   total: number;
 };
 export type DetailCampaignResponse = TypeCampaign;
