@@ -65,7 +65,7 @@ export default function TaskItem({
       if (user?.identities && user?.identities?.length > 0) {
         // fix safari bug
         const windowReference =
-          task?.type === 'OPEN_LINK' && (isMobile || isSafari || isFirefox)
+          task?.type === 'OPEN_LINK' && task?.link && (isMobile || isSafari || isFirefox)
             ? window.open('about:blank', '_blank')
             : null;
 
