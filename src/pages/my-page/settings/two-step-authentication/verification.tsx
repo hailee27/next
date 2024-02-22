@@ -26,7 +26,7 @@ export default function Verification() {
   const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window?.location?.search) : null;
 
   const userAction = searchParams?.get('action');
-  const urlPhone = searchParams?.get('phoneNumber');
+  const urlPhone = searchParams?.get('phoneNumber')?.replaceAll('-', '');
   const urlToken = searchParams?.get('token');
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

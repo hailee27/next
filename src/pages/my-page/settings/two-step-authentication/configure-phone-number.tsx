@@ -31,17 +31,16 @@ export default function ConfigurePhoneNumber() {
   const onSubmitPhone = async (values: UpdatePhoneData) => {
     try {
       if (values?.phone && user?.id) {
+        const phone = values?.phone?.replaceAll('-', '');
         const data = await sendVerificationCode({
           type: 'SMS',
           userId: user?.id,
-          phoneNumber: values?.phone?.replaceAll('-', ''),
+          phoneNumber: phone,
           isCheckPhone: true,
         }).unwrap();
 
         router.push(
-          `/my-page/settings/two-step-authentication/verification?phoneNumber=${values.phone}&token=${
-            data?.totpToken ?? ''
-          }`
+          `/my-page/settings/two-step-authentication/verification?phoneNumber=${phone}&token=${data?.totpToken ?? ''}`
         );
       }
     } catch (err) {
