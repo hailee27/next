@@ -20,6 +20,7 @@ export default function CampaignCardItem({
 
     return results?.sort((a, b) => a.amountOfMoney - b.amountOfMoney);
   }, [item?.CampaignReward]);
+
   return (
     <CShadowCard
       onClickCard={() => {
@@ -129,12 +130,12 @@ export default function CampaignCardItem({
               <span>
                 期限：
                 <span className="font-montserrat">
-                  {moment(item?.startTime)?.isValid() ? moment(item?.startTime)?.format('MM/DD hh:mm') : '--/-- --:--'}
+                  {moment(item?.startTime)?.isValid() ? moment(item?.startTime)?.format('MM/DD HH:mm') : '--/-- --:--'}
                   {item?.dontSetExpiredTime !== true && (
                     <>
                       <span> 〜 </span>
                       {moment(item?.expiredTime)?.isValid()
-                        ? moment(item?.expiredTime)?.format('MM/DD hh:mm')
+                        ? moment(item?.expiredTime)?.format('MM/DD HH:mm')
                         : '--/-- --:--'}
                     </>
                   )}

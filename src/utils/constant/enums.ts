@@ -1,38 +1,3 @@
-export const ErrorCodeENG: { [key: string]: string } = {
-  '400': '要求の形式が正しくありません',
-
-  '400002': 'Invalid ordering format',
-  '400003': 'Invalid query format',
-  '400004': '$key should be a number',
-  '400005': 'Invalid cursor format',
-  '400006': 'The code is expired or incorrect',
-  '400007': 'You have not completed the campaign yet',
-  '400008': 'You have already received your reward',
-  '400009': 'This campaign is not immediately rewarded',
-  '400010': 'No prize found',
-  '400011': 'campaign has expired',
-  '400012': 'This award has been given',
-  '401004': 'Cannot delete campaigns',
-  '401005': 'No token provided',
-  '401007': 'Incorrect password',
-  '404001': 'User not found',
-  '404002': 'Session not found',
-  '404003': 'Company not found',
-  '404004': 'Task not found',
-  '404005': 'Amazon gift code not found',
-  '404006': 'Campaign not found',
-  '401001': 'Insufficient permission',
-  '401002': 'Invalid credentials',
-  '401003': 'Invalid token',
-  '400014': 'Need at least 1 member to be a manager in the company',
-  '409001': 'This email already exists',
-  '409002': 'User using this twitter account already exists',
-  '409003': 'This code already exists',
-  '409004': 'This user has joined a company',
-  '409005': 'This phone number already exists',
-  '429001': 'Rate limit exceeded',
-};
-
 export const ErrorCode: { [key: string]: string } = {
   '400': '要求の形式が正しくありません',
 
@@ -47,6 +12,10 @@ export const ErrorCode: { [key: string]: string } = {
   '400010': '賞品なし',
   '400011': 'キャンペーンは終了しました',
   '400012': 'あなたはすでに報酬を受け取っています',
+  '400013': 'campaign has been paid',
+  '400014': '管理者は1人以上必要となります',
+  '400015': 'This campaign has not been paid yet',
+
   '401004': 'キャンペーンを削除できません',
   '401005': 'トークンなし',
   '401007': 'ログインはできません！ メールアドレスまたはパスワードが間違っています。',
@@ -59,7 +28,7 @@ export const ErrorCode: { [key: string]: string } = {
   '401001': '権限不足',
   '401002': '無効な認証情報',
   '401003': '無効なトークン',
-  '400014': '管理者は1人以上必要となります',
+
   '409001': 'このメールはすでに存在しています',
   '409002': 'このX(Twitter)アカウントはすでに存在しています',
   '409003': 'このコードはすでに存在しています',
