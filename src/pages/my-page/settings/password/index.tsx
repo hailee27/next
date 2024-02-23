@@ -45,7 +45,11 @@ export default function SettingPasswordPage() {
         toastMessage('パスワードの変更に成功されました。', 'success');
         router.push('/my-page');
       }
-    } catch (err) {
+    } catch (err: any) {
+      if (err?.data?.message?.includes('401002')) {
+        toastMessage('現在のパスワードが間違っています。', 'error');
+        return;
+      }
       toastMessage(getErrorMessage(err), 'error');
     }
   };

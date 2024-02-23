@@ -99,13 +99,13 @@ export default function InfoCampaign() {
                   <CalendarIcon className="w-[16px]" />
                   <span className="font-montserrat">
                     {moment(campaignDetail?.startTime)?.isValid()
-                      ? moment(campaignDetail?.startTime)?.format('MM/DD hh:mm')
+                      ? moment(campaignDetail?.startTime)?.format('MM/DD HH:mm')
                       : '--/-- --:--'}
                     {campaignDetail?.setExpiredTime !== true && (
                       <>
                         <span> 〜 </span>
                         {moment(campaignDetail?.expiredTime)?.isValid()
-                          ? moment(campaignDetail?.expiredTime)?.format('MM/DD hh:mm')
+                          ? moment(campaignDetail?.expiredTime)?.format('MM/DD HH:mm')
                           : '--/-- --:--'}
                       </>
                     )}

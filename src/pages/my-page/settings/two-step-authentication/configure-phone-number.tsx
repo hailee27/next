@@ -1,3 +1,4 @@
+import AuthCheck from '@/components/AuthCheck';
 import CButtonShadow from '@/components/common/CButtonShadow';
 import CFormInputShadow from '@/components/common/CFormInputShadow';
 import { useAuthVerificationMutation } from '@/redux/endpoints/auth';
@@ -9,12 +10,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Spin } from 'antd';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
-import React from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
 export default function ConfigurePhoneNumber() {
-  const { user, accessToken } = useSelector((store: RootState) => store.auth);
+  const { user } = useSelector((store: RootState) => store.auth);
   const {
     register,
     handleSubmit,
@@ -30,17 +31,16 @@ export default function ConfigurePhoneNumber() {
   const onSubmitPhone = async (values: UpdatePhoneData) => {
     try {
       if (values?.phone && user?.id) {
+        const phone = values?.phone?.replaceAll('-', '');
         const data = await sendVerificationCode({
           type: 'SMS',
           userId: user?.id,
-          phoneNumber: values?.phone,
+          phoneNumber: phone,
           isCheckPhone: true,
         }).unwrap();
 
         router.push(
-          `/my-page/settings/two-step-authentication/verification?phoneNumber=${values.phone}&token=${
-            data?.totpToken ?? ''
-          }`
+          `/my-page/settings/two-step-authentication/verification?phoneNumber=${phone}&token=${data?.totpToken ?? ''}`
         );
       }
     } catch (err) {
@@ -48,12 +48,14 @@ export default function ConfigurePhoneNumber() {
     }
   };
 
-  if (!accessToken) {
-    router.replace('/auth/sign-in/campaign-implementer');
-  } else if (user?.twoFactorMethod === 'TOTP' && user.twoFactorPhone) {
-    router.push('/my-page');
-  } else {
-    return (
+  useEffect(() => {
+    if (user?.twoFactorMethod === 'TOTP' && user.twoFactorPhone) {
+      router.push('/my-page');
+    }
+  }, [user]);
+
+  return (
+    <AuthCheck>
       <Spin spinning={isSendVerificationCode}>
         <div className="  w-full container-min-height pb-[16px] overflow-x-hidden bg-[#D5FFFF]">
           <div className={clsx(' h-full w-full bg-[#D5FFFF] py-[40px] px-[20px] transition-all duration-300')}>
@@ -93,6 +95,6 @@ export default function ConfigurePhoneNumber() {
           </div>
         </div>
       </Spin>
-    );
-  }
+    </AuthCheck>
+  );
 }

@@ -58,8 +58,8 @@ function Detail({ data }: { data?: TypeCampaign }) {
               </div>
               <FlagItem
                 className="pl-[16px]"
-                value={`${moment(data?.startTime).format('YYYY/MM/DD hh:mm')} 〜${moment(data?.expiredTime).format(
-                  'YYYY/MM/DD hh:mm'
+                value={`${moment(data?.startTime).format('YYYY/MM/DD HH:mm')} 〜${moment(data?.expiredTime).format(
+                  'YYYY/MM/DD HH:mm'
                 )} `}
               />
             </div>

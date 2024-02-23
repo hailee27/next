@@ -43,13 +43,13 @@ export default function ModalFreeTextContent({
       >
         <div className="h-[356px] font-notoSans overflow-y-hidden">
           <div className="h-full overflow-auto pr-[8px] scrollbar--custom">
-            <h3 className="text-[20px] font-bold tracking-[0.6px] leading-[30px] text-center">
+            <h3 className="text-[20px] font-bold tracking-[0.6px] leading-[30px] text-center  ">
               {task?.taskInfo?.title ?? ''}
             </h3>
             <div className="h-[16px]" />
-            <p className="text-[13px] leading-[22px]">{task?.taskInfo?.description ?? ''}</p>
+            <p className="text-[13px] leading-[22px] ml-[3px]">{task?.taskInfo?.description ?? ''}</p>
             <div className="h-[32px]" />
-            <h4 className="text-[14px] font-bold tracking-[0.42px] leading-[21px]">
+            <h4 className="text-[14px] font-bold tracking-[0.42px] leading-[21px] ml-[3px]">
               {task?.taskInfo?.questionText ?? ''}
             </h4>
             <div className="h-[16px]" />
@@ -64,7 +64,7 @@ export default function ModalFreeTextContent({
               ]}
             >
               <textarea
-                className="w-full min-h-[120px] p-[16px] bg-[#F2F2F2] text-[13px] tracking-[0.39px] placeholder:text-[13px] placeholder:text-[#aaa] rounded-[8px] resize-none"
+                className="w-[calc(100%-3px)] ml-[3px] min-h-[120px] p-[16px] bg-[#F2F2F2] text-[13px] tracking-[0.39px] placeholder:text-[13px] placeholder:text-[#aaa] rounded-[8px] resize-none focus:outline-1"
                 placeholder="自由回答形式の回答欄"
               />
             </Form.Item>
