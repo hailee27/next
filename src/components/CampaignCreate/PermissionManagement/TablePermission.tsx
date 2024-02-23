@@ -71,7 +71,7 @@ function TablePermission() {
                         .unwrap()
                         .then(() => {
                           triggerMe();
-                          toastMessage('success delete', 'success');
+                          toastMessage('削除に成功しました。', 'success');
                           setData((prev) => prev?.filter((e) => e.id !== value));
                         })
                         .catch((err) => toastMessage(getErrorMessage(err), 'error'));
@@ -176,7 +176,14 @@ function TablePermission() {
 
   return (
     <div className={styles.customTable}>
-      <Table columns={columns} dataSource={data} loading={isLoading} pagination={false} tableLayout="fixed" />
+      <Table
+        columns={columns}
+        dataSource={data}
+        loading={isLoading}
+        pagination={false}
+        scroll={{ x: 1000 }}
+        tableLayout="fixed"
+      />
     </div>
   );
 }

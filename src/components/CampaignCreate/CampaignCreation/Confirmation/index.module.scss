@@ -1,3 +1,4 @@
+@import '../../../../styles/globals.scss';
 .customeTable {
   :global {
     .ant-table-wrapper .ant-table {
@@ -23,6 +24,9 @@
       > td {
       border-right: 1px solid #777;
       padding: 13px 40px;
+      @include mobile {
+        padding: 20px 0px;
+      }
 
       &:last-child {
         border: none;
@@ -45,6 +49,9 @@
       font-weight: bold;
       color: white;
       padding: 13px 40px;
+      @include mobile {
+        padding: 20px 0px;
+      }
     }
 
     .ant-table-wrapper .ant-table-container {

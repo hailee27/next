@@ -227,6 +227,7 @@ export type TypeCampaign = {
   expiredTime: string;
   startTime: string;
   dontSetExpiredTime: boolean;
+  setExpiredTime?: boolean;
   methodOfselectWinners: 'AUTO_PRIZEE_DRAW' | 'MANUAL_SELECTION';
   totalNumberOfUsersAllowedToWork?: number | string;
   numberOfPrizes: number;
@@ -322,6 +323,7 @@ export type QuestsResponse = {
     expiredTime: string;
     startTime: string;
     dontSetExpiredTime: boolean;
+    setExpiredTime?: boolean;
     methodOfselectWinners: string;
     totalNumberOfUsersAllowedToWork: number;
     numberOfPrizes: number;
@@ -375,6 +377,7 @@ export type QuestsParams = {
   startTime?: string;
   expiredTime?: string;
   dontSetExpiredTime?: string;
+  setExpiredTime?: string;
   // tasks?: string;
   methodOfselectWinners?: string;
   totalNumberOfUsersAllowedToWork?: string;

@@ -103,8 +103,6 @@ function TableAll({
     { skip: pageTable ?? 0, take: 20, actionFrom: 'ADMIN', status: status === 'ALL' ? undefined : status },
     { refetchOnMountOrArgChange: true }
   );
-  // eslint-disable-next-line no-console
-  console.log(status);
 
   useEffect(() => {
     if (query.page) {
@@ -157,6 +155,7 @@ function TableAll({
           },
           // current: pageTable,
         }}
+        scroll={{ x: 1000 }}
         tableLayout="fixed"
       />
     </div>

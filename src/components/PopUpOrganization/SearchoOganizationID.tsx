@@ -6,6 +6,7 @@ import toastMessage from '@/utils/func/toastMessage';
 
 import { useLazyMeQuery } from '@/redux/endpoints/auth';
 
+import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import InputLabel from '../common/BasicInput/InputLabel';
 import CButtonShadow from '../common/CButtonShadow';
 
@@ -28,7 +29,7 @@ function SearchoOganizationID() {
                 });
               toastMessage('リクエストを送信しました。', 'success');
             })
-            .catch(() => toastMessage('error', 'error'));
+            .catch((err) => toastMessage(getErrorMessage(err), 'error'));
         }}
       >
         <InputLabel

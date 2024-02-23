@@ -14,6 +14,7 @@ import { RootState } from '@/redux/store';
 import { useCampaignApiContext } from '@/context/CampaignApiContext';
 import { usePopUpContext } from '@/context/PopUpContext';
 import PopupAlert from '@/components/common/PopupAlert';
+import toastMessage from '@/utils/func/toastMessage';
 import ReWard from './ReWard';
 import Confirmation from './Confirmation';
 import Setup from './Setup';
@@ -87,7 +88,7 @@ function CampaignCreation() {
         forms?.confirm?.setFieldsValue({
           nameCampagin: queryParams.campainName,
           typeCampagin: dataMaster?.CATEGORY_CAMPAIGN.find((e) => e.value === queryParams.category)?.label,
-          dateCampagin: queryParams.noDate
+          dateCampagin: !queryParams.noDate
             ? moment(String(queryParams.startDate)).format('YYYY/MM/DD HH:mm')
             : `${moment(String(queryParams.startDate)).format('YYYY/MM/DD HH:mm')} 〜 ${moment(
                 String(queryParams.endDate)
@@ -138,7 +139,10 @@ function CampaignCreation() {
                   onOk={() => {
                     deleteCampaign({ campaignId: String(router.query.id) })
                       .unwrap()
-                      .then(() => router.push('/campaign-creator/list'));
+                      .then(() => {
+                        toastMessage('キャンペーンを削除されました。', 'success');
+                        router.push('/campaign-creator/list');
+                      });
                   }}
                 />
               ),
@@ -150,12 +154,12 @@ function CampaignCreation() {
         window.scrollTo({ behavior: 'smooth', top: 0 });
       }}
     >
-      <div className="px-[48px]">
-        <div className="flex  py-[24px] w-full item justify-between border-b-2 border-[#2D3648] max-h-[112px] font-notoSans">
-          <span className="text-[32px] font-bold">キャンペーン作成</span>
-          <div className="flex space-x-[16px]">
+      <div className="md:px-[48px] px-[20px]">
+        <div className="flex md:flex-row flex-col py-[32px] w-full justify-between border-b-2 border-[#2D3648] md:max-h-[112px] md:space-y-0 space-y-[10px]">
+          <span className=" xl:text-[32px] text-[24px] font-bold">キャンペーン作成</span>
+          <div className="flex md:flex-nowrap flex-wrap md:space-y-0 gap-[10px] md:space-x-[16px] items-center">
             <Form name="delete">
-              <div className="w-[135px] h-[56px]">
+              <div className="md:w-[135px] w-[90px] md:h-[56px] h-[46px]">
                 <CButtonShadow
                   classBgColor="bg-white"
                   classRounded="rounded-[6px]"
@@ -179,7 +183,7 @@ function CampaignCreation() {
               </div>
             </Form>
             <Form name="preview">
-              <div className="w-[184px]  h-[56px]">
+              <div className="md:w-[184px] w-[120px] md:h-[56px] h-[46px]">
                 <CButtonShadow
                   classBgColor="bg-white"
                   classRounded="rounded-[6px]"
@@ -203,7 +207,7 @@ function CampaignCreation() {
               </div>
             </Form>
             <Form name="saveDraft">
-              <div className="w-[184px]  h-[56px]">
+              <div className="md:w-[184px] w-[150px]  md:h-[56px] h-[46px]">
                 <CButtonShadow
                   classBgColor="bg-main-text"
                   classRounded="rounded-[6px]"

@@ -1,3 +1,4 @@
+@import '../../../styles/globals.scss';
 .customeTabs {
   :global {
     .ant-tabs .ant-tabs-tab + .ant-tabs-tab {
@@ -9,10 +10,12 @@
     }
     .ant-tabs-nav .ant-tabs-nav-list {
       width: 100%;
+      @include mobile {
+        gap: 24px;
+        width: auto;
+      }
     }
-    // .ant-tabs .ant-tabs-tab:hover {
-    //   color: white;
-    // }
+
     .ant-tabs .ant-tabs-tab {
       font-size: 16px;
       color: #2d3648 !important;
