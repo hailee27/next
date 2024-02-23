@@ -43,6 +43,11 @@ export default function MainHeader() {
         text: 'お問い合わせ',
         to: '/inquiry',
       },
+      {
+        key: 6,
+        text: 'よくある質問',
+        to: '/faqs',
+      },
     ],
     []
   );
@@ -119,7 +124,7 @@ export default function MainHeader() {
         </Link>
         <div className="hidden xl:flex items-center justify-end gap-[48px]">
           <div className="flex items-center justify-end gap-[30px]">
-            {MainNavigation.slice(1, 5).map((item) => (
+            {MainNavigation.slice(1, 6).map((item) => (
               <Link
                 className={clsx(
                   'text-[14px] font-bold tracking-[0.42px] leading-[21px] ',
