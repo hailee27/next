@@ -83,9 +83,9 @@ function Confirmation() {
 
   return (
     <Spin spinning={loadingUpdate}>
-      <div className="bg-white rounded-[4px] mt-[16px] p-[40px]">
+      <div className="bg-white rounded-[4px] mt-[16px] md:p-[40px] p-[24px]">
         <Form form={form} name="confirm">
-          <div className="mt-[24px] grid grid-cols-3 gap-y-[24px]">
+          <div className="mt-[24px] grid md:grid-cols-3 grid-cols-1 gap-y-[24px]">
             <div className="flex flex-col space-y-[8px]">
               <span className="text-[16px] font-bold border-l-2 border-[#04AFAF] h-[24px] pl-[14px]">
                 キャンペーン名

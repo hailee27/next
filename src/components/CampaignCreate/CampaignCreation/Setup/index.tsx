@@ -40,11 +40,11 @@ function Setup() {
         campainName: dataCampaign.title,
         category: dataCampaign.category,
         endDate:
-          !dataCampaign.dontSetExpiredTime && dataCampaign.expiredTime
+          dataCampaign.setExpiredTime && dataCampaign.expiredTime
             ? dayjs(moment(dataCampaign.expiredTime).format(), 'YYYY-MM-DD HH:mm')
             : undefined,
         explanatoryText: dataCampaign.description,
-        noDate: dataCampaign.dontSetExpiredTime,
+        noDate: dataCampaign.setExpiredTime,
         startDate: dataCampaign.startTime
           ? dayjs(moment(dataCampaign.startTime).format(), 'YYYY-MM-DD HH:mm')
           : undefined,

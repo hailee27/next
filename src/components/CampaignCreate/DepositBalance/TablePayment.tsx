@@ -102,6 +102,7 @@ function TablePayment() {
           },
           // current: pageTable,
         }}
+        scroll={{ x: 1000 }}
         tableLayout="fixed"
       />
     </div>

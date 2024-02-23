@@ -130,7 +130,7 @@ export default function CampaignCardItem({
                 期限：
                 <span className="font-montserrat">
                   {moment(item?.startTime)?.isValid() ? moment(item?.startTime)?.format('MM/DD hh:mm') : '--/-- --:--'}
-                  {item?.dontSetExpiredTime !== true && (
+                  {item?.setExpiredTime !== true && (
                     <>
                       <span> 〜 </span>
                       {moment(item?.expiredTime)?.isValid()

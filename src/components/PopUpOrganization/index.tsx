@@ -7,6 +7,7 @@ import toastMessage from '@/utils/func/toastMessage';
 import { useLazyMeQuery } from '@/redux/endpoints/auth';
 
 import { TypeTokenPayment } from '@/types/paymentCard.type';
+import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import InputLabel from '../common/BasicInput/InputLabel';
 import PopUpCreditOrDebitCard from '../OrganizeInformation/PopUpCreditOrDebitCard';
 import UploadButton from '../common/UploadButton';
@@ -59,7 +60,7 @@ function PopUpOrganization() {
                 closePopUp();
               })
               .catch((err) => {
-                toastMessage(err.data.message, 'error');
+                toastMessage(getErrorMessage(err), 'error');
               });
           }}
           onFinishFailed={(e) => {
@@ -150,11 +151,7 @@ function PopUpOrganization() {
                 classBgColor="bg-main-text"
                 classRounded="rounded-[6px]"
                 classShadowColor="bg-white"
-                onClick={() => {
-                  // router.push('/campaign-creator/list');
-                  // closePopUp();
-                  form.submit();
-                }}
+                onClick={() => form.submit()}
                 shadowSize="normal"
                 title="組織を作成する"
               />

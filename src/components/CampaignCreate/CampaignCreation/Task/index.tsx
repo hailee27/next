@@ -64,7 +64,7 @@ function Task() {
 
   return (
     <>
-      <div className="bg-white  mt-[16px] p-[40px]">
+      <div className="bg-white  mt-[16px] md:p-[40px] p-[24px]">
         <Form
           form={form}
           name="tasks"
@@ -110,7 +110,7 @@ function Task() {
               <FlagItem />
             </Form.Item>
           </div>
-          <div className="flex flex-col space-y-[24px] pb-[24px]">
+          <div className="flex flex-col md:space-y-[24px] gap-4 pb-[24px]">
             {numberTask.map((e, i) => (
               <TaskCampain index={i} item={e} key={e.id} onDelete={() => handleDelete(e.id)} showDelete />
             ))}

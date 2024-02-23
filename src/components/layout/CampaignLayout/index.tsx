@@ -28,7 +28,7 @@ function CampaignLayout({ children }: Props) {
     return (
       <div>
         <HeaderMo />
-        <div className="container-min-height">{children}</div>
+        <div className="container-min-height bg-[#F6F6F6]">{children}</div>
         <MainFooter />
       </div>
     );
