@@ -1,12 +1,8 @@
-import FacebookIcon from '@/components/common/icons/FacebookIcon';
-import InstagramIcon from '@/components/common/icons/InstagramIcon';
-import LinkedinIcon from '@/components/common/icons/LinkedinIcon';
-import TwitterIcon from '@/components/common/icons/TwitterIcon';
+import LineIcon from '@/components/common/icons/LineIcon';
 import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
 
 const FooterNavigation = [
   {
@@ -32,34 +28,37 @@ const FooterNavigation = [
   },
   {
     key: 6,
+    text: 'よくある質問',
+    to: '/faqs',
+  },
+  {
+    key: 7,
     text: '利用規約',
     to: '/terms-of-service',
   },
   {
-    key: 7,
+    key: 8,
     text: '特定商取引法に基づく表示',
     to: '/specified-commercial-transactions-law',
   },
   {
-    key: 8,
+    key: 9,
     text: 'プライバシーポリシー',
     to: '/privacy-policy',
   },
 ];
 
-const FooterSocialLinks = [
+const FooterSocialLinksV1 = [
   {
     key: 1,
-    to: 'https://www.facebook.com/',
-    icon: <FacebookIcon />,
+    to: 'https://twitter.com/',
+    icon: <Image alt="x icon" height={40} src="/assets/images/footer-x-img.png" width={40} />,
   },
-  { key: 2, to: 'https://twitter.com/', icon: <TwitterIcon /> },
   {
-    key: 3,
-    to: 'https://www.instagram.com/',
-    icon: <InstagramIcon />,
+    key: 2,
+    to: 'https://line.me/',
+    icon: <LineIcon />,
   },
-  { key: 4, to: 'https://www.linkedin.com/', icon: <LinkedinIcon /> },
 ];
 
 export default function MainFooter() {
@@ -99,7 +98,7 @@ export default function MainFooter() {
                 ))}
               </div>
               <div className="flex flex-wrap gap-[16px] items-center justify-center">
-                {FooterNavigation.slice(3, 5).map((i) => (
+                {FooterNavigation.slice(3, 6).map((i) => (
                   <Link className="text-[16px] font-medium" href={i.to} key={i.key}>
                     {i.text}
                   </Link>
@@ -107,7 +106,7 @@ export default function MainFooter() {
               </div>
             </div>
             <div className="flex flex-wrap gap-[16px] lg:gap-[0px] items-center justify-center">
-              {FooterNavigation.slice(5, 8).map((i, idx) => (
+              {FooterNavigation.slice(6, 9).map((i, idx) => (
                 <Link
                   className={clsx(
                     'text-[12px] font-medium lg:px-[24px] lg:border-r-[1px] lg:border-r-[#aaa] lg:text-[11px] leading-[16px]',
@@ -124,8 +123,8 @@ export default function MainFooter() {
         </div>
 
         <div className="flex flex-wrap gap-[16px]">
-          {FooterSocialLinks.map((i) => (
-            <Link href={i.to} key={i.key}>
+          {FooterSocialLinksV1.map((i) => (
+            <Link href={i.to} key={i.key} target="_blank">
               {i.icon}
             </Link>
           ))}

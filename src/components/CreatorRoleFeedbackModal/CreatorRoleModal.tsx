@@ -7,7 +7,7 @@ export default function CreatorRoleModal({ isOpen, onCancel }: { isOpen: boolean
   const router = useRouter();
 
   return (
-    <CModalWapper isOpen={isOpen} onCancel={onCancel} top={80}>
+    <CModalWapper isOpen={isOpen} onCancel={onCancel}>
       <div className=" py-[8px] ">
         <div className=" flex flex-col items-center">
           <p className="text-[14px] text-main-text leading-[22px] tracking-[0.39px]">

@@ -43,6 +43,11 @@ export default function MainHeader() {
         text: 'お問い合わせ',
         to: '/inquiry',
       },
+      {
+        key: 6,
+        text: 'よくある質問',
+        to: '/faqs',
+      },
     ],
     []
   );
@@ -109,7 +114,7 @@ export default function MainHeader() {
       <div className="h-[var(--main-header-height-mobile)] xl:h-[var(--main-header-height-pc)]   px-[20px] flex justify-between items-center w-full  border-t-[2px] border-b-[2px] border-[#333] border-solid">
         <Link className="w-[81px] h-[24px] xl:w-[100px] xl:h-[30px] hover:cursor-pointer" href="/">
           <Image
-            alt="footer logo"
+            alt="logo"
             className="w-full h-full object-cover"
             height="0"
             sizes="100vw"
@@ -119,7 +124,7 @@ export default function MainHeader() {
         </Link>
         <div className="hidden xl:flex items-center justify-end gap-[48px]">
           <div className="flex items-center justify-end gap-[30px]">
-            {MainNavigation.slice(1, 5).map((item) => (
+            {MainNavigation.slice(1, 6).map((item) => (
               <Link
                 className={clsx(
                   'text-[14px] font-bold tracking-[0.42px] leading-[21px] ',
@@ -189,7 +194,7 @@ export default function MainHeader() {
         <div
           aria-hidden="true"
           className={clsx(
-            ' bg-white  w-[302px]  mb-h:h-[100vh] h-[75vh] border-[2px] border-[#333] border-r-[0px] absolute z-[1001]  duration-500 transition-all  py-[88px] pb-[10px] px-[48px] pr-[20px]',
+            ' bg-white w-[302px] h-[75vh] border-[2px] border-[#333] border-r-[0px] absolute z-[1001]  duration-500 transition-all  py-[88px] pb-[10px] px-[48px] pr-[20px]',
             isOpenMainMenu ? ' right-0 top-0' : ' right-[-500px] top-0'
           )}
           onClick={(e) => e.stopPropagation()}
