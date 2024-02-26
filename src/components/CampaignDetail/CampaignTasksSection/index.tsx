@@ -130,7 +130,11 @@ export default function CampaignTasksSection() {
               // isDisable={isDisableRegisterBtn}
               onClick={handleRegisterCampaign}
               textClass="text-white text-[14px] font-bold tracking-[0.42px]"
-              title="キャンペーンに応募する"
+              title={
+                campaignDetail?.methodOfselectWinners === 'MANUAL_SELECTION'
+                  ? 'キャンペーンに応募する'
+                  : '報酬を受け取る'
+              }
               withIcon={{
                 position: 'right',
                 icon: <ArrowDown className="rotate-[-90deg]" />,

@@ -101,7 +101,7 @@ export default function InfoCampaign() {
                     {moment(campaignDetail?.startTime)?.isValid()
                       ? moment(campaignDetail?.startTime)?.format('MM/DD HH:mm')
                       : '--/-- --:--'}
-                    {campaignDetail?.setExpiredTime !== true && (
+                    {campaignDetail?.setExpiredTime === true && (
                       <>
                         <span> 〜 </span>
                         {moment(campaignDetail?.expiredTime)?.isValid()

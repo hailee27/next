@@ -109,7 +109,7 @@ export function renderDataPlatform(platForm: TypePlatForm, data?: TypeConfig | u
       return [
         {
           value: 'discord_invite',
-          label: 'サーバーにJoinする',
+          label: 'サーバーにJoinさせる',
           content: [
             {
               id: 1,
