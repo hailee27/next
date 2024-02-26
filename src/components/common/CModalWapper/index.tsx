@@ -42,7 +42,7 @@ export default function CModalWapper({
             className=" absolute left-[50%] top-[50%] translate-x-[-50%]  translate-y-[-50%] z-[99999999] "
             style={{
               width: `${modalWidth}px`,
-              animation: 'modalDropTop 0.25s linear',
+              animation: 'modalDropTop 0.2s linear',
             }}
           >
             <div className="flex justify-end">

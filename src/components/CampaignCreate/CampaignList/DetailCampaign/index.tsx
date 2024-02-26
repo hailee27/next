@@ -9,10 +9,13 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import toastMessage from '@/utils/func/toastMessage';
 import { Spin } from 'antd';
+import PopupAlert from '@/components/common/PopupAlert';
+import { usePopUpContext } from '@/context/PopUpContext';
 import CampaignParticipantsInstant from './CampaignParticipantsInstant';
 import Detail from './Detail';
 
 function DetailCampaign() {
+  const { openPopUp } = usePopUpContext();
   const { query, back, reload, push } = useRouter();
   const { data, isFetching } = useGetDetailCampaignQuery(
     { campaignId: String(query?.id) },
@@ -22,13 +25,15 @@ function DetailCampaign() {
   const [deleteCampaign, { isLoading }] = useDeleteCampaignMutation();
 
   return (
-    <div className="px-[48px] pb-[77px]">
-      <div className="flex py-[32px] w-full justify-between border-b-2 border-[#2D3648] max-h-[112px]">
-        <span className="text-[32px] font-bold">{query?.isChecking === 'true' ? data?.title : 'キャンペーン詳細'}</span>
+    <div className="md:px-[48px] px-[20px] pb-[77px]">
+      <div className="flex md:flex-row flex-col py-[32px] w-full justify-between border-b-2 border-[#2D3648] md:max-h-[112px] md:space-y-0 space-y-[10px]">
+        <span className="xl:text-[32px] text-[24px] font-bold">
+          {query?.isChecking === 'true' ? data?.title : 'キャンペーン詳細'}
+        </span>
         <div className="flex space-x-[8px]">
           {query?.isChecking === 'true' ? (
             <>
-              <div className="w-[283px]  h-[56px]">
+              <div className="w-[283px]   md:h-[56px] h-[46px]">
                 <CButtonShadow
                   classBgColor="bg-white"
                   classRounded="rounded-[6px]"
@@ -50,7 +55,7 @@ function DetailCampaign() {
                   }}
                 />
               </div>
-              <div className="w-[166px]  h-[56px]">
+              <div className="w-[166px]  md:h-[56px] h-[46px]">
                 <CButtonShadow
                   classBgColor="bg-main-text"
                   classRounded="rounded-[6px]"
@@ -100,18 +105,27 @@ function DetailCampaign() {
           ) : (
             <>
               {data?.status === 'DRAFT' && (
-                <div className="w-[135px] h-[56px]">
+                <div className="w-[135px]  md:h-[56px] h-[46px]">
                   <CButtonShadow
                     classBgColor="bg-white"
                     classRounded="rounded-[6px]"
                     classShadowColor="bg-main-text"
                     onClick={() =>
-                      deleteCampaign({ campaignId: String(query.id) })
-                        .unwrap()
-                        .then(() => {
-                          push('/campaign-creator/list');
-                          toastMessage('delete sucsess', 'success');
-                        })
+                      openPopUp({
+                        contents: (
+                          <PopupAlert
+                            message="本当に削除してもよろしいですか？"
+                            onOk={() =>
+                              deleteCampaign({ campaignId: String(query.id) })
+                                .unwrap()
+                                .then(() => {
+                                  toastMessage('キャンペーンを削除されました。', 'success');
+                                  push('/campaign-creator/list');
+                                })
+                            }
+                          />
+                        ),
+                      })
                     }
                     shadowSize="normal"
                     textClass="bg-main-text"
@@ -131,7 +145,7 @@ function DetailCampaign() {
                 </div>
               )}
               {data?.status === 'COMPLETION' && (
-                <div className="w-[217px]  h-[56px]">
+                <div className="w-[217px]  md:h-[56px] h-[46px]">
                   <CButtonShadow
                     classBgColor="bg-main-text"
                     classRounded="rounded-[6px]"
@@ -156,7 +170,7 @@ function DetailCampaign() {
               {data?.status === 'PUBLIC' && (
                 <>
                   {data.methodOfselectWinners !== 'AUTO_PRIZEE_DRAW' && (
-                    <div className="w-[283px]  h-[56px]">
+                    <div className="w-[283px]   md:h-[56px] h-[46px]">
                       <CButtonShadow
                         classBgColor="bg-white"
                         classRounded="rounded-[6px]"
@@ -185,7 +199,7 @@ function DetailCampaign() {
                       />
                     </div>
                   )}
-                  <div className="w-[217px]  h-[56px]">
+                  <div className="w-[217px]   md:h-[56px] h-[46px]">
                     <CButtonShadow
                       classBgColor="bg-main-text"
                       classRounded="rounded-[6px]"

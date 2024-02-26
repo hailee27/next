@@ -48,16 +48,17 @@ function CampaignList() {
 
   const router = useRouter();
   return (
-    <div className="xl:px-[48px] px-[20px] pb-[77px]">
-      <div className="flex py-[32px] w-full justify-between border-b-2 border-[#2D3648] max-h-[112px]">
-        <span className="text-[32px] font-bold">キャンペーン一覧</span>
-        <div className="w-[165px]  h-[56px]">
+    <div className="xl:px-[48px] px-[20px] pb-[77px] w-full">
+      <div className="flex md:flex-row flex-col py-[32px] w-full justify-between border-b-2 border-[#2D3648] md:max-h-[112px] md:space-y-0 space-y-[10px]">
+        <span className="xl:text-[32px] text-[24px] font-bold">キャンペーン一覧</span>
+        <div className="md:w-[165px] w-[108px]  md:h-[56px] h-[46px]">
           <CButtonShadow
             classBgColor="bg-main-text"
             classRounded="rounded-[6px]"
             classShadowColor="bg-white"
             onClick={() => router.push('/campaign-creator/create')}
             shadowSize="normal"
+            textClass="md:text-[16px] text-[14px] text-white"
             title="新規作成"
             withIcon={{ position: 'left', icon: <FileIcon color="#fff" /> }}
           />

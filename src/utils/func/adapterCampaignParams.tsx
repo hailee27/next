@@ -11,9 +11,9 @@ export default function adapterCampaignParams(
       return {
         title: data.campainName ?? '',
         category: data.category ?? '',
-        dontSetExpiredTime: String(data.noDate ?? false),
+        setExpiredTime: String(data.noDate ?? false),
         startTime: data.startDate,
-        expiredTime: data.noDate ? undefined : data.endDate,
+        expiredTime: !data.noDate ? undefined : data.endDate,
         methodOfselectWinners: typeWinner,
         totalNumberOfUsersAllowedToWork: String(data.numberOfParticipants ?? undefined),
         numberOfPrizes: String(data.totalTicket),
@@ -27,9 +27,9 @@ export default function adapterCampaignParams(
       return {
         title: data.campainName ?? '',
         category: data.category ?? '',
-        dontSetExpiredTime: String(data.noDate ?? false),
+        setExpiredTime: String(data.noDate ?? false),
         startTime: data.startDate,
-        expiredTime: data.noDate ? undefined : data.endDate,
+        expiredTime: !data.noDate ? undefined : data.endDate,
         methodOfselectWinners: typeWinner,
         description: data.explanatoryText,
         noteReward: data.compensationSummary ?? 'NONE',

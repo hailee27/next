@@ -1,3 +1,4 @@
+@import '../../../styles/globals.scss';
 .customeButtonUpload {
   :global {
     .ant-upload.ant-upload-select {
@@ -30,8 +31,14 @@
     .ant-upload-wrapper.ant-upload-picture-card-wrapper
       .ant-upload-list.ant-upload-list-picture-card
       .ant-upload-list-item-container {
-      min-width: 467px;
       min-height: 216px;
+      min-width: 467px;
+      @include mobile {
+        // min-height: 216px;
+        // width: calc(100px - 60px);
+        min-width: 200px;
+        width: auto;
+      }
     }
   }
 }
