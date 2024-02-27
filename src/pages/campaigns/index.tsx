@@ -8,11 +8,12 @@ import { Spin } from 'antd';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
+import { isMobile } from 'react-device-detect';
 import { useMediaQuery } from 'usehooks-ts';
 
 export default function CampaignsPage() {
   const matchesMD = useMediaQuery('(min-width: 768px)');
-  const PAGE_SIZE = matchesMD ? 20 : 10;
+  const PAGE_SIZE = isMobile ? 10 : 20;
   const { campaigns, total, isFetching } = useGetCampaigns({ pageSize: PAGE_SIZE });
 
   const router = useRouter();

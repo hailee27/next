@@ -7,6 +7,7 @@ import { TypeTask } from '@/redux/endpoints/campaign';
 import { MasterDataResponse } from '@/redux/endpoints/masterData';
 import toastMessage from './toastMessage';
 import { getErrorMessage } from './getErrorMessage';
+import { TWITTER_COMPOSE_POST_BASE_URL, TWITTER_FOLLOW_BASE_URL, TWITTER_TWEET_POST_BASE_URL } from '../constant/enums';
 
 export interface TasksConvert {
   id: number;
@@ -61,7 +62,7 @@ export const convertCampaignTask = (task: TypeTask | null) => {
                 </div>
               ),
               type: 'OPEN_LINK',
-              link: `https://twitter.com/intent/follow?screen_name=${user}`,
+              link: `${TWITTER_FOLLOW_BASE_URL}?screen_name=${user}`,
             };
             break;
           }
@@ -84,99 +85,120 @@ export const convertCampaignTask = (task: TypeTask | null) => {
                 </div>
               ),
               type: 'OPEN_LINK',
-              link: `https://twitter.com/intent/retweet?tweet_id=${postId}`,
+              link: `${TWITTER_TWEET_POST_BASE_URL}?tweet_id=${postId}`,
             };
             break;
           }
           case 'twitter_repost_quote': {
-            const taskUrl = taskPlatForm === 'TWITTER' ? task?.taskTemplate?.config?.postURLQuote : '';
-            const splitUrl = taskUrl?.split('/');
-            const postId = splitUrl?.[(splitUrl?.length ?? 0) - 1] ?? '';
-            result = {
-              id: task?.id ?? '',
-              campaignId: task?.campaignId ?? '',
-              title: 'X(Twitter)で引用リツイートする',
-              description: (
-                <div className="text-[14px]">
-                  <p>
-                    この引用をリツイート:{' '}
-                    <a className="line-clamp-1 text-ellipsis" href={taskUrl} rel="noreferrer" target="_blank">
-                      {taskUrl}
-                    </a>
-                  </p>
-                  {taskPlatForm === 'TWITTER' && task?.taskTemplate?.config?.quotePost ? (
+            if (taskPlatForm === 'TWITTER') {
+              const taskUrl = task?.taskTemplate?.config?.postURLQuote ?? '';
+
+              const ops = {
+                text: `${task?.taskTemplate?.config?.quotePost ?? ''}\n\n${taskUrl ?? ''}`,
+              };
+              const qs = new URLSearchParams(ops).toString();
+              const url = `${TWITTER_COMPOSE_POST_BASE_URL}?${qs}`;
+
+              result = {
+                id: task?.id ?? '',
+                campaignId: task?.campaignId ?? '',
+                title: 'X(Twitter)で引用リツイートする',
+                description: (
+                  <div className="text-[14px]">
                     <p>
-                      リクエスト: <br />
-                      {task?.taskTemplate?.config?.quotePost}
+                      この引用をリツイート:{' '}
+                      <a className="line-clamp-1 text-ellipsis" href={taskUrl} rel="noreferrer" target="_blank">
+                        {taskUrl}
+                      </a>
                     </p>
-                  ) : (
-                    ''
-                  )}
-                </div>
-              ),
-              type: 'OPEN_LINK',
-              link: `https://twitter.com/intent/retweet?tweet_id=${postId}`,
-            };
+                    {task?.taskTemplate?.config?.quotePost ? (
+                      <p>
+                        リクエスト: <br />
+                        {task?.taskTemplate?.config?.quotePost}
+                      </p>
+                    ) : (
+                      ''
+                    )}
+                  </div>
+                ),
+                type: 'OPEN_LINK',
+                link: url,
+              };
+            }
             break;
           }
           case 'twitter_make_post_with_hashtags': {
-            result = {
-              id: task?.id ?? '',
-              campaignId: task?.campaignId ?? '',
-              title: 'X(Twitter)で指定ハッシュタグ付きの投稿をする',
-              description: (
-                <div className="text-[14px]">
-                  {taskPlatForm === 'TWITTER' && task?.taskTemplate?.config?.taskTitle ? (
-                    <p>
-                      タスクタイトル:
-                      <br /> {task?.taskTemplate?.config?.taskTitle}
-                    </p>
-                  ) : (
-                    ''
-                  )}
-                  {taskPlatForm === 'TWITTER' && task?.taskTemplate?.config?.taskDescription ? (
-                    <p>
-                      タスク説明:
-                      <br /> {task?.taskTemplate?.config?.taskDescription}
-                    </p>
-                  ) : (
-                    ''
-                  )}
-                  {taskPlatForm === 'TWITTER' && task?.taskTemplate?.config?.defaultPostText ? (
-                    <p>
-                      デフォルト投稿テキスト:
-                      <br /> {task?.taskTemplate?.config?.defaultPostText}
-                    </p>
-                  ) : (
-                    ''
-                  )}
-                </div>
-              ),
-              type: 'OPEN_LINK',
-              link: 'https://twitter.com/compose/tweet',
-            };
+            if (taskPlatForm === 'TWITTER') {
+              const ops = {
+                text: task?.taskTemplate?.config?.defaultPostText ?? '',
+              };
+              const qs = new URLSearchParams(ops).toString();
+              const url = `${TWITTER_COMPOSE_POST_BASE_URL}?${qs}`;
+              result = {
+                id: task?.id ?? '',
+                campaignId: task?.campaignId ?? '',
+                title: 'X(Twitter)で指定ハッシュタグ付きの投稿をする',
+                description: (
+                  <div className="text-[14px]">
+                    {task?.taskTemplate?.config?.taskTitle ? (
+                      <p>
+                        タスクタイトル:
+                        <br /> {task?.taskTemplate?.config?.taskTitle}
+                      </p>
+                    ) : (
+                      ''
+                    )}
+                    {task?.taskTemplate?.config?.taskDescription ? (
+                      <p>
+                        タスク説明:
+                        <br /> {task?.taskTemplate?.config?.taskDescription}
+                      </p>
+                    ) : (
+                      ''
+                    )}
+                    {task?.taskTemplate?.config?.defaultPostText ? (
+                      <p>
+                        デフォルト投稿テキスト:
+                        <br /> {task?.taskTemplate?.config?.defaultPostText}
+                      </p>
+                    ) : (
+                      ''
+                    )}
+                  </div>
+                ),
+                type: 'OPEN_LINK',
+                link: url,
+              };
+            }
             break;
           }
           case 'twitter_make_post': {
-            result = {
-              id: task?.id ?? '',
-              campaignId: task?.campaignId ?? '',
-              title: 'X(Twitter)で指定文言を投稿する',
-              description: (
-                <div className="text-[14px]">
-                  {taskPlatForm === 'TWITTER' && task?.taskTemplate?.config?.designatedClassicalChinese ? (
-                    <p>
-                      指定文言:
-                      <br /> {task?.taskTemplate?.config?.designatedClassicalChinese}
-                    </p>
-                  ) : (
-                    ''
-                  )}
-                </div>
-              ),
-              type: 'OPEN_LINK',
-              link: 'https://twitter.com/compose/tweet',
-            };
+            if (taskPlatForm === 'TWITTER') {
+              const ops = {
+                text: task?.taskTemplate?.config?.designatedClassicalChinese ?? '',
+              };
+              const qs = new URLSearchParams(ops).toString();
+              const url = `${TWITTER_COMPOSE_POST_BASE_URL}?${qs}`;
+              result = {
+                id: task?.id ?? '',
+                campaignId: task?.campaignId ?? '',
+                title: 'X(Twitter)で指定文言を投稿する',
+                description: (
+                  <div className="text-[14px]">
+                    {taskPlatForm === 'TWITTER' && task?.taskTemplate?.config?.designatedClassicalChinese ? (
+                      <p>
+                        指定文言:
+                        <br /> {task?.taskTemplate?.config?.designatedClassicalChinese}
+                      </p>
+                    ) : (
+                      ''
+                    )}
+                  </div>
+                ),
+                type: 'OPEN_LINK',
+                link: url,
+              };
+            }
             break;
           }
           default:

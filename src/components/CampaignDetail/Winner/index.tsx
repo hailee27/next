@@ -697,14 +697,14 @@ export default function Winner() {
         </h2>
         <div className=" flex flex-col gap-[16px]">
           <Spin spinning={isLoading}>
-            <div className="rounded-[16px] border-[2px] border-[#333] py-[38px] px-[30px] bg-white">
-              <div aria-hidden className="hover:cursor-pointer w-[100px] h-[40px] " onClick={onCreateCoupon}>
+            <div className="rounded-[16px] border-[2px] border-[#333] py-[38px] px-[30px] bg-white flex items-center justify-center">
+              <div aria-hidden className="hover:cursor-pointer w-[174px] h-[30px] " onClick={onCreateCoupon}>
                 <Image
                   alt="amazon gift"
                   className="w-full h-full object-contain"
-                  height={40}
-                  src="/assets/images/amazon-gift.png"
-                  width={100}
+                  height={30}
+                  src="/assets/images/aws_card_reward.png"
+                  width={174}
                 />
               </div>
             </div>
