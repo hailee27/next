@@ -46,3 +46,7 @@ export const USER_ROLE = {
 
 export const PAGINATION_PAGE_SIZE = 20;
 export const HOME_PAGINATION_PAGE_SIZE = 4;
+
+export const TWITTER_FOLLOW_BASE_URL = 'https://twitter.com/intent/follow';
+export const TWITTER_TWEET_POST_BASE_URL = 'https://twitter.com/intent/retweet';
+export const TWITTER_COMPOSE_POST_BASE_URL = 'https://twitter.com/compose/post';
