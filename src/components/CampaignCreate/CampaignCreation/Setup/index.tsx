@@ -52,6 +52,11 @@ function Setup() {
       });
     }
   }, [dataCampaign]);
+  useEffect(() => {
+    if (!noDateWatch) {
+      form.setFieldValue('endDate', undefined);
+    }
+  }, [noDateWatch]);
 
   return (
     <>

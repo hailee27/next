@@ -12,6 +12,7 @@ import adapterCampaignParams, {
   adapterDataTask,
   adapterNewTask,
 } from '@/utils/func/adapterCampaignParams';
+import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import toastMessage from '@/utils/func/toastMessage';
 import { useRouter } from 'next/router';
 import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
@@ -33,6 +34,7 @@ export type TypeCampaignContext = {
   handleDeleteCampaign: (campaignId: string | number) => void;
   isLoadingCreate: boolean;
   isLoadingUpdate: boolean;
+  isLoadingCreatePayment: boolean;
 };
 
 const CampaignApiContext = createContext<TypeCampaignContext | undefined>(undefined);
@@ -88,18 +90,19 @@ export const CampaignApiProvider = ({ children }: { children: React.ReactNode })
                   router.push('/campaign-creator/list');
                   toastMessage('ステータスを更新に成功です。', 'success');
                 })
-                .catch(() => toastMessage('paymnet error', 'error'));
+                .catch((err) => toastMessage(getErrorMessage(err), 'error'));
             } else {
               router.push('/campaign-creator/list');
               toastMessage(type === 'DRAFT' ? '下書き保存に成功しました。' : 'succses', 'success');
             }
           }
         } catch (err) {
+          getErrorMessage(err);
           // eslint-disable-next-line no-console
           console.log(err);
         }
       })
-      .catch((err) => toastMessage(err.message || 'error', 'error'));
+      .catch((err) => toastMessage(getErrorMessage(err), 'error'));
   };
 
   const handleUpdateCampaign = (
@@ -159,14 +162,14 @@ export const CampaignApiProvider = ({ children }: { children: React.ReactNode })
                 router.push('/campaign-creator/list');
                 toastMessage('ステータスを更新に成功です。', 'success');
               })
-              .catch(() => toastMessage('paymnet error', 'error'));
+              .catch((err) => toastMessage(getErrorMessage(err), 'error'));
           } else {
             router.push('/campaign-creator/list');
             toastMessage('下書き保存に成功しました。', 'success');
           }
         }
       })
-      .catch(() => toastMessage('failed', 'error'));
+      .catch((err) => toastMessage(getErrorMessage(err), 'error'));
   };
 
   const handleDeleteCampaign = useCallback((campaignId) => {
@@ -184,6 +187,7 @@ export const CampaignApiProvider = ({ children }: { children: React.ReactNode })
       isLoadingCreate: isLoadingCreateCampaign && isLoadingCreateTask && isLoadingCreateReWard,
       isLoadingUpdate: isLoadingUpdateCampaign && isLoadingUpdateTask && isLoadingUpdateReWard,
       isLoadingDelete: isLoadingDeleteCampaign && isLoadingDeleteTask && isLoadingDeleteReWard,
+      isLoadingCreatePayment,
     }),
     [
       setTaskIdDeletes,
@@ -193,6 +197,7 @@ export const CampaignApiProvider = ({ children }: { children: React.ReactNode })
       isLoadingCreateCampaign,
       isLoadingCreateTask,
       isLoadingCreateReWard,
+      isLoadingCreatePayment,
     ]
   );
   return <CampaignApiContext.Provider value={contextvalue}>{children}</CampaignApiContext.Provider>;
