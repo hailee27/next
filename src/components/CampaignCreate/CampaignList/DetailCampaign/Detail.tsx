@@ -58,9 +58,13 @@ function Detail({ data }: { data?: TypeCampaign }) {
               </div>
               <FlagItem
                 className="pl-[16px]"
-                value={`${moment(data?.startTime).format('YYYY/MM/DD HH:mm')} 〜${moment(data?.expiredTime).format(
-                  'YYYY/MM/DD HH:mm'
-                )} `}
+                value={
+                  data?.expiredTime
+                    ? `${moment(data?.startTime).format('YYYY/MM/DD HH:mm')} ~ ${moment(data?.expiredTime).format(
+                        'YYYY/MM/DD HH:mm'
+                      )} `
+                    : moment(data?.startTime).format('YYYY/MM/DD HH:mm')
+                }
               />
             </div>
             <div className="flex flex-col space-y-[8px]">
@@ -129,7 +133,7 @@ function Detail({ data }: { data?: TypeCampaign }) {
         )}
       </div>
       {query?.isChecking !== 'true' && (
-        <div className="flex md:flex-row flex-row space-y-[16px] md:space-x-[16px] justify-center  mt-[64px]">
+        <div className="flex md:flex-row flex-col  md:space-x-[16px] justify-center items-center  mt-[64px]">
           {status === '下書き' && (
             <div className="w-[293px]  h-[56px]">
               <CButtonShadow
