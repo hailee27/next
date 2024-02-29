@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import React, { useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import moment from 'moment';
@@ -20,42 +21,12 @@ import Confirmation from './Confirmation';
 import Setup from './Setup';
 import Task from './Task';
 
-const items: TabsProps['items'] = [
-  {
-    key: '1',
-    label: 'セットアップ',
-    children: <Setup />,
-    forceRender: true,
-    destroyInactiveTabPane: true,
-  },
-  {
-    key: '2',
-    label: 'タスク',
-    children: <Task />,
-    forceRender: true,
-    destroyInactiveTabPane: true,
-  },
-  {
-    key: '3',
-    label: '報酬',
-    children: <ReWard />,
-    forceRender: true,
-    destroyInactiveTabPane: true,
-  },
-  {
-    key: '4',
-    label: '確認・購入',
-    children: <Confirmation />,
-    forceRender: true,
-    destroyInactiveTabPane: true,
-  },
-];
-
 function CampaignCreation() {
   const router = useRouter();
   const { user } = useSelector((state: RootState) => state.auth);
   const [tab, setTab] = useState<string>('1');
-  const { handleCreateCampaign, handleUpdateCampaign, isLoadingCreate, isLoadingUpdate } = useCampaignApiContext();
+  const { handleCreateCampaign, handleUpdateCampaign, isLoadingCreate, isLoadingUpdate, isLoadingCreatePayment } =
+    useCampaignApiContext();
   const { openPopUp } = usePopUpContext();
   const [deleteCampaign] = useDeleteCampaignMutation();
   const { data: dataMaster } = useGetMasterDataQuery();
@@ -67,12 +38,51 @@ function CampaignCreation() {
     [setTab]
   );
 
+  const items = useMemo<TabsProps['items']>(
+    () => [
+      {
+        key: '1',
+        label: 'セットアップ',
+        children: <Setup />,
+        forceRender: true,
+        destroyInactiveTabPane: true,
+      },
+      {
+        key: '2',
+        label: 'タスク',
+        children: <Task />,
+        forceRender: true,
+        destroyInactiveTabPane: true,
+      },
+      {
+        key: '3',
+        label: '報酬',
+        children: <ReWard />,
+        forceRender: true,
+        destroyInactiveTabPane: true,
+      },
+      {
+        key: '4',
+        label: '確認・購入',
+        children: <Confirmation />,
+        forceRender: true,
+        destroyInactiveTabPane: true,
+        disabled: user?.companyRole.membership === 'MANAGER',
+      },
+    ],
+    [user?.companyRole.membership]
+  );
+
   return (
     <Form.Provider
       onFormFinish={(name, { forms }) => {
         // await forms[name].validateFields();
         if (name !== 'delete' && name !== 'preview' && name !== 'saveDraft') {
           setTab((prev) => String(Number(prev) + 1));
+          if (tab === '3' && user?.companyRole.membership !== 'MANAGER') {
+            openPopUp({ contents: <PopupAlert message="あなたは正しくありません" /> });
+            setTab('3');
+          }
         }
         if (tab === '4') {
           setTab('4');
@@ -232,7 +242,7 @@ function CampaignCreation() {
           </div>
         </div>
         <div className="pt-[28px] pb-[55px]">
-          <Spin spinning={isLoadingCreate || isLoadingUpdate}>
+          <Spin spinning={isLoadingCreate || isLoadingUpdate || isLoadingCreatePayment}>
             <StepContext.Provider value={valueContext}>
               <BasicTabs activeKey={tab} items={items} onChange={(e) => setTab(e)} />
             </StepContext.Provider>

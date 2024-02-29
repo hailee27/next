@@ -21,11 +21,12 @@ import { useGetDetailCampaignQuery } from '@/redux/endpoints/campaign';
 import { useGetMasterDataQuery } from '@/redux/endpoints/masterData';
 import moment from 'moment';
 import { useGetReWardsQuery } from '@/redux/endpoints/reWard';
+import { useCampaignApiContext } from '@/context/CampaignApiContext';
 import TableReWard from './TableReWard';
 
 function Confirmation() {
   const router = useRouter();
-
+  const { isLoadingCreatePayment } = useCampaignApiContext();
   const [form] = Form.useForm();
   const { openPopUp } = usePopUpContext();
   const { user } = useSelector((state: RootState) => state.auth);
@@ -58,10 +59,13 @@ function Confirmation() {
   }, [priceWatch, fee, tax]);
 
   useEffect(() => {
-    if (totalPaymentAmount) {
+    if (totalPaymentAmount && totalPaymentAmount >= 0) {
       form.setFieldValue('priceWithTax', totalPaymentAmount);
+    } else {
+      form.setFieldValue('priceWithTax', 0);
     }
   }, [totalPaymentAmount]);
+
   useEffect(() => {
     if (dataCampaign && masterData && dataReward) {
       form.setFieldsValue({
@@ -206,12 +210,13 @@ function Confirmation() {
                     <div className="w-[210px] h-[50px] border-2 rounded-[6px] border-[#333]">
                       <Form.Item initialValue={user?.memberCompany?.pointTotal ?? 0} name="depositBalance" noStyle>
                         <FlagItem className="flex items-center  h-full p-[24px]" />
-                        {/* <BasicInput type="number" /> */}
                       </Form.Item>
                     </div>
                     <BasicButton
+                      className={`${useDepositBalance && 'pointer-events-none'}`}
                       disabled={useDepositBalance}
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.preventDefault();
                         setUseDepositBalance(true);
                         form.setFieldValue('usePoint', true);
                         setTotalPaymentAmount(totalPaymentAmount - Number(user?.memberCompany?.pointTotal ?? 0));
@@ -224,7 +229,8 @@ function Confirmation() {
                 </div>
                 <div className="mt-[24px]">
                   <div className="text-[16px] items-center flex font-bold leading-[24px]">
-                    支払い金額合計:&ensp;{formatNumber(totalPaymentAmount, true, 1)} 円
+                    支払い金額合計:&ensp;
+                    {formatNumber(totalPaymentAmount && totalPaymentAmount >= 0 ? totalPaymentAmount : 0, true, 1)} 円
                   </div>
                   <div className="flex flex-col space-y-[32px] text-[16px] pt-[12px]">
                     <div className="flex items-center">
@@ -282,6 +288,7 @@ function Confirmation() {
               classBgColor="bg-main-text"
               classRounded="rounded-[6px]"
               classShadowColor="bg-white"
+              isDisable={isLoadingCreatePayment}
               onClick={() => form.submit()}
               shadowSize="normal"
               title="上記の内容で購入する"
