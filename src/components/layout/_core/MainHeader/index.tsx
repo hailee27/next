@@ -110,8 +110,8 @@ export default function MainHeader() {
     };
   }, []);
   return (
-    <div className="font-notoSans  bg-white">
-      <div className="h-[var(--main-header-height-mobile)] xl:h-[var(--main-header-height-pc)]   px-[20px] flex justify-between items-center w-full  border-t-[2px] border-b-[2px] border-[#333] border-solid">
+    <div className="font-notoSans  bg-white sticky top-0 z-[999]">
+      <div className="h-[var(--main-header-height-mobile)] xl:h-[var(--main-header-height-pc)]   px-[20px] flex justify-between items-center w-full  border-t-[2px] border-b-[2px] border-[#333] border-solid  ">
         <Link className="w-[81px] h-[24px] xl:w-[100px] xl:h-[30px] hover:cursor-pointer" href="/">
           <Image
             alt="logo"

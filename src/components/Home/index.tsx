@@ -12,22 +12,34 @@ function HomePage({ campaignsOrderByViews, campaignsOrderByStartTime, campaignsO
   return (
     <div className="font-notoSans bg-white">
       <HeaderHomePage />
-      <TemplateCampaign
-        listCampaign={campaignsOrderByViews}
-        title="おすすめのキャンペーン"
-        viewMoreLink="/campaigns?orderBy=totalViews"
-      />
-      <TemplateCampaign
-        bgColor="#D5FFFF"
-        listCampaign={campaignsOrderByStartTime}
-        title="新着キャンペーン"
-        viewMoreLink="/campaigns?orderBy=startTime"
-      />
-      <TemplateCampaign
-        listCampaign={campaignsOrderByTotalPrizeValue}
-        title="高額報酬キャンペーン"
-        viewMoreLink="/campaigns?orderBy=totalPrizeValue"
-      />
+      {campaignsOrderByViews && campaignsOrderByViews?.length > 0 ? (
+        <TemplateCampaign
+          listCampaign={campaignsOrderByViews}
+          title="おすすめのキャンペーン"
+          viewMoreLink="/campaigns?orderBy=totalViews"
+        />
+      ) : (
+        ''
+      )}
+      {campaignsOrderByStartTime && campaignsOrderByStartTime?.length > 0 ? (
+        <TemplateCampaign
+          bgColor="#D5FFFF"
+          listCampaign={campaignsOrderByStartTime}
+          title="新着キャンペーン"
+          viewMoreLink="/campaigns?orderBy=startTime"
+        />
+      ) : (
+        ''
+      )}
+      {campaignsOrderByTotalPrizeValue && campaignsOrderByTotalPrizeValue?.length > 0 ? (
+        <TemplateCampaign
+          listCampaign={campaignsOrderByTotalPrizeValue}
+          title="高額報酬キャンペーン"
+          viewMoreLink="/campaigns?orderBy=totalPrizeValue"
+        />
+      ) : (
+        ''
+      )}
     </div>
   );
 }
