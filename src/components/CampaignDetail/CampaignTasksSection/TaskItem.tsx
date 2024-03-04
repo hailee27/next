@@ -57,7 +57,7 @@ export default function TaskItem({
       setIsLoading(true);
       if (!accessToken || !user || (user && !user?.id)) {
         const ops = {
-          [`${REDIRECT_QUERY_KEY}`]: window.location.href,
+          [`${REDIRECT_QUERY_KEY}`]: router.asPath,
         };
         const qs = new URLSearchParams(ops).toString();
         router.push(`/auth/sign-in/campaign-implementer?${qs}`);

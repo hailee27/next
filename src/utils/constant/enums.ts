@@ -51,4 +51,4 @@ export const TWITTER_FOLLOW_BASE_URL = 'https://twitter.com/intent/follow';
 export const TWITTER_TWEET_POST_BASE_URL = 'https://twitter.com/intent/retweet';
 export const TWITTER_COMPOSE_POST_BASE_URL = 'https://twitter.com/compose/post';
 
-export const REDIRECT_QUERY_KEY = 'from-url';
+export const REDIRECT_QUERY_KEY = 'callback';
