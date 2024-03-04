@@ -39,7 +39,7 @@ export default function VerificationPage() {
           ) {
             push('/my-page');
           } else {
-            push('/campaign-creator');
+            push('/');
           }
         }
       }

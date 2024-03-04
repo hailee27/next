@@ -1,5 +1,7 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import CampaignCardItem from '@/components/CampaignCardItem';
+import CampaignCardItemSkeleton from '@/components/CampaignCardItem/CampaignCardItemSkeleton';
 
 import PaginationRouterControl from '@/components/common/BasicPaination/PaginationRouterControl';
 import CButtonShadow from '@/components/common/CButtonShadow';
@@ -77,14 +79,18 @@ export default function CampaignsPage() {
         ))}
       </div>
       <div className="h-[32px] xl:h-[80px]" />
-      {/* <div className="grid grid-cols-[repeat(auto-fit,_335px)]  gap-[10px] justify-center md:max-w-[680px] xl:max-w-[1025px] xxl:max-w-[1370px] md:mx-auto">
-        <CampaignCardItemSkeleton viewMode={matchesMD ? 'HAS_IMAGE' : 'NO_IMAGE'} />
-        <CampaignCardItemSkeleton viewMode={matchesMD ? 'HAS_IMAGE' : 'NO_IMAGE'} />
-        <CampaignCardItemSkeleton viewMode={matchesMD ? 'HAS_IMAGE' : 'NO_IMAGE'} />
-        <CampaignCardItemSkeleton viewMode={matchesMD ? 'HAS_IMAGE' : 'NO_IMAGE'} />
-      </div> */}
+
       <Spin spinning={isFetching}>
-        {Array.isArray(campaigns) && campaigns?.length > 0 ? (
+        {campaigns === null || isFetching ? (
+          <div className="grid grid-cols-[repeat(auto-fit,_335px)]  gap-[10px] justify-center md:max-w-[680px] xl:max-w-[1025px] xxl:max-w-[1370px] md:mx-auto">
+            <CampaignCardItemSkeleton viewMode={matchesMD ? 'HAS_IMAGE' : 'NO_IMAGE'} />
+            <CampaignCardItemSkeleton viewMode={matchesMD ? 'HAS_IMAGE' : 'NO_IMAGE'} />
+            <CampaignCardItemSkeleton viewMode={matchesMD ? 'HAS_IMAGE' : 'NO_IMAGE'} />
+            <div className="xl:hidden xxl:block">
+              <CampaignCardItemSkeleton viewMode={matchesMD ? 'HAS_IMAGE' : 'NO_IMAGE'} />
+            </div>
+          </div>
+        ) : Array.isArray(campaigns) && campaigns?.length > 0 ? (
           <>
             <div className="grid grid-cols-[repeat(auto-fit,_335px)]  gap-[10px] justify-center md:max-w-[680px] xl:max-w-[1025px] xxl:max-w-[1370px] md:mx-auto">
               {campaigns?.map((item) => (
