@@ -7,16 +7,28 @@ import { ColumnsType } from 'antd/es/table';
 import CircleArrow from '@/components/common/icons/CircleArrow';
 import moment from 'moment';
 import { formatNumber } from '@/utils/formatNumber';
+import { Image, type TabsProps } from 'antd';
+import BasicTabs from '@/components/common/BasicTabs';
+import ShareChart from './participants/ShareChart';
+import ShareTable from './participants/ShareTable';
 
 interface DataType {
   key: React.Key;
   accountName: string;
   email: string;
   date: string;
+  shares?: number;
   prize?: string;
   question_1: string;
   question_2: string;
 }
+
+const ListTab = ({ title }: { title: string }) => (
+  <div className=" flex items-center space-x-[8px]">
+    <Image alt="" preview={false} src="/icons/icon-placeholder.svg" />
+    <span className="text-[16px] font-bold">{title}</span>
+  </div>
+);
 
 function CampaignParticipantsInstant({ totalPrizeValue }: { totalPrizeValue: number }) {
   const { query } = useRouter();
@@ -72,7 +84,10 @@ function CampaignParticipantsInstant({ totalPrizeValue }: { totalPrizeValue: num
         title: '参加日時',
         dataIndex: 'date',
       },
-
+      {
+        title: 'ポイント',
+        dataIndex: 'shares',
+      },
       {
         title: '自由形式質問_1',
         dataIndex: 'question_1',
@@ -103,6 +118,58 @@ function CampaignParticipantsInstant({ totalPrizeValue }: { totalPrizeValue: num
 
   const fee = useMemo(() => Number((Number(totalPrizeValue) * 5) / 100), [totalPrizeValue]);
   const tax = useMemo(() => Number((fee * 10) / 100), [totalPrizeValue, fee]);
+
+  const ParticipantsTableContentRender = (
+    <div className={styles.customTable}>
+      <Table
+        columns={columns}
+        dataSource={data}
+        loading={isFetchingDetail || isFetchingList}
+        // onRow={(record) => ({
+        //   onClick: () => {
+        //     push(`/campaign-creator/list/${record.key}`);
+        //     // trigger({ campaignId: String(record.key) }); // click row
+        //   },
+        // })}
+        pagination={{
+          position: ['bottomCenter'],
+          pageSize: 10,
+          // total: 10,
+          showSizeChanger: false,
+          jumpNextIcon: <span className="text-[16px] font-medium tracking-[0.48px]">...</span>,
+          jumpPrevIcon: <span className="text-[16px] font-medium tracking-[0.48px]">...</span>,
+          prevIcon: <CircleArrow position="left" />,
+          nextIcon: <CircleArrow />,
+          // eslint-disable-next-line react/no-unstable-nested-components
+          showTotal: () => <span>{10} 件</span>,
+          // onChange: (page) => {
+          //   push({ query: { page } }, undefined, { shallow: true, scroll: true });
+          // },
+          current: 10,
+        }}
+        tableLayout="fixed"
+      />
+    </div>
+  );
+
+  const manualCampaignTabItems: TabsProps['items'] = [
+    {
+      key: '1',
+      label: <ListTab title="すべて" />,
+      children: <div className="mt-[16px]">{ParticipantsTableContentRender}</div>,
+    },
+    {
+      key: '2',
+      label: <ListTab title="下書き・購入待ち" />,
+      children: (
+        <div className="mt-[16px]">
+          <ShareChart />
+          <div className="h-[40px]" />
+          <ShareTable />
+        </div>
+      ),
+    },
+  ];
 
   return (
     <div className="mt-[56px]">
@@ -142,36 +209,11 @@ function CampaignParticipantsInstant({ totalPrizeValue }: { totalPrizeValue: num
           </div>
         </div>
       )}
-      <div className={styles.customTable}>
-        <Table
-          columns={columns}
-          dataSource={data}
-          loading={isFetchingDetail || isFetchingList}
-          // onRow={(record) => ({
-          //   onClick: () => {
-          //     push(`/campaign-creator/list/${record.key}`);
-          //     // trigger({ campaignId: String(record.key) }); // click row
-          //   },
-          // })}
-          pagination={{
-            position: ['bottomCenter'],
-            pageSize: 10,
-            // total: 10,
-            showSizeChanger: false,
-            jumpNextIcon: <span className="text-[16px] font-medium tracking-[0.48px]">...</span>,
-            jumpPrevIcon: <span className="text-[16px] font-medium tracking-[0.48px]">...</span>,
-            prevIcon: <CircleArrow position="left" />,
-            nextIcon: <CircleArrow />,
-            // eslint-disable-next-line react/no-unstable-nested-components
-            showTotal: () => <span>{10} 件</span>,
-            // onChange: (page) => {
-            //   push({ query: { page } }, undefined, { shallow: true, scroll: true });
-            // },
-            current: 10,
-          }}
-          tableLayout="fixed"
-        />
-      </div>
+      {dataTable?.methodOfselectWinners === 'AUTO_PRIZEE_DRAW' ? (
+        ParticipantsTableContentRender
+      ) : (
+        <BasicTabs defaultActiveKey="1" items={manualCampaignTabItems} />
+      )}
     </div>
   );
 }

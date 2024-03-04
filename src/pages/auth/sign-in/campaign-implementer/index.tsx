@@ -17,6 +17,8 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useDispatch } from 'react-redux';
+import { pickBy } from 'lodash';
+import { REDIRECT_QUERY_KEY } from '@/utils/constant/enums';
 
 export default function CampaignImplementerSignin() {
   const { register, handleSubmit, errors, isDisableSubmit, onChangeRecaptcha } = useAuthEmailPassword();
@@ -31,20 +33,32 @@ export default function CampaignImplementerSignin() {
 
   const onSigninEmail = async (formValue: AuthEmailPasswordData) => {
     try {
+      const redirectUrl = router?.query?.[`${REDIRECT_QUERY_KEY}`];
+
       if (formValue.email && formValue.password && !isDisableSubmit) {
         const data = await signinEmail(formValue).unwrap();
         if (data?.accessToken && data?.refreshToken && data?.user) {
           dispatch(setSession({ ...data }));
-          setIsShowMsg(true);
-          setTimeout(() => {
-            router.replace('/my-page');
-          }, 2000);
+
+          if (redirectUrl && typeof redirectUrl === 'string') {
+            router.push(redirectUrl);
+          } else {
+            setIsShowMsg(true);
+            setTimeout(() => {
+              router.replace('/my-page');
+            }, 2000);
+          }
         } else if (data?.user && data?.totpToken) {
-          router.push(
-            `/auth/sign-in/campaign-implementer/verification?code=${data?.code ?? undefined}&totpToken=${
-              data?.totpToken ?? undefined
-            }&userId=${data?.user?.id ?? undefined}`
-          );
+          const query = {
+            code: data?.code ?? undefined,
+            totpToken: data?.totpToken ?? undefined,
+            userId: data?.user?.id ?? undefined,
+            [`${REDIRECT_QUERY_KEY}`]: redirectUrl ?? undefined,
+          };
+
+          const qs = new URLSearchParams(pickBy(query)).toString();
+
+          router.push(`/auth/sign-in/campaign-implementer/verification?${qs}`);
         }
       }
     } catch (err) {

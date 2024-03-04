@@ -1,22 +1,17 @@
 /* eslint-disable react/no-danger */
 /* eslint-disable no-nested-ternary */
 
-import { useGetMasterDataQuery } from '@/redux/endpoints/masterData';
-import { getMasterDataLabel } from '@/utils/func/convertCampaign';
+import CalendarIcon from '@/components/common/icons/CalendarIcon';
+import YenIcon from '@/components/common/icons/YenIcon';
 import moment from 'moment';
 import Image from 'next/image';
 import { useContext, useMemo } from 'react';
-import CalendarIcon from '@/components/common/icons/CalendarIcon';
-import YenIcon from '@/components/common/icons/YenIcon';
-import { CampaignDetailContext } from '../CampainContext';
 import CampaignRewardSection from '../CampaignRewardSection';
 import CampaignTasksSection from '../CampaignTasksSection';
+import { CampaignDetailContext } from '../CampainContext';
 
 export default function InfoCampaign() {
-  const { data } = useGetMasterDataQuery();
-  const { campaignDetail, campaignRewards, campaignTasks } = useContext(CampaignDetailContext);
-
-  const campaignCategory = getMasterDataLabel(data, 'CATEGORY_CAMPAIGN', campaignDetail?.category ?? '');
+  const { campaignDetail, campaignRewards, campaignTasks, campaignCategory } = useContext(CampaignDetailContext);
 
   const sortCampaignRewardPrice = useMemo(() => {
     const results = campaignRewards && Array.isArray(campaignRewards) ? [...campaignRewards] : [];
@@ -142,7 +137,10 @@ export default function InfoCampaign() {
                         </>
                       ) : sortCampaignRewardPrice?.length === 1 ? (
                         <span>
-                          <span className="font-montserrat">{sortCampaignRewardPrice[0]?.amountOfMoney ?? '--'}</span>円
+                          <span className="font-montserrat">
+                            {sortCampaignRewardPrice[0]?.amountOfMoney.toLocaleString('ja-JP') ?? '--'}
+                          </span>
+                          円
                         </span>
                       ) : (
                         '--'

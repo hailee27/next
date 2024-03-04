@@ -127,7 +127,7 @@ export default function CampaignTasksSection() {
               classBgColor={isDisableRegisterBtn ? 'bg-[#c2c2c2]' : 'bg-[#333]'}
               classBorderColor={isDisableRegisterBtn ? 'border-[#c2c2c2]' : 'border-[#333]'}
               classShadowColor="bg-[#fff]"
-              // isDisable={isDisableRegisterBtn}
+              isDisable={isDisableRegisterBtn}
               onClick={handleRegisterCampaign}
               textClass="text-white text-[14px] font-bold tracking-[0.42px]"
               title={

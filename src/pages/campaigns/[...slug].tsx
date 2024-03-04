@@ -68,7 +68,6 @@ export default function CampaignDetailPage({
   campaignsRecommend: TypeCampaign[] | null;
   viewType: 'completion' | 'winning' | 'losing' | 'detail';
 }) {
-  console.log(campaignDetail);
   return (
     <CampaignDetailProvider campaignDetail={campaignDetail} viewType={viewType}>
       <div className="font-notoSans">

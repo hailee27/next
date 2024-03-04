@@ -20,6 +20,7 @@ import { useContext, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { isFirefox, isMobile, isSafari } from 'react-device-detect';
 
+import { REDIRECT_QUERY_KEY } from '@/utils/constant/enums';
 import { CampaignDetailContext } from '../CampainContext';
 import ModalChooseMultiple from './ModalChooseMultiple';
 import ModalChooseOne from './ModalChooseOne';
@@ -55,7 +56,11 @@ export default function TaskItem({
     try {
       setIsLoading(true);
       if (!accessToken || !user || (user && !user?.id)) {
-        router.push('/auth/sign-in/campaign-implementer');
+        const ops = {
+          [`${REDIRECT_QUERY_KEY}`]: router.asPath,
+        };
+        const qs = new URLSearchParams(ops).toString();
+        router.push(`/auth/sign-in/campaign-implementer?${qs}`);
         return;
       }
       if (isLoggedUserImplementedTask) {

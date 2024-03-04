@@ -15,6 +15,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useDispatch } from 'react-redux';
+import { pickBy } from 'lodash';
 
 export default function CampaignCreatorSigninPage() {
   const { register, handleSubmit, errors, isDisableSubmit, onChangeRecaptcha } = useAuthEmailPassword();
@@ -38,11 +39,15 @@ export default function CampaignCreatorSigninPage() {
             router.replace('/my-page');
           }, 2000);
         } else if (data?.user && data?.totpToken) {
-          router.push(
-            `/auth/sign-in/campaign-creator/verification?code=${data?.code ?? undefined}&totpToken=${
-              data?.totpToken ?? undefined
-            }&userId=${data?.user?.id ?? undefined}`
-          );
+          const query = {
+            code: data?.code ?? undefined,
+            totpToken: data?.totpToken ?? undefined,
+            userId: data?.user?.id ?? undefined,
+          };
+
+          const qs = new URLSearchParams(pickBy(query)).toString();
+
+          router.push(`/auth/sign-in/campaign-creator/verification?${qs}`);
         }
       }
     } catch (err) {

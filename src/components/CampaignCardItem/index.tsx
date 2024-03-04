@@ -115,7 +115,10 @@ export default function CampaignCardItem({
                         </>
                       ) : sortCampaignReward?.length === 1 ? (
                         <span>
-                          <span className="font-montserrat">{sortCampaignReward[0]?.amountOfMoney ?? '--'}</span>円
+                          <span className="font-montserrat">
+                            {sortCampaignReward[0]?.amountOfMoney.toLocaleString('ja-JP') ?? '--'}
+                          </span>
+                          円
                         </span>
                       ) : (
                         '--'
