@@ -12,6 +12,7 @@ import { useContext, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Spin } from 'antd';
 import { copyFunc } from '@/utils/copyFunc';
+import AmazonDomainIcon from '@/components/common/icons/AmazonDomainIcon';
 import { CampaignDetailContext } from '../CampainContext';
 
 export default function Winner() {
@@ -692,20 +693,50 @@ export default function Winner() {
           おめでとうございます！
           <br />
           {campaignDetail?.UserClaimCampaign?.[0]?.award?.campaignReward?.index ?? '---'}等{' '}
-          {campaignDetail?.UserClaimCampaign?.[0]?.award?.campaignReward?.amountOfMoney ?? '---'}円 に<br />
+          {campaignDetail?.UserClaimCampaign?.[0]?.award?.campaignReward?.amountOfMoney.toLocaleString('ja-JP') ??
+            '---'}
+          円 に<br />
           当選されました
         </h2>
         <div className=" flex flex-col gap-[16px]">
           <Spin spinning={isLoading}>
-            <div className="rounded-[16px] border-[2px] border-[#333] py-[38px] px-[30px] bg-white flex items-center justify-center">
-              <div aria-hidden className="hover:cursor-pointer w-[174px] h-[30px] " onClick={onCreateCoupon}>
-                <Image
-                  alt="amazon gift"
-                  className="w-full h-full object-contain"
-                  height={30}
-                  src="/assets/images/aws_card_reward.png"
-                  width={174}
-                />
+            <div
+              aria-hidden
+              className="w-[335px] h-[200px] mx-auto rounded-[24px] bg-white p-[24px] flex flex-col"
+              onClick={onCreateCoupon}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex gap-[4px] mt-[2px]">
+                  <svg fill="none" height="11" viewBox="0 0 9 11" width="9" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M3.18 10.7564V8.62641H0.75V7.33641H3.18V6.94641L2.82 6.20641H0.75V4.87641H2.2L0 0.316406H2.44L4.26 5.20641L6.19 0.316406H8.55L6.32 4.87641H7.75V6.16641H5.68L5.31 6.94641V7.29641H7.74V8.58641H5.32V10.7164L3.18 10.7564Z"
+                      fill="#232F3E"
+                    />
+                  </svg>
+                  <span className="font-bold text-[21px] relative top-[-3px] leading-[21px] font-montserrat max-w-[140px] overflow-hidden text-ellipsis">
+                    {campaignDetail?.UserClaimCampaign?.[0]?.award?.campaignReward?.amountOfMoney.toLocaleString(
+                      'ja-JP'
+                    ) ?? '---'}
+                  </span>
+                </div>
+
+                <AmazonDomainIcon />
+              </div>
+              <div className="flex-1 h-full flex items-center justify-center">
+                <svg fill="none" height="33" viewBox="0 0 145 33" width="145" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    clipRule="evenodd"
+                    d="M130.68 14.664C114.86 26.344 91.9102 32.554 72.1403 32.554C45.738 32.6966 20.2372 22.9586 0.650254 5.25396C-0.849746 3.93396 0.480251 2.11397 2.26025 3.13397C24.0411 15.5997 48.7044 22.1499 73.8003 22.134C92.5536 22.0405 111.103 18.2375 128.38 10.944C131.06 9.82396 133.31 12.734 130.68 14.664Z"
+                    fill="#F7981D"
+                    fillRule="evenodd"
+                  />
+                  <path
+                    clipRule="evenodd"
+                    d="M137.282 7.1335C135.282 4.5435 123.892 5.9235 118.792 6.5235C117.242 6.7035 117.002 5.3435 118.392 4.3835C127.462 -1.9765 142.322 -0.136497 144.022 1.9835C145.722 4.1035 143.582 18.9835 135.102 26.1135C133.782 27.2035 132.542 26.6435 133.102 25.1935C135.012 20.4035 139.302 9.7335 137.282 7.1335Z"
+                    fill="#F7981D"
+                    fillRule="evenodd"
+                  />
+                </svg>
               </div>
             </div>
           </Spin>
