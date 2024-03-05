@@ -87,6 +87,8 @@ export type TaskParams = {
       link: string;
       config: any;
     };
+    isRequiredTask?: boolean;
+    pointsAwarded?: string;
   }[];
 };
 

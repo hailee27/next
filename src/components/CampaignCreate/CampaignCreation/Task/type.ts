@@ -25,6 +25,8 @@ export interface TypeTasks {
       updatedAt: string;
       createdAt: string;
     };
+    isRequired?: boolean;
+    point?: number;
   };
 }
 export type TypeConfig = (

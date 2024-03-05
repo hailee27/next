@@ -18,7 +18,7 @@ function DetailCampaign() {
   const { openPopUp } = usePopUpContext();
   const { query, back, reload, push } = useRouter();
   const { data, isFetching } = useGetDetailCampaignQuery(
-    { campaignId: String(query?.id) },
+    { campaignId: String(query?.id), isAdmin: true },
     { refetchOnMountOrArgChange: true }
   );
   const { accessToken } = useSelector((state: RootState) => state.auth);

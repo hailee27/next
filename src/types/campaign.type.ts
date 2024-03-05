@@ -62,7 +62,7 @@ export type TaskType = (
       type: 'postSpecifiedText' | string;
       designatedClassicalChinese?: string;
     }
-) & { taskId: string };
+) & { taskId: string; isRequiredTask?: boolean; pointsAwarded?: string };
 
 export type TypeResponseFormCampaign = {
   campainName?: string;

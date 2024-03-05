@@ -68,10 +68,11 @@ function Task() {
         <Form
           form={form}
           name="tasks"
+          // onFinish={(e) => console.log(e)}
           onFinishFailed={() => toastMessage('タスクの最小数は1タスクです。（ デフォルトタスク除きます）', 'error')}
           onValuesChange={(e, values) => {
             const { optionTasks } = values;
-            Object.entries(e.optionTasks).forEach(([key, value]: [key: any, value: any]) => {
+            Object?.entries(e.optionTasks ?? {}).forEach(([key, value]: [key: any, value: any]) => {
               if (value?.platForm === 'TWITTER') {
                 form.setFieldValue(['optionTasks', `${key}`, 'type'], 'twitter_follow');
               }

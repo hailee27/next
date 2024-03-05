@@ -45,7 +45,7 @@ function Confirmation() {
     { skip: !router?.query?.id, refetchOnMountOrArgChange: true }
   );
   const { data: dataCampaign } = useGetDetailCampaignQuery(
-    { campaignId: String(router?.query?.id) },
+    { campaignId: String(router?.query?.id), isAdmin: true },
     { skip: !router?.query?.id }
   );
   const { data: masterData } = useGetMasterDataQuery(undefined, { skip: !router?.query?.id });
@@ -166,8 +166,8 @@ function Confirmation() {
                 <div className="flex flex-col mt-[24px]">
                   <span className="text-[16px] font-semibold leading-[20px]">支払方法</span>
                   <div className="flex flex-col p-[12px] space-y-[18px] text-[16px]  leading-[24px]">
-                    <span className="font-semibold">{user?.memberCompany.cardInfo.cardBrand}</span>
-                    <span>末尾が•••• {user?.memberCompany.cardInfo.lastFour}のクレジットカード</span>
+                    <span className="font-semibold">{user?.memberCompany?.cardInfo?.cardBrand}</span>
+                    <span>末尾が•••• {user?.memberCompany?.cardInfo?.lastFour}のクレジットカード</span>
                   </div>
                   <span
                     className="text-[#4158D0] cursor-pointer"

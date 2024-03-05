@@ -21,7 +21,7 @@ function Setup() {
   const noDateWatch = Form.useWatch('noDate', form);
   const startDateWatch = Form.useWatch('startDate', form);
   const { data: dataCampaign } = useGetDetailCampaignQuery(
-    { campaignId: String(router?.query?.id) },
+    { campaignId: String(router?.query?.id), isAdmin: true },
     { skip: !router?.query?.id }
   );
   const { data } = useGetMasterDataQuery();

@@ -67,7 +67,7 @@ function CampaignCreation() {
         children: <Confirmation />,
         forceRender: true,
         destroyInactiveTabPane: true,
-        disabled: user?.companyRole.membership === 'MANAGER',
+        disabled: user?.companyRole.membership !== 'MANAGER',
       },
     ],
     [user?.companyRole.membership]
@@ -76,17 +76,6 @@ function CampaignCreation() {
   return (
     <Form.Provider
       onFormFinish={(name, { forms }) => {
-        // await forms[name].validateFields();
-        if (name !== 'delete' && name !== 'preview' && name !== 'saveDraft') {
-          setTab((prev) => String(Number(prev) + 1));
-          if (tab === '3' && user?.companyRole.membership !== 'MANAGER') {
-            openPopUp({ contents: <PopupAlert message="あなたは正しくありません" /> });
-            setTab('3');
-          }
-        }
-        if (tab === '4') {
-          setTab('4');
-        }
         let queryParams: TypeResponseFormCampaign = {};
         queryParams = {
           ...forms?.setUp?.getFieldsValue(),
@@ -94,6 +83,7 @@ function CampaignCreation() {
           ...forms?.confirm?.getFieldsValue(),
           ...forms?.reWard?.getFieldsValue(),
         };
+
         // PASS VALUE TO FROM CONFIRM
         forms?.confirm?.setFieldsValue({
           nameCampagin: queryParams.campainName,
@@ -113,6 +103,22 @@ function CampaignCreation() {
           forms?.confirm?.setFieldValue('totalWinner', queryParams.numberOfParticipants);
         } else {
           forms?.confirm?.setFieldValue('compensationSummary', queryParams?.compensationSummary);
+        }
+        // await forms[name].validateFields();
+        if (name !== 'delete' && name !== 'preview' && name !== 'saveDraft') {
+          setTab((prev) => String(Number(prev) + 1));
+          if (tab === '3' && user?.companyRole.membership !== 'MANAGER') {
+            if (router.query.id) {
+              handleUpdateCampaign(String(router.query.id), queryParams, 'DRAFT');
+            } else {
+              handleCreateCampaign(queryParams, 'DRAFT');
+            }
+            // openPopUp({ contents: <PopupAlert message="あなたは正しくありません" /> });
+            setTab('3');
+          }
+        }
+        if (tab === '4') {
+          setTab('4');
         }
 
         // SAVE

@@ -51,7 +51,7 @@ function TaskQuestionCostom(props: Props) {
   }, [optionTasksWath, listChoise]);
 
   return (
-    <div>
+    <div className="mb-[20px]">
       <div className="w-full">
         <div className="text-[14px] font-semibold mb-[5px]">タスクタイトル ※必須</div>
         <Form.Item name={['optionTasks', `task${item.id}`, 'title']} rules={[{ required: true, message: '' }]}>
