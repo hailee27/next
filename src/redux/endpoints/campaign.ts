@@ -70,6 +70,11 @@ const injectedRtkApi = api.injectEndpoints({
             token: queryArg?.token,
           };
         }
+        if (queryArg?.isAdmin) {
+          config.params = {
+            isAdmin: String(queryArg?.isAdmin),
+          };
+        }
         return config;
       },
     }),
@@ -168,6 +173,7 @@ export type DetailCampaignResponse = TypeCampaign;
 export type DetailCampaignParams = {
   campaignId: string;
   token?: string;
+  isAdmin?: boolean | string;
 };
 
 export type TypeCampaignReward = {

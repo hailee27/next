@@ -52,6 +52,8 @@ export const adapterDataTask = (data: TypeResponseFormCampaign) =>
       taskActionType: e?.type,
       taskId: e.taskId,
       taskTemplate: { userName: 'NONE', link: 'NONE', config: { ...e, requireTask: false } },
+      isRequired: e.isRequiredTask,
+      point: Number(e.pointsAwarded),
     }))
   );
 export const adapterNewTask = (data: TypeResponseFormCampaign) =>

@@ -34,6 +34,7 @@ function CampaignParticipantsInstant({ totalPrizeValue }: { totalPrizeValue: num
   const { query } = useRouter();
   const { data: dataTable, isFetching: isFetchingDetail } = useGetDetailCampaignQuery({
     campaignId: String(query?.id),
+    isAdmin: true,
   });
   const { data: listDataCampaignUser, isFetching: isFetchingList } = useGetListCampaignUsersQuery({
     campaignId: String(query?.id),

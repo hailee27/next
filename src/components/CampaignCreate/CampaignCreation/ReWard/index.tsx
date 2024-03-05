@@ -12,7 +12,7 @@ function ReWard() {
   const [form] = Form.useForm();
   const router = useRouter();
   const { data: dataCampaign } = useGetDetailCampaignQuery(
-    { campaignId: String(router?.query?.id) },
+    { campaignId: String(router?.query?.id), isAdmin: true },
     { skip: !router?.query?.id, refetchOnMountOrArgChange: true }
   );
 

@@ -1,7 +1,15 @@
 /* eslint-disable max-lines-per-function */
 import { TypeConfig } from '@/components/CampaignCreate/CampaignCreation/Task/type';
 
-export type TypePlatForm = 'TWITTER' | 'TIKTOK' | 'LINE' | 'TELEGRAM' | 'DISCORD' | 'VISIT_PAGE' | 'CUSTOM';
+export type TypePlatForm =
+  | 'TWITTER'
+  | 'TIKTOK'
+  | 'LINE'
+  | 'TELEGRAM'
+  | 'DISCORD'
+  | 'VISIT_PAGE'
+  | 'CUSTOM'
+  | 'INVITE_FRIENDS_FROM_URL';
 
 export const renderValue = () => {};
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -128,6 +136,8 @@ export function renderDataPlatform(platForm: TypePlatForm, data?: TypeConfig | u
         { value: 'formatMultiple', label: '選択形式_複数回答' },
         { value: 'freeAnswer', label: '自由回答' },
       ];
+    case 'INVITE_FRIENDS_FROM_URL':
+      return [];
     default:
       return [
         {
@@ -136,7 +146,7 @@ export function renderDataPlatform(platForm: TypePlatForm, data?: TypeConfig | u
           content: [
             {
               id: 1,
-              title: 'Username',
+              title: 'Xの Username',
               type: 'input',
               require: true,
               name: 'userFollow',

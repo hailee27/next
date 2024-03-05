@@ -8,6 +8,7 @@ import BasicInput from '@/components/common/BasicInput';
 import BasicTextArea from '@/components/common/BasicTextArea';
 import { renderDataPlatform } from '@/utils/renderDataPlatform';
 import FlagItem from '@/components/common/FlagItem';
+import BasicSwitch from '@/components/common/BasicSwitch';
 import { TypeTasks } from './type';
 import TaskQuestionCostom from './TaskQuestionCostom';
 
@@ -45,6 +46,8 @@ const TaskCampain = ({ item, onDelete, showDelete, index }: Props) => {
       form.setFieldValue(['optionTasks', `task${item.id}`, 'type'], item.platForm.type);
       form.setFieldValue(['optionTasks', `task${item.id}`, 'platForm'], item.platForm.name);
       form.setFieldValue(['optionTasks', `task${item.id}`, 'taskId'], item.config.taskTemplateId);
+      form.setFieldValue(['optionTasks', `task${item.id}`, 'pointsAwarded'], item.config.point);
+      form.setFieldValue(['optionTasks', `task${item.id}`, 'isRequiredTask'], item.config.isRequired);
     }
   }, [item.platForm, item.config, item.id]);
 
@@ -55,12 +58,13 @@ const TaskCampain = ({ item, onDelete, showDelete, index }: Props) => {
         form.setFieldValue(['optionTasks', `task${item.id}`, `${v.name}`], v.value);
       });
   }, [dataPlatForm, optionTasksWath]);
-
-  // useEffect(() => {
-  //   if (platFormWatch && item.config) {
-  //     form.setFieldValue(['optionTasks', `task${item.id}`, 'type'], dataPlatForm?.[0].value);
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (platFormWatch === 'INVITE_FRIENDS_FROM_URL') {
+      form.setFieldValue(['optionTasks', `task${item.id}`, 'isRequiredTask'], false);
+    } else {
+      form.setFieldValue(['optionTasks', `task${item.id}`, 'isRequiredTask'], true);
+    }
+  }, [platFormWatch, item.id]);
 
   return (
     <>
@@ -92,11 +96,12 @@ const TaskCampain = ({ item, onDelete, showDelete, index }: Props) => {
               { label: ' Telegram', value: 'TELEGRAM' },
               { label: ' Discord', value: 'DISCORD' },
               { label: ' 自由形式で質問する', value: 'CUSTOM' },
+              { label: 'URLから友達を招待する', value: 'INVITE_FRIENDS_FROM_URL' },
             ]}
           />
-          {dataPlatForm?.[0].value && platFormWatch !== 'CUSTOM' ? (
+          {dataPlatForm?.[0]?.value && platFormWatch !== 'CUSTOM' ? (
             <SelectLabel
-              initialValue={dataPlatForm?.[0].value}
+              initialValue={dataPlatForm?.[0]?.value}
               name={['optionTasks', `task${item.id}`, 'type']}
               options={dataPlatForm}
             />
@@ -117,20 +122,19 @@ const TaskCampain = ({ item, onDelete, showDelete, index }: Props) => {
                     </div>
 
                     <Form.Item
-                      className="!mb-0"
                       initialValue={e.value}
                       name={['optionTasks', `task${item.id}`, `${e.name}`]}
                       rules={
                         e.isUrl
                           ? [
-                              { required: e.require, message: `Xの ${e.title}を入力してください。` },
+                              { required: e.require, message: `${e.title}を入力してください。` },
                               {
                                 pattern:
                                   /(https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z]{2,}(\.[a-zA-Z]{2,})(\.[a-zA-Z]{2,})?\/[a-zA-Z0-9]{2,}|((https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z]{2,}(\.[a-zA-Z]{2,})(\.[a-zA-Z]{2,})?)|(https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z0-9]{2,}\.[a-zA-Z0-9]{2,}\.[a-zA-Z0-9]{2,}(\.[a-zA-Z0-9]{2,})?/g,
                                 message: 'mush url',
                               },
                             ]
-                          : [{ required: e.require, message: `Xの ${e.title}を入力してください。` }]
+                          : [{ required: e.require, message: `${e.title}を入力してください。` }]
                       }
                     >
                       <BasicInput />
@@ -161,6 +165,22 @@ const TaskCampain = ({ item, onDelete, showDelete, index }: Props) => {
           {/* TASK QUESTION */}
           {platFormWatch === 'CUSTOM' && <TaskQuestionCostom dataPlatForm={dataPlatForm ?? []} item={item} />}
         </div>
+        <div className="w-full">
+          <div className="text-[14px] font-semibold mb-[5px] space-x-[8px]">付与ポイント</div>
+          <Form.Item className="" initialValue="1" name={['optionTasks', `task${item.id}`, 'pointsAwarded']}>
+            <BasicInput />
+          </Form.Item>
+        </div>
+
+        <div className="w-full flex items-center justify-end space-x-3">
+          <span>必須タスクにする</span>
+          <Form.Item name={['optionTasks', `task${item.id}`, 'isRequiredTask']} noStyle>
+            <BasicSwitch disabled={platFormWatch === 'INVITE_FRIENDS_FROM_URL'} />
+          </Form.Item>
+        </div>
+        {platFormWatch === 'INVITE_FRIENDS_FROM_URL' && (
+          <div className="text-right font-semibold text-[12px]">※このタスクは必須タスクに設定できません。</div>
+        )}
       </div>
     </>
   );
