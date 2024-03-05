@@ -1,9 +1,10 @@
 /* eslint-disable react/no-array-index-key */
 import { TypeCampaignReward } from '@/redux/endpoints/campaign';
-import Image from 'next/image';
+
 import { useMemo, useState } from 'react';
 import CShadowCard from '../common/CCardShadow';
 import ArrowDown from '../common/icons/ArrowDown';
+import AmazonDomainIcon from '../common/icons/AmazonDomainIcon';
 
 export default function CampaignRewardCardItem({ campaignReward }: { campaignReward: TypeCampaignReward }) {
   const [isViewMoreRewardMethod, setIsViewMoreRewardMethod] = useState(false);
@@ -42,18 +43,14 @@ export default function CampaignRewardCardItem({ campaignReward }: { campaignRew
             </span>
           </div>
           <div className="border-t-[1px] border-top-[#aaa] pt-[12px]">
-            <div className="flex flex-wrap justify-between items-end gap-[12px]  transition-all duration-150">
-              <div className="flex flex-wrap gap-[8px]">
+            <div className="flex flex-wrap justify-center  items-end gap-[12px]  transition-all duration-150">
+              <div className="flex flex-wrap gap-[8px] items-center justify-center">
                 {renderRewardItem.map((item, index) => (
-                  <div className="w-[32px] h-[32px] min-w-[32px] min-h-[32px] rounded-full" key={index}>
-                    <Image
-                      alt="campaign image"
-                      className="w-full h-full object-contain"
-                      height="0"
-                      sizes="100vw"
-                      src="/assets/images/amazon-reward-card.png"
-                      width="0"
-                    />
+                  <div className="flex items-center gap-[16px] " key={index}>
+                    <span className="font-bold text-[13px] ">受取方法</span>
+                    <div className="mt-[6px]">
+                      <AmazonDomainIcon />
+                    </div>
                   </div>
                 ))}
               </div>

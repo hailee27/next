@@ -7,6 +7,7 @@ import { TypeTokenPayment } from '@/types/paymentCard.type';
 import { CompaniesParams, useUpdateCompaniesMutation } from '@/redux/endpoints/companies';
 import { useLazyMeQuery } from '@/redux/endpoints/auth';
 import toastMessage from '@/utils/func/toastMessage';
+import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import BasicInput from '../common/BasicInput';
 import UploadButton from '../common/UploadButton';
 import PopUpCreditOrDebitCard from './PopUpCreditOrDebitCard';
@@ -57,9 +58,9 @@ function OrganizeInformation() {
                   setIsEdit(false);
                 });
 
-              toastMessage('update success', 'success');
+              toastMessage('更新に成功です。', 'success');
             })
-            .catch(() => toastMessage('error', 'error'));
+            .catch((error) => toastMessage(getErrorMessage(error), 'error'));
         }}
       >
         <div className="border-b-2 border-[#2D3648]  py-[24px]">

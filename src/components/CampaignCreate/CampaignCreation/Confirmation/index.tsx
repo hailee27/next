@@ -188,7 +188,7 @@ function Confirmation() {
                                 .unwrap()
                                 .then(() => {
                                   triggerMe();
-                                  toastMessage('update success', 'success');
+                                  toastMessage('更新に成功です。', 'success');
                                 })
                             }
                           />
