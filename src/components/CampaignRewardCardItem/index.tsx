@@ -1,10 +1,10 @@
 /* eslint-disable react/no-array-index-key */
 import { TypeCampaignReward } from '@/redux/endpoints/campaign';
 
+import Image from 'next/image';
 import { useMemo, useState } from 'react';
 import CShadowCard from '../common/CCardShadow';
 import ArrowDown from '../common/icons/ArrowDown';
-import AmazonDomainIcon from '../common/icons/AmazonDomainIcon';
 
 export default function CampaignRewardCardItem({ campaignReward }: { campaignReward: TypeCampaignReward }) {
   const [isViewMoreRewardMethod, setIsViewMoreRewardMethod] = useState(false);
@@ -48,8 +48,15 @@ export default function CampaignRewardCardItem({ campaignReward }: { campaignRew
                 {renderRewardItem.map((item, index) => (
                   <div className="flex items-center gap-[16px] " key={index}>
                     <span className="font-bold text-[13px] ">受取方法</span>
-                    <div className="mt-[6px]">
-                      <AmazonDomainIcon />
+                    <div className="w-[82px] h-[24px] min-w-[82px] min-h-[24px] rounded-full" key={index}>
+                      <Image
+                        alt="campaign image"
+                        className="w-full h-full object-contain"
+                        height="0"
+                        sizes="100vw"
+                        src="/assets/images/Amazon_Logo_RGB_SQUID.png"
+                        width="0"
+                      />
                     </div>
                   </div>
                 ))}
