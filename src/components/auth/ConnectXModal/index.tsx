@@ -57,7 +57,7 @@ export default function ConnectXModal({ buttonLabel, buttonIcon }: ConnectXModal
             <div className="h-[16px]" />
             <p className="text-[13px] text-gray-1 leading-[22px] tracking-[0.39px]">
               ※続行することにより
-              <Link className="font-bold" href="/terms-of-service">
+              <Link className="font-bold" href="/terms-of-service?view=implementer">
                 利用規約
               </Link>
               および

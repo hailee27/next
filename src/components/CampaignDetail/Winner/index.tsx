@@ -699,6 +699,7 @@ export default function Winner() {
           当選されました
         </h2>
         <div className=" flex flex-col gap-[16px]">
+          <p className="text-center text-[16px] text-[#333] font-medium ">下記より受取方法を選択してください</p>
           <Spin spinning={isLoading}>
             <div
               aria-hidden

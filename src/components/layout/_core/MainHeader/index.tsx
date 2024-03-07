@@ -56,7 +56,9 @@ export default function MainHeader() {
       {
         key: 1,
         text: '利用規約',
-        to: '/terms-of-service',
+        to: router.pathname.startsWith('/auth/sign-in/campaign-implementer')
+          ? '/terms-of-service?view=implementer'
+          : '/terms-of-service',
       },
       {
         key: 2,

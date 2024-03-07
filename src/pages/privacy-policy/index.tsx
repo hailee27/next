@@ -5,7 +5,7 @@ import React from 'react';
 
 function PrivacyPolicyPage() {
   return (
-    <div className="px-[20px] max-w-[820px] mx-auto">
+    <div className="px-[20px] max-w-[820px] mx-auto text-justify">
       <div className="flex flex-col items-center space-y-[32px] mt-[40px]">
         <h1 className="text-[28px] font-bold text-[#04AFAF]">プライバシーポリシー</h1>
         <p className="text-[13px] text-[#777] leading-[22px]">
@@ -71,7 +71,7 @@ function PrivacyPolicyPage() {
               </p>
               <p className="ml-[14px]">
                 (1)　
-                <span className="bg-yellow-400 text-[#333]">
+                <span>
                   キャンペーンに応募した参加者の情報を主催者に提供する場合であって、あらかじめ参加者の同意を得ているとき{' '}
                 </span>
                 <br />
@@ -146,10 +146,10 @@ function PrivacyPolicyPage() {
                   <tbody>
                     <tr>
                       <td className="p-[8px] border-[1px] border-[#333]">
-                        <span className="bg-yellow-400 text-[#333]">Google LLC</span>
+                        <span>Google LLC</span>
                       </td>
                       <td className="p-[8px] border-[1px] border-[#333]">
-                        <span className="bg-yellow-400 text-[#333]">Google Analytics</span>
+                        <span>Google Analytics</span>
                       </td>
                       <td className="p-[8px] border-[1px] border-[#333]">
                         お客様のアクセスを解析し、
@@ -211,7 +211,7 @@ function PrivacyPolicyPage() {
           <span>お問い合わせ</span>
           <p className="  font-normal">
             当社の保有個人データの取扱いに関する苦情のお申し出その他本プライバシーポリシーに関するお問い合わせは、{' '}
-            <span className="bg-yellow-400 text-[#333]">【問い合わせフォームのURL、メールアドレス等を記載】</span>
+            <span>【問い合わせフォームのURL、メールアドレス等を記載】</span>
             までご連絡ください。
           </p>
         </li>
