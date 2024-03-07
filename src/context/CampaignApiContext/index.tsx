@@ -1,3 +1,4 @@
+import { useLazyMeQuery } from '@/redux/endpoints/auth';
 import {
   useDeleteCampaignMutation,
   usePostQuestsMutation,
@@ -42,6 +43,8 @@ export const CampaignApiProvider = ({ children }: { children: React.ReactNode })
   const router = useRouter();
   const [taskIdDeletes, setTaskIdDeletes] = useState<number[]>([]);
   const [reWardIdDelete, setReWardIdDelete] = useState<number[]>([]);
+
+  const [triggerMe] = useLazyMeQuery();
   // CREATE
   const [createCampaign, { isLoading: isLoadingCreateCampaign }] = usePostQuestsMutation();
   const [createTask, { isLoading: isLoadingCreateTask }] = usePostTaskMutation();
@@ -83,11 +86,13 @@ export const CampaignApiProvider = ({ children }: { children: React.ReactNode })
                 campaignId: res.newCampaign.id,
                 price: Number(queryParams.price),
                 priceWithTax: Number(queryParams.priceWithTax),
-                usePoint: queryParams?.usePoint ?? false,
+                pointUse: Number(queryParams.depositBalance ?? 0),
+                // usePoint: queryParams?.usePoint ?? false,
               })
                 .unwrap()
                 .then(() => {
                   router.push('/campaign-creator/list');
+                  triggerMe();
                   toastMessage('ステータスを更新に成功です。', 'success');
                 })
                 .catch((err) => toastMessage(getErrorMessage(err), 'error'));
@@ -155,7 +160,8 @@ export const CampaignApiProvider = ({ children }: { children: React.ReactNode })
               campaignId: res.newCampaign.id,
               price: Number(queryParams.price),
               priceWithTax: Number(queryParams.priceWithTax),
-              usePoint: queryParams?.usePoint ?? false,
+              pointUse: Number(queryParams.depositBalance ?? 0),
+              // usePoint: queryParams?.usePoint ?? false,
             })
               .unwrap()
               .then(() => {

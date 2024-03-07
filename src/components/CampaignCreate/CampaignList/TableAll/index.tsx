@@ -108,6 +108,9 @@ function TableAll({
     if (query.page) {
       setPageTable(Number(Number(query.page) - 1) * 20);
     }
+    return () => {
+      setPageTable(1);
+    };
   }, [isReady, query?.page]);
 
   const data = useMemo<DataType[] | undefined>(() => {
@@ -155,7 +158,7 @@ function TableAll({
           },
           // current: pageTable,
         }}
-        scroll={{ x: 1000 }}
+        scroll={{ x: 700 }}
         tableLayout="fixed"
       />
     </div>

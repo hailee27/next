@@ -69,7 +69,9 @@ function Task() {
           form={form}
           name="tasks"
           // onFinish={(e) => console.log(e)}
-          onFinishFailed={() => toastMessage('タスクの最小数は1タスクです。（ デフォルトタスク除きます）', 'error')}
+          onFinishFailed={() =>
+            toastMessage(' 保存して次へ進む前に、必須フィールドに実施する必要があります。', 'error')
+          }
           onValuesChange={(e, values) => {
             const { optionTasks } = values;
             Object?.entries(e.optionTasks ?? {}).forEach(([key, value]: [key: any, value: any]) => {

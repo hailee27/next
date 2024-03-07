@@ -22,6 +22,7 @@ import { useGetMasterDataQuery } from '@/redux/endpoints/masterData';
 import moment from 'moment';
 import { useGetReWardsQuery } from '@/redux/endpoints/reWard';
 import { useCampaignApiContext } from '@/context/CampaignApiContext';
+import BasicInput from '@/components/common/BasicInput';
 import TableReWard from './TableReWard';
 
 function Confirmation() {
@@ -34,7 +35,11 @@ function Confirmation() {
   const typeWinnerWatch = Form.useWatch('typeWinner', form);
   const priceWatch = Form.useWatch('price', form);
   const totalWinnerWatch = Form.useWatch('totalWinner', form);
-  const [useDepositBalance, setUseDepositBalance] = useState<boolean>(false);
+  // const depositBalanceWatch = Form.useWatch('depositBalance', form);
+
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
+
+  const [useDepositBalance, setUseDepositBalance] = useState<number>(0);
   const [totalPaymentAmount, setTotalPaymentAmount] = useState<number>(0);
   const [tax, setTax] = useState<number>(0);
   const [fee, setFee] = useState<number>(0);
@@ -59,12 +64,8 @@ function Confirmation() {
   }, [priceWatch, fee, tax]);
 
   useEffect(() => {
-    if (totalPaymentAmount && totalPaymentAmount >= 0) {
-      form.setFieldValue('priceWithTax', totalPaymentAmount);
-    } else {
-      form.setFieldValue('priceWithTax', 0);
-    }
-  }, [totalPaymentAmount]);
+    form.setFieldValue('priceWithTax', priceWatch + fee + tax ?? 0);
+  }, [priceWatch, fee, tax]);
 
   useEffect(() => {
     if (dataCampaign && masterData && dataReward) {
@@ -78,12 +79,18 @@ function Confirmation() {
             )}`,
         typeWinner: dataCampaign.methodOfselectWinners,
         campaginCreator: dataCampaign.createdUser.email.email,
-        price: dataReward?.rewards
-          ?.map((e) => e.amountOfMoney * e.numberOfWinningTicket)
-          ?.reduce((prev, cur) => prev + cur, 0),
+        price: Math.floor(
+          dataReward?.rewards
+            ?.map((e) => e.amountOfMoney * e.numberOfWinningTicket)
+            ?.reduce((prev, cur) => prev + cur, 0)
+        ),
       });
     }
   }, [dataCampaign, masterData, dataReward]);
+
+  useEffect(() => {
+    setTotalPaymentAmount(totalPaymentAmount - Number(useDepositBalance));
+  }, [useDepositBalance]);
 
   return (
     <Spin spinning={loadingUpdate}>
@@ -136,7 +143,7 @@ function Confirmation() {
               <span className="text-[16px] font-bold border-l-2 border-[#04AFAF] h-[24px] pl-[14px]">
                 キャンペーン作成者
               </span>
-              <Form.Item initialValue={user?.email.email} name="campaginCreator" noStyle>
+              <Form.Item initialValue={user?.email?.email} name="campaginCreator" noStyle>
                 <FlagItem className="pl-[16px]" />
               </Form.Item>
             </div>
@@ -147,9 +154,9 @@ function Confirmation() {
                 <Form.Item className="!hidden" name="priceWithTax">
                   <FlagItem />
                 </Form.Item>
-                <Form.Item className="!hidden" initialValue={false} name="usePoint">
+                {/* <Form.Item className="!hidden" initialValue={false} name="usePoint">
                   <FlagItem />
-                </Form.Item>
+                </Form.Item> */}
                 <Form.Item className="!hidden" name="totalWinner">
                   <FlagItem />
                 </Form.Item>
@@ -207,19 +214,39 @@ function Confirmation() {
                     デポジット残高 ※ {formatNumber(user?.memberCompany?.pointTotal ?? 0, true, 1)}円利用可能
                   </span>
                   <div className="flex space-x-[8px] mt-[8px]">
-                    <div className="w-[210px] h-[50px] border-2 rounded-[6px] border-[#333]">
-                      <Form.Item initialValue={user?.memberCompany?.pointTotal ?? 0} name="depositBalance" noStyle>
-                        <FlagItem className="flex items-center  h-full p-[24px]" />
+                    <div className="w-[210px] h-[50px] ">
+                      <Form.Item
+                        // initialValue={user?.memberCompany?.pointTotal ?? 0}
+                        name="depositBalance"
+                        rules={[
+                          {
+                            validator: (_, value) => {
+                              if (Number(value) > Number(user?.memberCompany?.pointTotal)) {
+                                setErrorMessage('残高が支払いに十分ではありません。');
+                                return Promise.reject(new Error(''));
+                              }
+                              if (
+                                Number(value) > Number(user?.memberCompany?.pointTotal) &&
+                                Number(value) > Number(totalPaymentAmount)
+                              ) {
+                                setErrorMessage('入力した金額はこのキャンペーンの支払いに十分ではありません。');
+                                return Promise.reject(new Error(''));
+                              }
+                              setErrorMessage(undefined);
+                              return Promise.resolve();
+                            },
+                          },
+                        ]}
+                      >
+                        <BasicInput type="number" />
                       </Form.Item>
                     </div>
                     <BasicButton
-                      className={`${useDepositBalance && 'pointer-events-none'}`}
-                      disabled={useDepositBalance}
                       onClick={(e) => {
                         e.preventDefault();
-                        setUseDepositBalance(true);
-                        form.setFieldValue('usePoint', true);
-                        setTotalPaymentAmount(totalPaymentAmount - Number(user?.memberCompany?.pointTotal ?? 0));
+                        // form.setFieldValue('usePoint', true);
+                        setUseDepositBalance(form.getFieldValue('depositBalance'));
+                        setTotalPaymentAmount(priceWatch + fee + tax);
                       }}
                       type="primary"
                     >
@@ -227,10 +254,16 @@ function Confirmation() {
                     </BasicButton>
                   </div>
                 </div>
+                {errorMessage && <div className="text-[#ff4d4f]">{errorMessage}</div>}
                 <div className="mt-[24px]">
                   <div className="text-[16px] items-center flex font-bold leading-[24px]">
                     支払い金額合計:&ensp;
-                    {formatNumber(totalPaymentAmount && totalPaymentAmount >= 0 ? totalPaymentAmount : 0, true, 1)} 円
+                    {formatNumber(
+                      totalPaymentAmount && totalPaymentAmount >= 0 ? Math.floor(totalPaymentAmount) : 0,
+                      true,
+                      1
+                    )}{' '}
+                    円
                   </div>
                   <div className="flex flex-col space-y-[32px] text-[16px] pt-[12px]">
                     <div className="flex items-center">
@@ -240,9 +273,9 @@ function Confirmation() {
                       </Form.Item>
                       円
                     </div>
-                    <span>手数料: {formatNumber(fee, true, 1)}円</span>
-                    <span>消費税: {formatNumber(tax, true, 1)}円</span>
-                    <span>デポジット残高利用: {useDepositBalance ? user?.memberCompany?.pointTotal : 0}円</span>
+                    <span>手数料: {formatNumber(Math.floor(fee), true, 1)}円</span>
+                    <span>消費税: {formatNumber(Math.floor(tax), true, 1)}円</span>
+                    <span>デポジット残高利用: {formatNumber(useDepositBalance, true, 1)}円</span>
                   </div>
                 </div>
               </>
@@ -282,7 +315,7 @@ function Confirmation() {
             }}
           />
         </div>
-        {user?.companyRole.membership === 'MANAGER' && (
+        {user?.companyRole?.membership === 'MANAGER' && (
           <div className="w-[233px]  h-[56px]">
             <CButtonShadow
               classBgColor="bg-main-text"

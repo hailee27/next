@@ -65,7 +65,11 @@ function CampaignList() {
         </div>
       </div>
       <div className="pt-[28px] ">
-        <BasicTabs defaultActiveKey={router.query.type === 'public' ? '5' : '1'} items={items} />
+        <BasicTabs
+          defaultActiveKey={router.query.type === 'public' ? '5' : '1'}
+          items={items}
+          onChange={() => router.replace({ query: {} })}
+        />
       </div>
     </div>
   );

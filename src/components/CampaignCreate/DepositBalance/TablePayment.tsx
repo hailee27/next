@@ -32,7 +32,7 @@ const columns: ColumnsType<DataType> = [
   {
     title: '配布済み金額',
     dataIndex: 'withdrawal',
-    render: (value) => <span>{value ? `${formatNumber(value, true, 1)}円` : '-'} </span>,
+    render: (value) => <span>{value === 0 ? `${formatNumber(value, true, 1)}円` : '-'} </span>,
   },
   {
     title: '内容',

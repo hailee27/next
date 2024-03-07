@@ -9,7 +9,7 @@ export type TypePlatForm =
   | 'DISCORD'
   | 'VISIT_PAGE'
   | 'CUSTOM'
-  | 'INVITE_FRIENDS_FROM_URL';
+  | 'SHARE_URL';
 
 export const renderValue = () => {};
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -136,7 +136,7 @@ export function renderDataPlatform(platForm: TypePlatForm, data?: TypeConfig | u
         { value: 'formatMultiple', label: '選択形式_複数回答' },
         { value: 'freeAnswer', label: '自由回答' },
       ];
-    case 'INVITE_FRIENDS_FROM_URL':
+    case 'SHARE_URL':
       return [];
     default:
       return [

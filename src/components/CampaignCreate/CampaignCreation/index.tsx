@@ -67,10 +67,10 @@ function CampaignCreation() {
         children: <Confirmation />,
         forceRender: true,
         destroyInactiveTabPane: true,
-        disabled: user?.companyRole.membership !== 'MANAGER',
+        disabled: user?.companyRole?.membership !== 'MANAGER',
       },
     ],
-    [user?.companyRole.membership]
+    [user?.companyRole?.membership]
   );
 
   return (
@@ -83,7 +83,7 @@ function CampaignCreation() {
           ...forms?.confirm?.getFieldsValue(),
           ...forms?.reWard?.getFieldsValue(),
         };
-
+        // console.log(queryParams);
         // PASS VALUE TO FROM CONFIRM
         forms?.confirm?.setFieldsValue({
           nameCampagin: queryParams.campainName,

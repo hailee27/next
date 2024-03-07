@@ -53,7 +53,8 @@ export type PaymentParams = {
   campaignId: string;
   price: number;
   priceWithTax: number;
-  usePoint: boolean;
+  usePoint?: boolean;
+  pointUse?: number;
 };
 
 export { injectedRtkApi as PaymentApi };
