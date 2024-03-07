@@ -758,13 +758,13 @@ export default function Winner() {
       <CModalWapper isOpen={isModalOpen} onCancel={handleCancel}>
         <div>
           <div className="flex items-center justify-center ">
-            <div className="hover:cursor-pointer w-[232px] h-[40px] ">
+            <div className="hover:cursor-pointer w-[123px] h-[36px] ">
               <Image
                 alt="amazon gift"
                 className="w-full h-full object-contain"
-                height={40}
-                src="/assets/images/amazon-gift-L.png"
-                width={232}
+                height={36}
+                src="/assets/images/Amazon_Logo_RGB_SQUID.png"
+                width={123}
               />
             </div>
           </div>
