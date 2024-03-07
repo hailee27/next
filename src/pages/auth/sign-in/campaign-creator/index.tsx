@@ -105,7 +105,7 @@ export default function CampaignCreatorSigninPage() {
           <div>
             <p className="text-[13px] text-gray-1 leading-[22px]">
               ※続行することにより、
-              <Link className="font-bold" href="/terms-of-service">
+              <Link className="font-bold" href="/terms-of-service?view=creator">
                 利用規約
               </Link>
               および
