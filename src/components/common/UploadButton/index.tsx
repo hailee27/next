@@ -16,6 +16,7 @@ const UploadButton = ({
   className?: string;
   props?: Omit<ImgCropProps, 'children'>;
 }) => {
+  const combinedClassName = [styles.customeButtonUpload, className].filter((e) => e).join(' ');
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [fileList, setFileList] = useState<UploadFile[]>([]);
@@ -41,8 +42,6 @@ const UploadButton = ({
   };
   const handleCancel = () => setPreviewOpen(false);
 
-  const combinedClassName = [styles.customeButtonUpload, className].filter((e) => e).join(' ');
-
   useEffect(() => {
     if (value && fileList.length === 0) {
       setFileList([
@@ -61,8 +60,11 @@ const UploadButton = ({
     <div className={`${combinedClassName}`}>
       <ImgCrop
         modalCancel="キャンセル"
-        modalProps={{ okButtonProps: { className: 'bg-[#333]' } }}
+        modalProps={{
+          okButtonProps: { className: 'bg-[#333]' },
+        }}
         modalTitle="画像修正"
+        // onModalCancel={() => console.log('álo')}
         rotationSlider
         {...props}
       >

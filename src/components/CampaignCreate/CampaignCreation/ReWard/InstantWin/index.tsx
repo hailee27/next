@@ -73,6 +73,7 @@ function InstantWin() {
     form.setFieldValue('totalReWard', Number.isNaN(totalReWard) ? 0 : totalReWard);
     form.setFieldValue('totalTicket', totalTicket);
   }, [totalReWard, totalTicket]);
+  const totalTicketWatch = Form.useWatch('totalTicket', form);
 
   return (
     <>
@@ -82,7 +83,17 @@ function InstantWin() {
           name="numberOfParticipants"
           placeholder="記入してください"
           required
-          rules={[{ required: true, message: '' }]}
+          rules={[
+            { required: true, message: '' },
+            {
+              validator: (_, value) => {
+                if (Number(totalTicketWatch) > Number(value)) {
+                  return Promise.reject(new Error('当選本数の合計は、想定参加人数以下でなければなりません。'));
+                }
+                return Promise.resolve();
+              },
+            },
+          ]}
           type="number"
         />
         <span className="font-medium">人</span>

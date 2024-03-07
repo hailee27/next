@@ -2,7 +2,7 @@
 import BasicInput from '@/components/common/BasicInput';
 import BasicSwitch from '@/components/common/BasicSwitch';
 import { Form, Image } from 'antd';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import FlagItem from '@/components/common/FlagItem';
 import { TypeReWard } from './InstantWin';
 
@@ -11,6 +11,7 @@ function ListReWard({ index, item, onDelete }: { index: number; item: TypeReWard
   // const paypayWatch = Form.useWatch(['reWard', `reWard${item.key}`, 'receivingMethod', 'paypay'], form) ?? false;
   const amazonWatch = Form.useWatch(['reWard', `reWard${item.key}`, 'receivingMethod', 'amazon'], form);
 
+  const [errorAmazon, setErrorrAmazon] = useState<boolean | null>(null);
   useEffect(() => {
     if (item) {
       form.setFieldsValue({
@@ -75,15 +76,17 @@ function ListReWard({ index, item, onDelete }: { index: number; item: TypeReWard
               <span className="text-[16px]">Amazon gift card</span>
               <Form.Item
                 className="!mb-0"
-                initialValue={amazonWatch ?? false}
+                initialValue={amazonWatch}
                 name={['reWard', `reWard${item.key}`, 'receivingMethod', 'amazon']}
                 // noStyle
                 rules={[
                   {
                     validator: (_, checked) => {
                       if (!checked) {
-                        return Promise.reject(new Error('受取方法を選択する必要があります。'));
+                        setErrorrAmazon(true);
+                        return Promise.reject();
                       }
+                      setErrorrAmazon(false);
                       return Promise.resolve();
                     },
                   },
@@ -94,6 +97,7 @@ function ListReWard({ index, item, onDelete }: { index: number; item: TypeReWard
             </div>
           </div>
         </div>
+        {errorAmazon && <span className="text-[#ff4d4f]">受取方法を選択する必要があります。</span>}
       </div>
     </div>
   );

@@ -15,6 +15,7 @@ import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
 import ExplanatoryText from './ExplanatoryText';
 
+// eslint-disable-next-line max-lines-per-function
 function Setup() {
   const router = useRouter();
   const [form] = Form.useForm();
@@ -83,7 +84,10 @@ function Setup() {
               必須
             </div>
           </div>
-          <Form.Item name="thumbnail" rules={[{ required: true, message: '' }]}>
+          <Form.Item
+            name="thumbnail"
+            rules={[{ required: true, message: '保存して次へ進む前に、必須フィールドに実施する必要があります。' }]}
+          >
             <UploadButton
               className="w-[175px]"
               props={{ cropperProps: { cropSize: { height: 279, width: 279 } } as CropperProps }}
@@ -96,7 +100,10 @@ function Setup() {
               必須
             </div>
           </div>
-          <Form.Item name="explanatoryText" rules={[{ required: true, message: ' ' }]}>
+          <Form.Item
+            name="explanatoryText"
+            rules={[{ required: true, message: '保存して次へ進む前に、必須フィールドに実施する必要があります。' }]}
+          >
             <ExplanatoryText />
           </Form.Item>
           <div className="my-[32px]">

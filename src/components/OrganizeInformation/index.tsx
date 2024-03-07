@@ -151,7 +151,7 @@ function OrganizeInformation() {
             </div>
           )}
         </div>
-        {!(user?.isRequestMemberCompany || user?.companyId === null) && (
+        {!(user?.isRequestMemberCompany || user?.companyId === null || user?.companyRole.membership !== 'MANAGER') && (
           <div className=" pt-[48px]  h-full flex space-x-[24px] items-center justify-center">
             {isEdit && (
               <div className="w-[146px]  h-[56px]">

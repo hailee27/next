@@ -59,7 +59,7 @@ const TaskCampain = ({ item, onDelete, showDelete, index }: Props) => {
       });
   }, [dataPlatForm, optionTasksWath]);
   useEffect(() => {
-    if (platFormWatch === 'INVITE_FRIENDS_FROM_URL') {
+    if (platFormWatch === 'SHARE_URL') {
       form.setFieldValue(['optionTasks', `task${item.id}`, 'isRequiredTask'], false);
     } else {
       form.setFieldValue(['optionTasks', `task${item.id}`, 'isRequiredTask'], true);
@@ -96,7 +96,7 @@ const TaskCampain = ({ item, onDelete, showDelete, index }: Props) => {
               { label: ' Telegram', value: 'TELEGRAM' },
               { label: ' Discord', value: 'DISCORD' },
               { label: ' 自由形式で質問する', value: 'CUSTOM' },
-              { label: 'URLから友達を招待する', value: 'INVITE_FRIENDS_FROM_URL' },
+              { label: 'URLから友達を招待する', value: 'SHARE_URL' },
             ]}
           />
           {dataPlatForm?.[0]?.value && platFormWatch !== 'CUSTOM' ? (
@@ -131,7 +131,7 @@ const TaskCampain = ({ item, onDelete, showDelete, index }: Props) => {
                               {
                                 pattern:
                                   /(https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z]{2,}(\.[a-zA-Z]{2,})(\.[a-zA-Z]{2,})?\/[a-zA-Z0-9]{2,}|((https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z]{2,}(\.[a-zA-Z]{2,})(\.[a-zA-Z]{2,})?)|(https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z0-9]{2,}\.[a-zA-Z0-9]{2,}\.[a-zA-Z0-9]{2,}(\.[a-zA-Z0-9]{2,})?/g,
-                                message: 'mush url',
+                                message: '正しい URL 形式を入力してください。',
                               },
                             ]
                           : [{ required: e.require, message: `${e.title}を入力してください。` }]
@@ -175,10 +175,10 @@ const TaskCampain = ({ item, onDelete, showDelete, index }: Props) => {
         <div className="w-full flex items-center justify-end space-x-3">
           <span>必須タスクにする</span>
           <Form.Item name={['optionTasks', `task${item.id}`, 'isRequiredTask']} noStyle>
-            <BasicSwitch disabled={platFormWatch === 'INVITE_FRIENDS_FROM_URL'} />
+            <BasicSwitch disabled={platFormWatch === 'SHARE_URL'} />
           </Form.Item>
         </div>
-        {platFormWatch === 'INVITE_FRIENDS_FROM_URL' && (
+        {platFormWatch === 'SHARE_URL' && (
           <div className="text-right font-semibold text-[12px]">※このタスクは必須タスクに設定できません。</div>
         )}
       </div>
