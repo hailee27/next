@@ -6,13 +6,15 @@ import YenIcon from '@/components/common/icons/YenIcon';
 import moment from 'moment';
 import Image from 'next/image';
 import { useContext, useMemo } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 import CampaignRewardSection from '../CampaignRewardSection';
 import CampaignTasksSection from '../CampaignTasksSection';
 import { CampaignDetailContext } from '../CampainContext';
 
 export default function InfoCampaign() {
   const { campaignDetail, campaignRewards, campaignTasks, campaignCategory } = useContext(CampaignDetailContext);
-
+  const { accessToken, user } = useSelector((state: RootState) => state.auth);
   const sortCampaignRewardPrice = useMemo(() => {
     const results = campaignRewards && Array.isArray(campaignRewards) ? [...campaignRewards] : [];
 
@@ -27,6 +29,14 @@ export default function InfoCampaign() {
     }
     return result;
   }, [campaignDetail]);
+
+  const isUserLogged = useMemo(() => {
+    let result = true;
+    if (!accessToken || !user || (user && !user?.id)) {
+      result = false;
+    }
+    return result;
+  }, [accessToken, user]);
 
   return (
     <div>
@@ -164,7 +174,7 @@ export default function InfoCampaign() {
           </div>
         </div>
         <div className="xl:w-[440px] xl:border-l-[2px] xl:border-l-[#333] relative">
-          <div className={isCampaignExpired === true ? 'opacity-40 pointer-events-none' : ''}>
+          <div className={isCampaignExpired === true || isUserLogged === false ? 'opacity-40 pointer-events-none' : ''}>
             {campaignTasks && Array.isArray(campaignTasks) && campaignTasks?.length ? <CampaignTasksSection /> : ''}
           </div>
         </div>

@@ -5,6 +5,7 @@ export default function Document() {
     <Html lang="en">
       <Head>
         <meta content="width=device-width, height=device-height" name="viewport" />
+        <meta charSet="UTF-8" />
         <link
           href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,900&family=Noto+Sans+JP:wght@100;300;400;500;700;900&display=swap"
           rel="stylesheet"
