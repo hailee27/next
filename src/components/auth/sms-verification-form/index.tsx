@@ -1,3 +1,6 @@
+/* eslint-disable no-console */
+/* eslint-disable no-bitwise */
+/* eslint-disable no-plusplus */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react/require-default-props */
 import { Form } from 'antd';
@@ -9,6 +12,24 @@ interface IComponentProps {
   isSubmitError?: boolean;
 }
 const { useForm } = Form;
+function toASCII(chars: string) {
+  let ascii = '';
+  try {
+    for (let i = 0, l = chars.length; i < l; i++) {
+      let c = chars[i].charCodeAt(0);
+
+      // make sure we only convert half-full width char
+      if (c >= 0xff00 && c <= 0xffef) {
+        c = 0xff & (c + 0x20);
+      }
+
+      ascii += String.fromCharCode(c);
+    }
+  } catch (e) {
+    console.log('e', e);
+  }
+  return ascii;
+}
 export default function SmsVerificationForm({ onSubmitCode, isSubmitError }: IComponentProps) {
   const [form] = useForm();
   const input1 = Form.useWatch('sms-item-1', form);
@@ -20,7 +41,7 @@ export default function SmsVerificationForm({ onSubmitCode, isSubmitError }: ICo
     try {
       if (input1 && input2 && input3 && input4) {
         const inputValue = [input1, input2, input3, input4].join('');
-        onSubmitCode?.(inputValue);
+        onSubmitCode?.(toASCII(inputValue) ?? '');
       }
     } catch (e) {
       // eslint-disable-next-line no-console
