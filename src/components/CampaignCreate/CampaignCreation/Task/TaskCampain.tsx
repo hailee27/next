@@ -8,7 +8,7 @@ import BasicInput from '@/components/common/BasicInput';
 import BasicTextArea from '@/components/common/BasicTextArea';
 import { renderDataPlatform } from '@/utils/renderDataPlatform';
 import FlagItem from '@/components/common/FlagItem';
-import BasicSwitch from '@/components/common/BasicSwitch';
+// import BasicSwitch from '@/components/common/BasicSwitch';
 import { TypeTasks } from './type';
 import TaskQuestionCostom from './TaskQuestionCostom';
 
@@ -46,8 +46,8 @@ const TaskCampain = ({ item, onDelete, showDelete, index }: Props) => {
       form.setFieldValue(['optionTasks', `task${item.id}`, 'type'], item.platForm.type);
       form.setFieldValue(['optionTasks', `task${item.id}`, 'platForm'], item.platForm.name);
       form.setFieldValue(['optionTasks', `task${item.id}`, 'taskId'], item.config.taskTemplateId);
-      form.setFieldValue(['optionTasks', `task${item.id}`, 'pointsAwarded'], item.config.point);
-      form.setFieldValue(['optionTasks', `task${item.id}`, 'isRequiredTask'], item.config.isRequired);
+      // form.setFieldValue(['optionTasks', `task${item.id}`, 'pointsAwarded'], item.config.point);
+      // form.setFieldValue(['optionTasks', `task${item.id}`, 'isRequiredTask'], item.config.isRequired);
     }
   }, [item.platForm, item.config, item.id]);
 
@@ -96,7 +96,7 @@ const TaskCampain = ({ item, onDelete, showDelete, index }: Props) => {
               { label: ' Telegram', value: 'TELEGRAM' },
               { label: ' Discord', value: 'DISCORD' },
               { label: ' 自由形式で質問する', value: 'CUSTOM' },
-              { label: 'URLから友達を招待する', value: 'SHARE_URL' },
+              // { label: 'URLから友達を招待する', value: 'SHARE_URL' },
             ]}
           />
           {dataPlatForm?.[0]?.value && platFormWatch !== 'CUSTOM' ? (
@@ -165,7 +165,7 @@ const TaskCampain = ({ item, onDelete, showDelete, index }: Props) => {
           {/* TASK QUESTION */}
           {platFormWatch === 'CUSTOM' && <TaskQuestionCostom dataPlatForm={dataPlatForm ?? []} item={item} />}
         </div>
-        <div className="w-full">
+        {/* <div className="w-full">
           <div className="text-[14px] font-semibold mb-[5px] space-x-[8px]">付与ポイント</div>
           <Form.Item className="" initialValue="1" name={['optionTasks', `task${item.id}`, 'pointsAwarded']}>
             <BasicInput />
@@ -180,7 +180,7 @@ const TaskCampain = ({ item, onDelete, showDelete, index }: Props) => {
         </div>
         {platFormWatch === 'SHARE_URL' && (
           <div className="text-right font-semibold text-[12px]">※このタスクは必須タスクに設定できません。</div>
-        )}
+        )} */}
       </div>
     </>
   );
