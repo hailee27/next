@@ -21,9 +21,10 @@ export default function AuthInfoCard() {
 
   const [disconnectTwitter, { isLoading: isDisconnecting, isSuccess: isDisconnected }] = useDisconnectTwitterMutation();
 
-  const { isModalOpen, showModal, cancelModal, getTwitterOauthUrl, isFetchingUser, refreshUser } = useConnectX({
-    handleAction: 'CONNECT',
-  });
+  const { isModalOpen, showModal, cancelModal, getTwitterOauthUrl, isFetchingUser, refreshUser, isRefetchUser } =
+    useConnectX({
+      handleAction: 'CONNECT',
+    });
 
   const onUpdateTwoStepAuthState = async (newState: boolean) => {
     if (newState === false) {
@@ -68,7 +69,7 @@ export default function AuthInfoCard() {
   };
 
   return (
-    <Spin spinning={isFetchingUser || isDisconnecting}>
+    <Spin spinning={isFetchingUser || isDisconnecting || isRefetchUser}>
       <div className=" border-[2px] border-[#333] px-[22px] py-[30px] rounded-[16px] bg-white">
         <div className="flex flex-col gap-[16px]">
           <div className="flex justify-between gap-[12px] items-center">

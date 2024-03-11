@@ -32,7 +32,7 @@ export default function CampaignCardItem({
       <div className="font-notoSans px-[24px] py-[32px] flex flex-col gap-[16px] h-full justify-between">
         <div className=" flex flex-col gap-[16px]">
           <div className=" flex gap-[10px] items-center  ">
-            <div className="w-[32px] h-[32px] rounded-full  overflow-hidden">
+            <div className="w-[32px] h-[32px] min-w-[32px] rounded-full  overflow-hidden">
               <Image
                 alt="company logo"
                 className="w-full h-full object-cover"
@@ -42,7 +42,7 @@ export default function CampaignCardItem({
                 width="0"
               />
             </div>
-            <p className="font-bold text-[14px] tracking-[0.42px] leading-[21px] text-main-text ">
+            <p className="font-bold text-[14px] tracking-[0.42px] leading-[21px] text-main-text line-clamp-1 text-ellipsis">
               {item?.company?.name ?? '-'}
             </p>
           </div>
@@ -72,7 +72,7 @@ export default function CampaignCardItem({
           )}
 
           <div>
-            <h3 className="font-bold text-[16px] tracking-[0.48px] leading-[24px] mb-[8px] text-main-text line-clamp-2 text-ellipsis">
+            <h3 className="font-bold text-[16px] tracking-[0.48px] leading-[24px] mb-[8px] text-main-text line-clamp-1 text-ellipsis">
               {item?.title ?? '-'}
             </h3>
             {item?.methodOfselectWinners === 'MANUAL_SELECTION' && (

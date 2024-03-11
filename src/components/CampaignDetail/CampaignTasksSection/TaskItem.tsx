@@ -95,10 +95,11 @@ export default function TaskItem({
               try {
                 await onImplementTask({
                   taskId: task?.id ?? '',
-                });
-                await onRefetchCampaignTasks();
+                }).unwrap();
               } catch (e) {
                 toastMessage(getErrorMessage(e), 'error');
+              } finally {
+                await onRefetchCampaignTasks();
               }
             }, 5000);
 
