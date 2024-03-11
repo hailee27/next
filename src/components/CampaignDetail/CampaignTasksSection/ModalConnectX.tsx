@@ -1,6 +1,7 @@
 import CButtonShadow from '@/components/common/CButtonShadow';
 import CModalWapper from '@/components/common/CModalWapper';
 import { RootState } from '@/redux/store';
+import { REDIRECT_QUERY_KEY } from '@/utils/constant/enums';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 
@@ -24,7 +25,11 @@ export default function ModalConnectX({ isOpen, onCancel }: { isOpen: boolean; o
           <CButtonShadow
             onClick={() => {
               if (accessToken) {
-                router.push('/my-page');
+                const ops = {
+                  [`${REDIRECT_QUERY_KEY}`]: router.asPath,
+                };
+                const qs = new URLSearchParams(ops).toString();
+                router.push(`/my-page?${qs}`);
               }
             }}
             title="設定"

@@ -4,6 +4,7 @@
 
 import { useLazyMeQuery } from '@/redux/endpoints/auth';
 import { setSession } from '@/redux/slices/auth.slice';
+import { REDIRECT_QUERY_KEY } from '@/utils/constant/enums';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import { openWindowPopup } from '@/utils/func/openWindowPopup';
 import toastMessage from '@/utils/func/toastMessage';
@@ -20,6 +21,8 @@ export default function useConnectX({ handleAction }: IProps) {
   const router = useRouter();
   const dispatch = useDispatch();
   const [triggerGetMe, { isFetching: isFetchingUser }] = useLazyMeQuery();
+
+  const [isRefetchUser, setIsRefetchUser] = useState(false);
 
   const refreshUser = async () => {
     try {
@@ -65,13 +68,22 @@ export default function useConnectX({ handleAction }: IProps) {
             );
           }
         } else if (handleAction === 'CONNECT') {
+          setIsRefetchUser(true);
           await refreshUser();
           toastMessage('X連携をONにしました。', 'success');
+          if (router.pathname?.startsWith('/my-page')) {
+            const redirectUrl = router?.query?.[`${REDIRECT_QUERY_KEY}`];
+            if (redirectUrl && typeof redirectUrl === 'string') {
+              router.push(redirectUrl);
+            }
+          }
         }
       }
     } catch (error) {
       console.log(error);
       toastMessage(getErrorMessage(error), 'error');
+    } finally {
+      setIsRefetchUser(false);
     }
   }, []);
 
@@ -100,5 +112,6 @@ export default function useConnectX({ handleAction }: IProps) {
     getTwitterOauthUrl,
     isFetchingUser,
     refreshUser,
+    isRefetchUser,
   };
 }

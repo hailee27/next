@@ -3,11 +3,11 @@
 
 import CalendarIcon from '@/components/common/icons/CalendarIcon';
 import YenIcon from '@/components/common/icons/YenIcon';
+import { RootState } from '@/redux/store';
 import moment from 'moment';
 import Image from 'next/image';
 import { useContext, useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '@/redux/store';
 import CampaignRewardSection from '../CampaignRewardSection';
 import CampaignTasksSection from '../CampaignTasksSection';
 import { CampaignDetailContext } from '../CampainContext';
@@ -55,7 +55,7 @@ export default function InfoCampaign() {
           <div className="bg-white px-[20px] pt-[48px] pb-[56px] md:px-[160px] xl:px-[35px] xxl:px-[160px] md:!py-[64px]">
             <div className="flex flex-col gap-[16px] ">
               <div className=" flex gap-[10px] items-center  ">
-                <div className="w-[32px] h-[32px] md:w-[32px] md:h-[32px] rounded-full  overflow-hidden">
+                <div className="w-[32px] min-w-[32px] h-[32px] md:w-[32px] md:h-[32px] rounded-full  overflow-hidden">
                   <Image
                     alt="company logo"
                     className="w-full h-full object-cover"

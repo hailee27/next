@@ -57,8 +57,10 @@ export const convertCampaignTask = (task: TypeTask | null) => {
               title: 'X(Twitter)でフォローする',
               description: (
                 <div className="text-[14px]">
-                  <h3>{targetUser ?? ''}</h3>
-                  <p>{targetUser ?? ''}のアカウントをフォローしてください。</p>
+                  <h3 className="font-bold">{targetUser ?? ''}</h3>
+                  <p>
+                    <span className="font-bold">{targetUser ?? ''}</span>のアカウントをフォローしてください。
+                  </p>
                 </div>
               ),
               type: 'OPEN_LINK',
