@@ -14,9 +14,10 @@ import { useDispatch } from 'react-redux';
 
 interface IProps {
   handleAction: 'SIGNUP' | 'CONNECT';
+  callBackPath?: string;
 }
 
-export default function useConnectX({ handleAction }: IProps) {
+export default function useConnectX({ handleAction, callBackPath }: IProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
@@ -57,26 +58,26 @@ export default function useConnectX({ handleAction }: IProps) {
           if (storageData?.data?.accessToken && storageData?.data?.refreshToken && storageData?.data?.user) {
             dispatch(setSession({ ...storageData?.data }));
 
-            router.replace('/my-page');
+            if (callBackPath) {
+              toastMessage('X連携をONにしました。', 'success');
+            } else {
+              router.replace('/my-page');
+            }
           } else if (storageData?.data?.totpToken && storageData?.data?.user) {
             router.push(
               `/auth/sign-in/${
                 router.pathname?.includes('campaign-creator') ? 'campaign-creator' : 'campaign-implementer'
               }/verification?code=${storageData?.data?.code ?? undefined}&totpToken=${
                 storageData?.data?.totpToken ?? undefined
-              }&userId=${storageData?.data?.user?.id ?? undefined}&authMethod=twitter`
+              }&userId=${storageData?.data?.user?.id ?? undefined}&authMethod=twitter&${REDIRECT_QUERY_KEY}=${
+                callBackPath ?? ''
+              }`
             );
           }
         } else if (handleAction === 'CONNECT') {
           setIsRefetchUser(true);
           await refreshUser();
           toastMessage('X連携をONにしました。', 'success');
-          if (router.pathname?.startsWith('/my-page')) {
-            const redirectUrl = router?.query?.[`${REDIRECT_QUERY_KEY}`];
-            if (redirectUrl && typeof redirectUrl === 'string') {
-              router.push(redirectUrl);
-            }
-          }
         }
       }
     } catch (error) {

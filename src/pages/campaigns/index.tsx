@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import CampaignCardItem from '@/components/CampaignCardItem';
@@ -51,8 +52,8 @@ export default function CampaignsPage() {
   return (
     <div className="font-notoSans text-main-text min-h-screen px-[20px] py-[40px] xl:py-[100px] bg-[#D5FFFF] ">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-[8px] w-fit mx-auto">
-        {orderBtnGroups.map((item) => (
-          <div className="w-[126px] h-[51px] md:w-[172px] md:h-[56px]">
+        {orderBtnGroups.map((item, index) => (
+          <div className="w-[126px] h-[51px] md:w-[172px] md:h-[56px]" key={index}>
             <CButtonShadow
               classBgColor={item?.isActive ? 'bg-[#333]' : 'bg-white'}
               classShadowColor={item?.isActive ? 'bg-[#fff]' : 'bg-[#333]'}
