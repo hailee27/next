@@ -26,7 +26,7 @@ function OrganizeInformation() {
   return (
     <Spin spinning={loadingUpdate}>
       <Form
-        className="px-[48px] pb-[100px]"
+        className="md:px-[48px] px-[20px] pb-[100px] "
         form={form}
         onFinish={(e) => {
           const obj: CompaniesParams = {

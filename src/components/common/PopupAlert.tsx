@@ -11,7 +11,7 @@ function PopupAlert(props: Props) {
   const { onOk, onCancel, message } = props;
   const { closePopUp } = usePopUpContext();
   return (
-    <div className="w-[300px] h-[150px] flex flex-col items-center">
+    <div className="w-[300px] min-h-[150px] flex flex-col items-center">
       <div className="flex-1 w-full flex items-center justify-center  text-[16px] font-medium p-[20px] text-center">
         {message}
       </div>

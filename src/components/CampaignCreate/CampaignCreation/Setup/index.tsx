@@ -93,6 +93,7 @@ function Setup() {
               props={{ cropperProps: { cropSize: { height: 279, width: 279 } } as CropperProps }}
             />
           </Form.Item>
+          {/* <Crop /> */}
           {/* <div className="text-[14px] font-semibold mb-[5px] mt-[24px]">説明文</div> */}
           <div className="flex space-x-[8px] items-center mb-[10px]">
             <div className="text-[14px] font-bold ">説明文</div>

@@ -66,6 +66,7 @@ export type TaskType = (
 
 export type TypeResponseFormCampaign = {
   campainName?: string;
+  campaginCreator?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   thumbnail?: any;
   category?: string;

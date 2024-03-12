@@ -136,6 +136,11 @@ function InstantWin() {
                               toastMessage('キャンペーンには少なくとも 1 つの賞品が必要です。', 'error')
                             );
                           }
+                          if (Number(value) > 500000) {
+                            return Promise.reject(new Error('')).finally(() =>
+                              toastMessage('賞品金額の合計金額は上限を50万円とする。', 'error')
+                            );
+                          }
                           return Promise.resolve();
                         },
                       },
