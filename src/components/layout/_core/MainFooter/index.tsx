@@ -4,65 +4,65 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-const FooterNavigation = [
-  {
-    key: 1,
-    text: 'Home',
-    to: '/',
-  },
-  { key: 2, text: 'キャンペーン', to: '/campaigns' },
-  {
-    key: 3,
-    text: 'マイページ',
-    to: '/my-page',
-  },
-  {
-    key: 4,
-    text: 'キャンペーン作成',
-    to: '/campaign-creator/create',
-  },
-  {
-    key: 5,
-    text: 'お問い合わせ',
-    to: '/inquiry',
-  },
-  {
-    key: 6,
-    text: 'よくある質問',
-    to: '/faqs',
-  },
-  {
-    key: 7,
-    text: '利用規約',
-    to: '/terms-of-service',
-  },
-  {
-    key: 8,
-    text: '特定商取引法に基づく表示',
-    to: '/specified-commercial-transactions-law',
-  },
-  {
-    key: 9,
-    text: 'プライバシーポリシー',
-    to: '/privacy-policy',
-  },
-];
-
-const FooterSocialLinksV1 = [
-  {
-    key: 1,
-    to: 'https://twitter.com/',
-    icon: <Image alt="x icon" height={40} src="/assets/images/footer-x-img.png" width={40} />,
-  },
-  {
-    key: 2,
-    to: 'https://line.me/',
-    icon: <LineIcon />,
-  },
-];
-
 export default function MainFooter() {
   const router = useRouter();
+  const FooterNavigation = [
+    {
+      key: 1,
+      text: 'Home',
+      to: '/',
+    },
+    { key: 2, text: 'キャンペーン', to: '/campaigns' },
+    {
+      key: 3,
+      text: 'マイページ',
+      to: '/my-page',
+    },
+    {
+      key: 4,
+      text: 'キャンペーン作成',
+      to: '/campaign-creator/create',
+    },
+    {
+      key: 5,
+      text: 'お問い合わせ',
+      to: '/inquiry',
+    },
+    {
+      key: 6,
+      text: 'よくある質問',
+      to: '/faqs',
+    },
+    {
+      key: 7,
+      text: '利用規約',
+      to: router.pathname.startsWith('/auth/sign-in/campaign-implementer')
+        ? '/terms-of-service?view=implementer'
+        : '/terms-of-service',
+    },
+    {
+      key: 8,
+      text: '特定商取引法に基づく表示',
+      to: '/specified-commercial-transactions-law',
+    },
+    {
+      key: 9,
+      text: 'プライバシーポリシー',
+      to: '/privacy-policy',
+    },
+  ];
+  const FooterSocialLinksV1 = [
+    {
+      key: 1,
+      to: 'https://twitter.com/',
+      icon: <Image alt="x icon" height={40} src="/assets/images/footer-x-img.png" width={40} />,
+    },
+    {
+      key: 2,
+      to: 'https://line.me/',
+      icon: <LineIcon />,
+    },
+  ];
   return (
     <div className="flex items-center flex-col gap-[40px] lg:gap-[100px] pt-[56px] pb-[16px] lg:pb-[24px] lg:pt-[100px] font-notoSans">
       <div className="flex items-center flex-col gap-[40px] lg:flex-row lg:justify-between lg:items-end  max-w-[1000px] lg:w-[1000px] mx-auto">

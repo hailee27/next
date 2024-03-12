@@ -12,6 +12,7 @@ import toastMessage from '@/utils/func/toastMessage';
 import { AuthEmailPasswordData } from '@/utils/schema/auth.schema';
 import Image from 'next/image';
 
+import { pickBy } from 'lodash';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -35,16 +36,21 @@ export default function CampaignImplementerSignin() {
         const data = await signinEmail(formValue).unwrap();
         if (data?.accessToken && data?.refreshToken && data?.user) {
           dispatch(setSession({ ...data }));
+
           setIsShowMsg(true);
           setTimeout(() => {
             router.replace('/my-page');
           }, 2000);
         } else if (data?.user && data?.totpToken) {
-          router.push(
-            `/auth/sign-in/campaign-implementer/verification?code=${data?.code ?? undefined}&totpToken=${
-              data?.totpToken ?? undefined
-            }&userId=${data?.user?.id ?? undefined}`
-          );
+          const query = {
+            code: data?.code ?? undefined,
+            totpToken: data?.totpToken ?? undefined,
+            userId: data?.user?.id ?? undefined,
+          };
+
+          const qs = new URLSearchParams(pickBy(query)).toString();
+
+          router.push(`/auth/sign-in/campaign-implementer/verification?${qs}`);
         }
       }
     } catch (err) {

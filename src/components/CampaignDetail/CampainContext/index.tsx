@@ -1,7 +1,9 @@
 import { TypeCampaign, TypeCampaignReward, TypeTask, useLazyGetDetailCampaignQuery } from '@/redux/endpoints/campaign';
+import { useGetMasterDataQuery } from '@/redux/endpoints/masterData';
 import { useGetReWardsQuery } from '@/redux/endpoints/reWard';
 import { useGetTasksQuery } from '@/redux/endpoints/task';
 import { RootState } from '@/redux/store';
+import { getMasterDataLabel } from '@/utils/func/convertCampaign';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import toastMessage from '@/utils/func/toastMessage';
 import { useRouter } from 'next/router';
@@ -17,6 +19,7 @@ export const CampaignDetailContext = React.createContext<{
   isFetchingCampaignTasks: boolean;
   isFetchingCampaignRewards: boolean;
   onFetchCampaignInfo?: () => Promise<TypeCampaign | null>;
+  campaignCategory: string;
 }>({
   campaignDetail: null,
   campaignTasks: null,
@@ -25,6 +28,7 @@ export const CampaignDetailContext = React.createContext<{
   viewType: 'detail',
   isFetchingCampaignTasks: false,
   isFetchingCampaignRewards: false,
+  campaignCategory: '',
 });
 
 export default function CampaignDetailProvider({
@@ -41,9 +45,13 @@ export default function CampaignDetailProvider({
 
   const router = useRouter();
 
+  const { data: masterData } = useGetMasterDataQuery();
+
   const [campaignInfo, setCampaignInfo] = useState<TypeCampaign | null | undefined>(campaignDetail);
 
   const [triggerGetInfo] = useLazyGetDetailCampaignQuery();
+
+  const campaignCategory = getMasterDataLabel(masterData, 'CATEGORY_CAMPAIGN', campaignDetail?.category ?? '');
 
   const {
     data: campaignDetailTasks,
@@ -92,6 +100,7 @@ export default function CampaignDetailProvider({
 
   const values = useMemo(
     () => ({
+      campaignCategory: campaignCategory || campaignDetail?.category || '',
       campaignDetail: campaignInfo ?? null,
       campaignTasks: campaignDetailTasks?.tasks ?? null,
       campaignRewards: campaignDetailRewards?.rewards ?? null,

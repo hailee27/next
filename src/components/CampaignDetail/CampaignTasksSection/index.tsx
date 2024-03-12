@@ -6,7 +6,7 @@ import CModalWapper from '@/components/common/CModalWapper';
 import ArrowDown from '@/components/common/icons/ArrowDown';
 import { useCreateGachaMutation } from '@/redux/endpoints/users';
 import { RootState } from '@/redux/store';
-import { convertCampaignTask } from '@/utils/func/convertCampaign';
+import { convertCampaignTask, TasksConvert } from '@/utils/func/convertCampaign';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import toastMessage from '@/utils/func/toastMessage';
 import { Spin } from 'antd';
@@ -14,11 +14,12 @@ import { useRouter } from 'next/router';
 import { useContext, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 
+import clsx from 'clsx';
 import { CampaignDetailContext } from '../CampainContext';
 import TaskItem from './TaskItem';
 
 export default function CampaignTasksSection() {
-  const { user } = useSelector((state: RootState) => state.auth);
+  const { accessToken, user } = useSelector((state: RootState) => state.auth);
   const router = useRouter();
   const [isOpenModalSetupAuthEmail, setIsOpenModalSetupAuthEmail] = useState(false);
   const [onRegisterCampaign] = useCreateGachaMutation();
@@ -93,13 +94,35 @@ export default function CampaignTasksSection() {
     }
   };
 
+  const isUserLogged = useMemo(() => {
+    let result = true;
+    if (
+      !accessToken ||
+      !user ||
+      (user && !user?.id) ||
+      !(user && user?.identities && Array.isArray(user?.identities) && user?.identities?.length > 0)
+    ) {
+      result = false;
+    }
+    return result;
+  }, [accessToken, user]);
+
   return (
     <Spin spinning={isLoading || isFetchingCampaignTasks}>
       <div className="py-[56px] px-[20px] md:py-[100px] md:px-[160px] xl:px-[35px]">
         <h3 className="text-[24px] font-bold tracking-[0.72px] text-center md:text-[28px] ">タスク</h3>
         <div className="h-[24px] md:h-[64px]" />
 
-        <div className="flex flex-col gap-[8px]">
+        {isUserLogged === false ? (
+          <div className="mb-[8px]">
+            <TaskItem isLoggedUserImplementedTask={false} task={{} as TasksConvert} type="CONNECT_X" />
+          </div>
+        ) : (
+          ''
+        )}
+        <div
+          className={clsx('flex flex-col gap-[8px]', isUserLogged === false ? 'opacity-40 pointer-events-none' : '')}
+        >
           {campaignTasks &&
             Array.isArray(campaignTasks) &&
             campaignTasks?.length > 0 &&
@@ -127,7 +150,7 @@ export default function CampaignTasksSection() {
               classBgColor={isDisableRegisterBtn ? 'bg-[#c2c2c2]' : 'bg-[#333]'}
               classBorderColor={isDisableRegisterBtn ? 'border-[#c2c2c2]' : 'border-[#333]'}
               classShadowColor="bg-[#fff]"
-              // isDisable={isDisableRegisterBtn}
+              isDisable={isDisableRegisterBtn}
               onClick={handleRegisterCampaign}
               textClass="text-white text-[14px] font-bold tracking-[0.42px]"
               title={

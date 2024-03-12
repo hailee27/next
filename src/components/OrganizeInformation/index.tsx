@@ -58,9 +58,9 @@ function OrganizeInformation() {
                   setIsEdit(false);
                 });
 
-              toastMessage('更新に成功', 'success');
+              toastMessage('更新に成功です。', 'success');
             })
-            .catch((err) => toastMessage(getErrorMessage(err), 'error'));
+            .catch((error) => toastMessage(getErrorMessage(error), 'error'));
         }}
       >
         <div className="border-b-2 border-[#2D3648]  py-[24px]">

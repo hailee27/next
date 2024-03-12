@@ -6,8 +6,10 @@
 import CampaignDetail from '@/components/CampaignDetail';
 import CampaignDetailProvider from '@/components/CampaignDetail/CampainContext';
 import RecommedCampaignsSection from '@/components/CampaignDetail/RecommedCampaignsSection';
+import { useMeQuery } from '@/redux/endpoints/auth';
 import { CampaignApi, ListCampaignParams, TypeCampaign } from '@/redux/endpoints/campaign';
-import { wrapper } from '@/redux/store';
+import { RootState, wrapper } from '@/redux/store';
+import { useSelector } from 'react-redux';
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ params }) => {
   if (
@@ -68,7 +70,10 @@ export default function CampaignDetailPage({
   campaignsRecommend: TypeCampaign[] | null;
   viewType: 'completion' | 'winning' | 'losing' | 'detail';
 }) {
-  console.log(campaignDetail);
+  const { accessToken } = useSelector((state: RootState) => state.auth);
+  useMeQuery(undefined, {
+    skip: !accessToken,
+  });
   return (
     <CampaignDetailProvider campaignDetail={campaignDetail} viewType={viewType}>
       <div className="font-notoSans">

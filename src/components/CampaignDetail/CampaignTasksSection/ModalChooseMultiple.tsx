@@ -22,6 +22,17 @@ export default function ModalChooseMultiple({
   const { onRefetchCampaignTasks } = useContext(CampaignDetailContext);
   const [onImplementTask] = useImplementTaskMutation();
 
+  const [form] = Form.useForm();
+  const watchAnswer = Form.useWatch('answer', form);
+
+  const isDisableBtn = useMemo(() => {
+    let result = true;
+    if (Array.isArray(watchAnswer) && watchAnswer.length) {
+      result = false;
+    }
+    return result;
+  }, [watchAnswer]);
+
   const convertListItem = useMemo(() => {
     let results: { [key: string]: string }[] | null = null;
     const taskListChoice = task?.taskInfo?.listChoice ?? null;
@@ -33,10 +44,14 @@ export default function ModalChooseMultiple({
     }
     return results;
   }, [task]);
-
+  const handleCancel = () => {
+    form.resetFields();
+    onCancel();
+  };
   return (
-    <CModalWapper isOpen={isOpen} onCancel={onCancel}>
+    <CModalWapper isOpen={isOpen} onCancel={handleCancel}>
       <Form
+        form={form}
         onFinish={async (values) => {
           const answer = values?.answer ?? [];
           try {
@@ -46,12 +61,13 @@ export default function ModalChooseMultiple({
                 body: {
                   answer: answer?.join('、'),
                 },
-              });
-              await onRefetchCampaignTasks();
-              onCancel();
+              }).unwrap();
             }
           } catch (e) {
             toastMessage(getErrorMessage(e), 'error');
+          } finally {
+            await onRefetchCampaignTasks();
+            handleCancel();
           }
         }}
       >
@@ -98,7 +114,13 @@ export default function ModalChooseMultiple({
             </div>
             <div className="h-[24px]" />
             <div className="w-[206px] h-[53px] mx-auto">
-              <CButtonShadow title="送信する" type="submit" />
+              <CButtonShadow
+                classBgColor={isDisableBtn ? 'bg-[#c2c2c2]' : 'bg-[#333]'}
+                classBorderColor={isDisableBtn ? 'border-[#c2c2c2]' : 'border-[#333]'}
+                isDisable={isDisableBtn}
+                title="送信する"
+                type="submit"
+              />
             </div>
           </div>
         </div>

@@ -40,7 +40,9 @@ export default function ConfigurePhoneNumber() {
         }).unwrap();
 
         router.push(
-          `/my-page/settings/two-step-authentication/verification?phoneNumber=${phone}&token=${data?.totpToken ?? ''}`
+          `/my-page/settings/two-step-authentication/verification?phoneNumber=${phone ?? ''}&token=${
+            data?.totpToken ?? ''
+          }`
         );
       }
     } catch (err) {

@@ -14,6 +14,7 @@ export default function useGetCampaigns({ pageSize }: { pageSize: number }) {
 
   const fetchCampaigns = useCallback(async () => {
     try {
+      const startRequest = Date.now();
       setIsFetching(true);
       const page = parseInt((router?.query?.page ?? '1') as string, 10);
       const orderBy = router?.query?.orderBy;
@@ -42,11 +43,21 @@ export default function useGetCampaigns({ pageSize }: { pageSize: number }) {
       const data = await triggerGetCampaigns(apiRequest).unwrap();
       setCampaigns(data?.campaigns);
       setTotal(data?.total);
+      const endRequest = Date.now();
+      if (endRequest - startRequest < 600) {
+        setTimeout(
+          () => {
+            setIsFetching(false);
+          },
+          600 - (endRequest - startRequest)
+        );
+      } else {
+        setIsFetching(false);
+      }
     } catch (err) {
       setCampaigns([]);
       setTotal(0);
       toastMessage(getErrorMessage(err), 'error');
-    } finally {
       setIsFetching(false);
     }
   }, [pageSize, router?.query?.page, router?.query?.orderBy]);

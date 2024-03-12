@@ -4,6 +4,7 @@
 import SmsVerificationForm from '@/components/auth/sms-verification-form';
 import { useAuthVerificationMutation, useSmsVerifyMutation } from '@/redux/endpoints/auth';
 import { setSession } from '@/redux/slices/auth.slice';
+import { REDIRECT_QUERY_KEY } from '@/utils/constant/enums';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import toastMessage from '@/utils/func/toastMessage';
 import { Spin } from 'antd';
@@ -21,9 +22,12 @@ export default function VerificationPage() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const router = useRouter();
+
   const handleSubmitSMS = async (code: string) => {
     try {
       setIsSubmitting(true);
+      const redirectUrl = router?.query?.[`${REDIRECT_QUERY_KEY}`];
       if (query?.code && query?.totpToken) {
         const data = await smsAuth({
           code,
@@ -32,14 +36,16 @@ export default function VerificationPage() {
 
         if (data?.accessToken && data?.refreshToken && data?.user) {
           dispatch(setSession({ ...data }));
-          if (
+          if (redirectUrl && typeof redirectUrl === 'string') {
+            router.push(redirectUrl);
+          } else if (
             query?.authMethod === 'twitter' ||
             data?.user?.twoFactorMethod === 'NONE' ||
             data?.user?.emailId === null
           ) {
             push('/my-page');
           } else {
-            push('/campaign-creator');
+            push('/');
           }
         }
       }

@@ -21,9 +21,16 @@ export default function ModalFreeTextContent({
   const { onRefetchCampaignTasks } = useContext(CampaignDetailContext);
   const [onImplementTask] = useImplementTaskMutation();
 
+  const [form] = Form.useForm();
+  const answer = Form.useWatch('answer', form);
+  const handleCancel = () => {
+    form.resetFields();
+    onCancel();
+  };
   return (
-    <CModalWapper isOpen={isOpen} onCancel={onCancel}>
+    <CModalWapper isOpen={isOpen} onCancel={handleCancel}>
       <Form
+        form={form}
         onFinish={async (values) => {
           try {
             if (task?.id) {
@@ -32,12 +39,13 @@ export default function ModalFreeTextContent({
                 body: {
                   answer: values?.answer,
                 },
-              });
-              await onRefetchCampaignTasks();
-              onCancel();
+              }).unwrap();
             }
           } catch (e) {
             toastMessage(getErrorMessage(e), 'error');
+          } finally {
+            await onRefetchCampaignTasks();
+            handleCancel();
           }
         }}
       >
@@ -71,7 +79,13 @@ export default function ModalFreeTextContent({
             <div className="h-[24px]" />
 
             <div className="w-[206px] h-[53px] mx-auto">
-              <CButtonShadow title="送信する" type="submit" />
+              <CButtonShadow
+                classBgColor={!answer ? 'bg-[#c2c2c2]' : 'bg-[#333]'}
+                classBorderColor={!answer ? 'border-[#c2c2c2]' : 'border-[#333]'}
+                isDisable={!answer}
+                title="送信する"
+                type="submit"
+              />
             </div>
           </div>
         </div>

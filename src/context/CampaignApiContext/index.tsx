@@ -98,7 +98,7 @@ export const CampaignApiProvider = ({ children }: { children: React.ReactNode })
                 .catch((err) => toastMessage(getErrorMessage(err), 'error'));
             } else {
               router.push('/campaign-creator/list');
-              toastMessage(type === 'DRAFT' ? '下書き保存に成功しました。' : 'succses', 'success');
+              toastMessage(type === 'DRAFT' ? '下書き保存に成功しました。' : '購入に成功です。', 'success');
             }
           }
         } catch (err) {

@@ -4,6 +4,7 @@
 
 import { useLazyMeQuery } from '@/redux/endpoints/auth';
 import { setSession } from '@/redux/slices/auth.slice';
+import { REDIRECT_QUERY_KEY } from '@/utils/constant/enums';
 import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import { openWindowPopup } from '@/utils/func/openWindowPopup';
 import toastMessage from '@/utils/func/toastMessage';
@@ -13,13 +14,16 @@ import { useDispatch } from 'react-redux';
 
 interface IProps {
   handleAction: 'SIGNUP' | 'CONNECT';
+  callBackPath?: string;
 }
 
-export default function useConnectX({ handleAction }: IProps) {
+export default function useConnectX({ handleAction, callBackPath }: IProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
   const [triggerGetMe, { isFetching: isFetchingUser }] = useLazyMeQuery();
+
+  const [isRefetchUser, setIsRefetchUser] = useState(false);
 
   const refreshUser = async () => {
     try {
@@ -54,17 +58,24 @@ export default function useConnectX({ handleAction }: IProps) {
           if (storageData?.data?.accessToken && storageData?.data?.refreshToken && storageData?.data?.user) {
             dispatch(setSession({ ...storageData?.data }));
 
-            router.replace('/my-page');
+            if (callBackPath) {
+              toastMessage('X連携をONにしました。', 'success');
+            } else {
+              router.replace('/my-page');
+            }
           } else if (storageData?.data?.totpToken && storageData?.data?.user) {
             router.push(
               `/auth/sign-in/${
                 router.pathname?.includes('campaign-creator') ? 'campaign-creator' : 'campaign-implementer'
               }/verification?code=${storageData?.data?.code ?? undefined}&totpToken=${
                 storageData?.data?.totpToken ?? undefined
-              }&userId=${storageData?.data?.user?.id ?? undefined}&authMethod=twitter`
+              }&userId=${storageData?.data?.user?.id ?? undefined}&authMethod=twitter&${REDIRECT_QUERY_KEY}=${
+                callBackPath ?? ''
+              }`
             );
           }
         } else if (handleAction === 'CONNECT') {
+          setIsRefetchUser(true);
           await refreshUser();
           toastMessage('X連携をONにしました。', 'success');
         }
@@ -72,6 +83,8 @@ export default function useConnectX({ handleAction }: IProps) {
     } catch (error) {
       console.log(error);
       toastMessage(getErrorMessage(error), 'error');
+    } finally {
+      setIsRefetchUser(false);
     }
   }, []);
 
@@ -100,5 +113,6 @@ export default function useConnectX({ handleAction }: IProps) {
     getTwitterOauthUrl,
     isFetchingUser,
     refreshUser,
+    isRefetchUser,
   };
 }

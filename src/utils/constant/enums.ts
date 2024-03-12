@@ -15,6 +15,7 @@ export const ErrorCode: { [key: string]: string } = {
   '400013': 'キャンペーンの支払いが完了しました',
   '400014': '管理者は1人以上必要となります',
   '400015': 'このキャンペーンはまだ支払われていません',
+  '400017': 'This task has already been dones',
 
   '401004': 'キャンペーンを削除できません',
   '401005': 'トークンなし',
@@ -50,3 +51,5 @@ export const HOME_PAGINATION_PAGE_SIZE = 4;
 export const TWITTER_FOLLOW_BASE_URL = 'https://twitter.com/intent/follow';
 export const TWITTER_TWEET_POST_BASE_URL = 'https://twitter.com/intent/retweet';
 export const TWITTER_COMPOSE_POST_BASE_URL = 'https://twitter.com/compose/post';
+
+export const REDIRECT_QUERY_KEY = 'callback';

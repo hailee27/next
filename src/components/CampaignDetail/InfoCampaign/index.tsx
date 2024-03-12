@@ -1,22 +1,17 @@
 /* eslint-disable react/no-danger */
 /* eslint-disable no-nested-ternary */
 
-import { useGetMasterDataQuery } from '@/redux/endpoints/masterData';
-import { getMasterDataLabel } from '@/utils/func/convertCampaign';
+import CalendarIcon from '@/components/common/icons/CalendarIcon';
+import YenIcon from '@/components/common/icons/YenIcon';
 import moment from 'moment';
 import Image from 'next/image';
 import { useContext, useMemo } from 'react';
-import CalendarIcon from '@/components/common/icons/CalendarIcon';
-import YenIcon from '@/components/common/icons/YenIcon';
-import { CampaignDetailContext } from '../CampainContext';
 import CampaignRewardSection from '../CampaignRewardSection';
 import CampaignTasksSection from '../CampaignTasksSection';
+import { CampaignDetailContext } from '../CampainContext';
 
 export default function InfoCampaign() {
-  const { data } = useGetMasterDataQuery();
-  const { campaignDetail, campaignRewards, campaignTasks } = useContext(CampaignDetailContext);
-
-  const campaignCategory = getMasterDataLabel(data, 'CATEGORY_CAMPAIGN', campaignDetail?.category ?? '');
+  const { campaignDetail, campaignRewards, campaignTasks, campaignCategory } = useContext(CampaignDetailContext);
 
   const sortCampaignRewardPrice = useMemo(() => {
     const results = campaignRewards && Array.isArray(campaignRewards) ? [...campaignRewards] : [];
@@ -50,7 +45,7 @@ export default function InfoCampaign() {
           <div className="bg-white px-[20px] pt-[48px] pb-[56px] md:px-[160px] xl:px-[35px] xxl:px-[160px] md:!py-[64px]">
             <div className="flex flex-col gap-[16px] ">
               <div className=" flex gap-[10px] items-center  ">
-                <div className="w-[32px] h-[32px] md:w-[32px] md:h-[32px] rounded-full  overflow-hidden">
+                <div className="w-[32px] min-w-[32px] h-[32px] md:w-[32px] md:h-[32px] rounded-full  overflow-hidden">
                   <Image
                     alt="company logo"
                     className="w-full h-full object-cover"
@@ -142,7 +137,10 @@ export default function InfoCampaign() {
                         </>
                       ) : sortCampaignRewardPrice?.length === 1 ? (
                         <span>
-                          <span className="font-montserrat">{sortCampaignRewardPrice[0]?.amountOfMoney ?? '--'}</span>円
+                          <span className="font-montserrat">
+                            {sortCampaignRewardPrice[0]?.amountOfMoney.toLocaleString('ja-JP') ?? '--'}
+                          </span>
+                          円
                         </span>
                       ) : (
                         '--'

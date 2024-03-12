@@ -20,6 +20,9 @@ import { useContext, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { isFirefox, isMobile, isSafari } from 'react-device-detect';
 
+import { REDIRECT_QUERY_KEY } from '@/utils/constant/enums';
+import useConnectX from '@/hooks/useConnectX';
+import ConnectXConfirmModal from '@/components/auth/ConnectXModal/ConnectXConfirmModal';
 import { CampaignDetailContext } from '../CampainContext';
 import ModalChooseMultiple from './ModalChooseMultiple';
 import ModalChooseOne from './ModalChooseOne';
@@ -29,13 +32,21 @@ import ModalFreeTextContent from './ModalFreeTextContent';
 export default function TaskItem({
   task,
   isLoggedUserImplementedTask,
+  type,
 }: {
   task: TasksConvert;
   isLoggedUserImplementedTask: boolean;
+  type?: 'CONNECT_X' | 'CAMPAIGN_TASK';
 }) {
   const [onImplementTask] = useImplementTaskMutation();
   const router = useRouter();
   const { accessToken, user } = useSelector((state: RootState) => state.auth);
+
+  const { isModalOpen, showModal, cancelModal, getTwitterOauthUrl } = useConnectX({
+    handleAction: !accessToken || !user ? 'SIGNUP' : 'CONNECT',
+    callBackPath: router.asPath,
+  });
+
   const { onRefetchCampaignTasks, onFetchCampaignInfo } = useContext(CampaignDetailContext);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -55,7 +66,11 @@ export default function TaskItem({
     try {
       setIsLoading(true);
       if (!accessToken || !user || (user && !user?.id)) {
-        router.push('/auth/sign-in/campaign-implementer');
+        const ops = {
+          [`${REDIRECT_QUERY_KEY}`]: router.asPath,
+        };
+        const qs = new URLSearchParams(ops).toString();
+        router.push(`/auth/sign-in/campaign-implementer?${qs}`);
         return;
       }
       if (isLoggedUserImplementedTask) {
@@ -90,10 +105,11 @@ export default function TaskItem({
               try {
                 await onImplementTask({
                   taskId: task?.id ?? '',
-                });
-                await onRefetchCampaignTasks();
+                }).unwrap();
               } catch (e) {
                 toastMessage(getErrorMessage(e), 'error');
+              } finally {
+                await onRefetchCampaignTasks();
               }
             }, 5000);
 
@@ -125,8 +141,41 @@ export default function TaskItem({
     }
   };
 
-  return (
-    <Spin spinning={isLoading}>
+  let contentRender = <div />;
+
+  if (type === 'CONNECT_X') {
+    contentRender = (
+      <CShadowCard
+        onClickCard={() => {
+          showModal();
+        }}
+      >
+        <div className="p-[24px] flex gap-[8px] flex-col">
+          <div className={clsx('flex gap-[16px] items-center pb-[16px] border-b-[#AAA] border-b-[1px] ')}>
+            <div className="w-[24px] h-[24px]">
+              <Image
+                alt="campaign image"
+                className="w-full h-full object-cover"
+                height="0"
+                sizes="100vw"
+                src="/assets/images/NotCheckIcon.png"
+                width="0"
+              />
+            </div>
+            <div className="flex-1">
+              <div className="text-[16px] font-bold tracking-[0.48px] flex items-center gap-[4px] flex-wrap">
+                <span>Xを連携する</span>
+
+                <ArrowDown className=" rotate-[-90deg] w-[14px] h-[14px]" />
+              </div>
+            </div>
+          </div>
+          <div className="text-[13px]">参加するにはX連携が必要になります</div>
+        </div>
+      </CShadowCard>
+    );
+  } else {
+    contentRender = (
       <CShadowCard onClickCard={onClickCard}>
         <div className="p-[24px] flex gap-[8px] flex-col">
           <div
@@ -170,6 +219,12 @@ export default function TaskItem({
           <div className="text-[14px]">{task?.description ?? ''}</div>
         </div>
       </CShadowCard>
+    );
+  }
+
+  return (
+    <Spin spinning={isLoading}>
+      {contentRender}
       <ModalFreeTextContent
         isOpen={modalState?.isOpenModal && modalState?.content === 'FAQ_FREE_TEXT'}
         onCancel={() => {
@@ -209,6 +264,18 @@ export default function TaskItem({
           });
         }}
       />
+      <ConnectXConfirmModal
+        isOpen={isModalOpen}
+        onCancel={cancelModal}
+        onConfirm={() => {
+          cancelModal();
+          getTwitterOauthUrl();
+        }}
+      />
     </Spin>
   );
 }
+
+TaskItem.defaultProps = {
+  type: 'CAMPAIGN_TASK',
+};

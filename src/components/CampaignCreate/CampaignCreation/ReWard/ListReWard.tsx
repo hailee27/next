@@ -54,7 +54,7 @@ function ListReWard({ index, item, onDelete }: { index: number; item: TypeReWard
             <span className="text-[14px] font-semibold">金額</span>
             <div className="flex-1 relative ">
               <Form.Item className="!mb-0" name={['reWard', `reWard${item.key}`, 'money']}>
-                <BasicInput placeholder="記入してください" type="currency" />
+                <BasicInput min={0} placeholder="記入してください" type="currency" />
               </Form.Item>
               <span className="absolute top-[50%] -translate-y-[50%] right-[24px] font-medium text-[14px]">円</span>
             </div>
