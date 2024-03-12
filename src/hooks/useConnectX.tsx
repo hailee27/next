@@ -9,7 +9,7 @@ import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import { openWindowPopup } from '@/utils/func/openWindowPopup';
 import toastMessage from '@/utils/func/toastMessage';
 import { useRouter } from 'next/router';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 interface IProps {
@@ -41,7 +41,7 @@ export default function useConnectX({ handleAction, callBackPath }: IProps) {
     setIsModalOpen(false);
   };
 
-  const onChangeLocalStorage = useCallback(async () => {
+  const onChangeLocalStorage = async () => {
     try {
       const storageData = JSON.parse(localStorage.getItem('twitter_callback_data') || '{}');
 
@@ -60,6 +60,7 @@ export default function useConnectX({ handleAction, callBackPath }: IProps) {
 
             if (callBackPath) {
               toastMessage('X連携をONにしました。', 'success');
+              window.location.assign(`${window.location.origin}${callBackPath}`);
             } else {
               router.replace('/my-page');
             }
@@ -78,6 +79,7 @@ export default function useConnectX({ handleAction, callBackPath }: IProps) {
           setIsRefetchUser(true);
           await refreshUser();
           toastMessage('X連携をONにしました。', 'success');
+          window.location.assign(`${window.location.origin}${callBackPath}`);
         }
       }
     } catch (error) {
@@ -86,7 +88,7 @@ export default function useConnectX({ handleAction, callBackPath }: IProps) {
     } finally {
       setIsRefetchUser(false);
     }
-  }, []);
+  };
 
   function getTwitterOauthUrl() {
     localStorage.removeItem('twitter_callback_data');
