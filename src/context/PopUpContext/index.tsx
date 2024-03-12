@@ -68,6 +68,8 @@ export const PopUpProvider = ({ children }: { children: React.ReactNode }) => {
               closeIcon={false}
               footer={false}
               key={e.id}
+              // maskClosable
+
               modalRender={(node) => ModalRender(node, classNameWrapper)}
               onCancel={() => {
                 e.option?.onCancel();

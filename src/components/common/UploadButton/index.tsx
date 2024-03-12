@@ -29,10 +29,13 @@ const UploadButton = ({
       reader.onerror = (error) => reject(error);
     });
 
-  const handleChange: UploadProps['onChange'] = ({ fileList: newlist }) => {
-    setFileList(newlist);
-    onChange?.(newlist?.[0]?.originFileObj ?? null);
+  const handleChange: UploadProps['onChange'] = ({ fileList: newlist, file }) => {
+    if (file.status !== 'uploading') {
+      setFileList(newlist);
+      onChange?.(newlist?.[0]?.originFileObj ?? null);
+    }
   };
+
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj as RcFile);
@@ -64,17 +67,22 @@ const UploadButton = ({
           okButtonProps: { className: 'bg-[#333]' },
         }}
         modalTitle="画像修正"
-        // onModalCancel={() => console.log('álo')}
         rotationSlider
         {...props}
       >
         <Upload
           action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+          beforeUpload={(file: UploadFile, list) => {
+            setFileList(list);
+          }}
           fileList={fileList}
           listType="picture-card"
           onChange={handleChange}
           onPreview={handlePreview}
-          onRemove={() => onChange?.(null)}
+          onRemove={() => {
+            setFileList([]);
+            onChange?.(null);
+          }}
         >
           {fileList.length > 0 ? '' : <span className="text-[16px] font-semibold text-white">画像を選択する</span>}
         </Upload>

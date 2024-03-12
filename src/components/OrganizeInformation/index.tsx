@@ -7,6 +7,7 @@ import { TypeTokenPayment } from '@/types/paymentCard.type';
 import { CompaniesParams, useUpdateCompaniesMutation } from '@/redux/endpoints/companies';
 import { useLazyMeQuery } from '@/redux/endpoints/auth';
 import toastMessage from '@/utils/func/toastMessage';
+import { getErrorMessage } from '@/utils/func/getErrorMessage';
 import BasicInput from '../common/BasicInput';
 import UploadButton from '../common/UploadButton';
 import PopUpCreditOrDebitCard from './PopUpCreditOrDebitCard';
@@ -25,7 +26,7 @@ function OrganizeInformation() {
   return (
     <Spin spinning={loadingUpdate}>
       <Form
-        className="px-[48px] pb-[100px]"
+        className="md:px-[48px] px-[20px] pb-[100px] "
         form={form}
         onFinish={(e) => {
           const obj: CompaniesParams = {
@@ -57,9 +58,9 @@ function OrganizeInformation() {
                   setIsEdit(false);
                 });
 
-              toastMessage('update success', 'success');
+              toastMessage('更新に成功', 'success');
             })
-            .catch(() => toastMessage('error', 'error'));
+            .catch((err) => toastMessage(getErrorMessage(err), 'error'));
         }}
       >
         <div className="border-b-2 border-[#2D3648]  py-[24px]">

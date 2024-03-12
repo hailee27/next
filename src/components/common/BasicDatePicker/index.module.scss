@@ -37,8 +37,8 @@
 }
 .customPopup {
   :global {
-    .ant-picker-footer {
-      display: none;
+    .ant-btn-primary {
+      background-color: #333;
     }
   }
 }

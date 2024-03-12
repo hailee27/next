@@ -32,6 +32,7 @@ const MegaHead = (props: MegaHeadProps) => {
       <title>{title}</title>
       <link href={url} rel="preconnect" />
       <link href={url} rel="canonical" />
+      <meta content="viewport-fit=cover" name="viewport" />
       <meta content={description} name="description" />
       <meta content={title} property="og:title" />
       <meta content={name} property="og:site_name" />
