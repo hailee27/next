@@ -37,7 +37,7 @@ export default function VerificationPage() {
         if (data?.accessToken && data?.refreshToken && data?.user) {
           dispatch(setSession({ ...data }));
           if (redirectUrl && typeof redirectUrl === 'string') {
-            router.push(redirectUrl);
+            window.location.assign(`${window.location.origin}${redirectUrl}`);
           } else if (
             query?.authMethod === 'twitter' ||
             data?.user?.twoFactorMethod === 'NONE' ||
