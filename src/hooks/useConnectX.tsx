@@ -68,11 +68,9 @@ export default function useConnectX({ handleAction, callBackPath }: IProps) {
             router.push(
               `/auth/sign-in/${
                 router.pathname?.includes('campaign-creator') ? 'campaign-creator' : 'campaign-implementer'
-              }/verification?code=${storageData?.data?.code ?? undefined}&totpToken=${
-                storageData?.data?.totpToken ?? undefined
-              }&userId=${storageData?.data?.user?.id ?? undefined}&authMethod=twitter&${REDIRECT_QUERY_KEY}=${
-                callBackPath ?? ''
-              }`
+              }/verification?totpToken=${storageData?.data?.totpToken ?? ''}&userId=${
+                storageData?.data?.user?.id ?? ''
+              }&authMethod=twitter&${REDIRECT_QUERY_KEY}=${callBackPath ?? ''}`
             );
           }
         } else if (handleAction === 'CONNECT') {
