@@ -79,7 +79,9 @@ export default function useConnectX({ handleAction, callBackPath }: IProps) {
           setIsRefetchUser(true);
           await refreshUser();
           toastMessage('X連携をONにしました。', 'success');
-          window.location.assign(`${window.location.origin}${callBackPath}`);
+          if (callBackPath) {
+            window.location.assign(`${window.location.origin}${callBackPath}`);
+          }
         }
       }
     } catch (error) {
