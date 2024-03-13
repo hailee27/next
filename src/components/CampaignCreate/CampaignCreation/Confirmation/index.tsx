@@ -300,7 +300,7 @@ function Confirmation() {
             classShadowColor="bg-main-text"
             onClick={() => prevTab?.()}
             shadowSize="normal"
-            textClass="bg-main-text"
+            textClass="md:text-[16px] text-[12px] bg-main-text"
             title="戻る"
             withIcon={{
               position: 'left',
@@ -324,6 +324,7 @@ function Confirmation() {
               isDisable={isLoadingCreatePayment}
               onClick={() => form.submit()}
               shadowSize="normal"
+              textClass="md:text-[16px] text-[12px] text-white"
               title="上記の内容で購入する"
               withIcon={{
                 position: 'right',

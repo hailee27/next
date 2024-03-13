@@ -186,7 +186,7 @@ function TablePermission() {
         dataSource={data}
         loading={isLoading}
         pagination={false}
-        scroll={{ x: 1000 }}
+        scroll={{ x: 700 }}
         tableLayout="fixed"
       />
     </div>

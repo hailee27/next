@@ -35,7 +35,6 @@ export const ErrorCode: { [key: string]: string } = {
   '409003': 'このコードはすでに存在しています',
   '409004': 'このユーザーは入社しました',
   '409005': 'この電話番号はすでに存在しています',
-
   '429001': 'レート制限超過',
 };
 export const PREVENT_CORS_URL = 'https://cors.bridged.cc';

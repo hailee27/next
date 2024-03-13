@@ -117,7 +117,7 @@ function TableReWard({ value, totalWinner }: Props) {
 
   return (
     <div className={styles.customeTable}>
-      <Table bordered columns={columns} dataSource={data} pagination={false} tableLayout="fixed" />
+      <Table bordered columns={columns} dataSource={data} pagination={false} scroll={{ x: 700 }} tableLayout="fixed" />
     </div>
   );
 }

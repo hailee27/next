@@ -83,8 +83,8 @@ const TaskCampain = ({ item, onDelete, showDelete, index }: Props) => {
           />
         )}
       </div>
-      <div className="p-[32px] rounded-[8px] border-2 border-[#333]">
-        <div className="flex justify-between space-x-[24px] w-full">
+      <div className="md:p-[32px] md:pb-[20px] p-[22px] pb-0 rounded-[8px] border-2 border-[#333]">
+        <div className="flex flex-col md:flex-row justify-between md:space-x-[24px]  w-full">
           <SelectLabel
             initialValue="TWITTER"
             name={['optionTasks', `task${item.id}`, 'platForm']}

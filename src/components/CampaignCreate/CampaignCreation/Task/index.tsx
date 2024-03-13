@@ -137,7 +137,7 @@ function Task() {
               title="タスクを追加"
             />
           )}
-          <div className="border-2 border-[#2D3648] rounded-[8px] p-[40px] ">
+          <div className="border-2 border-[#2D3648] rounded-[8px] md:p-[32px] p-[22px]">
             <span>
               必須タスク ※このタスクは削除できません。詳細は
               <Link className="underline font-bold text-[#2675BE]" href="/">
@@ -145,7 +145,7 @@ function Task() {
               </Link>
               。
             </span>
-            <div className="flex justify-between space-x-[24px] w-full">
+            <div className="flex md:flex-row flex-col justify-between md:space-x-[24px] w-full">
               <SelectLabel
                 initialValue="TWITTER"
                 name={['requireTask', 'platForm']}
@@ -179,7 +179,7 @@ function Task() {
             classShadowColor="bg-main-text"
             onClick={() => prevTab?.()}
             shadowSize="normal"
-            textClass="bg-main-text"
+            textClass="md:text-[16px] text-[12px] bg-main-text"
             title="戻る"
             withIcon={{
               position: 'left',
@@ -201,6 +201,7 @@ function Task() {
             classShadowColor="bg-white"
             onClick={() => form.submit()}
             shadowSize="normal"
+            textClass="md:text-[16px] text-[12px] text-white"
             title="保存して次へ進む"
             withIcon={{
               position: 'right',

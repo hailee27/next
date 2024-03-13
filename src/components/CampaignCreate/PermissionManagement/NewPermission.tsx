@@ -8,6 +8,7 @@ import { usePostNewPermissionCompaniesMutation } from '@/redux/endpoints/users';
 import toastMessage from '@/utils/func/toastMessage';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
+import { getErrorMessage } from '@/utils/func/getErrorMessage';
 
 function NewPermission() {
   const router = useRouter();
@@ -33,7 +34,7 @@ function NewPermission() {
                 router.push('/campaign-creator/permission-management');
                 toastMessage('権限の変更に成功しました。', 'success');
               })
-              .catch((err) => toastMessage(err.data.message, 'error'))
+              .catch((err) => toastMessage(getErrorMessage(err), 'error'))
           }
         >
           <InputLabel label="アカウントアドレス" name="accountAddress" />

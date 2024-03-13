@@ -13,6 +13,8 @@ import { range } from '@/utils/range';
 import { useGetDetailCampaignQuery } from '@/redux/endpoints/campaign';
 import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
+import { usePopUpContext } from '@/context/PopUpContext';
+import PopupAlert from '@/components/common/PopupAlert';
 import ExplanatoryText from './ExplanatoryText';
 
 // eslint-disable-next-line max-lines-per-function
@@ -21,7 +23,8 @@ function Setup() {
   const [form] = Form.useForm();
   const noDateWatch = Form.useWatch('noDate', form);
   const startDateWatch = Form.useWatch('startDate', form);
-  const { data: dataCampaign } = useGetDetailCampaignQuery(
+  const { openPopUp } = usePopUpContext();
+  const { data: dataCampaign, isError } = useGetDetailCampaignQuery(
     { campaignId: String(router?.query?.id), isAdmin: true },
     { skip: !router?.query?.id }
   );
@@ -34,6 +37,12 @@ function Setup() {
       })),
     [data?.CATEGORY_CAMPAIGN]
   );
+
+  useEffect(() => {
+    if (isError) {
+      openPopUp({ contents: <PopupAlert message="ERROR" onCancel={() => router.back()} onOk={() => router.back()} /> });
+    }
+  }, [isError]);
 
   useEffect(() => {
     if (dataCampaign) {
@@ -61,7 +70,7 @@ function Setup() {
 
   return (
     <>
-      <div className="mt-[16px]  bg-white rounded-[4px] p-[40px]">
+      <div className="mt-[16px]  bg-white rounded-[4px] md:p-[40px] p-[20px] ">
         <Form form={form} name="setUp" scrollToFirstError={{ behavior: 'smooth', inline: 'center', block: 'center' }}>
           <InputLabel
             label="キャンペーン名"
@@ -84,10 +93,7 @@ function Setup() {
               必須
             </div>
           </div>
-          <Form.Item
-            name="thumbnail"
-            rules={[{ required: true, message: '保存して次へ進む前に、必須フィールドに実施する必要があります。' }]}
-          >
+          <Form.Item name="thumbnail" rules={[{ required: true, message: 'サムネイル画像を追加してください' }]}>
             <UploadButton
               className="w-[175px]"
               props={{ cropperProps: { cropSize: { height: 279, width: 279 } } as CropperProps }}
@@ -101,10 +107,7 @@ function Setup() {
               必須
             </div>
           </div>
-          <Form.Item
-            name="explanatoryText"
-            rules={[{ required: true, message: '保存して次へ進む前に、必須フィールドに実施する必要があります。' }]}
-          >
+          <Form.Item name="explanatoryText" rules={[{ required: true, message: '説明文を追加してください' }]}>
             <ExplanatoryText />
           </Form.Item>
           <div className="my-[32px]">
@@ -176,7 +179,7 @@ function Setup() {
             classShadowColor="bg-main-text"
             onClick={() => router.back()}
             shadowSize="normal"
-            textClass="bg-main-text"
+            textClass="md:text-[16px] text-[12px] bg-main-text"
             title="戻る"
             withIcon={{
               position: 'left',
@@ -198,6 +201,7 @@ function Setup() {
             classShadowColor="bg-white"
             onClick={() => form.submit()}
             shadowSize="normal"
+            textClass="md:text-[16px] text-[12px] text-white"
             title="保存して次へ進む"
             withIcon={{
               position: 'right',

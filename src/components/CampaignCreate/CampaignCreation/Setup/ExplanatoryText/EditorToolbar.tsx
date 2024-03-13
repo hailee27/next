@@ -23,7 +23,7 @@ export const formats = [
 // Quill Toolbar component
 const QuillToolbar = () => (
   <div id="toolbar">
-    <div className="md:flex-nowrap flex-wrap !flex ">
+    <div className="xl:flex-nowrap flex-wrap !flex ">
       <span className="ql-formats">
         <button className="ql-undo" />
       </span>

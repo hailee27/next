@@ -11,7 +11,7 @@ function PermissionManagement() {
   const { user } = useSelector((state: RootState) => state.auth);
 
   return (
-    <div className="md:px-[48px] p-[20px] pt-[32px]">
+    <div className="xl:px-[48px] p-[20px] pt-[32px]">
       <div className="border-b-2 border-[#333] flex justify-between items-center pb-[24px] mb-[47px]">
         <span className="text-[32px] font-bold">権限管理</span>
         <div className="w-[174px]  h-[56px]">

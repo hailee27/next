@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic';
-import React, { LegacyRef, useMemo, useRef } from 'react';
+import React, { LegacyRef, useEffect, useMemo, useRef } from 'react';
 import 'react-quill/dist/quill.snow.css';
 import type ReactQuill from 'react-quill';
 import styles from './index.module.scss';
@@ -80,12 +80,17 @@ const QuillWrapper = dynamic(
 );
 interface Props {
   value?: string;
-  onChange?: (value: string) => void;
+  onChange?: (value: string | null) => void;
 }
 function ExplanatoryText(props: Props) {
   const { value, onChange } = props;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const quillRef = useRef<any>();
+  useEffect(() => {
+    if (value === '<p><br></p>') {
+      onChange?.(null);
+    }
+  }, [value]);
 
   const modules = useMemo(
     () => ({

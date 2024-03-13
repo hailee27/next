@@ -26,6 +26,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
   }
 
   const id = params?.slug?.[0] ? params?.slug?.[0] : '';
+  console.log(id);
 
   const apiRequest: ListCampaignParams = {
     orderBy: JSON.stringify({
