@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import TableReWard from '../../CampaignCreation/Confirmation/TableReWard';
 
+// eslint-disable-next-line max-lines-per-function
 function Detail({ data }: { data?: TypeCampaign }) {
   const { user } = useSelector((state: RootState) => state.auth);
   const { push, query } = useRouter();
@@ -59,11 +60,14 @@ function Detail({ data }: { data?: TypeCampaign }) {
               <FlagItem
                 className="pl-[16px]"
                 value={
+                  // eslint-disable-next-line no-nested-ternary
                   data?.expiredTime
                     ? `${moment(data?.startTime).format('YYYY/MM/DD HH:mm')} ~ ${moment(data?.expiredTime).format(
                         'YYYY/MM/DD HH:mm'
                       )} `
-                    : moment(data?.startTime).format('YYYY/MM/DD HH:mm')
+                    : data?.startTime
+                      ? moment(data?.startTime).format('YYYY/MM/DD HH:mm')
+                      : ''
                 }
               />
             </div>

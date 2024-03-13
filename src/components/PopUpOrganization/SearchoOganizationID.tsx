@@ -33,9 +33,10 @@ function SearchoOganizationID() {
         }}
       >
         <InputLabel
-          initialValue="123a534kj5wb3"
+          // initialValue="123a534kj5wb3"
           label="組織ID"
           name="organizationID"
+          placeholder="123a534kj5wb3"
           required
           rules={[
             {

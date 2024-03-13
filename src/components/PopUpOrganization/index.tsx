@@ -56,7 +56,7 @@ function PopUpOrganization() {
               .unwrap()
               .then(() => {
                 getMe();
-                toastMessage('組織の作りに成功しました。', 'success');
+                toastMessage('組織の作成に成功しました', 'success');
                 closePopUp();
               })
               .catch((err) => {

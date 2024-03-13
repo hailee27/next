@@ -88,7 +88,7 @@ export default function CampaignTasksSection() {
         router.push('/auth/sign-in/campaign-implementer');
       }
     } catch (e) {
-      toastMessage(getErrorMessage(e), 'error');
+      toastMessage(getErrorMessage(e), 'error', true);
     } finally {
       setIsLoading(false);
     }

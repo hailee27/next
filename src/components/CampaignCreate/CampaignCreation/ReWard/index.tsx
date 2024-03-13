@@ -35,7 +35,7 @@ function ReWard() {
 
   return (
     <>
-      <div className=" bg-white rounded-[16px] mt-[16px] p-[48px]">
+      <div className=" bg-white rounded-[16px] mt-[16px] md:p-[48px] p-[20px]">
         <Form form={form} name="reWard" scrollToFirstError={{ behavior: 'smooth', inline: 'start', block: 'end' }}>
           <SelectLabel
             initialValue="AUTO_PRIZEE_DRAW"
@@ -70,7 +70,7 @@ function ReWard() {
             classShadowColor="bg-main-text"
             onClick={() => prevTab?.()}
             shadowSize="normal"
-            textClass="bg-main-text"
+            textClass="md:text-[16px] text-[12px] bg-main-text"
             title="戻る"
             withIcon={{
               position: 'left',
@@ -92,6 +92,7 @@ function ReWard() {
             classShadowColor="bg-white"
             onClick={() => form.submit()}
             shadowSize="normal"
+            textClass="md:text-[16px] text-[12px] text-white"
             title="保存して購入申請待ちにする"
             withIcon={{
               position: 'right',

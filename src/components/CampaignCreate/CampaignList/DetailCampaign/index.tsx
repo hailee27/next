@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable max-lines-per-function */
 import React from 'react';
 import CButtonShadow from '@/components/common/CButtonShadow';
@@ -17,7 +18,7 @@ import Detail from './Detail';
 function DetailCampaign() {
   const { openPopUp } = usePopUpContext();
   const { query, back, reload, push } = useRouter();
-  const { data, isFetching } = useGetDetailCampaignQuery(
+  const { data, isFetching, isError } = useGetDetailCampaignQuery(
     { campaignId: String(query?.id), isAdmin: true },
     { refetchOnMountOrArgChange: true }
   );
@@ -25,7 +26,7 @@ function DetailCampaign() {
   const [deleteCampaign, { isLoading }] = useDeleteCampaignMutation();
 
   return (
-    <div className="md:px-[48px] px-[20px] pb-[77px]">
+    <div className="xl:px-[48px] px-[20px] pb-[77px] h-full">
       <div className="flex md:flex-row flex-col py-[32px] w-full justify-between border-b-2 border-[#2D3648] md:max-h-[112px] md:space-y-0 space-y-[10px]">
         <span className="xl:text-[32px] text-[24px] font-bold">
           {query?.isChecking === 'true' ? data?.title : 'キャンペーン詳細'}
@@ -232,11 +233,16 @@ function DetailCampaign() {
           )}
         </div>
       </div>
+
       {query?.isChecking === 'true' ? (
         <CampaignParticipantsInstant totalPrizeValue={data?.totalPrizeValue ?? 0} />
       ) : (
-        <Spin spinning={isFetching || isLoading}>
-          <Detail data={data} />
+        <Spin className="!h-full" spinning={isFetching || isLoading}>
+          {isError ? (
+            <div className="h-full flex items-center justify-center mt-[300px] text-[#888] ">データがありません !</div>
+          ) : (
+            <Detail data={data} />
+          )}
         </Spin>
       )}
     </div>

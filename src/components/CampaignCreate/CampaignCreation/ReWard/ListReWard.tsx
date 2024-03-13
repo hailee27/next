@@ -45,13 +45,13 @@ function ListReWard({ index, item, onDelete }: { index: number; item: TypeReWard
       <Form.Item className="!hidden" name={['reWard', `reWard${item.key}`, 'reWardId']}>
         <FlagItem />
       </Form.Item>
-      <div className="border-2 border-[#2D3648] rounded-[8px] p-[32px]">
+      <div className="border-2 border-[#2D3648] rounded-[8px] md:p-[32px] p-[20px]">
         <div className="flex w-full border-b items-end justify-between text-[16px] font-semibold mb-[24px] pb-[24px]">
           <span>{index}等</span>
         </div>
-        <div className="flex space-x-[24px] w-full justify-between mb-[24px]">
+        <div className="flex flex-col md:flex-row md:space-x-[24px] w-full justify-between mb-[24px]">
           <div className="flex space-y-[8px]  w-full items-center space-x-[16px]">
-            <span className="text-[14px] font-semibold">金額</span>
+            <span className="text-[14px] font-semibold md:min-w-0 min-w-[60px]">金額</span>
             <div className="flex-1 relative ">
               <Form.Item className="!mb-0" name={['reWard', `reWard${item.key}`, 'money']}>
                 <BasicInput min={0} placeholder="記入してください" type="currency" />
@@ -60,7 +60,7 @@ function ListReWard({ index, item, onDelete }: { index: number; item: TypeReWard
             </div>
           </div>
           <div className="flex space-y-[8px]  w-full items-center space-x-[16px]">
-            <span className="text-[14px] font-semibold">当選本数</span>
+            <span className="text-[14px] font-semibold md:min-w-0 min-w-[60px]">当選本数</span>
             <div className="flex-1 relative ">
               <Form.Item className="!mb-0" name={['reWard', `reWard${item.key}`, 'tiketWinning']}>
                 <BasicInput placeholder="記入してください" type="number" />
@@ -70,10 +70,10 @@ function ListReWard({ index, item, onDelete }: { index: number; item: TypeReWard
           </div>
         </div>
         <div className="w-full flex items-center space-x-[32px]">
-          <div className="text-[14px] font-semibold">受取方法</div>
+          <div className="text-[14px] font-semibold ">受取方法</div>
           <div className="flex space-x-[16px]">
-            <div className="flex items-center space-x-[12px]">
-              <span className="text-[16px]">Amazon gift card</span>
+            <div className="flex items-center space-x-[12px] ">
+              <span className="md:text-[16px] text-[14px]">Amazon gift card</span>
               <Form.Item
                 className="!mb-0"
                 initialValue={amazonWatch}
