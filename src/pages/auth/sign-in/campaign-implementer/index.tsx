@@ -15,11 +15,14 @@ import Image from 'next/image';
 import { pickBy } from 'lodash';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 
 export default function CampaignImplementerSignin() {
+  const { accessToken } = useSelector((state: RootState) => state.auth);
+
   const { register, handleSubmit, errors, isDisableSubmit, onChangeRecaptcha } = useAuthEmailPassword();
 
   const [isShowMsg, setIsShowMsg] = useState(false);
@@ -43,7 +46,6 @@ export default function CampaignImplementerSignin() {
           }, 2000);
         } else if (data?.user && data?.totpToken) {
           const query = {
-            code: data?.code ?? undefined,
             totpToken: data?.totpToken ?? undefined,
             userId: data?.user?.id ?? undefined,
           };
@@ -57,6 +59,12 @@ export default function CampaignImplementerSignin() {
       toastMessage(getErrorMessage(err), 'error');
     }
   };
+
+  useEffect(() => {
+    if (accessToken) {
+      router.replace('/');
+    }
+  }, []);
 
   return (
     <div className="container-min-height pb-[56px] bg-[#D5FFFF] py-[40px] px-[20px]">

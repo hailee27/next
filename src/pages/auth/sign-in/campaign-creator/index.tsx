@@ -12,12 +12,15 @@ import toastMessage from '@/utils/func/toastMessage';
 import { AuthEmailPasswordData } from '@/utils/schema/auth.schema';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { pickBy } from 'lodash';
+import { RootState } from '@/redux/store';
 
 export default function CampaignCreatorSigninPage() {
+  const { accessToken } = useSelector((state: RootState) => state.auth);
+
   const { register, handleSubmit, errors, isDisableSubmit, onChangeRecaptcha } = useAuthEmailPassword();
 
   const [isShowMsg, setIsShowMsg] = useState(false);
@@ -40,7 +43,6 @@ export default function CampaignCreatorSigninPage() {
           }, 2000);
         } else if (data?.user && data?.totpToken) {
           const query = {
-            code: data?.code ?? undefined,
             totpToken: data?.totpToken ?? undefined,
             userId: data?.user?.id ?? undefined,
           };
@@ -54,6 +56,13 @@ export default function CampaignCreatorSigninPage() {
       toastMessage(getErrorMessage(err), 'error');
     }
   };
+
+  useEffect(() => {
+    if (accessToken) {
+      router.replace('/');
+    }
+  }, []);
+
   return (
     <div className="xxl:bg-[#D5FFFF] xxl:border-[2px] xxl:border-[#333] xxl:rounded-[16px] xxl:px-[56px] xxl:py-[48px] text-[#333]">
       <h3 className="text-[30px] font-bold text-[#04AFAF] tracking-[0.9px] text-center ">ログイン</h3>

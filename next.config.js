@@ -17,6 +17,7 @@ module.exports = withTM({
       'localhost',
       'api.beta.clout-fi.com',
       'api.clout-fi.com',
+      'clout-bucket-1.s3.ap-northeast-1.amazonaws.com',
     ],
     remotePatterns: [
       {
@@ -38,6 +39,10 @@ module.exports = withTM({
       {
         protocol: 'https',
         hostname: 'api.clout-fi.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'clout-bucket-1.s3.ap-northeast-1.amazonaws.com',
       },
     ],
     minimumCacheTTL: 60,

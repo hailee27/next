@@ -28,7 +28,7 @@ export default function VerificationPage() {
     try {
       setIsSubmitting(true);
       const redirectUrl = router?.query?.[`${REDIRECT_QUERY_KEY}`];
-      if (query?.code && query?.totpToken) {
+      if (query?.totpToken) {
         const data = await smsAuth({
           code,
           token: typeof query?.totpToken === 'string' ? query?.totpToken : '',

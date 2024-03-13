@@ -23,7 +23,7 @@ export default function VerificationPage() {
   const handleSubmitSMS = async (code: string) => {
     try {
       setIsSubmitting(true);
-      if (query?.code && query?.totpToken) {
+      if (query?.totpToken) {
         const data = await smsAuth({
           code,
           token: typeof query?.totpToken === 'string' ? query?.totpToken : '',
