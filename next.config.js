@@ -11,7 +11,13 @@ module.exports = withTM({
   },
   images: {
     deviceSizes: [375, 640, 768, 1024, 1280, 1536],
-    domains: ['api.staging.clout-fi.com', 'api.test-internal-clout.lisod.vn', 'localhost'],
+    domains: [
+      'api.staging.clout-fi.com',
+      'api.test-internal-clout.lisod.vn',
+      'localhost',
+      'api.beta.clout-fi.com',
+      'api.clout-fi.com',
+    ],
     remotePatterns: [
       {
         protocol: 'http',
@@ -24,6 +30,14 @@ module.exports = withTM({
       {
         protocol: 'https',
         hostname: 'api.test-internal-clout.lisod.vn',
+      },
+      {
+        protocol: 'https',
+        hostname: 'api.beta.clout-fi.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'api.clout-fi.com',
       },
     ],
     minimumCacheTTL: 60,
