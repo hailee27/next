@@ -3,6 +3,7 @@ import { BaseQueryFn, createApi, FetchArgs, fetchBaseQuery, FetchBaseQueryError 
 import { Mutex } from 'async-mutex';
 import { REHYDRATE } from 'redux-persist';
 import { HYDRATE } from 'next-redux-wrapper';
+
 import type { RootState } from './store';
 
 const mutex = new Mutex();

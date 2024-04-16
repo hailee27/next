@@ -1,8 +1,0 @@
-.SmsVerificationForm {
-  @apply w-full flex gap-[16px] items-center justify-center;
-  :global {
-    .SmsVerificationFormInput {
-      @apply relative w-[56px] h-[56px]  min-w-[56px] min-h-[56px] rounded-full text-center border-[2px] border-[#333] focus:border-[#b4e7e7] transition-all duration-100 text-[20px] font-bold font-montserrat focus:outline focus:outline-4 focus:outline-[#b4e7e7];
-    }
-  }
-}

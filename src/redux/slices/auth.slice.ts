@@ -1,11 +1,13 @@
-import { User } from '@/types/auth.type';
 import { createSlice } from '@reduxjs/toolkit';
-import { authApi } from '../endpoints/auth';
+
+// import { authApi } from '../endpoints/auth';
+
+// import { User } from '@/types/auth.type';
 
 export interface AuthState {
   accessToken: string | null;
   refreshToken: string | null;
-  user: User | null;
+  user: null;
 }
 
 const initialState: AuthState = {
@@ -40,14 +42,14 @@ const authSlice = createSlice({
       state.refreshToken = actions?.payload?.refreshToken;
     },
   },
-  extraReducers: (builder) => {
-    builder
-      .addMatcher(authApi.endpoints.me.matchPending, () => {})
-      .addMatcher(authApi.endpoints.me.matchFulfilled, (state, { payload }) => {
-        state.user = payload;
-      })
-      .addMatcher(authApi.endpoints.me.matchRejected, () => {});
-  },
+  // extraReducers: (builder) => {
+  //   builder
+  //     .addMatcher(authApi.endpoints.me.matchPending, () => {})
+  //     .addMatcher(authApi.endpoints.me.matchFulfilled, (state, { payload }) => {
+  //       state.user = payload;
+  //     })
+  //     .addMatcher(authApi.endpoints.me.matchRejected, () => {});
+  // },
 });
 
 const authReducer = authSlice.reducer;

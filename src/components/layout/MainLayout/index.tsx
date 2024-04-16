@@ -1,14 +1,15 @@
 import React from 'react';
-import MainHeader from '../_core/MainHeader';
-import MainFooter from '../_core/MainFooter';
+
+import Header from './Header';
 
 function MainLayout({ children }: { children: React.ReactNode }) {
   return (
     <div>
-      <MainHeader />
+      {/* <MainHeader /> */}
+      <Header />
       <div className="container-min-height">{children}</div>
 
-      <MainFooter />
+      {/* <MainFooter /> */}
     </div>
   );
 }

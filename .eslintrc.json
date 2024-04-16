@@ -14,6 +14,19 @@
     "prettier/prettier": ["error"],
     "no-param-reassign": ["error", { "props": false }],
     "@typescript-eslint/no-unused-vars": "error",
+    "import/no-unresolved": "error", // turn on errors for missing imports
+    "react/jsx-filename-extension": [0, { "extensions": [".tsx"] }],
+    "react/jsx-props-no-spreading": [0, { "html": "ignore", "custom": "ignore", "explicitSpread": "ignore" }],
+    "no-use-before-define": 0,
+    "@typescript-eslint/no-use-before-define": 2,
+    "import/order": [
+      2,
+      {
+        "groups": ["builtin", "external", "internal", "parent", "sibling", "index"],
+        "newlines-between": "always"
+      }
+    ],
+    "import/newline-after-import": 1,
     // "@typescript-eslint/no-explicit-any": "error",
     "@typescript-eslint/lines-between-class-members": "off",
     // Possible errors
@@ -26,7 +39,6 @@
         "namedComponents": ["function-declaration", "arrow-function"]
       }
     ],
-    "react/jsx-props-no-spreading": "off",
     "@typescript-eslint/no-empty-function": "off",
     // Best practices
     "dot-notation": "error",

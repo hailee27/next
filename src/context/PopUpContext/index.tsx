@@ -1,5 +1,6 @@
 import { Modal } from 'antd';
 import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
+
 import styles from './modal.module.scss';
 
 interface PopUpData {

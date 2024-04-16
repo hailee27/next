@@ -13,12 +13,11 @@ import {
 } from 'redux-persist';
 import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
 import { createWrapper } from 'next-redux-wrapper';
+
 import { api } from './api';
 import authSlice from './slices/auth.slice';
-import commonSlice from './slices/common.slice';
 
 const rootReducer = combineReducers({
-  common: commonSlice,
   auth: authSlice,
   [api.reducerPath]: api.reducer,
 });
