@@ -1,17 +1,15 @@
-import { Modal } from 'antd';
 import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
-
-import styles from './modal.module.scss';
+import { Box, Fade, Modal } from '@mui/material';
 
 interface PopUpData {
   id?: string;
-  content: JSX.Element;
+  content: JSX.Element | string;
   option?: {
     onCancel: () => void;
   };
 }
 interface PropsOpenPopUp {
-  contents: JSX.Element;
+  contents: JSX.Element | string;
   classNameWrapperPopup?: string;
   typePopup?: 'POPUP' | 'ALERT';
   onCancel?: () => void;
@@ -22,9 +20,6 @@ interface TypePopUpContext {
   closeAllPopUp: () => void;
 }
 const PopUpContext = createContext<TypePopUpContext | undefined>(undefined);
-const ModalRender = (node: React.ReactNode, classNameWrapper?: string) => (
-  <div className={` ${classNameWrapper} bg-white border-2 border-[#333] w-full rounded-[16px] `}> {node}</div>
-);
 
 export const PopUpProvider = ({ children }: { children: React.ReactNode }) => {
   // const [open, setOpen] = useState<boolean>(false);
@@ -58,6 +53,17 @@ export const PopUpProvider = ({ children }: { children: React.ReactNode }) => {
     }),
     [openPopUp, classNameWrapper, type, closeAllPopUp]
   );
+  const style = {
+    position: 'absolute' as const,
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    minWidth: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    // p: 4,
+  };
   return (
     <PopUpContext.Provider value={contextvalue}>
       <>
@@ -65,23 +71,15 @@ export const PopUpProvider = ({ children }: { children: React.ReactNode }) => {
         {contentPopUp.length > 0 &&
           contentPopUp.map((e) => (
             <Modal
-              centered
-              closeIcon={false}
-              footer={false}
-              key={e.id}
-              // maskClosable
-
-              modalRender={(node) => ModalRender(node, classNameWrapper)}
-              onCancel={() => {
+              onClose={() => {
                 e.option?.onCancel();
                 closePopUp();
               }}
               open={contentPopUp[contentPopUp.length - 1].id === e.id}
-              styles={{ mask: { background: '#333', opacity: 0.9 } }}
-              width="max-content"
-              wrapClassName={styles.customModal}
             >
-              {e.content}
+              <Fade in={contentPopUp[contentPopUp.length - 1].id === e.id}>
+                <Box sx={style}>{e.content}</Box>
+              </Fade>
             </Modal>
           ))}
       </>

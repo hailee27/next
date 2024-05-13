@@ -1,12 +1,10 @@
 import React from 'react';
 
-import Header from './Header';
-
-function MainLayout({ children }: { children: React.ReactNode }) {
+function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <div>
       {/* <MainHeader /> */}
-      <Header />
+
       <div className="min-h-screen">{children}</div>
 
       {/* <MainFooter /> */}
@@ -14,4 +12,4 @@ function MainLayout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default MainLayout;
+export default AuthLayout;

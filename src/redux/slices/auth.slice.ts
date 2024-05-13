@@ -1,4 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+import { Person } from '../endpoints/auth';
 
 // import { authApi } from '../endpoints/auth';
 
@@ -7,25 +9,30 @@ import { createSlice } from '@reduxjs/toolkit';
 export interface AuthState {
   accessToken: string | null;
   refreshToken: string | null;
-  user: null;
+  teacher?: Person | null;
+  student?: Person | null;
 }
 
 const initialState: AuthState = {
   accessToken: null,
   refreshToken: null,
-  user: null,
+  teacher: null,
+  student: null,
 };
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setAuth(state, actions) {
+    setAuth(state, actions: PayloadAction<{ accessToken: string; refreshToken: string }>) {
       state.accessToken = actions?.payload?.accessToken;
       state.refreshToken = actions?.payload?.refreshToken;
     },
-    setUser(state, actions) {
-      state.user = actions?.payload;
+    setTeacher(state, actions) {
+      state.teacher = actions?.payload;
+    },
+    setStudent(state, actions) {
+      state.student = actions?.payload;
     },
     tokenReceived(state, actions) {
       state.accessToken = actions?.payload?.accessToken;
@@ -34,10 +41,12 @@ const authSlice = createSlice({
     logout: (state) => {
       state.accessToken = initialState?.accessToken;
       state.refreshToken = initialState?.refreshToken;
-      state.user = initialState?.user;
+      state.teacher = initialState?.teacher;
+      state.student = initialState?.student;
     },
     setSession(state, actions) {
-      state.user = actions?.payload?.user;
+      state.teacher = actions?.payload?.teacher;
+      state.student = actions?.payload?.student;
       state.accessToken = actions?.payload?.accessToken;
       state.refreshToken = actions?.payload?.refreshToken;
     },
@@ -56,4 +65,4 @@ const authReducer = authSlice.reducer;
 
 export default authReducer;
 
-export const { setAuth, setUser, tokenReceived, logout, setSession } = authSlice.actions;
+export const { setAuth, setStudent, setTeacher, tokenReceived, logout, setSession } = authSlice.actions;

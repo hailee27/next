@@ -1,12 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
 :root {
-  font-family: 'Noto Sans JP', sans-serif;
-  --font-noto-san-jp: 'Noto Sans JP', sans-serif;
-  --font-montserrat: 'Montserrat', sans-serif;
+  font-family: 'Roboto', sans-serif;
+  /* --font-noto-san-jp: 'Noto Sans JP', sans-serif;
+  --font-montserrat: 'Montserrat', sans-serif; */
   --main-header-height-mobile: 64px;
   --main-header-height-pc: 85px;
   --main-footer-height-mobile: 389px;
@@ -31,7 +32,7 @@ body {
   body,
   div,
   span {
-    font-family: var(--font-noto-san-jp), sans-serif;
+    font-family: 'Roboto', sans-serif;
   }
 }
 
@@ -53,59 +54,7 @@ body {
   background: #a9a9a9;
 }
 
-@keyframes animate1 {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-@keyframes animate2 {
-  0% {
-    transform: translateY(-100%);
-  }
-  100% {
-    transform: translateY(100%);
-  }
-}
-
-@keyframes animate3 {
-  0% {
-    transform: translateX(100%);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
-}
-@keyframes animate4 {
-  0% {
-    transform: translateY(100%);
-  }
-  100% {
-    transform: translateY(-100%);
-  }
-}
-
 body.fixed-page {
   touch-action: none !important;
   overflow: hidden !important;
-}
-
-@keyframes modalDropTop {
-  0% {
-    transform: translate(-100%, -100%) scale(0);
-    opacity: 0;
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes shimmer {
-  100% {
-    transform: translateX(100%);
-  }
 }

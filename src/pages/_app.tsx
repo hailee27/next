@@ -6,13 +6,15 @@ import { useRouter } from 'next/router';
 import { ReactElement, useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import jaJP from 'antd/locale/ja_JP';
-import { ConfigProvider } from 'antd';
+import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 
 import Loading from '@/components/Loading';
 import { wrapper } from '@/redux/store';
-import { PopUpProvider } from '@/context/PopUpContext';
+// import { PopUpProvider } from '@/context/PopUpContext';
 import MainLayout from '@/components/layout/MainLayout';
+import AuthLayout from '@/components/layout/AuthLayout';
+import { NotificationProvider } from '@/context/NotificationContext';
+import { PopUpProvider } from '@/context/PopUpContext';
 
 export type NextPageWithLayout<P = Record<string, never>, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => JSX.Element;
@@ -29,6 +31,9 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
 
   if (router.pathname === '/') {
     getLayout = (page) => <MainLayout>{page}</MainLayout>;
+  }
+  if (router.pathname.startsWith('/auth')) {
+    getLayout = (page) => <AuthLayout>{page}</AuthLayout>;
   }
 
   useEffect(() => {
@@ -50,20 +55,26 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
       router.events.off('routeChangeError', end);
     };
   }, []);
+  const defaultTheme = createTheme();
 
   return (
     <>
       {/* <MegaHead /> */}
       <Provider store={store}>
         <PersistGate loading={null} persistor={store.persistorData}>
-          <main>
-            <ConfigProvider locale={jaJP}>
-              <PopUpProvider>
-                {loading && <Loading />}
-                {getLayout(<Component {...props} />)}
-              </PopUpProvider>
-            </ConfigProvider>
-          </main>
+          <ThemeProvider theme={defaultTheme}>
+            <CssBaseline />
+            <NotificationProvider>
+              <main>
+                {/* <ConfigProvider locale={jaJP}> */}
+                <PopUpProvider>
+                  {loading && <Loading />}
+                  {getLayout(<Component {...props} />)}
+                </PopUpProvider>
+                {/* </ConfigProvider> */}
+              </main>
+            </NotificationProvider>
+          </ThemeProvider>
         </PersistGate>
       </Provider>
     </>

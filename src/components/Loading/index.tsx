@@ -1,14 +1,20 @@
 import React from 'react';
-import { Spin } from 'antd';
+import CircularProgress from '@mui/material/CircularProgress';
+import { Backdrop } from '@mui/material';
 
 function Loading() {
   return (
-    <div
-      aria-hidden="true"
-      className="fixed max-w-screen max-h-screen w-full h-full bg-black z-[9999] bg-opacity-20 flex items-center justify-center"
-    >
-      <Spin />
-    </div>
+    <Backdrop open sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+      <svg height={0} width={0}>
+        <defs>
+          <linearGradient id="my_gradient" x1="0%" x2="0%" y1="0%" y2="100%">
+            <stop offset="0%" stopColor="#e01cd5" />
+            <stop offset="100%" stopColor="#1CB5E0" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <CircularProgress sx={{ 'svg circle': { stroke: 'url(#my_gradient)' } }} />
+    </Backdrop>
   );
 }
 

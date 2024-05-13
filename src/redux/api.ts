@@ -49,30 +49,31 @@ const baseQueryWithInterceptor: BaseQueryFn<string | FetchArgs, unknown, FetchBa
         const release = await mutex.acquire();
         try {
           const auth = (api.getState() as RootState)?.auth;
+          const { teacher } = auth;
           if (auth?.accessToken && auth?.refreshToken) {
             const refreshResult: any = await baseQuery(
               {
-                url: 'auth/refresh',
+                url: `/${teacher ? 'teacher' : 'student'}/auth/refresh-token`,
                 method: 'POST',
                 body: { token: auth?.refreshToken },
               },
               api,
               extraOptions
             );
-            if (refreshResult?.data?.accessToken && refreshResult?.data?.refreshToken) {
+            if (refreshResult?.result?.accessToken && refreshResult?.result?.refreshToken) {
               // handle update new toke
               api.dispatch({
                 type: 'auth/tokenReceived',
                 payload: {
-                  accessToken: refreshResult.data.accessToken,
-                  refreshToken: refreshResult.data.refreshToken,
+                  accessToken: refreshResult.result.accessToken,
+                  refreshToken: refreshResult.result.refreshToken,
                 },
               });
               // retry the initial query
               result = await baseQuery(args, api, extraOptions);
             } else {
               // handle logout
-              api.dispatch({ type: 'auth/logout' });
+              api.dispatch({ type: `${teacher ? 'teacher' : 'student'}/auth/logout` });
             }
           }
         } finally {
