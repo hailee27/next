@@ -1,9 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
-
 :root {
   font-family: 'Roboto', sans-serif;
   /* --font-noto-san-jp: 'Noto Sans JP', sans-serif;
@@ -12,9 +10,11 @@
   --main-header-height-pc: 85px;
   --main-footer-height-mobile: 389px;
 }
+
 input[type='number'] {
   -moz-appearance: textfield;
 }
+
 input[type='number']::-webkit-outer-spin-button,
 input[type='number']::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -43,13 +43,16 @@ body {
 .custom-scroll::-webkit-scrollbar {
   width: 5px;
 }
+
 .custom-scroll::-webkit-scrollbar-track {
   background: #fff;
 }
+
 .custom-scroll::-webkit-scrollbar-thumb {
   background: #c6c6c6;
   border-radius: 5px;
 }
+
 .custom-scroll::-webkit-scrollbar-thumb:hover {
   background: #a9a9a9;
 }
@@ -57,4 +60,8 @@ body {
 body.fixed-page {
   touch-action: none !important;
   overflow: hidden !important;
+}
+
+button.ant-btn-primary:not(.ant-switch) {
+  background-color: #1677ff !important;
 }

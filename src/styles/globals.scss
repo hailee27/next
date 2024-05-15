@@ -1,10 +1,10 @@
 $width-mobile: 800px;
-
 @mixin mobile {
   @media (max-width: #{$width-mobile}) {
     @content;
   }
 }
+
 .clout-custom-antd-radio .ant-radio-wrapper {
   .ant-radio {
     .ant-radio-inner {
@@ -103,7 +103,7 @@ $width-mobile: 800px;
 
 div.custom-antd-notification {
   border-radius: 8px;
-  padding: 16px 12px !important ;
+  padding: 16px 12px !important;
   font-weight: 500 !important;
   .ant-notification-notice-close {
     width: 28px !important;
@@ -143,10 +143,15 @@ div.custom-antd-notification {
 .scrollbar--custom::-webkit-scrollbar-thumb {
   background-color: #666;
 }
+
 .custom-scroll-bar::-webkit-scrollbar-thumb:hover {
   background: #333 !important;
 }
 
 .container-min-height {
   min-height: calc(100vh - var(--main-header-height-mobile) - var(--main-footer-height-mobile));
+}
+
+button.ant-btn-primary:not(.ant-switch) {
+  background-color: #1677ff !important;
 }
