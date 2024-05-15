@@ -47,7 +47,15 @@ function PrimaryLayout({ children }: { children: React.ReactNode }) {
           icon: svgIcon,
           label: 'Class',
           onClick: () => {
-            router.push('/class');
+            router.push('/teacher/class');
+          },
+        },
+        {
+          key: 'item_assignment',
+          icon: svgIcon,
+          label: 'Assignment',
+          onClick: () => {
+            router.push('/teacher/assignment');
           },
         },
       ],

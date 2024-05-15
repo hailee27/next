@@ -5,57 +5,64 @@ import { message, Table } from 'antd';
 import dayjs from 'dayjs';
 import { MoreOutlined } from '@ant-design/icons';
 
-import {
-  ClassSearchObj,
-  DeleteClassResponse,
-  useDeleteClassMutation,
-  useLazyGetListClassQuery,
-} from '@/redux/endpoints/class';
 import BasicPopover from '@/components/common/BasicPopover';
 import BasicButton from '@/components/common/forms/BasicButton';
+import {
+  AssignmentSearchObj,
+  DeleteAssignmentResponse,
+  useDeleteAssignmentMutation,
+  useLazyGetListAssignmentQuery,
+} from '@/redux/endpoints/assignment';
 import CustomPagination from '@/components/common/CustomPagination';
 
-import CreateOrEditClass from '../Modal/CreateOrEditClass';
+import CreateOrEditAssignment from '../Modal/CreateOrEditAssignment';
 
 interface PropsType {
-  objSearch: ClassSearchObj;
+  objSearch: AssignmentSearchObj;
 }
 
-const ClassTable = ({ objSearch }: PropsType) => {
-  const [getList, { data, isFetching }] = useLazyGetListClassQuery();
-  const [deleteClass] = useDeleteClassMutation();
+const AssignmentTable = ({ objSearch }: PropsType) => {
+  const [getList, { data, isFetching }] = useLazyGetListAssignmentQuery();
+  const [deleteAssignment] = useDeleteAssignmentMutation();
 
   const [page, setPage] = useState<number>(1);
   const [openCreateOrEditModal, setOpenCreateOrEditModal] = useState<boolean>(false);
-  const [classIdEdit, setClassIdEdit] = useState(0);
-
-  const handleGetClass = () => {
-    getList({ page: 1, limit: 20 });
-  };
+  const [idEdit, setIdEdit] = useState(0);
 
   useEffect(() => {
-    getList({
-      limit: 20,
-      page,
-      ...objSearch,
-    });
-  }, [page]);
-
-  useEffect(() => {
-    if (page !== 1) {
-      setPage(1);
-    } else {
+    if (objSearch?.classId) {
       getList({
         limit: 20,
         page,
-        ...objSearch,
+        classId: Number(objSearch?.classId || 0),
+        createdAt: objSearch?.createdAt,
       });
+    }
+  }, [page]);
+
+  useEffect(() => {
+    if (objSearch?.classId) {
+      if (page !== 1) {
+        setPage(1);
+      } else {
+        getList({
+          limit: 20,
+          page,
+          classId: Number(objSearch?.classId || 0),
+          createdAt: objSearch?.createdAt,
+        });
+      }
     }
   }, [objSearch]);
 
-  useEffect(() => {
-    handleGetClass();
-  }, []);
+  const handleGetFirstPage = () => {
+    getList({
+      limit: 20,
+      page: 1,
+      classId: Number(objSearch?.classId || 0),
+      createdAt: objSearch?.createdAt,
+    });
+  };
 
   const tableFormat = [
     {
@@ -64,21 +71,26 @@ const ClassTable = ({ objSearch }: PropsType) => {
       render: (name) => <div className="font-bold">{name}</div>,
     },
     {
-      title: 'Description',
-      dataIndex: 'description',
-      render: (description) => <div className="">{description}</div>,
+      title: 'Total Mark',
+      dataIndex: 'totalMark',
+      render: (totalMark) => <div className="">{totalMark}</div>,
     },
     {
-      title: 'Created At',
-      width: 200,
-      dataIndex: 'createdAt',
-      render: (createdAt) => <div className="">{dayjs(createdAt).format('DD-MM-YYYY')}</div>,
+      title: 'Time Allow',
+      dataIndex: 'timeAllow',
+      render: (timeAllow) => <div className="">{(timeAllow / 60).toFixed(2)} h</div>,
     },
     {
-      title: 'Updated At',
+      title: 'Time Start',
       width: 200,
-      dataIndex: 'updatedAt',
-      render: (updatedAt) => <div className="">{dayjs(updatedAt).format('DD-MM-YYYY')}</div>,
+      dataIndex: 'timeStart',
+      render: (timeStart) => <div className="">{dayjs(timeStart).subtract(7, 'hours').format('DD-MM-YYYY HH:ss')}</div>,
+    },
+    {
+      title: 'Time End',
+      width: 200,
+      dataIndex: 'timeEnd',
+      render: (timeEnd) => <div className="">{dayjs(timeEnd).subtract(7, 'hours').format('DD-MM-YYYY HH:ss')}</div>,
     },
     {
       title: '',
@@ -92,7 +104,7 @@ const ClassTable = ({ objSearch }: PropsType) => {
                 <BasicButton
                   className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
                   onClick={() => {
-                    setClassIdEdit(record?.id);
+                    setIdEdit(record?.id);
                     setOpenCreateOrEditModal(true);
                   }}
                   styleType="text"
@@ -102,12 +114,12 @@ const ClassTable = ({ objSearch }: PropsType) => {
                 <BasicButton
                   className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
                   onClick={() => {
-                    deleteClass({ id: record?.id }).then((res) => {
-                      if ((res as unknown as DeleteClassResponse)?.data?.status) {
-                        message.success('Xoá lớp học thành công');
-                        handleGetClass();
+                    deleteAssignment({ id: record?.id }).then((res) => {
+                      if ((res as unknown as DeleteAssignmentResponse)?.data?.status) {
+                        message.success('Xoá assignment thành công');
+                        handleGetFirstPage();
                       } else {
-                        message.success('Xảy ra lỗi khi xoá lớp học');
+                        message.success('Xảy ra lỗi khi xoá assignment');
                       }
                     });
                   }}
@@ -129,18 +141,19 @@ const ClassTable = ({ objSearch }: PropsType) => {
   return (
     <>
       <div className="flex items-center justify-between px-6 h-[64px] shadow-inner bg-[#F4F6F7]">
-        <p className="text-[18px] leading-[22px] font-bold text-[#000]">Class List</p>
+        <p className="text-[18px] leading-[22px] font-bold text-[#000]">Assignment List</p>
         <div className="flex items-center gap-x-4">
-          <BasicButton
-            className="text-[13px] font-[700] text-[#fff] !bg-[#2F2F2F]"
-            onClick={() => {
-              setOpenCreateOrEditModal(true);
-              setClassIdEdit(0);
-            }}
-            styleType="rounded"
-          >
-            Add Class
-          </BasicButton>
+          {objSearch?.classId && (
+            <BasicButton
+              className="text-[13px] font-[700] text-[#fff] !bg-[#2F2F2F]"
+              onClick={() => {
+                setOpenCreateOrEditModal(true);
+              }}
+              styleType="rounded"
+            >
+              Add Assignment
+            </BasicButton>
+          )}
         </div>
       </div>
       <div className="shadow-xl pb-6">
@@ -179,9 +192,12 @@ const ClassTable = ({ objSearch }: PropsType) => {
         </div>
       </div>
 
-      <CreateOrEditClass
-        classIdEdit={classIdEdit}
-        getList={handleGetClass}
+      <CreateOrEditAssignment
+        classId={objSearch?.classId || 0}
+        getList={() => {
+          handleGetFirstPage();
+        }}
+        idEdit={idEdit}
         openModal={openCreateOrEditModal}
         setOpenModal={setOpenCreateOrEditModal}
       />
@@ -189,4 +205,4 @@ const ClassTable = ({ objSearch }: PropsType) => {
   );
 };
 
-export default ClassTable;
+export default AssignmentTable;

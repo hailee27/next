@@ -43,7 +43,12 @@ const CreateOrEditClass = ({ openModal, setOpenModal, getList, classIdEdit }: Pr
 
   return (
     <Spin spinning={isFetching || isLoading || isLoadingUpdate}>
-      <Modal footer={null} onCancel={handleCancel} open={openModal} title="Create Class">
+      <Modal
+        footer={null}
+        onCancel={handleCancel}
+        open={openModal}
+        title={classIdEdit ? 'Update Class Information' : 'Create Class'}
+      >
         <Form
           autoComplete="off"
           form={form}
@@ -80,15 +85,15 @@ const CreateOrEditClass = ({ openModal, setOpenModal, getList, classIdEdit }: Pr
             }
           }}
         >
-          <Form.Item label="Name" name="name" rules={[{ required: true, message: 'Please input class name!' }]}>
-            <Input />
+          <Form.Item label="Name" name="name" rules={[{ required: true, message: 'Please input name!' }]}>
+            <Input placeholder="name" />
           </Form.Item>
           <Form.Item
             label="Description"
             name="description"
             rules={[{ required: true, message: 'Please input description!' }]}
           >
-            <Input />
+            <Input placeholder="description" />
           </Form.Item>
 
           <div className="gap-x-3 flex items-center justify-end mt-2">

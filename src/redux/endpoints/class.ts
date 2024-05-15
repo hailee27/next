@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { api } from '../api';
 
 const injectedRtkApi = api.injectEndpoints({
@@ -35,8 +36,22 @@ const injectedRtkApi = api.injectEndpoints({
         method: 'DELETE',
       }),
     }),
+    postAddStudent: build.mutation<PostAddStudentResponse, PostAddStudentParams>({
+      query: (queryArg) => ({
+        url: '/teacher/class/add-student',
+        method: 'POST',
+        body: queryArg,
+      }),
+    }),
   }),
 });
+
+export type PostAddStudentResponse = any;
+
+export type PostAddStudentParams = {
+  classId: number;
+  studentIds: number[];
+};
 
 export type ClassSearchObj = {
   search?: string | null;
@@ -132,4 +147,5 @@ export const {
   usePostClassMutation,
   usePutClassMutation,
   useDeleteClassMutation,
+  usePostAddStudentMutation,
 } = injectedRtkApi;

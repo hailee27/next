@@ -1,27 +1,16 @@
 import React from 'react';
-import { DatePicker, Form, Input } from 'antd';
+import { DatePicker, Form } from 'antd';
 
+import { AssignmentSearchObj } from '@/redux/endpoints/assignment';
 import BasicButton from '@/components/common/forms/BasicButton';
-import { ClassSearchObj } from '@/redux/endpoints/class';
-
-export interface SelectType {
-  value: number | string;
-  label: string;
-}
-export interface KeywordSearchType {
-  area?: SelectType;
-  brand?: string | null;
-  customGroup?: SelectType;
-  categoryId?: SelectType;
-  storeIds?: SelectType;
-}
+import BasicSelectClass from '@/components/common/BasicSelectClass';
 
 interface PropsType {
-  onSubmit: (v: ClassSearchObj) => void;
+  onSubmit: (v: AssignmentSearchObj) => void;
   additionalButtons?: JSX.Element | JSX.Element[];
 }
 
-const ClassFilter = ({ onSubmit, additionalButtons }: PropsType) => {
+const AssignmentFilter = ({ onSubmit, additionalButtons }: PropsType) => {
   const [form] = Form.useForm();
 
   const onReset = () => {
@@ -32,8 +21,8 @@ const ClassFilter = ({ onSubmit, additionalButtons }: PropsType) => {
     <div className="border p-4 bg-[#fff] shadow-md rounded">
       <Form className="space-y-[16px]" form={form} onFinish={onSubmit}>
         <div className="grid grid-cols-4 gap-6">
-          <Form.Item name="search" noStyle>
-            <Input className="flex-1 h-10" placeholder="Name" />
+          <Form.Item name="class" noStyle>
+            <BasicSelectClass className="flex-1 h-10" placeholder="Class" />
           </Form.Item>
           <Form.Item name="createdAt" noStyle>
             <DatePicker placeholder="Created At" />
@@ -51,13 +40,17 @@ const ClassFilter = ({ onSubmit, additionalButtons }: PropsType) => {
             </BasicButton>
           </div>
         </div>
+
+        <div className="uppercase text-[11px] font-bold text-[#80888F]">
+          Please select a class to view assignment list
+        </div>
       </Form>
     </div>
   );
 };
 
-ClassFilter.defaultProps = {
+AssignmentFilter.defaultProps = {
   additionalButtons: undefined,
 };
 
-export default ClassFilter;
+export default AssignmentFilter;
