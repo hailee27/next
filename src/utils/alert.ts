@@ -1,3 +1,3 @@
-import Notification from '@/components/common/Notification';
+// import Notification from '@/components/common/Notification';
 
-export const alert = () => Notification({ message: 'alert' });
+// export const alert = () => Notification({ message: 'alert' });

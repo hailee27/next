@@ -1,0 +1,21 @@
+.basicInput {
+  height: 48px;
+  :global {
+    .ant-input {
+      border-radius: 4px !important;
+    }
+  }
+  &:global {
+    &.ant-input-affix-wrapper-readonly {
+      background: #F3F5F7;
+      input{
+        background: #F3F5F7;
+      }
+    }
+  }
+}
+
+
+.basicInput[readonly] {
+  background: rgba(225, 230, 234, 0.40);
+}

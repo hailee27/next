@@ -72,7 +72,7 @@ function LoginPage() {
               .unwrap()
               .then((value) => {
                 if (value.result.teacher) {
-                  router.push('/teacher');
+                  router.push('/class');
                   dispatch(setTeacher(value.result.teacher));
                 }
                 if (value.result.student) {

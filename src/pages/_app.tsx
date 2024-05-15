@@ -11,10 +11,10 @@ import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import Loading from '@/components/Loading';
 import { wrapper } from '@/redux/store';
 // import { PopUpProvider } from '@/context/PopUpContext';
-import MainLayout from '@/components/layout/MainLayout';
 import AuthLayout from '@/components/layout/AuthLayout';
 import { NotificationProvider } from '@/context/NotificationContext';
 import { PopUpProvider } from '@/context/PopUpContext';
+import PrimaryLayout from '@/components/layout/PrimaryLayout';
 
 export type NextPageWithLayout<P = Record<string, never>, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => JSX.Element;
@@ -27,10 +27,10 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const { store, props } = wrapper.useWrappedStore(pageProps);
-  let getLayout = Component.getLayout ?? ((page) => <MainLayout>{page}</MainLayout>);
+  let getLayout = Component.getLayout ?? ((page) => <PrimaryLayout>{page}</PrimaryLayout>);
 
   if (router.pathname === '/') {
-    getLayout = (page) => <MainLayout>{page}</MainLayout>;
+    getLayout = (page) => <PrimaryLayout>{page}</PrimaryLayout>;
   }
   if (router.pathname.startsWith('/auth')) {
     getLayout = (page) => <AuthLayout>{page}</AuthLayout>;
