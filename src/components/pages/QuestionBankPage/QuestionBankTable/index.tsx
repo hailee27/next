@@ -2,95 +2,83 @@
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
 import { message, Table } from 'antd';
-import dayjs from 'dayjs';
 import { MoreOutlined } from '@ant-design/icons';
+import dayjs from 'dayjs';
 
 import BasicPopover from '@/components/common/BasicPopover';
+import CustomPagination from '@/components/common/CustomPagination';
 import BasicButton from '@/components/common/forms/BasicButton';
 import {
-  AssignmentSearchObj,
-  DeleteAssignmentResponse,
-  useDeleteAssignmentMutation,
-  useLazyGetListAssignmentQuery,
-} from '@/redux/endpoints/assignment';
-import CustomPagination from '@/components/common/CustomPagination';
+  DeleteQuestionBankResponse,
+  QuestionBankSearchObj,
+  useDeleteQuestionBankMutation,
+  useLazyGetListQuestionBankQuery,
+} from '@/redux/endpoints/questionBank';
 
-import CreateOrEditAssignment from '../Modal/CreateOrEditAssignment';
+import CreateOrEditQuestionBank from '../Modal/CreateOrEditQuestionBank';
 
 interface PropsType {
-  objSearch: AssignmentSearchObj;
+  objSearch: QuestionBankSearchObj;
 }
 
-const AssignmentTable = ({ objSearch }: PropsType) => {
-  const [getList, { data, isFetching }] = useLazyGetListAssignmentQuery();
-  const [deleteAssignment] = useDeleteAssignmentMutation();
+const QuestionBankTable = ({ objSearch }: PropsType) => {
+  const [getList, { data, isFetching }] = useLazyGetListQuestionBankQuery();
+  const [deleteQuestionBank] = useDeleteQuestionBankMutation();
 
   const [page, setPage] = useState<number>(1);
   const [openCreateOrEditModal, setOpenCreateOrEditModal] = useState<boolean>(false);
   const [idEdit, setIdEdit] = useState(0);
 
+  const handleGetQuestionBank = () => {
+    getList({ page: 1, limit: 20 });
+  };
+
   useEffect(() => {
-    if (objSearch?.classId) {
-      getList({
-        limit: 20,
-        page,
-        classId: Number(objSearch?.classId || 0),
-        createdAt: objSearch?.createdAt,
-      });
-    }
+    getList({
+      limit: 20,
+      page,
+      ...objSearch,
+    });
   }, [page]);
 
   useEffect(() => {
-    if (objSearch?.classId) {
-      if (page !== 1) {
-        setPage(1);
-      } else {
-        getList({
-          limit: 20,
-          page,
-          classId: Number(objSearch?.classId || 0),
-          createdAt: objSearch?.createdAt,
-        });
-      }
+    if (page !== 1) {
+      setPage(1);
+    } else {
+      getList({
+        limit: 20,
+        page,
+        ...objSearch,
+      });
     }
   }, [objSearch]);
 
-  const handleGetFirstPage = () => {
-    getList({
-      limit: 20,
-      page: 1,
-      classId: Number(objSearch?.classId || 0),
-      createdAt: objSearch?.createdAt,
-    });
-  };
+  useEffect(() => {
+    handleGetQuestionBank();
+  }, []);
 
   const tableFormat = [
     {
       title: 'Name',
-      dataIndex: 'name',
-      render: (name) => <div className="font-bold">{name}</div>,
+      dataIndex: 'body',
+      render: (body) => <div className="font-bold">{body}</div>,
     },
     {
-      title: 'Total Mark',
-      dataIndex: 'totalMark',
-      render: (totalMark) => <div className="">{totalMark}</div>,
+      title: 'Instruction',
+      dataIndex: 'instruction',
+      render: (instruction) => <div className="font-bold">{instruction}</div>,
     },
     {
-      title: 'Time Allow',
-      dataIndex: 'timeAllow',
-      render: (timeAllow) => <div className="">{(timeAllow / 60).toFixed(2)} h</div>,
-    },
-    {
-      title: 'Time Start',
+      title: 'Created At',
       width: 200,
-      dataIndex: 'timeStart',
-      render: (timeStart) => <div className="">{dayjs(timeStart).subtract(7, 'hours').format('DD-MM-YYYY HH:ss')}</div>,
+      dataIndex: 'createdAt',
+      render: (createdAt) => <div className="">{dayjs(createdAt).format('DD-MM-YYYY')}</div>,
     },
     {
-      title: 'Time End',
+      title: 'Updated At',
       width: 200,
-      dataIndex: 'timeEnd',
-      render: (timeEnd) => <div className="">{dayjs(timeEnd).subtract(7, 'hours').format('DD-MM-YYYY HH:ss')}</div>,
+      dataIndex: 'updatedAt',
+      render: (updatedAt) => <div className="">{dayjs(updatedAt).format('DD-MM-YYYY')}</div>,
     },
     {
       title: '',
@@ -114,12 +102,12 @@ const AssignmentTable = ({ objSearch }: PropsType) => {
                 <BasicButton
                   className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
                   onClick={() => {
-                    deleteAssignment({ id: record?.id }).then((res) => {
-                      if ((res as unknown as DeleteAssignmentResponse)?.data?.status) {
-                        message.success('Xoá assignment thành công');
-                        handleGetFirstPage();
+                    deleteQuestionBank({ id: record?.id }).then((res) => {
+                      if ((res as unknown as DeleteQuestionBankResponse)?.data?.status) {
+                        message.success('Xoá câu hỏi thành công');
+                        handleGetQuestionBank();
                       } else {
-                        message.success('Xảy ra lỗi khi xoá assignment');
+                        message.success('Xảy ra lỗi khi xoá câu hỏi');
                       }
                     });
                   }}
@@ -138,24 +126,21 @@ const AssignmentTable = ({ objSearch }: PropsType) => {
     },
   ];
 
-  console.log('data', data);
-
   return (
     <>
       <div className="flex items-center justify-between px-6 h-[64px] shadow-inner bg-[#F4F6F7]">
-        <p className="text-[18px] leading-[22px] font-bold text-[#000]">Assignment List</p>
+        <p className="text-[18px] leading-[22px] font-bold text-[#000]">Question Bank List</p>
         <div className="flex items-center gap-x-4">
-          {objSearch?.classId && (
-            <BasicButton
-              className="text-[13px] font-[700] text-[#fff] !bg-[#2F2F2F]"
-              onClick={() => {
-                setOpenCreateOrEditModal(true);
-              }}
-              styleType="rounded"
-            >
-              Add Assignment
-            </BasicButton>
-          )}
+          <BasicButton
+            className="text-[13px] font-[700] text-[#fff] !bg-[#2F2F2F]"
+            onClick={() => {
+              setOpenCreateOrEditModal(true);
+              setIdEdit(0);
+            }}
+            styleType="rounded"
+          >
+            Add Question
+          </BasicButton>
         </div>
       </div>
       <div className="shadow-xl pb-6">
@@ -193,18 +178,16 @@ const AssignmentTable = ({ objSearch }: PropsType) => {
           )}
         </div>
       </div>
-
-      <CreateOrEditAssignment
-        classId={objSearch?.classId || 0}
-        getList={() => {
-          handleGetFirstPage();
-        }}
-        idEdit={idEdit}
-        openModal={openCreateOrEditModal}
-        setOpenModal={setOpenCreateOrEditModal}
-      />
+      {openCreateOrEditModal && (
+        <CreateOrEditQuestionBank
+          getList={handleGetQuestionBank}
+          idEdit={idEdit}
+          openModal={openCreateOrEditModal}
+          setOpenModal={setOpenCreateOrEditModal}
+        />
+      )}
     </>
   );
 };
 
-export default AssignmentTable;
+export default QuestionBankTable;

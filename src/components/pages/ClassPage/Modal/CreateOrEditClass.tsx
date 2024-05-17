@@ -8,6 +8,7 @@ import {
   usePostClassMutation,
   usePutClassMutation,
 } from '@/redux/endpoints/class';
+import BasicArea from '@/components/common/forms/BasicArea';
 
 interface PropsType {
   openModal: boolean;
@@ -93,7 +94,7 @@ const CreateOrEditClass = ({ openModal, setOpenModal, getList, classIdEdit }: Pr
             name="description"
             rules={[{ required: true, message: 'Please input description!' }]}
           >
-            <Input placeholder="description" />
+            <BasicArea placeholder="description" rows={4} />
           </Form.Item>
 
           <div className="gap-x-3 flex items-center justify-end mt-2">
