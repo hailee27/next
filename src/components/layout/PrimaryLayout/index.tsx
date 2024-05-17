@@ -58,6 +58,14 @@ function PrimaryLayout({ children }: { children: React.ReactNode }) {
             router.push('/teacher/assignment');
           },
         },
+        {
+          key: 'item_question_bank',
+          icon: svgIcon,
+          label: 'Question Bank',
+          onClick: () => {
+            router.push('/teacher/question-bank');
+          },
+        },
       ],
     },
   ];

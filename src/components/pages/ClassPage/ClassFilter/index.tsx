@@ -26,6 +26,7 @@ const ClassFilter = ({ onSubmit, additionalButtons }: PropsType) => {
 
   const onReset = () => {
     form.resetFields();
+    form.submit();
   };
 
   return (
