@@ -46,8 +46,13 @@ const injectedRtkApi = api.injectEndpoints({
   }),
 });
 
-export type PostAddStudentResponse = any;
-
+export type PostAddStudentResponse = {
+  data: {
+    message: string;
+    status: boolean;
+    result: true;
+  };
+};
 export type PostAddStudentParams = {
   classId: number;
   studentIds: number[];

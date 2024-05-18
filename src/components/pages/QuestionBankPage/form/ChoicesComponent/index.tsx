@@ -15,7 +15,7 @@ const ChoicesComponents = ({ questionKey }: PropsType) => (
       <Form.List name={[questionKey, 'choices']}>
         {(fields, { add, remove }) => (
           <>
-            <div className="flex justify-between">
+            <div className="flex justify-between mb-3">
               <p className="">Choices</p>
               <BasicButton
                 className="text-[13px] font-[700] text-[#fff] !bg-[#2F2F2F]"
@@ -30,7 +30,17 @@ const ChoicesComponents = ({ questionKey }: PropsType) => (
             </div>
             {fields?.map((item, index) => (
               <div key={item?.key}>
-                <p className="uppercase text-[11px] font-bold text-[#AEB9C2]">Choice {index + 1}</p>
+                <div className="mb-3 flex items-center justify-between">
+                  <p className="uppercase text-[11px] font-bold text-[#AEB9C2]">Choice {index + 1}</p>
+                  <BasicButton
+                    className="text-[12px] font-bold uppercase text-[#E11D48]"
+                    onClick={() => remove(item?.name)}
+                    styleType="text"
+                    type="dashed"
+                  >
+                    Delete
+                  </BasicButton>
+                </div>
                 <Form.Item
                   label=""
                   name={[index, 'name']}

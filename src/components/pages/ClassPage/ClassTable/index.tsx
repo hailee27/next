@@ -16,6 +16,7 @@ import BasicButton from '@/components/common/forms/BasicButton';
 import CustomPagination from '@/components/common/CustomPagination';
 
 import CreateOrEditClass from '../Modal/CreateOrEditClass';
+import AddStudentModal from '../Modal/AddStudentModal';
 
 interface PropsType {
   objSearch: ClassSearchObj;
@@ -26,8 +27,9 @@ const ClassTable = ({ objSearch }: PropsType) => {
   const [deleteClass] = useDeleteClassMutation();
 
   const [page, setPage] = useState<number>(1);
-  const [openCreateOrEditModal, setOpenCreateOrEditModal] = useState<boolean>(false);
   const [classIdEdit, setClassIdEdit] = useState(0);
+  const [openCreateOrEditModal, setOpenCreateOrEditModal] = useState<boolean>(false);
+  const [openAddStudentModal, setOpenAddStudentModal] = useState<boolean>(false);
 
   const handleGetClass = () => {
     getList({ page: 1, limit: 20 });
@@ -89,6 +91,16 @@ const ClassTable = ({ objSearch }: PropsType) => {
           <BasicPopover
             content={
               <div>
+                <BasicButton
+                  className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
+                  onClick={() => {
+                    setClassIdEdit(record?.id);
+                    setOpenAddStudentModal(true);
+                  }}
+                  styleType="text"
+                >
+                  Add Student
+                </BasicButton>
                 <BasicButton
                   className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
                   onClick={() => {
@@ -178,13 +190,17 @@ const ClassTable = ({ objSearch }: PropsType) => {
           )}
         </div>
       </div>
-
-      <CreateOrEditClass
-        classIdEdit={classIdEdit}
-        getList={handleGetClass}
-        openModal={openCreateOrEditModal}
-        setOpenModal={setOpenCreateOrEditModal}
-      />
+      {openCreateOrEditModal && (
+        <CreateOrEditClass
+          classIdEdit={classIdEdit}
+          getList={handleGetClass}
+          openModal={openCreateOrEditModal}
+          setOpenModal={setOpenCreateOrEditModal}
+        />
+      )}
+      {openAddStudentModal && (
+        <AddStudentModal classId={classIdEdit} openModal={openAddStudentModal} setOpenModal={setOpenAddStudentModal} />
+      )}
     </>
   );
 };

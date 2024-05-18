@@ -1,6 +1,7 @@
 import { api } from '../api';
 
 import { MetaDataType } from './class';
+import { QuestionBankType } from './questionBank';
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -41,8 +42,26 @@ const injectedRtkApi = api.injectEndpoints({
         method: 'DELETE',
       }),
     }),
+
+    postQuestionAssignment: build.mutation<PostQuestionAssignmentResponse, PostQuestionAssignmentParams>({
+      query: (queryArg) => ({
+        url: '/teacher/question',
+        method: 'POST',
+        body: queryArg,
+      }),
+    }),
   }),
 });
+
+export type PostQuestionAssignmentParams = { assignmentId: number; questions: QuestionBankType[] };
+
+export type PostQuestionAssignmentResponse = {
+  data: {
+    message: string;
+    status: boolean;
+    result: true;
+  };
+};
 
 export type AssignmentSearchObj = {
   classId?: number;
@@ -139,4 +158,6 @@ export const {
   usePostAssignmentMutation,
   usePutAssignmentMutation,
   useDeleteAssignmentMutation,
+
+  usePostQuestionAssignmentMutation,
 } = injectedRtkApi;
