@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-console */
+/* eslint-disable max-lines-per-function */
 import React, { useEffect, useState } from 'react';
 import { message, Table } from 'antd';
 import dayjs from 'dayjs';
@@ -16,6 +17,8 @@ import {
 import CustomPagination from '@/components/common/CustomPagination';
 
 import CreateOrEditAssignment from '../Modal/CreateOrEditAssignment';
+import AddQuestionModal from '../Modal/AddQuestionModal';
+import ViewQuestionListModal from '../Modal/ViewQuestionListModal';
 
 interface PropsType {
   objSearch: AssignmentSearchObj;
@@ -26,8 +29,10 @@ const AssignmentTable = ({ objSearch }: PropsType) => {
   const [deleteAssignment] = useDeleteAssignmentMutation();
 
   const [page, setPage] = useState<number>(1);
-  const [openCreateOrEditModal, setOpenCreateOrEditModal] = useState<boolean>(false);
   const [idEdit, setIdEdit] = useState(0);
+  const [openCreateOrEditModal, setOpenCreateOrEditModal] = useState<boolean>(false);
+  const [openAddQuestion, setOpenAddQuestion] = useState<boolean>(false);
+  const [openViewQuestionList, setOpenViewQuestionList] = useState<boolean>(false);
 
   useEffect(() => {
     if (objSearch?.classId) {
@@ -105,6 +110,26 @@ const AssignmentTable = ({ objSearch }: PropsType) => {
                   className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
                   onClick={() => {
                     setIdEdit(record?.id);
+                    setOpenViewQuestionList(true);
+                  }}
+                  styleType="text"
+                >
+                  View Question List
+                </BasicButton>
+                <BasicButton
+                  className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
+                  onClick={() => {
+                    setIdEdit(record?.id);
+                    setOpenAddQuestion(true);
+                  }}
+                  styleType="text"
+                >
+                  Add Question
+                </BasicButton>
+                <BasicButton
+                  className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
+                  onClick={() => {
+                    setIdEdit(record?.id);
                     setOpenCreateOrEditModal(true);
                   }}
                   styleType="text"
@@ -138,8 +163,6 @@ const AssignmentTable = ({ objSearch }: PropsType) => {
     },
   ];
 
-  console.log('data', data);
-
   return (
     <>
       <div className="flex items-center justify-between px-6 h-[64px] shadow-inner bg-[#F4F6F7]">
@@ -150,6 +173,8 @@ const AssignmentTable = ({ objSearch }: PropsType) => {
               className="text-[13px] font-[700] text-[#fff] !bg-[#2F2F2F]"
               onClick={() => {
                 setOpenCreateOrEditModal(true);
+                setOpenAddQuestion(false);
+                setIdEdit(0);
               }}
               styleType="rounded"
             >
@@ -194,15 +219,29 @@ const AssignmentTable = ({ objSearch }: PropsType) => {
         </div>
       </div>
 
-      <CreateOrEditAssignment
-        classId={objSearch?.classId || 0}
-        getList={() => {
-          handleGetFirstPage();
-        }}
-        idEdit={idEdit}
-        openModal={openCreateOrEditModal}
-        setOpenModal={setOpenCreateOrEditModal}
-      />
+      {openCreateOrEditModal && (
+        <CreateOrEditAssignment
+          classId={objSearch?.classId || 0}
+          getList={() => {
+            handleGetFirstPage();
+          }}
+          idEdit={idEdit}
+          openModal={openCreateOrEditModal}
+          setOpenModal={setOpenCreateOrEditModal}
+        />
+      )}
+
+      {openAddQuestion && (
+        <AddQuestionModal assignmentId={idEdit} openModal={openAddQuestion} setOpenModal={setOpenAddQuestion} />
+      )}
+
+      {openViewQuestionList && (
+        <ViewQuestionListModal
+          assignmentId={idEdit}
+          openModal={openViewQuestionList}
+          setOpenModal={setOpenViewQuestionList}
+        />
+      )}
     </>
   );
 };

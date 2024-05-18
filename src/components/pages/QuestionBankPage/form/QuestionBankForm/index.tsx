@@ -3,6 +3,7 @@ import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import { Form, FormInstance, FormListFieldData, Radio } from 'antd';
 
 import BasicArea from '@/components/common/forms/BasicArea';
+import BasicButton from '@/components/common/forms/BasicButton';
 
 import ChoicesComponents from '../ChoicesComponent';
 import ResponseComponent from '../ResponseComponent';
@@ -13,9 +14,10 @@ interface PropsType {
   index: number;
   setFormChange: Dispatch<SetStateAction<boolean>>;
   idEdit: number;
+  remove: () => void;
 }
 
-const QuestionBankForm = ({ item, form, index, setFormChange, idEdit }: PropsType) => {
+const QuestionBankForm = ({ item, form, index, setFormChange, idEdit, remove }: PropsType) => {
   const questionTypeForm = form.getFieldValue(['questionBank', item?.name, 'type']);
   const responseForm = form.getFieldValue(['questionBank', item?.name, 'response']);
 
@@ -28,7 +30,20 @@ const QuestionBankForm = ({ item, form, index, setFormChange, idEdit }: PropsTyp
 
   return (
     <div className="border-b py-4" key={item?.key}>
-      <p className="mb-3 font-bold text-[13px] uppercase">Question {Number(item?.key) + 1}</p>
+      <div className="flex items-center justify-between">
+        <p className="mb-3 font-bold text-[13px] uppercase">Question {Number(item?.key) + 1}</p>
+        {!idEdit && (
+          <BasicButton
+            className="text-[12px] font-bold uppercase text-[#E11D48]"
+            onClick={() => remove()}
+            styleType="text"
+            type="dashed"
+          >
+            Delete
+          </BasicButton>
+        )}
+      </div>
+
       <Form.Item
         label="Question"
         name={[index, 'body']}

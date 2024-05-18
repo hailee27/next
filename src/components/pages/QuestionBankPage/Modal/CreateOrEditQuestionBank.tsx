@@ -135,6 +135,9 @@ const CreateOrEditQuestionBank = ({ openModal, setOpenModal, getList, idEdit }: 
                     idEdit={idEdit}
                     index={index}
                     item={item}
+                    remove={() => {
+                      remove(item?.name);
+                    }}
                     setFormChange={setFormChange}
                   />
                 ))}

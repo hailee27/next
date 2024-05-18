@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { api } from '../api';
 
+import { MetaDataType } from './class';
+
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
     getListQuestionBank: build.query<GetListQuestionBankResponse, GetListQuestionBankParams>({
@@ -44,7 +46,13 @@ const injectedRtkApi = api.injectEndpoints({
   }),
 });
 
-export type DeleteQuestionBankResponse = any;
+export type DeleteQuestionBankResponse = {
+  data: {
+    message: string;
+    status: boolean;
+    result: true;
+  };
+};
 
 export type DeleteQuestionBankParams = {
   id: number;
@@ -65,7 +73,13 @@ export type PutQuestionBankParams = {
   response: string;
 };
 
-export type PostQuestionBankResponse = any;
+export type PostQuestionBankResponse = {
+  data: {
+    message: string;
+    status: boolean;
+    result: true;
+  };
+};
 
 export type FormListType = {
   key: number;
@@ -73,6 +87,7 @@ export type FormListType = {
 
 export type QuestionBankType = {
   id?: number;
+  questionBankId?: number;
   parentId?: number;
   isParent?: boolean;
   body?: string;
@@ -92,7 +107,12 @@ export type GetDetailQuestionBankParams = {
   id: number;
 };
 
-export type GetListQuestionBankResponse = any;
+export type GetListQuestionBankResponse = {
+  result: QuestionBankType[];
+  metadata: MetaDataType;
+  message: string;
+  status: boolean;
+};
 
 export type GetListQuestionBankParams = {
   page: number;
