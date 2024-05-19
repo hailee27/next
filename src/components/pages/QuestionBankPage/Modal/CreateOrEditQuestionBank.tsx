@@ -3,15 +3,15 @@
 import React, { useEffect, useState } from 'react';
 import { Form, message, Modal, Spin } from 'antd';
 
+import BasicButton from '@/components/common/forms/BasicButton';
+import { getRandomNumber, handleConvertObjectToArray } from '@/utils';
+import { handleConvertQuestionBankDataForm, handleResponseFromQuestionBankDetail } from '@/utils/questionBank';
 import {
   PostQuestionBankResponse,
   useLazyGetDetailQuestionBankQuery,
   usePostQuestionBankMutation,
   usePutQuestionBankMutation,
-} from '@/redux/endpoints/questionBank';
-import BasicButton from '@/components/common/forms/BasicButton';
-import { getRandomNumber, handleConvertObjectToArray } from '@/utils';
-import { handleConvertQuestionBankDataForm, handleResponseFromQuestionBankDetail } from '@/utils/questionBank';
+} from '@/redux/endpoints/teacher/questionBank';
 
 import QuestionBankForm from '../form/QuestionBankForm';
 
@@ -72,14 +72,14 @@ const CreateOrEditQuestionBank = ({ openModal, setOpenModal, getList, idEdit }: 
   };
 
   return (
-    <Spin spinning={isFetching || isLoading || isLoadingUpdate}>
-      <Modal
-        footer={null}
-        onCancel={handleCancel}
-        open={openModal}
-        title={idEdit ? 'Update Question Information' : 'Create Question Bank'}
-        width={1000}
-      >
+    <Modal
+      footer={null}
+      onCancel={handleCancel}
+      open={openModal}
+      title={idEdit ? 'Update Question Information' : 'Create Question Bank'}
+      width={1000}
+    >
+      <Spin spinning={isFetching || isLoading || isLoadingUpdate}>
         <Form
           autoComplete="off"
           form={form}
@@ -163,8 +163,8 @@ const CreateOrEditQuestionBank = ({ openModal, setOpenModal, getList, idEdit }: 
             </BasicButton>
           </div>
         </Form>
-      </Modal>
-    </Spin>
+      </Spin>
+    </Modal>
   );
 };
 

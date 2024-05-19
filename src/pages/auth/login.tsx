@@ -17,10 +17,10 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import Link from 'next/link';
 
-import { useLoginTeacherMutation } from '@/redux/endpoints/auth';
 import { setAuth, setStudent, setTeacher } from '@/redux/slices/auth.slice';
 import { useNotificationContext } from '@/context/NotificationContext';
 import signInSchema from '@/schema/signIn';
+import { useLoginTeacherMutation } from '@/redux/endpoints/auth';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function Copyright(props: any) {

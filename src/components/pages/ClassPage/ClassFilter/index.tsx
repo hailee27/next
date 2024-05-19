@@ -2,7 +2,7 @@ import React from 'react';
 import { DatePicker, Form, Input } from 'antd';
 
 import BasicButton from '@/components/common/forms/BasicButton';
-import { ClassSearchObj } from '@/redux/endpoints/class';
+import { ClassSearchObj } from '@/redux/endpoints/teacher/class';
 
 export interface SelectType {
   value: number | string;

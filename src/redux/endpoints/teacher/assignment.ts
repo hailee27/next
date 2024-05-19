@@ -1,7 +1,8 @@
-import { api } from '../api';
+import { api } from '../../api';
 
 import { MetaDataType } from './class';
 import { QuestionBankType } from './questionBank';
+import { CreateUpdateDeleteResponse } from './student';
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -55,13 +56,7 @@ const injectedRtkApi = api.injectEndpoints({
 
 export type PostQuestionAssignmentParams = { assignmentId: number; questions: QuestionBankType[] };
 
-export type PostQuestionAssignmentResponse = {
-  data: {
-    message: string;
-    status: boolean;
-    result: true;
-  };
-};
+export type PostQuestionAssignmentResponse = CreateUpdateDeleteResponse;
 
 export type AssignmentSearchObj = {
   classId?: number;
@@ -72,13 +67,7 @@ export type AssignmentSearchObj = {
   createdAt?: string;
 };
 
-export type DeleteAssignmentResponse = {
-  data: {
-    message: string;
-    status: boolean;
-    result: true;
-  };
-};
+export type DeleteAssignmentResponse = CreateUpdateDeleteResponse;
 
 export type DeleteAssignmentParams = { id: number };
 

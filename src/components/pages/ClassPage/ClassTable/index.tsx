@@ -5,18 +5,19 @@ import { message, Table } from 'antd';
 import dayjs from 'dayjs';
 import { MoreOutlined } from '@ant-design/icons';
 
+import BasicPopover from '@/components/common/BasicPopover';
+import BasicButton from '@/components/common/forms/BasicButton';
+import CustomPagination from '@/components/common/CustomPagination';
 import {
   ClassSearchObj,
   DeleteClassResponse,
   useDeleteClassMutation,
   useLazyGetListClassQuery,
-} from '@/redux/endpoints/class';
-import BasicPopover from '@/components/common/BasicPopover';
-import BasicButton from '@/components/common/forms/BasicButton';
-import CustomPagination from '@/components/common/CustomPagination';
+} from '@/redux/endpoints/teacher/class';
 
 import CreateOrEditClass from '../Modal/CreateOrEditClass';
 import AddStudentModal from '../Modal/AddStudentModal';
+import ViewStudentListModal from '../Modal/ViewStudentListModal';
 
 interface PropsType {
   objSearch: ClassSearchObj;
@@ -30,6 +31,7 @@ const ClassTable = ({ objSearch }: PropsType) => {
   const [classIdEdit, setClassIdEdit] = useState(0);
   const [openCreateOrEditModal, setOpenCreateOrEditModal] = useState<boolean>(false);
   const [openAddStudentModal, setOpenAddStudentModal] = useState<boolean>(false);
+  const [openViewStudentList, setOpenViewStudentList] = useState<boolean>(false);
 
   const handleGetClass = () => {
     getList({ page: 1, limit: 20 });
@@ -91,6 +93,16 @@ const ClassTable = ({ objSearch }: PropsType) => {
           <BasicPopover
             content={
               <div>
+                <BasicButton
+                  className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
+                  onClick={() => {
+                    setClassIdEdit(record?.id);
+                    setOpenViewStudentList(true);
+                  }}
+                  styleType="text"
+                >
+                  View Student List
+                </BasicButton>
                 <BasicButton
                   className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
                   onClick={() => {
@@ -198,8 +210,17 @@ const ClassTable = ({ objSearch }: PropsType) => {
           setOpenModal={setOpenCreateOrEditModal}
         />
       )}
+
       {openAddStudentModal && (
         <AddStudentModal classId={classIdEdit} openModal={openAddStudentModal} setOpenModal={setOpenAddStudentModal} />
+      )}
+
+      {openViewStudentList && (
+        <ViewStudentListModal
+          classId={classIdEdit}
+          openModal={openViewStudentList}
+          setOpenModal={setOpenViewStudentList}
+        />
       )}
     </>
   );

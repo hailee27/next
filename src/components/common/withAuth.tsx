@@ -18,6 +18,7 @@ function withAuth<T>(Component: any) {
     if (!accessToken) {
       return null;
     }
+
     return <Component {...props} />;
   };
   return Auth;

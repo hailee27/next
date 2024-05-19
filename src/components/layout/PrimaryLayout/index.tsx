@@ -59,6 +59,14 @@ function PrimaryLayout({ children }: { children: React.ReactNode }) {
           },
         },
         {
+          key: 'item_teacher_student',
+          icon: svgIcon,
+          label: 'Student',
+          onClick: () => {
+            router.push('/teacher/student');
+          },
+        },
+        {
           key: 'item_question_bank',
           icon: svgIcon,
           label: 'Question Bank',

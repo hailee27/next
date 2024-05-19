@@ -4,7 +4,7 @@
 import { FunctionComponent, useEffect, useMemo, useState } from 'react';
 import { Select, Spin } from 'antd';
 
-import { useLazyGetListStudentQuery } from '@/redux/endpoints/student';
+import { useLazyGetListStudentQuery } from '@/redux/endpoints/teacher/student';
 
 import { useDebounce } from '../../../hooks/use-debounce';
 import { CustomTag } from '../CustomTag';
@@ -26,6 +26,7 @@ interface TagSelectProps {
   placeholder?: string;
   showResultValue?: boolean;
   suffixIcon?: JSX.Element;
+  studentAdded: number[];
 }
 
 export const SelectMultiStudent: FunctionComponent<TagSelectProps> = ({
@@ -38,6 +39,7 @@ export const SelectMultiStudent: FunctionComponent<TagSelectProps> = ({
   placeholder,
   showResultValue = true,
   suffixIcon,
+  studentAdded,
 }) => {
   const [value, setValue] = useState<SelectItems[]>([]);
   useEffect(() => {
@@ -56,6 +58,12 @@ export const SelectMultiStudent: FunctionComponent<TagSelectProps> = ({
   const [pageSize] = useState<number>(50);
   const [page, setPage] = useState(1);
   const inputSearch = useDebounce(inputValue, 300);
+
+  useEffect(() => {
+    if (studentAdded?.length > 0 && optionSearch?.length > 0) {
+      setOptionSearch((prev) => prev?.filter((item) => !studentAdded.includes(Number(item?.value))));
+    }
+  }, [studentAdded, optionSearch]);
 
   const handleAfterCallApiGetListStudent = (dataList: any, optionCru: any) => {
     if (dataList?.metadata?.total && Math.ceil(dataList?.metadata?.total / pageSize) <= page) {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import dayjs from 'dayjs';
 
-import { AssignmentSearchObj } from '@/redux/endpoints/assignment';
+import { AssignmentSearchObj } from '@/redux/endpoints/teacher/assignment';
 
 import AssignmentTable from './AssignmentTable';
 import AssignmentFilter from './AssignmentFilter';

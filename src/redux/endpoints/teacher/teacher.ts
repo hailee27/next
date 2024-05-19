@@ -1,4 +1,4 @@
-import { api } from '../api';
+import { api } from '../../api';
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -26,4 +26,4 @@ export type InforTeacherResponse = void;
 export type InforTeacherParams = void;
 
 export { injectedRtkApi as TeacherApi };
-export const { useGetMeTeacherQuery, useCreateClassMutation } = injectedRtkApi;
+export const { useGetMeTeacherQuery, useLazyGetMeTeacherQuery, useCreateClassMutation } = injectedRtkApi;
