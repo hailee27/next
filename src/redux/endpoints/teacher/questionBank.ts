@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { api } from '../api';
+import { api } from '../../api';
 
 import { MetaDataType } from './class';
+import { CreateUpdateDeleteResponse } from './student';
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -46,13 +47,7 @@ const injectedRtkApi = api.injectEndpoints({
   }),
 });
 
-export type DeleteQuestionBankResponse = {
-  data: {
-    message: string;
-    status: boolean;
-    result: true;
-  };
-};
+export type DeleteQuestionBankResponse = CreateUpdateDeleteResponse;
 
 export type DeleteQuestionBankParams = {
   id: number;
@@ -73,13 +68,7 @@ export type PutQuestionBankParams = {
   response: string;
 };
 
-export type PostQuestionBankResponse = {
-  data: {
-    message: string;
-    status: boolean;
-    result: true;
-  };
-};
+export type PostQuestionBankResponse = CreateUpdateDeleteResponse;
 
 export type FormListType = {
   key: number;

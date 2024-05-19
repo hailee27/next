@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react';
 
-import { QuestionBankSearchObj } from '@/redux/endpoints/questionBank';
+import { QuestionBankSearchObj } from '@/redux/endpoints/teacher/questionBank';
 
 import QuestionBankTable from './QuestionBankTable';
 

@@ -9,7 +9,7 @@ import {
   useLazyGetDetailAssignmentQuery,
   usePostAssignmentMutation,
   usePutAssignmentMutation,
-} from '@/redux/endpoints/assignment';
+} from '@/redux/endpoints/teacher/assignment';
 
 interface PropsType {
   openModal: boolean;
@@ -48,13 +48,13 @@ const CreateOrEditAssignment = ({ openModal, setOpenModal, getList, idEdit, clas
   };
 
   return (
-    <Spin spinning={isFetching || isLoading || isLoadingUpdate}>
-      <Modal
-        footer={null}
-        onCancel={handleCancel}
-        open={openModal}
-        title={idEdit ? 'Update Assignment Information' : 'Create Assignment'}
-      >
+    <Modal
+      footer={null}
+      onCancel={handleCancel}
+      open={openModal}
+      title={idEdit ? 'Update Assignment Information' : 'Create Assignment'}
+    >
+      <Spin spinning={isFetching || isLoading || isLoadingUpdate}>
         <Form
           autoComplete="off"
           form={form}
@@ -148,8 +148,8 @@ const CreateOrEditAssignment = ({ openModal, setOpenModal, getList, idEdit, clas
             </BasicButton>
           </div>
         </Form>
-      </Modal>
-    </Spin>
+      </Spin>
+    </Modal>
   );
 };
 

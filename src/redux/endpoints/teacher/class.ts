@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { api } from '../api';
+/* eslint-disable import/no-cycle */
+import { api } from '../../api';
+
+import { CreateUpdateDeleteResponse, StudentType } from './student';
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -36,6 +39,13 @@ const injectedRtkApi = api.injectEndpoints({
         method: 'DELETE',
       }),
     }),
+    getListStudentClass: build.query<GetListStudentClassResponse, GetListStudentClassParams>({
+      query: (queryArg) => ({
+        url: '/teacher/class/list-student',
+        method: 'GET',
+        params: queryArg,
+      }),
+    }),
     postAddStudent: build.mutation<PostAddStudentResponse, PostAddStudentParams>({
       query: (queryArg) => ({
         url: '/teacher/class/add-student',
@@ -43,16 +53,38 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg,
       }),
     }),
+    postDeleteStudent: build.mutation<PostDeleteStudentResponse, PostDeleteStudentParams>({
+      query: (queryArg) => ({
+        url: '/teacher/class/remove-student',
+        method: 'POST',
+        body: queryArg,
+      }),
+    }),
   }),
 });
 
-export type PostAddStudentResponse = {
-  data: {
-    message: string;
-    status: boolean;
-    result: true;
-  };
+export type GetListStudentClassResponse = {
+  message: string;
+  status: boolean;
+  metadata: MetaDataType;
+  result: StudentType[];
 };
+
+export type GetListStudentClassParams = {
+  classId: number;
+  page?: number;
+  limit?: number;
+};
+
+export type PostDeleteStudentResponse = CreateUpdateDeleteResponse;
+
+export type PostDeleteStudentParams = {
+  classId: number;
+  studentId: number;
+};
+
+export type PostAddStudentResponse = CreateUpdateDeleteResponse;
+
 export type PostAddStudentParams = {
   classId: number;
   studentIds: number[];
@@ -63,13 +95,7 @@ export type ClassSearchObj = {
   createdAt?: string | null;
 };
 
-export type DeleteClassResponse = {
-  data: {
-    message: string;
-    status: boolean;
-    result: true;
-  };
-};
+export type DeleteClassResponse = CreateUpdateDeleteResponse;
 
 export type DeleteClassParams = {
   id: number;
@@ -152,5 +178,8 @@ export const {
   usePostClassMutation,
   usePutClassMutation,
   useDeleteClassMutation,
+  useGetListStudentClassQuery,
+  useLazyGetListStudentClassQuery,
   usePostAddStudentMutation,
+  usePostDeleteStudentMutation,
 } = injectedRtkApi;

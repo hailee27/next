@@ -18,8 +18,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import signUpSchema from '@/schema/signUp';
-import { useSignUpStudentMutation } from '@/redux/endpoints/auth';
 import { useNotificationContext } from '@/context/NotificationContext';
+import { useSignUpStudentMutation } from '@/redux/endpoints/auth';
 
 function SignUpPage() {
   const {

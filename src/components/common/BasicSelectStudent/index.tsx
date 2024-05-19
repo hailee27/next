@@ -9,7 +9,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 import useComponentVisible from '@/hooks/useComponentVisible';
 import { useDebounce } from '@/hooks/use-debounce';
-import { useLazyGetListStudentQuery } from '@/redux/endpoints/student';
+import { useLazyGetListStudentQuery } from '@/redux/endpoints/teacher/student';
 
 import ArrowDown from '../../Icons/ArrowDown';
 

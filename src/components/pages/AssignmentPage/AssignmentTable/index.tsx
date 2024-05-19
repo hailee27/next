@@ -13,7 +13,7 @@ import {
   DeleteAssignmentResponse,
   useDeleteAssignmentMutation,
   useLazyGetListAssignmentQuery,
-} from '@/redux/endpoints/assignment';
+} from '@/redux/endpoints/teacher/assignment';
 import CustomPagination from '@/components/common/CustomPagination';
 
 import CreateOrEditAssignment from '../Modal/CreateOrEditAssignment';

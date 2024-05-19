@@ -2,13 +2,13 @@ import React, { useEffect } from 'react';
 import { Form, Input, message, Modal, Spin } from 'antd';
 
 import BasicButton from '@/components/common/forms/BasicButton';
+import BasicArea from '@/components/common/forms/BasicArea';
 import {
   PostClassResponse,
   useLazyGetDetailClassQuery,
   usePostClassMutation,
   usePutClassMutation,
-} from '@/redux/endpoints/class';
-import BasicArea from '@/components/common/forms/BasicArea';
+} from '@/redux/endpoints/teacher/class';
 
 interface PropsType {
   openModal: boolean;
@@ -43,13 +43,13 @@ const CreateOrEditClass = ({ openModal, setOpenModal, getList, classIdEdit }: Pr
   };
 
   return (
-    <Spin spinning={isFetching || isLoading || isLoadingUpdate}>
-      <Modal
-        footer={null}
-        onCancel={handleCancel}
-        open={openModal}
-        title={classIdEdit ? 'Update Class Information' : 'Create Class'}
-      >
+    <Modal
+      footer={null}
+      onCancel={handleCancel}
+      open={openModal}
+      title={classIdEdit ? 'Update Class Information' : 'Create Class'}
+    >
+      <Spin spinning={isFetching || isLoading || isLoadingUpdate}>
         <Form
           autoComplete="off"
           form={form}
@@ -110,8 +110,8 @@ const CreateOrEditClass = ({ openModal, setOpenModal, getList, classIdEdit }: Pr
             </BasicButton>
           </div>
         </Form>
-      </Modal>
-    </Spin>
+      </Spin>
+    </Modal>
   );
 };
 

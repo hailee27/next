@@ -15,6 +15,7 @@ import AuthLayout from '@/components/layout/AuthLayout';
 import { NotificationProvider } from '@/context/NotificationContext';
 import { PopUpProvider } from '@/context/PopUpContext';
 import PrimaryLayout from '@/components/layout/PrimaryLayout';
+import AuthGuard from '@/components/common/AuthGuard';
 
 export type NextPageWithLayout<P = Record<string, never>, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => JSX.Element;
@@ -68,8 +69,10 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
               <main>
                 {/* <ConfigProvider locale={jaJP}> */}
                 <PopUpProvider>
-                  {loading && <Loading />}
-                  {getLayout(<Component {...props} />)}
+                  <AuthGuard>
+                    {loading && <Loading />}
+                    {getLayout(<Component {...props} />)}
+                  </AuthGuard>
                 </PopUpProvider>
                 {/* </ConfigProvider> */}
               </main>

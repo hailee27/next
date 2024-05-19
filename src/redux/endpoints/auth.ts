@@ -29,6 +29,7 @@ export type SignUpParams = {
   gender: string;
   address: string;
 };
+
 export type SignUpResponse = {
   status: boolean;
   message: string;

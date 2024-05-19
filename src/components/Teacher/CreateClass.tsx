@@ -4,9 +4,9 @@ import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { usePopUpContext } from '@/context/PopUpContext';
-import { useCreateClassMutation } from '@/redux/endpoints/teacher';
 import { createClassSchema } from '@/schema/teacher';
 import { useNotificationContext } from '@/context/NotificationContext';
+import { useCreateClassMutation } from '@/redux/endpoints/teacher/teacher';
 
 function CreateClass() {
   const { closePopUp } = usePopUpContext();

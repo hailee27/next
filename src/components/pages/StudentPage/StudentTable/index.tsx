@@ -9,29 +9,33 @@ import BasicPopover from '@/components/common/BasicPopover';
 import CustomPagination from '@/components/common/CustomPagination';
 import BasicButton from '@/components/common/forms/BasicButton';
 import {
-  DeleteQuestionBankResponse,
-  QuestionBankSearchObj,
-  useDeleteQuestionBankMutation,
-  useLazyGetListQuestionBankQuery,
-} from '@/redux/endpoints/teacher/questionBank';
+  DeleteStudentResponse,
+  StudentSearchObj,
+  useDeleteStudentMutation,
+  useLazyGetListStudentQuery,
+} from '@/redux/endpoints/teacher/student';
 
-import CreateOrEditQuestionBank from '../Modal/CreateOrEditQuestionBank';
+import CreateOrEditModal from '../Modal/CreateOrEditModal';
 
 interface PropsType {
-  objSearch: QuestionBankSearchObj;
+  objSearch: StudentSearchObj;
 }
 
-const QuestionBankTable = ({ objSearch }: PropsType) => {
-  const [getList, { data, isFetching }] = useLazyGetListQuestionBankQuery();
-  const [deleteQuestionBank] = useDeleteQuestionBankMutation();
+const StudentTable = ({ objSearch }: PropsType) => {
+  const [getList, { data, isFetching }] = useLazyGetListStudentQuery();
+  const [deleteStudent] = useDeleteStudentMutation();
 
   const [page, setPage] = useState<number>(1);
   const [openCreateOrEditModal, setOpenCreateOrEditModal] = useState<boolean>(false);
   const [idEdit, setIdEdit] = useState(0);
 
-  const handleGetQuestionBank = () => {
+  const handleGetStudent = () => {
     getList({ page: 1, limit: 20 });
   };
+
+  useEffect(() => {
+    handleGetStudent();
+  }, []);
 
   useEffect(() => {
     getList({
@@ -53,30 +57,40 @@ const QuestionBankTable = ({ objSearch }: PropsType) => {
     }
   }, [objSearch]);
 
-  useEffect(() => {
-    handleGetQuestionBank();
-  }, []);
-
   const tableFormat = [
     {
       title: 'Name',
-      dataIndex: 'body',
-      render: (body) => <div className="font-bold">{body}</div>,
+      dataIndex: 'name',
+      render: (name) => <div className="font-bold">{name}</div>,
+      width: 150,
     },
     {
-      title: 'Instruction',
-      dataIndex: 'instruction',
-      render: (instruction) => <div className="font-bold">{instruction}</div>,
+      title: 'Email',
+      dataIndex: 'email',
+      render: (email) => <div className="font-bold">{email}</div>,
+      width: 150,
+    },
+    {
+      title: 'Gender',
+      dataIndex: 'gender',
+      render: (gender) => <div className="font-bold">{gender}</div>,
+      width: 150,
+    },
+    {
+      title: 'Address',
+      dataIndex: 'address',
+      render: (address) => <div className="font-bold">{address}</div>,
+      width: 400,
     },
     {
       title: 'Created At',
-      width: 200,
+      width: 100,
       dataIndex: 'createdAt',
       render: (createdAt) => <div className="">{dayjs(createdAt).format('DD-MM-YYYY')}</div>,
     },
     {
       title: 'Updated At',
-      width: 200,
+      width: 100,
       dataIndex: 'updatedAt',
       render: (updatedAt) => <div className="">{dayjs(updatedAt).format('DD-MM-YYYY')}</div>,
     },
@@ -92,22 +106,12 @@ const QuestionBankTable = ({ objSearch }: PropsType) => {
                 <BasicButton
                   className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
                   onClick={() => {
-                    setIdEdit(record?.id);
-                    setOpenCreateOrEditModal(true);
-                  }}
-                  styleType="text"
-                >
-                  Update
-                </BasicButton>
-                <BasicButton
-                  className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
-                  onClick={() => {
-                    deleteQuestionBank({ id: record?.id }).then((res) => {
-                      if ((res as unknown as DeleteQuestionBankResponse)?.data?.status) {
-                        message.success('Xoá câu hỏi thành công');
-                        handleGetQuestionBank();
+                    deleteStudent({ id: record?.id }).then((res) => {
+                      if ((res as unknown as DeleteStudentResponse)?.data?.status) {
+                        message.success('Xoá học sinh thành công');
+                        handleGetStudent();
                       } else {
-                        message.success('Xảy ra lỗi khi xoá câu hỏi');
+                        message.success('Xảy ra lỗi khi xoá học sinh');
                       }
                     });
                   }}
@@ -129,7 +133,7 @@ const QuestionBankTable = ({ objSearch }: PropsType) => {
   return (
     <>
       <div className="flex items-center justify-between px-6 h-[64px] shadow-inner bg-[#F4F6F7]">
-        <p className="text-[18px] leading-[22px] font-bold text-[#000]">Question Bank List</p>
+        <p className="text-[18px] leading-[22px] font-bold text-[#000]">Student List</p>
         <div className="flex items-center gap-x-4">
           <BasicButton
             className="text-[13px] font-[700] text-[#fff] !bg-[#2F2F2F]"
@@ -139,10 +143,11 @@ const QuestionBankTable = ({ objSearch }: PropsType) => {
             }}
             styleType="rounded"
           >
-            Add Question
+            Add Student
           </BasicButton>
         </div>
       </div>
+
       <div className="shadow-xl pb-6">
         <div className="flex-1">
           <Table
@@ -178,9 +183,10 @@ const QuestionBankTable = ({ objSearch }: PropsType) => {
           )}
         </div>
       </div>
+
       {openCreateOrEditModal && (
-        <CreateOrEditQuestionBank
-          getList={handleGetQuestionBank}
+        <CreateOrEditModal
+          getList={handleGetStudent}
           idEdit={idEdit}
           openModal={openCreateOrEditModal}
           setOpenModal={setOpenCreateOrEditModal}
@@ -190,4 +196,4 @@ const QuestionBankTable = ({ objSearch }: PropsType) => {
   );
 };
 
-export default QuestionBankTable;
+export default StudentTable;

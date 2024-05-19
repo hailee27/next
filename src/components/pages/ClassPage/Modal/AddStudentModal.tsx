@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Divider, Form, message, Modal, Spin } from 'antd';
 
 import { SelectMultiStudent } from '@/components/common/SelectMultiStudent';
 import ArrowDown from '@/components/Icons/ArrowDown';
 import BasicButton from '@/components/common/forms/BasicButton';
-import { PostAddStudentResponse, usePostAddStudentMutation } from '@/redux/endpoints/class';
+import {
+  PostAddStudentResponse,
+  useLazyGetListStudentClassQuery,
+  usePostAddStudentMutation,
+} from '@/redux/endpoints/teacher/class';
 
 interface PropsType {
   openModal: boolean;
@@ -16,15 +20,34 @@ const AddStudentModal = ({ openModal, setOpenModal, classId }: PropsType) => {
   const [form] = Form.useForm();
 
   const [addStudentToClass, { isLoading }] = usePostAddStudentMutation();
+  const [getList, { data: students, isFetching }] = useLazyGetListStudentClassQuery();
+
+  useEffect(() => {
+    if (classId) {
+      getList({
+        classId,
+        page: 1,
+        limit: 100,
+      });
+    }
+  }, [classId, openModal]);
+
+  // useEffect(() => {
+  //   if ((students?.result || [])?.length > 0) {
+  //     form.setFieldValue('studentIds', students?.result?.map((item) => ({ value: item?.id, label: item?.name })));
+  //   }
+  // }, [students]);
 
   const handleCancel = () => {
     setOpenModal(false);
     form.resetFields();
   };
 
+  const studentAdded = students?.result?.map((item) => Number(item?.id)) || [];
+
   return (
-    <Spin spinning={isLoading}>
-      <Modal footer={null} onCancel={handleCancel} open={openModal} title="Add Student To Class">
+    <Modal footer={null} onCancel={handleCancel} open={openModal} title="Add Student To Class">
+      <Spin spinning={isLoading || isFetching}>
         <Form
           autoComplete="off"
           form={form}
@@ -56,6 +79,7 @@ const AddStudentModal = ({ openModal, setOpenModal, classId }: PropsType) => {
                 bordered
                 hightLight
                 showResultValue={false}
+                studentAdded={studentAdded}
                 suffixIcon={
                   <div className="flex justify-between items-center">
                     <Divider className="h-7" type="vertical" />
@@ -79,8 +103,8 @@ const AddStudentModal = ({ openModal, setOpenModal, classId }: PropsType) => {
             </BasicButton>
           </div>
         </Form>
-      </Modal>
-    </Spin>
+      </Spin>
+    </Modal>
   );
 };
 

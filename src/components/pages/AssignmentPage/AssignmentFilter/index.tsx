@@ -1,7 +1,7 @@
 import React from 'react';
 import { DatePicker, Form } from 'antd';
 
-import { AssignmentSearchObj } from '@/redux/endpoints/assignment';
+import { AssignmentSearchObj } from '@/redux/endpoints/teacher/assignment';
 import BasicButton from '@/components/common/forms/BasicButton';
 import BasicSelectClass from '@/components/common/BasicSelectClass';
 

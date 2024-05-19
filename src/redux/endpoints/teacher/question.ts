@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { api } from '../api';
+import { api } from '../../api';
 
 import { MetaDataType } from './class';
 import { QuestionBankType } from './questionBank';
+import { CreateUpdateDeleteResponse } from './student';
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -36,25 +37,13 @@ const injectedRtkApi = api.injectEndpoints({
   }),
 });
 
-export type DeleteQuestionDetailAssignmentResponse = {
-  data: {
-    message: string;
-    status: boolean;
-    result: true;
-  };
-};
+export type DeleteQuestionDetailAssignmentResponse = CreateUpdateDeleteResponse;
 
 export type DeleteQuestionDetailAssignmentParams = {
   id: number;
 };
 
-export type PutQuestionDetailAssignmentResponse = {
-  data: {
-    message: string;
-    status: boolean;
-    result: true;
-  };
-};
+export type PutQuestionDetailAssignmentResponse = CreateUpdateDeleteResponse;
 
 export type PutQuestionDetailAssignmentParams = {
   id: number;

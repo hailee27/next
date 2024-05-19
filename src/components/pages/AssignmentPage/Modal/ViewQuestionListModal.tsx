@@ -2,12 +2,12 @@ import { message, Modal, Spin } from 'antd';
 import React, { useEffect } from 'react';
 
 import BasicButton from '@/components/common/forms/BasicButton';
+import { handleConvertObjectToArray } from '@/utils';
 import {
   DeleteQuestionDetailAssignmentResponse,
   useDeleteQuestionAssignmentMutation,
   useLazyGetQuestionAssignmentQuery,
-} from '@/redux/endpoints/question';
-import { handleConvertObjectToArray } from '@/utils';
+} from '@/redux/endpoints/teacher/question';
 
 interface PropsType {
   openModal: boolean;
@@ -26,15 +26,15 @@ const ViewQuestionListModal = ({ openModal, setOpenModal, assignmentId }: PropsT
         assignmentId,
       });
     }
-  }, [assignmentId]);
+  }, [assignmentId, openModal]);
 
   const handleCancel = () => {
     setOpenModal(false);
   };
 
   return (
-    <Spin spinning={isFetchingQuestionAssignment}>
-      <Modal footer={null} onCancel={handleCancel} open={openModal} title="View Question List" width={800}>
+    <Modal footer={null} onCancel={handleCancel} open={openModal} title="View Question List" width={800}>
+      <Spin spinning={isFetchingQuestionAssignment}>
         <div className="grid grid-cols-1 gap-y-3">
           {questionAssignment?.result?.map((item, index) => (
             <div className="" key={item?.id}>
@@ -72,8 +72,8 @@ const ViewQuestionListModal = ({ openModal, setOpenModal, assignmentId }: PropsT
           ))}
           {questionAssignment?.result?.length === 0 && <p className="text-center">No data</p>}
         </div>
-      </Modal>
-    </Spin>
+      </Spin>
+    </Modal>
   );
 };
 

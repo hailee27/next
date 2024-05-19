@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import dayjs from 'dayjs';
 
-import { ClassSearchObj } from '@/redux/endpoints/class';
+import { ClassSearchObj } from '@/redux/endpoints/teacher/class';
 
 import ClassTable from './ClassTable';
 import ClassFilter from './ClassFilter';
