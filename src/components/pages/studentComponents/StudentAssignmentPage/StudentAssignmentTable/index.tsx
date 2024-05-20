@@ -22,8 +22,6 @@ const StudentAssignmentTable = ({ objSearch }: PropsType) => {
     getList({ page: 1, limit: 20 });
   };
 
-  console.log('objSearch', objSearch);
-
   useEffect(() => {
     if (objSearch?.classId && objSearch?.status) {
       getList({
