@@ -15,11 +15,10 @@ const AuthGuard = ({ children }: PropsType) => {
   useEffect(() => {
     if (!accessToken) {
       router.push('/auth/login');
+    } else {
+      router.push('/');
     }
   }, [accessToken]);
-  if (!accessToken) {
-    return null;
-  }
 
   return <div>{children}</div>;
 };

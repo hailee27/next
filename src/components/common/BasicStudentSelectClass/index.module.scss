@@ -1,0 +1,52 @@
+.selectSearch {
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  display: flex;
+  position: relative;
+  :global {
+    .prefix-icon-wrapper {
+      position: absolute;
+      z-index: 1;
+      width: 3rem;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ant-select-selector {
+      width: 100%;
+      border: none !important;
+      outline: none;
+      box-shadow: none !important;
+    }
+    .ant-select-selection-placeholder {
+      padding-left: calc(3rem - 8px);
+    }
+    .ant-select-arrow {
+      display: none;
+    }
+    .anticon-search {
+      height: 100%;
+    }
+    .ant-select-selection-overflow-item {
+      display: none;
+    }
+    .ant-select-selector::before {
+      padding-left: calc(3rem - 8px);
+      visibility: visible;
+      content: '東京、お台場';
+      color: #bdc2c7;
+      font-size: 13px;
+      font-weight: 400;
+    }
+    .ant-select-selection-placeholder {
+      display: none;
+    }
+  }
+}
+
+.fix_layout {
+  div {
+    width: 100%;
+  }
+}

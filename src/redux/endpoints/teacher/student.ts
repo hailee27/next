@@ -79,6 +79,7 @@ export type StudentSearchObj = {
   limit?: number;
   page?: number;
   search?: string;
+  createdAt?: string;
 };
 
 export type StudentType = {

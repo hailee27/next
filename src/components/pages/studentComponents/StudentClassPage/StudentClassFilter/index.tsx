@@ -1,16 +1,15 @@
 import React from 'react';
-import { DatePicker, Form } from 'antd';
+import { DatePicker, Form, Input } from 'antd';
 
-import { AssignmentSearchObj } from '@/redux/endpoints/teacher/assignment';
+import { StudentGetListClassParams } from '@/redux/endpoints/student/class';
 import BasicButton from '@/components/common/forms/BasicButton';
-import BasicSelectClass from '@/components/common/BasicSelectClass';
 
 interface PropsType {
-  onSubmit: (v: AssignmentSearchObj) => void;
+  onSubmit: (v: StudentGetListClassParams) => void;
   additionalButtons?: JSX.Element | JSX.Element[];
 }
 
-const AssignmentFilter = ({ onSubmit, additionalButtons }: PropsType) => {
+const StudentClassFilter = ({ onSubmit, additionalButtons }: PropsType) => {
   const [form] = Form.useForm();
 
   const onReset = () => {
@@ -22,10 +21,9 @@ const AssignmentFilter = ({ onSubmit, additionalButtons }: PropsType) => {
     <div className="border p-4 bg-[#fff] shadow-md rounded">
       <Form className="space-y-[16px]" form={form} onFinish={onSubmit}>
         <div className="grid grid-cols-4 gap-6">
-          <Form.Item name="class" noStyle>
-            <BasicSelectClass className="flex-1 h-10" placeholder="Class" />
+          <Form.Item name="search" noStyle>
+            <Input className="flex-1 h-10" placeholder="Name" />
           </Form.Item>
-
           <Form.Item name="createdAt" noStyle>
             <DatePicker placeholder="Created At" />
           </Form.Item>
@@ -42,17 +40,13 @@ const AssignmentFilter = ({ onSubmit, additionalButtons }: PropsType) => {
             </BasicButton>
           </div>
         </div>
-
-        <div className="uppercase text-[11px] font-bold text-[#80888F]">
-          Please select a class to view assignment list
-        </div>
       </Form>
     </div>
   );
 };
 
-AssignmentFilter.defaultProps = {
+StudentClassFilter.defaultProps = {
   additionalButtons: undefined,
 };
 
-export default AssignmentFilter;
+export default StudentClassFilter;

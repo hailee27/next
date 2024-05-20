@@ -4,19 +4,28 @@ import React, { useContext, useState } from 'react';
 import { Button, Layout, Menu, Popover } from 'antd';
 import { MenuOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { LayoutContext, LayoutContextInterface } from '@/components/pages/context/LayoutContext';
+import { RootState } from '@/redux/store';
+import { logout } from '@/redux/slices/auth.slice';
 
 const { Sider } = Layout;
 
 function PrimaryLayout({ children }: { children: React.ReactNode }) {
+  const dispatch = useDispatch();
   const { collapsed, setCollapsed } = useContext<LayoutContextInterface>(LayoutContext);
+  const auth = useSelector((state: RootState) => state.auth);
+
+  const checkRole = auth?.teacher?.id ? 'TEACHER' : 'STUDENT';
 
   const router = useRouter();
 
   const [activeMenu, setActiceMenu] = useState(['']);
 
-  const handleLogout = () => {};
+  const handleLogout = () => {
+    dispatch(logout());
+  };
 
   //   useEffect(() => {
   //     if (location.pathname == '/login') {
@@ -37,15 +46,16 @@ function PrimaryLayout({ children }: { children: React.ReactNode }) {
 
   const menuItems: any = [
     {
-      key: 'grp_management_operation',
+      key: 'teacher_management',
       label: 'Teacher',
       type: 'group',
-
+      authority: ['TEACHER'],
       children: [
         {
           key: 'item_class',
           icon: svgIcon,
           label: 'Class',
+          authority: ['TEACHER'],
           onClick: () => {
             router.push('/teacher/class');
           },
@@ -54,6 +64,7 @@ function PrimaryLayout({ children }: { children: React.ReactNode }) {
           key: 'item_assignment',
           icon: svgIcon,
           label: 'Assignment',
+          authority: ['TEACHER'],
           onClick: () => {
             router.push('/teacher/assignment');
           },
@@ -62,6 +73,7 @@ function PrimaryLayout({ children }: { children: React.ReactNode }) {
           key: 'item_teacher_student',
           icon: svgIcon,
           label: 'Student',
+          authority: ['TEACHER'],
           onClick: () => {
             router.push('/teacher/student');
           },
@@ -70,22 +82,47 @@ function PrimaryLayout({ children }: { children: React.ReactNode }) {
           key: 'item_question_bank',
           icon: svgIcon,
           label: 'Question Bank',
+          authority: ['TEACHER'],
           onClick: () => {
             router.push('/teacher/question-bank');
           },
         },
       ],
     },
+    {
+      key: 'student_management',
+      label: 'Student',
+      type: 'group',
+      authority: ['STUDENT'],
+      children: [
+        {
+          key: 'item_student_class',
+          icon: svgIcon,
+          label: 'Class',
+          authority: ['STUDENT'],
+          onClick: () => {
+            router.push('/student/class');
+          },
+        },
+        {
+          key: 'item_student_assignment',
+          icon: svgIcon,
+          label: 'Assignment',
+          authority: ['STUDENT'],
+          onClick: () => {
+            router.push('/student/assignment');
+          },
+        },
+      ],
+    },
   ];
 
-  //   const menuItemsRenderGroup = menuItems?.filter((e: any) => !e.authority || e.authority?.includes(user?.role));
-  const menuItemsRenderGroup = menuItems;
+  const menuItemsRenderGroup = menuItems?.filter((e: any) => !e.authority || e.authority?.includes(checkRole));
   const menuItemsRenderChildren = menuItemsRenderGroup?.map((e: any) => {
     if (!e.children) {
       return e;
     }
-    //   const newChildren = e.children?.filter((ele: any) => !ele.authority || ele.authority?.includes(user?.role));
-    const newChildren = e.children;
+    const newChildren = e.children?.filter((ele: any) => !ele.authority || ele.authority?.includes(checkRole));
     return { ...e, children: newChildren };
   });
 
@@ -160,9 +197,9 @@ function PrimaryLayout({ children }: { children: React.ReactNode }) {
           }
           placement="top"
         >
-          <div className="flex ps-[23px] my-[12px] relative cursor-pointer pb-[20px] items-center space-x-[10px] ">
+          <div className="flex ps-[23px] my-[12px] relative cursor-pointer pb-[20px] items-center space-x-[10px]">
             <div>{svgIcon}</div>
-            <div className="font-bold text-[#2f2f2f]">Username</div>
+            <div className="font-bold text-[#2f2f2f]">{auth?.teacher?.name || auth?.student?.name || ''}</div>
             <div className="absolute right-[16px]">
               <svg fill="none" height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
                 <rect
