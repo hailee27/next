@@ -8,6 +8,9 @@ import { Table } from 'antd';
 import { StudentGetListClassParams, useLazyStudentGetListClassQuery } from '@/redux/endpoints/student/class';
 import BasicPopover from '@/components/common/BasicPopover';
 import CustomPagination from '@/components/common/CustomPagination';
+import BasicButton from '@/components/common/forms/BasicButton';
+
+import AssignmentAnalysisModal from '../Modal/AssignmentAnalysisModal';
 
 interface PropsType {
   objSearch: StudentGetListClassParams;
@@ -17,6 +20,8 @@ const StudentClassTable = ({ objSearch }: PropsType) => {
   const [getList, { data, isFetching }] = useLazyStudentGetListClassQuery();
 
   const [page, setPage] = useState<number>(1);
+  const [idEdit, setIdEdit] = useState(0);
+  const [openAssignmentAnalysis, setOpenAssignmentAnalysis] = useState<boolean>(false);
 
   const handleGetClass = () => {
     getList({ page: 1, limit: 20 });
@@ -73,9 +78,25 @@ const StudentClassTable = ({ objSearch }: PropsType) => {
       title: '',
       dataIndex: 'moreAction',
       width: 50,
-      render: () => (
+      render: (_, record) => (
         <div id="MoreOutlined">
-          <BasicPopover content={<div />} placement="left">
+          <BasicPopover
+            content={
+              <div>
+                <BasicButton
+                  className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
+                  onClick={() => {
+                    setIdEdit(record?.id);
+                    setOpenAssignmentAnalysis(true);
+                  }}
+                  styleType="text"
+                >
+                  View Assignment Analysis
+                </BasicButton>
+              </div>
+            }
+            placement="left"
+          >
             <MoreOutlined />
           </BasicPopover>
         </div>
@@ -118,6 +139,14 @@ const StudentClassTable = ({ objSearch }: PropsType) => {
           />
         )}
       </div>
+
+      {openAssignmentAnalysis && (
+        <AssignmentAnalysisModal
+          idEdit={idEdit}
+          openModal={openAssignmentAnalysis}
+          setOpenModal={setOpenAssignmentAnalysis}
+        />
+      )}
     </div>
   );
 };
