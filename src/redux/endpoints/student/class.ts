@@ -20,8 +20,21 @@ const injectedRtkApi = api.injectEndpoints({
         params: queryArg,
       }),
     }),
+    studentGetClassAnalysis: build.query<StudentGetClassAnalysisResponse, StudentGetClassAnalysisParams>({
+      query: (queryArg) => ({
+        url: `/class/analysis/${queryArg?.classId}`,
+        method: 'GET',
+        params: queryArg,
+      }),
+    }),
   }),
 });
+
+export type StudentGetClassAnalysisResponse = any;
+
+export type StudentGetClassAnalysisParams = {
+  classId?: number;
+};
 
 export type StudentGetListAssignmentResponse = {
   message: string;
@@ -66,4 +79,6 @@ export const {
   useLazyStudentGetListClassQuery,
   useStudentGetListAssignmentQuery,
   useLazyStudentGetListAssignmentQuery,
+  useStudentGetClassAnalysisQuery,
+  useLazyStudentGetClassAnalysisQuery,
 } = injectedRtkApi;

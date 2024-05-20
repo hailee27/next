@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable import/no-cycle */
 import { BaseQueryFn, createApi, FetchArgs, fetchBaseQuery, FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
 import { Mutex } from 'async-mutex';
 import { REHYDRATE } from 'redux-persist';
@@ -73,7 +74,6 @@ const baseQueryWithInterceptor: BaseQueryFn<string | FetchArgs, unknown, FetchBa
               // retry the initial query
               result = await baseQuery(args, api, extraOptions);
             } else {
-              console.log('123');
               // handle logout
               api.dispatch({ type: `${teacher ? 'teacher' : 'student'}/auth/logout` });
               api.dispatch(logout());

@@ -72,6 +72,11 @@ const ViewQuestionListModal = ({ openModal, setOpenModal, assignmentId }: PropsT
           ))}
           {questionAssignment?.result?.length === 0 && <p className="text-center">No data</p>}
         </div>
+        <div className="gap-x-3 flex items-center justify-end mt-2">
+          <BasicButton onClick={() => handleCancel()} styleType="rounded">
+            Close
+          </BasicButton>
+        </div>
       </Spin>
     </Modal>
   );
