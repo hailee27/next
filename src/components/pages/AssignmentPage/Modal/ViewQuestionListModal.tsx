@@ -1,5 +1,5 @@
 import { message, Modal, Spin } from 'antd';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import BasicButton from '@/components/common/forms/BasicButton';
 import { handleConvertObjectToArray } from '@/utils';
@@ -8,6 +8,8 @@ import {
   useDeleteQuestionAssignmentMutation,
   useLazyGetQuestionAssignmentQuery,
 } from '@/redux/endpoints/teacher/question';
+
+import AddQuestionModal from './AddQuestionModal';
 
 interface PropsType {
   openModal: boolean;
@@ -19,6 +21,8 @@ const ViewQuestionListModal = ({ openModal, setOpenModal, assignmentId }: PropsT
   const [getList, { data: questionAssignment, isFetching: isFetchingQuestionAssignment }] =
     useLazyGetQuestionAssignmentQuery();
   const [deleteQuestion] = useDeleteQuestionAssignmentMutation();
+
+  const [openAddQuestion, setOpenAddQuestion] = useState<boolean>(false);
 
   useEffect(() => {
     if (assignmentId) {
@@ -35,6 +39,17 @@ const ViewQuestionListModal = ({ openModal, setOpenModal, assignmentId }: PropsT
   return (
     <Modal footer={null} onCancel={handleCancel} open={openModal} title="View Question List" width={800}>
       <Spin spinning={isFetchingQuestionAssignment}>
+        <div className="flex justify-end my-4">
+          <BasicButton
+            className="text-[13px] font-[700] text-[#fff] !bg-[#2F2F2F]"
+            onClick={() => {
+              setOpenAddQuestion(true);
+            }}
+            styleType="rounded"
+          >
+            Add Question
+          </BasicButton>
+        </div>
         <div className="grid grid-cols-1 gap-y-3">
           {questionAssignment?.result?.map((item, index) => (
             <div className="" key={item?.id}>
@@ -77,6 +92,19 @@ const ViewQuestionListModal = ({ openModal, setOpenModal, assignmentId }: PropsT
             Close
           </BasicButton>
         </div>
+
+        {openAddQuestion && (
+          <AddQuestionModal
+            assignmentId={assignmentId}
+            getListQuestionPopup={() => {
+              getList({
+                assignmentId,
+              });
+            }}
+            openModal={openAddQuestion}
+            setOpenModal={setOpenAddQuestion}
+          />
+        )}
       </Spin>
     </Modal>
   );

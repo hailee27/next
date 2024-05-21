@@ -9,13 +9,16 @@ import {
 import { QuestionBankType, useLazyGetListQuestionBankQuery } from '@/redux/endpoints/teacher/questionBank';
 import { useLazyGetQuestionAssignmentQuery } from '@/redux/endpoints/teacher/question';
 
+import CreateOrEditQuestionBank from '../../QuestionBankPage/Modal/CreateOrEditQuestionBank';
+
 interface PropsType {
   openModal: boolean;
   setOpenModal: (v: boolean) => void;
   assignmentId: number;
+  getListQuestionPopup: () => void;
 }
 
-const AddQuestionModal = ({ openModal, setOpenModal, assignmentId }: PropsType) => {
+const AddQuestionModal = ({ openModal, setOpenModal, assignmentId, getListQuestionPopup }: PropsType) => {
   const [getList, { data, isFetching }] = useLazyGetListQuestionBankQuery();
   const [postQuestionToAssignment, { isLoading }] = usePostQuestionAssignmentMutation();
   const [getListQuestion, { data: questionAssignment, isFetching: isFetchingQuestionAssignment }] =
@@ -30,6 +33,7 @@ const AddQuestionModal = ({ openModal, setOpenModal, assignmentId }: PropsType) 
   }, [assignmentId, openModal]);
 
   const [questionSelected, setQuestionSelected] = useState<QuestionBankType[]>([]);
+  const [openCreateQuestionModal, setOpenCreateQuestionModal] = useState<boolean>(false);
 
   const handleGetQuestionBank = () => {
     getList({ page: 1, limit: 100 });
@@ -48,6 +52,7 @@ const AddQuestionModal = ({ openModal, setOpenModal, assignmentId }: PropsType) 
     postQuestionToAssignment({ assignmentId, questions: questionSelected }).then((res) => {
       if ((res as unknown as PostQuestionAssignmentResponse)?.data?.status) {
         message.success('Thêm câu hỏi vào assignment thành công');
+        getListQuestionPopup();
         handleCancel();
       } else {
         message.error((res as unknown as { error: PostQuestionAssignmentResponse })?.error?.data?.message);
@@ -60,6 +65,18 @@ const AddQuestionModal = ({ openModal, setOpenModal, assignmentId }: PropsType) 
   return (
     <Modal footer={null} onCancel={handleCancel} open={openModal} title="Add Question To Assignment" width={800}>
       <Spin spinning={isFetching || isFetchingQuestionAssignment || isLoading}>
+        <div className="flex justify-end my-4">
+          <BasicButton
+            className="text-[13px] font-[700] text-[#fff] !bg-[#2F2F2F]"
+            onClick={() => {
+              setOpenCreateQuestionModal(true);
+            }}
+            styleType="rounded"
+          >
+            Add New Question
+          </BasicButton>
+        </div>
+
         <div className="grid grid-cols-1 gap-y-4">
           {data?.result
             ?.filter((item) => !questionAssignmentAdded?.includes(item?.id))
@@ -93,6 +110,15 @@ const AddQuestionModal = ({ openModal, setOpenModal, assignmentId }: PropsType) 
             Save
           </BasicButton>
         </div>
+
+        {openCreateQuestionModal && (
+          <CreateOrEditQuestionBank
+            getList={handleGetQuestionBank}
+            idEdit={0}
+            openModal={openCreateQuestionModal}
+            setOpenModal={setOpenCreateQuestionModal}
+          />
+        )}
       </Spin>
     </Modal>
   );

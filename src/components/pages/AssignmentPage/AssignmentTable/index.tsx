@@ -17,7 +17,6 @@ import {
 import CustomPagination from '@/components/common/CustomPagination';
 
 import CreateOrEditAssignment from '../Modal/CreateOrEditAssignment';
-import AddQuestionModal from '../Modal/AddQuestionModal';
 import ViewQuestionListModal from '../Modal/ViewQuestionListModal';
 
 interface PropsType {
@@ -31,7 +30,6 @@ const AssignmentTable = ({ objSearch }: PropsType) => {
   const [page, setPage] = useState<number>(1);
   const [idEdit, setIdEdit] = useState(0);
   const [openCreateOrEditModal, setOpenCreateOrEditModal] = useState<boolean>(false);
-  const [openAddQuestion, setOpenAddQuestion] = useState<boolean>(false);
   const [openViewQuestionList, setOpenViewQuestionList] = useState<boolean>(false);
 
   useEffect(() => {
@@ -102,30 +100,16 @@ const AssignmentTable = ({ objSearch }: PropsType) => {
       dataIndex: 'moreAction',
       width: 50,
       render: (_, record) => (
-        <div id="MoreOutlined">
+        <div
+          id="MoreOutlined"
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+          role="presentation"
+        >
           <BasicPopover
             content={
               <div>
-                <BasicButton
-                  className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
-                  onClick={() => {
-                    setIdEdit(record?.id);
-                    setOpenViewQuestionList(true);
-                  }}
-                  styleType="text"
-                >
-                  View Question List
-                </BasicButton>
-                <BasicButton
-                  className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
-                  onClick={() => {
-                    setIdEdit(record?.id);
-                    setOpenAddQuestion(true);
-                  }}
-                  styleType="text"
-                >
-                  Add Question
-                </BasicButton>
                 <BasicButton
                   className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
                   onClick={() => {
@@ -173,7 +157,6 @@ const AssignmentTable = ({ objSearch }: PropsType) => {
               className="text-[13px] font-[700] text-[#fff] !bg-[#2F2F2F]"
               onClick={() => {
                 setOpenCreateOrEditModal(true);
-                setOpenAddQuestion(false);
                 setIdEdit(0);
               }}
               styleType="rounded"
@@ -197,6 +180,12 @@ const AssignmentTable = ({ objSearch }: PropsType) => {
                 </div>
               ),
             }}
+            onRow={(record) => ({
+              onClick: () => {
+                setIdEdit(record?.id || 0);
+                setOpenViewQuestionList(true);
+              },
+            })}
             pagination={false}
             rowKey="id"
           />
@@ -229,10 +218,6 @@ const AssignmentTable = ({ objSearch }: PropsType) => {
           openModal={openCreateOrEditModal}
           setOpenModal={setOpenCreateOrEditModal}
         />
-      )}
-
-      {openAddQuestion && (
-        <AddQuestionModal assignmentId={idEdit} openModal={openAddQuestion} setOpenModal={setOpenAddQuestion} />
       )}
 
       {openViewQuestionList && (

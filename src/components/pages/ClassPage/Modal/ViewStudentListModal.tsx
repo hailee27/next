@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { message, Modal, Spin } from 'antd';
 
 import {
@@ -7,6 +7,8 @@ import {
   usePostDeleteStudentMutation,
 } from '@/redux/endpoints/teacher/class';
 import BasicButton from '@/components/common/forms/BasicButton';
+
+import AddStudentModal from './AddStudentModal';
 
 interface PropsType {
   openModal: boolean;
@@ -18,13 +20,19 @@ const ViewStudentListModal = ({ openModal, setOpenModal, classId }: PropsType) =
   const [getList, { data: students, isFetching }] = useLazyGetListStudentClassQuery();
   const [deleteQuestion] = usePostDeleteStudentMutation();
 
+  const [openAddStudentModal, setOpenAddStudentModal] = useState<boolean>(false);
+
+  const handleGetList = () => {
+    getList({
+      classId,
+      page: 1,
+      limit: 100,
+    });
+  };
+
   useEffect(() => {
     if (classId) {
-      getList({
-        classId,
-        page: 1,
-        limit: 100,
-      });
+      handleGetList();
     }
   }, [classId, openModal]);
 
@@ -35,6 +43,17 @@ const ViewStudentListModal = ({ openModal, setOpenModal, classId }: PropsType) =
   return (
     <Modal footer={null} onCancel={handleCancel} open={openModal} title="View Student List" width={800}>
       <Spin spinning={isFetching}>
+        <div className="flex justify-end my-4">
+          <BasicButton
+            className="text-[13px] font-[700] text-[#fff] !bg-[#2F2F2F]"
+            onClick={() => {
+              setOpenAddStudentModal(true);
+            }}
+            styleType="rounded"
+          >
+            Add Student
+          </BasicButton>
+        </div>
         <div className="grid grid-cols-1 gap-y-3">
           {students?.result?.map((item, index) => (
             <div className="" key={item?.id}>
@@ -46,11 +65,7 @@ const ViewStudentListModal = ({ openModal, setOpenModal, classId }: PropsType) =
                     deleteQuestion({ studentId: Number(item?.id), classId }).then((res) => {
                       if ((res as unknown as PostDeleteStudentResponse)?.data?.status) {
                         message.success('Xoá học sinh thành công');
-                        getList({
-                          classId,
-                          page: 1,
-                          limit: 100,
-                        });
+                        handleGetList();
                       } else {
                         message.success('Xảy ra lỗi khi xoá học sinh');
                       }
@@ -88,6 +103,15 @@ const ViewStudentListModal = ({ openModal, setOpenModal, classId }: PropsType) =
             Close
           </BasicButton>
         </div>
+
+        {openAddStudentModal && (
+          <AddStudentModal
+            classId={classId}
+            getListStudent={() => handleGetList()}
+            openModal={openAddStudentModal}
+            setOpenModal={setOpenAddStudentModal}
+          />
+        )}
       </Spin>
     </Modal>
   );
