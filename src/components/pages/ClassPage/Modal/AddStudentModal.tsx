@@ -14,9 +14,10 @@ interface PropsType {
   openModal: boolean;
   setOpenModal: (v: boolean) => void;
   classId: number;
+  getListStudent: () => void;
 }
 
-const AddStudentModal = ({ openModal, setOpenModal, classId }: PropsType) => {
+const AddStudentModal = ({ openModal, setOpenModal, classId, getListStudent }: PropsType) => {
   const [form] = Form.useForm();
 
   const [addStudentToClass, { isLoading }] = usePostAddStudentMutation();
@@ -60,6 +61,7 @@ const AddStudentModal = ({ openModal, setOpenModal, classId }: PropsType) => {
             addStudentToClass(submitData).then((res) => {
               if ((res as unknown as PostAddStudentResponse)?.data?.status) {
                 message.success('Thêm học sinh thành công');
+                getListStudent();
                 handleCancel();
               } else {
                 message.success('Xảy ra lỗi khi thêm học sinh');

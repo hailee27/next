@@ -16,7 +16,6 @@ import {
 } from '@/redux/endpoints/teacher/class';
 
 import CreateOrEditClass from '../Modal/CreateOrEditClass';
-import AddStudentModal from '../Modal/AddStudentModal';
 import ViewStudentListModal from '../Modal/ViewStudentListModal';
 
 interface PropsType {
@@ -30,7 +29,6 @@ const ClassTable = ({ objSearch }: PropsType) => {
   const [page, setPage] = useState<number>(1);
   const [classIdEdit, setClassIdEdit] = useState(0);
   const [openCreateOrEditModal, setOpenCreateOrEditModal] = useState<boolean>(false);
-  const [openAddStudentModal, setOpenAddStudentModal] = useState<boolean>(false);
   const [openViewStudentList, setOpenViewStudentList] = useState<boolean>(false);
 
   const handleGetClass = () => {
@@ -89,30 +87,16 @@ const ClassTable = ({ objSearch }: PropsType) => {
       dataIndex: 'moreAction',
       width: 50,
       render: (_, record) => (
-        <div id="MoreOutlined">
+        <div
+          id="MoreOutlined"
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+          role="presentation"
+        >
           <BasicPopover
             content={
               <div>
-                <BasicButton
-                  className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
-                  onClick={() => {
-                    setClassIdEdit(record?.id);
-                    setOpenViewStudentList(true);
-                  }}
-                  styleType="text"
-                >
-                  View Student List
-                </BasicButton>
-                <BasicButton
-                  className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
-                  onClick={() => {
-                    setClassIdEdit(record?.id);
-                    setOpenAddStudentModal(true);
-                  }}
-                  styleType="text"
-                >
-                  Add Student
-                </BasicButton>
                 <BasicButton
                   className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
                   onClick={() => {
@@ -181,6 +165,12 @@ const ClassTable = ({ objSearch }: PropsType) => {
                 </div>
               ),
             }}
+            onRow={(record) => ({
+              onClick: () => {
+                setClassIdEdit(record?.id || 0);
+                setOpenViewStudentList(true);
+              },
+            })}
             pagination={false}
             rowKey="id"
           />
@@ -209,10 +199,6 @@ const ClassTable = ({ objSearch }: PropsType) => {
           openModal={openCreateOrEditModal}
           setOpenModal={setOpenCreateOrEditModal}
         />
-      )}
-
-      {openAddStudentModal && (
-        <AddStudentModal classId={classIdEdit} openModal={openAddStudentModal} setOpenModal={setOpenAddStudentModal} />
       )}
 
       {openViewStudentList && (
