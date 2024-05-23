@@ -11,3 +11,8 @@ export const handleConvertObjectToArray = (object: any) => {
 
 export const handleConvertArrayToChoicesObject = (value: any) =>
   value?.reduce((a: any, v: any) => ({ ...a, [`${v.index}`]: v?.name }), {});
+
+// export const regexMissingWord = new RegExp(
+//   '(${ANSWER_1}|${ANSWER_2}|${ANSWER_3}|${ANSWER_4}|${ANSWER_5}|${ANSWER_6}|${ANSWER_7}|${ANSWER_8}|${ANSWER_9}|${ANSWER_10})',
+//   'g'
+// );
