@@ -87,13 +87,13 @@ const AssignmentTable = ({ objSearch }: PropsType) => {
       title: 'Time Start',
       width: 200,
       dataIndex: 'timeStart',
-      render: (timeStart) => <div className="">{dayjs(timeStart).subtract(7, 'hours').format('DD-MM-YYYY HH:ss')}</div>,
+      render: (timeStart) => <div className="">{dayjs(timeStart).format('DD-MM-YYYY HH:ss')}</div>,
     },
     {
       title: 'Time End',
       width: 200,
       dataIndex: 'timeEnd',
-      render: (timeEnd) => <div className="">{dayjs(timeEnd).subtract(7, 'hours').format('DD-MM-YYYY HH:ss')}</div>,
+      render: (timeEnd) => <div className="">{dayjs(timeEnd).format('DD-MM-YYYY HH:ss')}</div>,
     },
     {
       title: '',

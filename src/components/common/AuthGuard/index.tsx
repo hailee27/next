@@ -13,9 +13,9 @@ const AuthGuard = ({ children }: PropsType) => {
   const { accessToken } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
-    if (!accessToken) {
+    if (!accessToken && router.pathname !== '/auth/login') {
       router.push('/auth/login');
-    } else {
+    } else if (accessToken && router.pathname === '/auth/login') {
       router.push('/');
     }
   }, [accessToken]);

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import { api } from '../api';
 
 const injectedRtkApi = api.injectEndpoints({

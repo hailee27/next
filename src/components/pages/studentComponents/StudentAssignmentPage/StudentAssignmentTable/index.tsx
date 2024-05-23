@@ -3,17 +3,20 @@
 import React, { useEffect, useState } from 'react';
 import { MoreOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
+import { useRouter } from 'next/router';
 import { Table } from 'antd';
 
 import BasicPopover from '@/components/common/BasicPopover';
 import { StudentGetListAssignmentParams, useLazyStudentGetListAssignmentQuery } from '@/redux/endpoints/student/class';
 import CustomPagination from '@/components/common/CustomPagination';
+import BasicButton from '@/components/common/forms/BasicButton';
 
 interface PropsType {
   objSearch: StudentGetListAssignmentParams;
 }
 
 const StudentAssignmentTable = ({ objSearch }: PropsType) => {
+  const { push } = useRouter();
   const [getList, { data, isFetching }] = useLazyStudentGetListAssignmentQuery();
 
   const [page, setPage] = useState<number>(1);
@@ -70,21 +73,36 @@ const StudentAssignmentTable = ({ objSearch }: PropsType) => {
       title: 'Time Start',
       width: 200,
       dataIndex: 'timeStart',
-      render: (timeStart) => <div className="">{dayjs(timeStart).subtract(7, 'hours').format('DD-MM-YYYY HH:ss')}</div>,
+      render: (timeStart) => <div className="">{dayjs(timeStart).format('DD-MM-YYYY HH:ss')}</div>,
     },
     {
       title: 'Time End',
       width: 200,
       dataIndex: 'timeEnd',
-      render: (timeEnd) => <div className="">{dayjs(timeEnd).subtract(7, 'hours').format('DD-MM-YYYY HH:ss')}</div>,
+      render: (timeEnd) => <div className="">{dayjs(timeEnd).format('DD-MM-YYYY HH:ss')}</div>,
     },
     {
       title: '',
       dataIndex: 'moreAction',
       width: 50,
-      render: () => (
+      render: (_, record) => (
         <div id="MoreOutlined">
-          <BasicPopover content={<div />} placement="left">
+          <BasicPopover
+            content={
+              <div>
+                <BasicButton
+                  className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
+                  onClick={() => {
+                    push(`/student/exam/${record?.id}`);
+                  }}
+                  styleType="text"
+                >
+                  Exam
+                </BasicButton>
+              </div>
+            }
+            placement="left"
+          >
             <MoreOutlined />
           </BasicPopover>
         </div>

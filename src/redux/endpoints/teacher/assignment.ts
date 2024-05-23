@@ -1,3 +1,5 @@
+import { Dayjs } from 'dayjs';
+
 import { api } from '../../api';
 
 import { MetaDataType } from './class';
@@ -83,8 +85,8 @@ export type PutAssignmentParams = {
   name: string;
   totalMark: number;
   timeAllow: number;
-  timeStart: string;
-  timeEnd: string;
+  timeStart: Dayjs;
+  timeEnd: Dayjs;
 };
 
 export type PostAssignmentResponse = {
@@ -99,8 +101,8 @@ export type PostAssignmentParams = {
   classId: number;
   totalMark: number;
   timeAllow: number;
-  timeStart: string;
-  timeEnd: string;
+  timeStart: Dayjs;
+  timeEnd: Dayjs;
 };
 
 export type GetDetailAssignmentResponse = {

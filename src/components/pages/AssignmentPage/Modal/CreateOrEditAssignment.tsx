@@ -37,8 +37,8 @@ const CreateOrEditAssignment = ({ openModal, setOpenModal, getList, idEdit, clas
       form.setFieldValue('name', data?.result?.assignment?.name);
       form.setFieldValue('totalMark', data?.result?.assignment?.totalMark);
       form.setFieldValue('timeAllow', data?.result?.assignment?.timeAllow);
-      form.setFieldValue('timeStart', dayjs(data?.result?.assignment?.timeStart).subtract(7, 'hours'));
-      form.setFieldValue('timeEnd', dayjs(data?.result?.assignment?.timeEnd).subtract(7, 'hours'));
+      form.setFieldValue('timeStart', dayjs(data?.result?.assignment?.timeStart));
+      form.setFieldValue('timeEnd', dayjs(data?.result?.assignment?.timeEnd));
     }
   }, [data]);
 
@@ -67,8 +67,8 @@ const CreateOrEditAssignment = ({ openModal, setOpenModal, getList, idEdit, clas
                 name: values?.name,
                 totalMark: Number(values?.totalMark),
                 timeAllow: Number(values?.timeAllow),
-                timeStart: dayjs(values?.timeStart).format('YYYY-MM-DD HH:ss'),
-                timeEnd: dayjs(values?.timeEnd).format('YYYY-MM-DD HH:ss'),
+                timeStart: dayjs(values?.timeStart),
+                timeEnd: dayjs(values?.timeEnd),
               }).then((res) => {
                 if ((res as unknown as PutAssignmentResponse)?.data?.status) {
                   message.success('Cập nhật thông tin assignment thành công');
@@ -84,8 +84,8 @@ const CreateOrEditAssignment = ({ openModal, setOpenModal, getList, idEdit, clas
                 name: values?.name,
                 totalMark: Number(values?.totalMark),
                 timeAllow: Number(values?.timeAllow),
-                timeStart: dayjs(values?.timeStart).format('YYYY-MM-DD HH:ss'),
-                timeEnd: dayjs(values?.timeEnd).format('YYYY-MM-DD HH:ss'),
+                timeStart: dayjs(values?.timeStart),
+                timeEnd: dayjs(values?.timeEnd),
               }).then((res) => {
                 if ((res as unknown as PostAssignmentResponse)?.data?.status) {
                   message.success('Tạo assignment thành công');
@@ -115,7 +115,15 @@ const CreateOrEditAssignment = ({ openModal, setOpenModal, getList, idEdit, clas
             name="timeAllow"
             rules={[{ required: true, message: 'Please input time allow!' }]}
           >
-            <Input placeholder="time allow" type="number" />
+            <Input
+              max={2000}
+              onChange={(e) => {
+                const startDate = form.getFieldValue('timeStart');
+                form.setFieldValue('timeEnd', dayjs(startDate).add(Number(e.target.value), 'minutes'));
+              }}
+              placeholder="time allow"
+              type="number"
+            />
           </Form.Item>
 
           <Form.Item
@@ -126,13 +134,23 @@ const CreateOrEditAssignment = ({ openModal, setOpenModal, getList, idEdit, clas
             <DatePicker
               className="flex-1 w-full"
               format="YYYY-MM-DD HH:mm:ss"
+              onChange={(e) => {
+                const timeAllow = form.getFieldValue('timeAllow');
+                form.setFieldValue('timeEnd', dayjs(e).add(Number(timeAllow), 'minutes'));
+              }}
               placeholder="select time start"
               showTime
             />
           </Form.Item>
 
           <Form.Item label="Time End" name="timeEnd" rules={[{ required: true, message: 'Please select time end!' }]}>
-            <DatePicker className="flex-1 w-full" format="YYYY-MM-DD HH:mm:ss" placeholder="select time end" showTime />
+            <DatePicker
+              className="flex-1 w-full"
+              disabled
+              format="YYYY-MM-DD HH:mm:ss"
+              placeholder="select time end"
+              showTime
+            />
           </Form.Item>
 
           <div className="gap-x-3 flex items-center justify-end mt-2">

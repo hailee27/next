@@ -20,14 +20,18 @@ export const handleResponseDataForm = (response: any, type: number) => {
   }
 
   if (type === 4) {
-    return JSON.stringify(
+    return JSON.stringify([
       handleConvertArrayToChoicesObject(
         handleConvertObjectToArray(response)?.map((item: any, index) => ({
           name: item?.name,
           index: index + 1,
         }))
-      )
-    );
+      ),
+      {
+        1: 'Đúng',
+        2: 'Sai',
+      },
+    ]);
   }
 
   if (type === 5) {
