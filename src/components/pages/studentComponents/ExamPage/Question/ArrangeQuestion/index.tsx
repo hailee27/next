@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Tooltip } from 'antd';
 
 import { QuestionBankType } from '@/redux/endpoints/teacher/questionBank';
 import { handleConvertObjectToArray } from '@/utils';
+import { useExamContext } from '@/context/ExamContext';
+import { AnswerSubmitType, useSaveAssignmentQuestionMutation } from '@/redux/endpoints/student/assignment';
 
 interface PropsType {
   question: QuestionBankType;
   index: number;
+  setAnswerSubmit: React.Dispatch<React.SetStateAction<AnswerSubmitType[]>>;
 }
 
 export interface SelectType {
@@ -14,11 +17,50 @@ export interface SelectType {
   label: string;
 }
 
-const ArrangeQuestion = ({ question, index }: PropsType) => {
+const ArrangeQuestion = ({ question, index, setAnswerSubmit }: PropsType) => {
+  const { assignmentSessionId } = useExamContext();
+  const [saveAssignmentQuestion] = useSaveAssignmentQuestionMutation();
+
   const choices = handleConvertObjectToArray(JSON.parse(question?.choices || '{}'));
   const choicesOptions = (choices || [])?.map((item, key) => ({ value: key + 1, label: item || '' }));
 
   const [responseChoose, setResponseChoose] = useState<SelectType[]>([]);
+
+  useEffect(() => {
+    if (responseChoose?.length === choicesOptions?.length) {
+      saveAssignmentQuestion({
+        assignmentSessionId,
+        answers: {
+          [`${question?.id || 0}`]: responseChoose?.map((item) => item?.value),
+        },
+      });
+      setAnswerSubmit(
+        (prev) =>
+          prev?.map((item) => {
+            if (item?.id === question?.id) {
+              return {
+                ...item,
+                answer: responseChoose?.map((i) => i?.value),
+              };
+            }
+            return item;
+          })
+      );
+    }
+  }, [responseChoose]);
+
+  useEffect(() => {
+    const answer = question?.answer ? JSON.parse(question?.answer) : [];
+
+    if (answer?.length > 0) {
+      setResponseChoose(
+        answer?.map((item) => ({
+          value: item,
+          label: choicesOptions?.find((i) => i?.value === item)?.label,
+        }))
+      );
+    }
+  }, [question]);
 
   return (
     <div>

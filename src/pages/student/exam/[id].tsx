@@ -4,6 +4,7 @@ import { Layout } from 'antd';
 import HeaderRender from '@/components/layout/HeaderRender';
 import MainPage from '@/components/layout/MainPage';
 import ExamComponents from '@/components/pages/studentComponents/ExamPage';
+import { ExamContextProvider } from '@/context/ExamContext';
 
 const { Content } = Layout;
 
@@ -12,7 +13,9 @@ const StudentExamPage = () => (
     <HeaderRender title="Exam" />
 
     <Content>
-      <ExamComponents />
+      <ExamContextProvider>
+        <ExamComponents />
+      </ExamContextProvider>
     </Content>
   </MainPage>
 );

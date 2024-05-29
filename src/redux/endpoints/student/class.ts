@@ -30,7 +30,17 @@ const injectedRtkApi = api.injectEndpoints({
   }),
 });
 
-export type StudentGetClassAnalysisResponse = any;
+export type ClassAnalysisType = {
+  type: number;
+  count: number;
+  correctCount: number;
+};
+
+export type StudentGetClassAnalysisResponse = {
+  status: boolean;
+  message: string;
+  result: ClassAnalysisType[];
+};
 
 export type StudentGetClassAnalysisParams = {
   classId?: number;

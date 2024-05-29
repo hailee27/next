@@ -2,7 +2,7 @@ import { message, Modal, Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
 
 import BasicButton from '@/components/common/forms/BasicButton';
-import { handleConvertObjectToArray } from '@/utils';
+import { handleConvertObjectToArray, handleGetReplaceMessingText } from '@/utils';
 import {
   DeleteQuestionDetailAssignmentResponse,
   useDeleteQuestionAssignmentMutation,
@@ -75,7 +75,7 @@ const ViewQuestionListModal = ({ openModal, setOpenModal, assignmentId }: PropsT
                   Delete
                 </BasicButton>
               </div>
-              <p className="text-[14px] font-bold">{item?.body}</p>
+              <p className="text-[14px] font-bold">{handleGetReplaceMessingText(item?.body || '')}</p>
               <div className="">
                 {handleConvertObjectToArray(JSON.parse(item?.choices || '{}'))?.map((choice, i) => (
                   <p className="">
