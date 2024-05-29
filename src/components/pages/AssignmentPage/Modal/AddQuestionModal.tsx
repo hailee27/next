@@ -8,6 +8,7 @@ import {
 } from '@/redux/endpoints/teacher/assignment';
 import { QuestionBankType, useLazyGetListQuestionBankQuery } from '@/redux/endpoints/teacher/questionBank';
 import { useLazyGetQuestionAssignmentQuery } from '@/redux/endpoints/teacher/question';
+import { handleGetReplaceMessingText } from '@/utils';
 
 import CreateOrEditQuestionBank from '../../QuestionBankPage/Modal/CreateOrEditQuestionBank';
 
@@ -92,7 +93,7 @@ const AddQuestionModal = ({ openModal, setOpenModal, assignmentId, getListQuesti
                     }
                   }}
                 />
-                <p className="">{item?.body}</p>
+                <p className="">{handleGetReplaceMessingText(item?.body || '')}</p>
               </div>
             ))}
         </div>

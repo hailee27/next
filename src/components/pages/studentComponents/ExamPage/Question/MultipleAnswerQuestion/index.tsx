@@ -30,7 +30,7 @@ const MultipleAnswerQuestion = ({ question, index, setAnswerSubmit }: PropsType)
         initialValue={answer}
         label=""
         name={[index, 'multiple']}
-        rules={[{ required: true, message: 'Please choose answer!' }]}
+        // rules={[{ required: true, message: 'Please choose answer!' }]}
       >
         <Checkbox.Group
           onChange={(e) => {
