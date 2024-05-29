@@ -83,7 +83,8 @@ export type QuestionBankType = {
   choices?: string;
   instruction?: string;
   response?: string;
-  type?: number;
+  type: number;
+  answer: string | null;
 };
 
 export type PostQuestionBankParams = {

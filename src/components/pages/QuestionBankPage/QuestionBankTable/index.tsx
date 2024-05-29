@@ -14,6 +14,7 @@ import {
   useDeleteQuestionBankMutation,
   useLazyGetListQuestionBankQuery,
 } from '@/redux/endpoints/teacher/questionBank';
+import { handleGetReplaceMessingText } from '@/utils';
 
 import CreateOrEditQuestionBank from '../Modal/CreateOrEditQuestionBank';
 
@@ -61,7 +62,7 @@ const QuestionBankTable = ({ objSearch }: PropsType) => {
     {
       title: 'Name',
       dataIndex: 'body',
-      render: (body) => <div className="font-bold">{body}</div>,
+      render: (body) => <div className="font-bold">{handleGetReplaceMessingText(body)}</div>,
     },
     {
       title: 'Instruction',

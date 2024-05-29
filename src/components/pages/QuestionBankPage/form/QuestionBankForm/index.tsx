@@ -22,11 +22,11 @@ const QuestionBankForm = ({ item, form, index, setFormChange, idEdit, remove }: 
   const responseForm = form.getFieldValue(['questionBank', item?.name, 'response']);
 
   useEffect(() => {
-    if (responseForm) {
+    if (responseForm && !idEdit) {
       form.setFieldValue(['questionBank', item?.name, 'response'], '');
       setFormChange((prev) => !prev);
     }
-  }, [questionTypeForm]);
+  }, [questionTypeForm, idEdit]);
 
   return (
     <div className="border-b py-4" key={item?.key}>

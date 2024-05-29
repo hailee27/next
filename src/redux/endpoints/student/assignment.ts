@@ -3,6 +3,7 @@
 import { api } from '../../api';
 import { AssignmentType } from '../teacher/assignment';
 import { QuestionBankType } from '../teacher/questionBank';
+import { CreateUpdateDeleteResponse } from '../teacher/student';
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -20,8 +21,65 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg,
       }),
     }),
+    getAssignmentQuestion: build.query<GetAssignmentQuestionResponse, GetAssignmentQuestionParams>({
+      query: (queryArg) => ({
+        url: '/assignment/question',
+        method: 'GET',
+        params: queryArg,
+      }),
+    }),
+    saveAssignmentQuestion: build.mutation<SaveAssignmentQuestionResponse, SaveAssignmentQuestionParams>({
+      query: (queryArg) => ({
+        url: '/assignment/save',
+        method: 'POST',
+        body: queryArg,
+      }),
+    }),
+    submitAssignmentQuestion: build.mutation<SubmitAssignmentQuestionResponse, SubmitAssignmentQuestionParams>({
+      query: (queryArg) => ({
+        url: '/assignment/submit',
+        method: 'POST',
+        body: queryArg,
+      }),
+    }),
+    putAssignmentQuestion: build.mutation<PutAssignmentQuestionResponse, PutAssignmentQuestionParams>({
+      query: (queryArg) => ({
+        url: '/assignment/question',
+        method: 'PATCH',
+        body: queryArg,
+      }),
+    }),
   }),
 });
+
+export type SubmitAssignmentQuestionResponse = CreateUpdateDeleteResponse;
+
+export type SubmitAssignmentQuestionParams = {
+  assignmentSessionId: number;
+  answers: any;
+};
+
+export type SaveAssignmentQuestionResponse = CreateUpdateDeleteResponse;
+
+export type SaveAssignmentQuestionParams = {
+  assignmentSessionId: number;
+  answers: any;
+};
+
+export type GetAssignmentQuestionResponse = CreateUpdateDeleteResponse;
+
+export type GetAssignmentQuestionParams = {
+  assignmentId: number;
+  questionId: number;
+};
+
+export type PutAssignmentQuestionResponse = CreateUpdateDeleteResponse;
+
+export type PutAssignmentQuestionParams = {
+  assignmentId: number;
+  questionId: number;
+  answers: any;
+};
 
 export type SessionType = {
   id: number;
@@ -43,7 +101,7 @@ export type PostAssignmentStartParams = {
   assignmentId: number;
 };
 
-export type StudentGetListAssignmentsResponse = any;
+export type StudentGetListAssignmentsResponse = CreateUpdateDeleteResponse;
 
 export type StudentGetListAssignmentsParams = {
   limit?: number;
@@ -53,10 +111,20 @@ export type StudentGetListAssignmentsParams = {
   classId: number;
 };
 
+export type AnswerSubmitType = {
+  id: number;
+  answer: any;
+};
+
 export { injectedRtkApi as StudentAssignmentsApi };
 
 export const {
   useStudentGetListAssignmentsQuery,
   useLazyStudentGetListAssignmentsQuery,
+  useGetAssignmentQuestionQuery,
+  useLazyGetAssignmentQuestionQuery,
   usePostAssignmentStartMutation,
+  usePutAssignmentQuestionMutation,
+  useSaveAssignmentQuestionMutation,
+  useSubmitAssignmentQuestionMutation,
 } = injectedRtkApi;

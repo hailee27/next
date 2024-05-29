@@ -1,9 +1,4 @@
-import {
-  getRandomNumber,
-  handleConvertArrayToChoicesObject,
-  handleConvertArrayToObject,
-  handleConvertObjectToArray,
-} from '.';
+import { handleConvertArrayToChoicesObject, handleConvertArrayToObject, handleConvertObjectToArray } from '.';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const handleResponseDataForm = (response: any, type: number) => {
@@ -16,7 +11,7 @@ export const handleResponseDataForm = (response: any, type: number) => {
   }
 
   if (type === 3) {
-    return JSON.stringify([[response]]);
+    return JSON.stringify([handleConvertObjectToArray(response)?.map((item) => (item as any)?.name)]);
   }
 
   if (type === 4) {
@@ -42,7 +37,7 @@ export const handleResponseDataForm = (response: any, type: number) => {
 };
 
 export const handleResponseFromQuestionBankDetail = (response: string, type: number) => {
-  const responseConvert = JSON.parse(response);
+  const responseConvert = JSON.parse(response || '{}');
 
   if (type === 1) {
     return responseConvert?.[0] || '';
@@ -53,25 +48,39 @@ export const handleResponseFromQuestionBankDetail = (response: string, type: num
   }
 
   if (type === 3) {
-    return responseConvert?.[0]?.[0] || '';
+    return handleConvertArrayToObject(responseConvert?.[0]?.map((item, index) => ({ id: index + 1, name: item })));
   }
 
   if (type === 4) {
     return handleConvertArrayToObject(
-      handleConvertObjectToArray(responseConvert)?.map((item) => ({ id: getRandomNumber(), name: item }))
+      handleConvertObjectToArray(responseConvert)?.map((item, index) => ({ id: index + 1, name: item }))
     );
   }
 
   if (type === 5) {
-    return handleConvertArrayToObject(responseConvert?.map((item) => ({ id: getRandomNumber(), name: item })));
+    return handleConvertArrayToObject(responseConvert?.map((item, index) => ({ id: index + 1, name: item })));
   }
 
   return '';
 };
 
+export const handleFormatMissingTextBeforeSubmit = (text: string) => {
+  const answers = new Array(50).fill(0)?.map((_, index) => `{ANSWER_${index + 1}}`);
+
+  const replacedTextParts = text.split('___');
+  let replacedText = replacedTextParts[0];
+
+  for (let i = 1; i < replacedTextParts.length; i += 1) {
+    const answer = answers[i - 1] !== undefined ? answers[i - 1] : '___';
+    replacedText += answer + replacedTextParts[i];
+  }
+
+  return replacedText;
+};
+
 export const handleConvertQuestionBankDataForm = (values: any) => {
   const res = values?.questionBank?.map((item) => ({
-    body: item?.body?.replace('___', '{ANSWER_1}'),
+    body: item?.type === 3 ? handleFormatMissingTextBeforeSubmit(item?.body) : item?.body,
     instruction: item?.instruction,
     type: item?.type,
     choices:

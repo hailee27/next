@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Form, message, Modal, Spin } from 'antd';
 
 import BasicButton from '@/components/common/forms/BasicButton';
-import { getRandomNumber, handleConvertObjectToArray } from '@/utils';
+import { getRandomNumber, handleConvertObjectToArray, handleGetReplaceMessingText } from '@/utils';
 import { handleConvertQuestionBankDataForm, handleResponseFromQuestionBankDetail } from '@/utils/questionBank';
 import {
   PostQuestionBankResponse,
@@ -50,15 +50,15 @@ const CreateOrEditQuestionBank = ({ openModal, setOpenModal, getList, idEdit }: 
     if (questionDetail?.id) {
       form.setFieldValue('questionBank', [
         {
-          body: questionDetail?.body,
+          body: handleGetReplaceMessingText(questionDetail?.body),
           instruction: questionDetail?.instruction,
           type: questionDetail?.type,
           choices:
             questionDetail?.type === 3 || questionDetail?.type === 6
               ? ''
-              : handleConvertObjectToArray(JSON.parse(questionDetail?.choices || '{}'))?.map((item) => ({
+              : handleConvertObjectToArray(JSON.parse(questionDetail?.choices || '{}'))?.map((item, index) => ({
                   name: item,
-                  id: getRandomNumber(),
+                  id: index + 1,
                 })),
           response: handleResponseFromQuestionBankDetail(questionDetail?.response, questionDetail?.type),
         },
