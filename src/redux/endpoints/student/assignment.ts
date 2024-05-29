@@ -28,6 +28,20 @@ const injectedRtkApi = api.injectEndpoints({
         params: queryArg,
       }),
     }),
+    getAssignmentCountCompleted: build.query<GetAssignmentCountCompletedResponse, GetAssignmentCountCompletedParams>({
+      query: (queryArg) => ({
+        url: '/assignment/count-completed',
+        method: 'GET',
+        params: queryArg,
+      }),
+    }),
+    getAssignmentRank: build.query<GetAssignmentRankResponse, GetAssignmentRankParams>({
+      query: (queryArg) => ({
+        url: '/assignment/rank',
+        method: 'GET',
+        params: queryArg,
+      }),
+    }),
     saveAssignmentQuestion: build.mutation<SaveAssignmentQuestionResponse, SaveAssignmentQuestionParams>({
       query: (queryArg) => ({
         url: '/assignment/save',
@@ -51,6 +65,30 @@ const injectedRtkApi = api.injectEndpoints({
     }),
   }),
 });
+
+export type AssignmentRankType = {
+  answerCount: number;
+  id: number;
+  mark: string;
+};
+
+export type GetAssignmentRankResponse = {
+  status: boolean;
+  message: string;
+  result: AssignmentRankType[];
+};
+
+export type GetAssignmentRankParams = { assignmentId: number };
+
+export type AssignmentCountCompletedType = { countTotal: number; countCompleted: number };
+
+export type GetAssignmentCountCompletedResponse = {
+  status: boolean;
+  message: string;
+  result: AssignmentCountCompletedType[];
+};
+
+export type GetAssignmentCountCompletedParams = { classId: number };
 
 export type SubmitAssignmentQuestionResponse = CreateUpdateDeleteResponse;
 
@@ -123,6 +161,10 @@ export const {
   useLazyStudentGetListAssignmentsQuery,
   useGetAssignmentQuestionQuery,
   useLazyGetAssignmentQuestionQuery,
+  useGetAssignmentCountCompletedQuery,
+  useLazyGetAssignmentCountCompletedQuery,
+  useGetAssignmentRankQuery,
+  useLazyGetAssignmentRankQuery,
   usePostAssignmentStartMutation,
   usePutAssignmentQuestionMutation,
   useSaveAssignmentQuestionMutation,

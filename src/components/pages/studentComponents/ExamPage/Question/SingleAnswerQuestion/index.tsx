@@ -32,7 +32,7 @@ const SingleAnswerQuestion = ({ question, index, setAnswerSubmit }: PropsType) =
         initialValue={answer?.[0]}
         label=""
         name={[index, 'single']}
-        rules={[{ required: true, message: 'Please choose answer!' }]}
+        // rules={[{ required: true, message: 'Please choose answer!' }]}
       >
         <Radio.Group
           onChange={(e) => {

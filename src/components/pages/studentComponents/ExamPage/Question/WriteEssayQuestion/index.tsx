@@ -28,7 +28,7 @@ const WriteEssayQuestion = ({ question, index, setAnswerSubmit }: PropsType) => 
         initialValue={answer}
         label=""
         name={[index, 'essay']}
-        rules={[{ required: true, message: 'Please input essay!' }]}
+        // rules={[{ required: true, message: 'Please input essay!' }]}
       >
         <BasicArea
           onBlur={(e) => {

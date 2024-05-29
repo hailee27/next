@@ -11,6 +11,7 @@ import CustomPagination from '@/components/common/CustomPagination';
 import BasicButton from '@/components/common/forms/BasicButton';
 
 import AssignmentAnalysisModal from '../Modal/AssignmentAnalysisModal';
+import CountCompletedModal from '../Modal/CountCompletedModal';
 
 interface PropsType {
   objSearch: StudentGetListClassParams;
@@ -22,6 +23,7 @@ const StudentClassTable = ({ objSearch }: PropsType) => {
   const [page, setPage] = useState<number>(1);
   const [idEdit, setIdEdit] = useState(0);
   const [openAssignmentAnalysis, setOpenAssignmentAnalysis] = useState<boolean>(false);
+  const [openCountCompleted, setOpenCountCompleted] = useState<boolean>(false);
 
   const handleGetClass = () => {
     getList({ page: 1, limit: 20 });
@@ -87,6 +89,16 @@ const StudentClassTable = ({ objSearch }: PropsType) => {
                   className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
                   onClick={() => {
                     setIdEdit(record?.id);
+                    setOpenCountCompleted(true);
+                  }}
+                  styleType="text"
+                >
+                  View Assignment Completed
+                </BasicButton>
+                <BasicButton
+                  className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
+                  onClick={() => {
+                    setIdEdit(record?.id);
                     setOpenAssignmentAnalysis(true);
                   }}
                   styleType="text"
@@ -146,6 +158,10 @@ const StudentClassTable = ({ objSearch }: PropsType) => {
           openModal={openAssignmentAnalysis}
           setOpenModal={setOpenAssignmentAnalysis}
         />
+      )}
+
+      {openCountCompleted && (
+        <CountCompletedModal idEdit={idEdit} openModal={openCountCompleted} setOpenModal={setOpenCountCompleted} />
       )}
     </div>
   );

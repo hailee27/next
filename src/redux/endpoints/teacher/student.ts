@@ -21,8 +21,9 @@ const injectedRtkApi = api.injectEndpoints({
     }),
     getListAssignmentStudent: build.query<GetListAssignmentStudentResponse, GetListAssignmentStudentParams>({
       query: (queryArg) => ({
-        url: `/teacher/student/list-assignment/${queryArg?.id}`,
+        url: '/teacher/student/list-assignment',
         method: 'GET',
+        params: queryArg,
       }),
     }),
     getDetailAssignmentStudent: build.query<GetDetailAssignmentStudentResponse, GetDetailAssignmentStudentParams>({
@@ -48,10 +49,20 @@ export type GetDetailAssignmentStudentParams = {
   assignmentId: number;
 };
 
-export type GetListAssignmentStudentResponse = any;
+export type ListAssignmentStudentType = {
+  id: number;
+  mark: string;
+  answerCount: number;
+};
+
+export type GetListAssignmentStudentResponse = {
+  status: boolean;
+  message: string;
+  result: ListAssignmentStudentType[];
+};
 
 export type GetListAssignmentStudentParams = {
-  id: number;
+  studentId: number;
 };
 
 export type GetDetailStudentResponse = {

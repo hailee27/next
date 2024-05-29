@@ -16,6 +16,7 @@ import {
 } from '@/redux/endpoints/teacher/student';
 
 import CreateOrEditModal from '../Modal/CreateOrEditModal';
+import AssignmentListModal from '../Modal/AssignmentListModal';
 
 interface PropsType {
   objSearch: StudentSearchObj;
@@ -26,8 +27,9 @@ const StudentTable = ({ objSearch }: PropsType) => {
   const [deleteStudent] = useDeleteStudentMutation();
 
   const [page, setPage] = useState<number>(1);
-  const [openCreateOrEditModal, setOpenCreateOrEditModal] = useState<boolean>(false);
   const [idEdit, setIdEdit] = useState(0);
+  const [openCreateOrEditModal, setOpenCreateOrEditModal] = useState<boolean>(false);
+  const [openAssignmentListModal, setOpenAssignmentListModal] = useState<boolean>(false);
 
   const handleGetStudent = () => {
     getList({ page: 1, limit: 20 });
@@ -106,6 +108,17 @@ const StudentTable = ({ objSearch }: PropsType) => {
                 <BasicButton
                   className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
                   onClick={() => {
+                    setIdEdit(record?.id);
+                    setOpenAssignmentListModal(true);
+                  }}
+                  styleType="text"
+                >
+                  View Assignment List
+                </BasicButton>
+
+                <BasicButton
+                  className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
+                  onClick={() => {
                     deleteStudent({ id: record?.id }).then((res) => {
                       if ((res as unknown as DeleteStudentResponse)?.data?.status) {
                         message.success('Xoá học sinh thành công');
@@ -147,7 +160,6 @@ const StudentTable = ({ objSearch }: PropsType) => {
           </BasicButton>
         </div>
       </div>
-
       <div className="shadow-xl pb-6">
         <div className="flex-1">
           <Table
@@ -183,7 +195,6 @@ const StudentTable = ({ objSearch }: PropsType) => {
           )}
         </div>
       </div>
-
       {openCreateOrEditModal && (
         <CreateOrEditModal
           getList={handleGetStudent}
@@ -192,6 +203,14 @@ const StudentTable = ({ objSearch }: PropsType) => {
           setOpenModal={setOpenCreateOrEditModal}
         />
       )}
+      {openAssignmentListModal && (
+        <AssignmentListModal
+          idEdit={idEdit}
+          openModal={openAssignmentListModal}
+          setOpenModal={setOpenAssignmentListModal}
+        />
+      )}
+      s
     </>
   );
 };

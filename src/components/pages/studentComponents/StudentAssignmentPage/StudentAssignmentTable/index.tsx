@@ -11,6 +11,8 @@ import { StudentGetListAssignmentParams, useLazyStudentGetListAssignmentQuery } 
 import CustomPagination from '@/components/common/CustomPagination';
 import BasicButton from '@/components/common/forms/BasicButton';
 
+import AssignmentRankModal from '../Modal/AssignmentRankModal';
+
 interface PropsType {
   objSearch: StudentGetListAssignmentParams;
 }
@@ -20,6 +22,8 @@ const StudentAssignmentTable = ({ objSearch }: PropsType) => {
   const [getList, { data, isFetching }] = useLazyStudentGetListAssignmentQuery();
 
   const [page, setPage] = useState<number>(1);
+  const [idEdit, setIdEdit] = useState(0);
+  const [openRank, setOpenRank] = useState<boolean>(false);
 
   const handleGetAssignment = () => {
     getList({ page: 1, limit: 20 });
@@ -90,15 +94,29 @@ const StudentAssignmentTable = ({ objSearch }: PropsType) => {
           <BasicPopover
             content={
               <div>
-                <BasicButton
-                  className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
-                  onClick={() => {
-                    push(`/student/exam/${record?.id}`);
-                  }}
-                  styleType="text"
-                >
-                  Exam
-                </BasicButton>
+                {objSearch?.status === 1 && (
+                  <BasicButton
+                    className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
+                    onClick={() => {
+                      push(`/student/exam/${record?.id}`);
+                    }}
+                    styleType="text"
+                  >
+                    Exam
+                  </BasicButton>
+                )}
+                {objSearch?.status === 3 && (
+                  <BasicButton
+                    className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
+                    onClick={() => {
+                      setIdEdit(record?.id);
+                      setOpenRank(true);
+                    }}
+                    styleType="text"
+                  >
+                    View Assignment Rank
+                  </BasicButton>
+                )}
               </div>
             }
             placement="left"
@@ -145,6 +163,8 @@ const StudentAssignmentTable = ({ objSearch }: PropsType) => {
           />
         )}
       </div>
+
+      {openRank && <AssignmentRankModal idEdit={idEdit} openModal={openRank} setOpenModal={setOpenRank} />}
     </div>
   );
 };

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect } from 'react';
-import { Form, Modal, Spin, Table } from 'antd';
+import { Modal, Spin, Table } from 'antd';
 
 import { useLazyStudentGetClassAnalysisQuery } from '@/redux/endpoints/student/class';
 import BasicButton from '@/components/common/forms/BasicButton';
@@ -12,7 +12,6 @@ interface PropsType {
 }
 
 const AssignmentAnalysisModal = ({ openModal, setOpenModal, idEdit }: PropsType) => {
-  const [form] = Form.useForm();
   const [getDetail, { data, isFetching }] = useLazyStudentGetClassAnalysisQuery();
 
   useEffect(() => {
@@ -23,7 +22,6 @@ const AssignmentAnalysisModal = ({ openModal, setOpenModal, idEdit }: PropsType)
 
   const handleCancel = () => {
     setOpenModal(false);
-    form.resetFields();
   };
 
   const handleGetQuestionType = (type: number) => {
@@ -88,6 +86,7 @@ const AssignmentAnalysisModal = ({ openModal, setOpenModal, idEdit }: PropsType)
             rowKey="id"
           />
         </div>
+
         <div className="gap-x-3 flex items-center justify-end mt-2">
           <BasicButton onClick={() => handleCancel()} styleType="rounded">
             Close
