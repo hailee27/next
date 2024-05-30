@@ -14,30 +14,67 @@ interface PropsType {
   question: QuestionBankType;
   index: number;
   setAnswerSubmit: React.Dispatch<React.SetStateAction<AnswerSubmitType[]>>;
+  isPractice?: boolean;
 }
 
-const Question = ({ question, index, setAnswerSubmit }: PropsType) => {
+const Question = ({ question, index, setAnswerSubmit, isPractice }: PropsType) => {
   if (question?.type === 1) {
-    return <SingleAnswerQuestion index={index} question={question} setAnswerSubmit={setAnswerSubmit} />;
+    return (
+      <SingleAnswerQuestion
+        index={index}
+        isPractice={isPractice}
+        question={question}
+        setAnswerSubmit={setAnswerSubmit}
+      />
+    );
   }
 
   if (question?.type === 2) {
-    return <MultipleAnswerQuestion index={index} question={question} setAnswerSubmit={setAnswerSubmit} />;
+    return (
+      <MultipleAnswerQuestion
+        index={index}
+        isPractice={isPractice}
+        question={question}
+        setAnswerSubmit={setAnswerSubmit}
+      />
+    );
   }
 
   if (question?.type === 3) {
-    return <FillMissingWordQuestion index={index} question={question} setAnswerSubmit={setAnswerSubmit} />;
+    return (
+      <FillMissingWordQuestion
+        index={index}
+        isPractice={isPractice}
+        question={question}
+        setAnswerSubmit={setAnswerSubmit}
+      />
+    );
   }
 
   if (question?.type === 4) {
-    return <TrueOrFalseQuestion index={index} question={question} setAnswerSubmit={setAnswerSubmit} />;
+    return (
+      <TrueOrFalseQuestion
+        index={index}
+        isPractice={isPractice}
+        question={question}
+        setAnswerSubmit={setAnswerSubmit}
+      />
+    );
   }
 
   if (question?.type === 5) {
-    return <ArrangeQuestion index={index} question={question} setAnswerSubmit={setAnswerSubmit} />;
+    return (
+      <ArrangeQuestion index={index} isPractice={isPractice} question={question} setAnswerSubmit={setAnswerSubmit} />
+    );
   }
 
-  return <WriteEssayQuestion index={index} question={question} setAnswerSubmit={setAnswerSubmit} />;
+  return (
+    <WriteEssayQuestion index={index} isPractice={isPractice} question={question} setAnswerSubmit={setAnswerSubmit} />
+  );
+};
+
+Question.defaultProps = {
+  isPractice: false,
 };
 
 export default Question;

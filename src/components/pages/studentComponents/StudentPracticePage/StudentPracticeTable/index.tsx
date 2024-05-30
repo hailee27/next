@@ -1,60 +1,60 @@
-/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
-import { MoreOutlined } from '@ant-design/icons';
-import dayjs from 'dayjs';
-import { useRouter } from 'next/router';
 import { Table } from 'antd';
+import { useRouter } from 'next/router';
+import dayjs from 'dayjs';
+import { MoreOutlined } from '@ant-design/icons';
 
+import {
+  GetListPracticeRoomParams,
+  ListPracticeRoomType,
+  useLazyGetListPracticeRoomQuery,
+} from '@/redux/endpoints/student/practice';
 import BasicPopover from '@/components/common/BasicPopover';
-import { StudentGetListAssignmentParams, useLazyStudentGetListAssignmentQuery } from '@/redux/endpoints/student/class';
-import CustomPagination from '@/components/common/CustomPagination';
 import BasicButton from '@/components/common/forms/BasicButton';
 
-import AssignmentRankModal from '../Modal/AssignmentRankModal';
+import CreatePracticeModal from '../Modal/CreatePracticeModal';
+import ViewPracticeScoreModal from '../Modal/ViewPracticeScoreModal';
 
 interface PropsType {
-  objSearch: StudentGetListAssignmentParams;
+  objSearch: GetListPracticeRoomParams;
 }
 
-const StudentAssignmentTable = ({ objSearch }: PropsType) => {
+const StudentPracticeTable = ({ objSearch }: PropsType) => {
   const { push } = useRouter();
-  const [getList, { data, isFetching }] = useLazyStudentGetListAssignmentQuery();
+  const [getList, { data, isFetching }] = useLazyGetListPracticeRoomQuery();
 
   const [page, setPage] = useState<number>(1);
-  const [idEdit, setIdEdit] = useState(0);
-  const [openRank, setOpenRank] = useState<boolean>(false);
+  const [openCreateModal, setOpenCreateModal] = useState<boolean>(false);
+  const [openViewScoreModal, setOpenViewScoreModal] = useState<boolean>(false);
+  const [practiceSelected, setPracticeSelected] = useState<ListPracticeRoomType>({});
 
-  const handleGetAssignment = () => {
+  const handleGetPractice = () => {
     getList({ page: 1, limit: 20 });
   };
 
   useEffect(() => {
-    if (objSearch?.classId && objSearch?.status) {
+    getList({
+      limit: 20,
+      page,
+      ...objSearch,
+    });
+  }, [page]);
+
+  useEffect(() => {
+    if (page !== 1) {
+      setPage(1);
+    } else {
       getList({
         limit: 20,
         page,
         ...objSearch,
       });
     }
-  }, [page]);
-
-  useEffect(() => {
-    if (objSearch?.classId && objSearch?.status) {
-      if (page !== 1) {
-        setPage(1);
-      } else {
-        getList({
-          limit: 20,
-          page,
-          ...objSearch,
-        });
-      }
-    }
   }, [objSearch]);
 
   useEffect(() => {
-    handleGetAssignment();
+    handleGetPractice();
   }, []);
 
   const tableFormat = [
@@ -74,16 +74,10 @@ const StudentAssignmentTable = ({ objSearch }: PropsType) => {
       render: (timeAllow) => <div className="">{(timeAllow / 60).toFixed(2)} h</div>,
     },
     {
-      title: 'Time Start',
+      title: 'Created At',
       width: 200,
-      dataIndex: 'timeStart',
-      render: (timeStart) => <div className="">{dayjs(timeStart).format('DD-MM-YYYY HH:ss')}</div>,
-    },
-    {
-      title: 'Time End',
-      width: 200,
-      dataIndex: 'timeEnd',
-      render: (timeEnd) => <div className="">{dayjs(timeEnd).format('DD-MM-YYYY HH:ss')}</div>,
+      dataIndex: 'createdAt',
+      render: (createdAt) => <div className="">{dayjs(createdAt).format('DD-MM-YYYY')}</div>,
     },
     {
       title: '',
@@ -94,27 +88,34 @@ const StudentAssignmentTable = ({ objSearch }: PropsType) => {
           <BasicPopover
             content={
               <div>
-                {objSearch?.status === 1 && (
+                {record?.status && (
                   <BasicButton
                     className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
                     onClick={() => {
-                      push(`/student/exam/${record?.id}`);
+                      push({
+                        pathname: `/student/practice/${record?.id}`,
+                        query: {
+                          timeAllow: record?.timeAllow,
+                          questionCount: record?.questionCount,
+                          type: record?.type,
+                        },
+                      });
                     }}
                     styleType="text"
                   >
                     Exam
                   </BasicButton>
                 )}
-                {objSearch?.status === 3 && (
+                {!record?.status && (
                   <BasicButton
                     className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
                     onClick={() => {
-                      setIdEdit(record?.id);
-                      setOpenRank(true);
+                      setPracticeSelected(record);
+                      setOpenViewScoreModal(true);
                     }}
                     styleType="text"
                   >
-                    View Assignment Rank
+                    View Practice Score
                   </BasicButton>
                 )}
               </div>
@@ -131,7 +132,18 @@ const StudentAssignmentTable = ({ objSearch }: PropsType) => {
   return (
     <div className="shadow-xl pb-6">
       <div className="flex items-center justify-between px-6 h-[64px] shadow-inner bg-[#F4F6F7]">
-        <p className="text-[18px] leading-[22px] font-bold text-[#000]">Assignment List</p>
+        <p className="text-[18px] leading-[22px] font-bold text-[#000]">Practice List</p>
+        <div className="flex items-center gap-x-4">
+          <BasicButton
+            className="text-[13px] font-[700] text-[#fff] !bg-[#2F2F2F]"
+            onClick={() => {
+              setOpenCreateModal(true);
+            }}
+            styleType="rounded"
+          >
+            Add Practice
+          </BasicButton>
+        </div>
       </div>
       <div className="flex-1">
         <Table
@@ -149,26 +161,24 @@ const StudentAssignmentTable = ({ objSearch }: PropsType) => {
           pagination={false}
           rowKey="id"
         />
-        {Number(data?.metadata?.total) > 0 && (
-          <CustomPagination
-            onBackPage={() => {
-              setPage?.((page || 0) - 1);
-            }}
-            onNextPage={() => {
-              setPage?.((page || 0) + 1);
-            }}
-            onSelectPageSize={(e) => {
-              console.log('e', e);
-            }}
-            page={page || 0}
-            pageSize={20}
-            total={Number(data?.metadata?.total)}
-          />
-        )}
       </div>
-      {openRank && <AssignmentRankModal idEdit={idEdit} openModal={openRank} setOpenModal={setOpenRank} />}
+      {openCreateModal && (
+        <CreatePracticeModal
+          getList={() => handleGetPractice()}
+          openModal={openCreateModal}
+          setOpenModal={setOpenCreateModal}
+        />
+      )}
+
+      {openViewScoreModal && (
+        <ViewPracticeScoreModal
+          openModal={openViewScoreModal}
+          practiceSelected={practiceSelected}
+          setOpenModal={setOpenViewScoreModal}
+        />
+      )}
     </div>
   );
 };
 
-export default StudentAssignmentTable;
+export default StudentPracticeTable;

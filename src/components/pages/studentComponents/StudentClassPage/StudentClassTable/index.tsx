@@ -118,6 +118,9 @@ const StudentClassTable = ({ objSearch }: PropsType) => {
 
   return (
     <div className="shadow-xl pb-6">
+      <div className="flex items-center justify-between px-6 h-[64px] shadow-inner bg-[#F4F6F7]">
+        <p className="text-[18px] leading-[22px] font-bold text-[#000]">Class List</p>
+      </div>
       <div className="flex-1">
         <Table
           bordered

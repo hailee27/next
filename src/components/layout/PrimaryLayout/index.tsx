@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable max-lines-per-function */
 import React, { useContext, useState } from 'react';
 import { Button, Layout, Menu, Popover } from 'antd';
 import { MenuOutlined } from '@ant-design/icons';
@@ -111,6 +112,15 @@ function PrimaryLayout({ children }: { children: React.ReactNode }) {
           authority: ['STUDENT'],
           onClick: () => {
             router.push('/student/assignment');
+          },
+        },
+        {
+          key: 'item_student_practice',
+          icon: svgIcon,
+          label: 'Practice',
+          authority: ['STUDENT'],
+          onClick: () => {
+            router.push('/student/practice');
           },
         },
       ],

@@ -5,16 +5,19 @@ import { QuestionBankType } from '@/redux/endpoints/teacher/questionBank';
 import { handleConvertObjectToArray } from '@/utils';
 import { AnswerSubmitType, useSaveAssignmentQuestionMutation } from '@/redux/endpoints/student/assignment';
 import { useExamContext } from '@/context/ExamContext';
+import { useSavePracticeMutation } from '@/redux/endpoints/student/practice';
 
 interface PropsType {
   question: QuestionBankType;
   index: number;
   setAnswerSubmit: React.Dispatch<React.SetStateAction<AnswerSubmitType[]>>;
+  isPractice?: boolean;
 }
 
-const SingleAnswerQuestion = ({ question, index, setAnswerSubmit }: PropsType) => {
+const SingleAnswerQuestion = ({ question, index, setAnswerSubmit, isPractice }: PropsType) => {
   const { assignmentSessionId } = useExamContext();
   const [saveAssignmentQuestion] = useSaveAssignmentQuestionMutation();
+  const [savePracticeQuestion] = useSavePracticeMutation();
 
   const choices = handleConvertObjectToArray(JSON.parse(question?.choices || '{}'));
   const choicesOptions = (choices || [])?.map((item, key) => ({ value: key + 1, label: item || '' }));
@@ -49,12 +52,18 @@ const SingleAnswerQuestion = ({ question, index, setAnswerSubmit }: PropsType) =
                   return item;
                 })
             );
-            saveAssignmentQuestion({
+            const dataSaveApi = {
               assignmentSessionId,
               answers: {
                 [`${question?.id || 0}`]: [value],
               },
-            });
+            };
+
+            if (isPractice) {
+              savePracticeQuestion(dataSaveApi);
+            } else {
+              saveAssignmentQuestion(dataSaveApi);
+            }
           }}
         >
           <Space direction="vertical">
@@ -68,6 +77,10 @@ const SingleAnswerQuestion = ({ question, index, setAnswerSubmit }: PropsType) =
       </Form.Item>
     </div>
   );
+};
+
+SingleAnswerQuestion.defaultProps = {
+  isPractice: false,
 };
 
 export default SingleAnswerQuestion;
