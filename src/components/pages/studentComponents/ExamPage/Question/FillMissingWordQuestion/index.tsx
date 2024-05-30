@@ -8,6 +8,7 @@ import { QuestionBankType } from '@/redux/endpoints/teacher/questionBank';
 import { AnswerSubmitType, useSaveAssignmentQuestionMutation } from '@/redux/endpoints/student/assignment';
 import { handleGetReplaceMessingText } from '@/utils';
 import { useExamContext } from '@/context/ExamContext';
+import { useSavePracticeMutation } from '@/redux/endpoints/student/practice';
 
 interface FillMissingWordType {
   index: number;
@@ -18,11 +19,13 @@ interface PropsType {
   question: QuestionBankType;
   index: number;
   setAnswerSubmit: React.Dispatch<React.SetStateAction<AnswerSubmitType[]>>;
+  isPractice?: boolean;
 }
 
-const FillMissingWordQuestion = ({ question, index, setAnswerSubmit }: PropsType) => {
+const FillMissingWordQuestion = ({ question, index, setAnswerSubmit, isPractice }: PropsType) => {
   const { assignmentSessionId } = useExamContext();
   const [saveAssignmentQuestion] = useSaveAssignmentQuestionMutation();
+  const [savePracticeQuestion] = useSavePracticeMutation();
 
   const responseLength = handleGetReplaceMessingText(question?.body || '')?.split('___')?.length - 1;
 
@@ -77,12 +80,18 @@ const FillMissingWordQuestion = ({ question, index, setAnswerSubmit }: PropsType
                       return item;
                     })
                 );
-                saveAssignmentQuestion({
+
+                const dataSaveApi = {
                   assignmentSessionId,
                   answers: {
                     [`${question?.id || 0}`]: dataChange?.map((item) => item?.value),
                   },
-                });
+                };
+                if (isPractice) {
+                  savePracticeQuestion(dataSaveApi);
+                } else {
+                  saveAssignmentQuestion(dataSaveApi);
+                }
                 setDataFilled(dataChange);
               }}
               placeholder="word"
@@ -93,6 +102,10 @@ const FillMissingWordQuestion = ({ question, index, setAnswerSubmit }: PropsType
       </div>
     </div>
   );
+};
+
+FillMissingWordQuestion.defaultProps = {
+  isPractice: false,
 };
 
 export default FillMissingWordQuestion;

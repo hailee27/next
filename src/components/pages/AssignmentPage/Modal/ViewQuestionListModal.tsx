@@ -52,7 +52,7 @@ const ViewQuestionListModal = ({ openModal, setOpenModal, assignmentId }: PropsT
         </div>
         <div className="grid grid-cols-1 gap-y-3">
           {questionAssignment?.result?.map((item, index) => (
-            <div className="" key={item?.id}>
+            <div className="border-b pb-2" key={item?.id}>
               <div className="flex items-center justify-between ">
                 <p className="uppercase text-[13px] font-[700]">question {index + 1}:</p>
                 <BasicButton

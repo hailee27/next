@@ -5,6 +5,7 @@ import { QuestionBankType } from '@/redux/endpoints/teacher/questionBank';
 import { handleConvertObjectToArray } from '@/utils';
 import { AnswerSubmitType, useSaveAssignmentQuestionMutation } from '@/redux/endpoints/student/assignment';
 import { useExamContext } from '@/context/ExamContext';
+import { useSavePracticeMutation } from '@/redux/endpoints/student/practice';
 
 interface TrueFalseType {
   index: number;
@@ -14,11 +15,13 @@ interface PropsType {
   question: QuestionBankType;
   index: number;
   setAnswerSubmit: React.Dispatch<React.SetStateAction<AnswerSubmitType[]>>;
+  isPractice?: boolean;
 }
 
-const TrueOrFalseQuestion = ({ question, index, setAnswerSubmit }: PropsType) => {
+const TrueOrFalseQuestion = ({ question, index, setAnswerSubmit, isPractice }: PropsType) => {
   const { assignmentSessionId } = useExamContext();
   const [saveAssignmentQuestion] = useSaveAssignmentQuestionMutation();
+  const [savePracticeQuestion] = useSavePracticeMutation();
 
   const choices = handleConvertObjectToArray(JSON.parse(question?.choices || '{}'));
   const choicesOptions = (choices || [])?.map((item, key) => ({ value: key + 1, label: item || '' }));
@@ -72,12 +75,18 @@ const TrueOrFalseQuestion = ({ question, index, setAnswerSubmit }: PropsType) =>
                       return item;
                     })
                 );
-                saveAssignmentQuestion({
+
+                const dataSaveApi = {
                   assignmentSessionId,
                   answers: {
                     [`${question?.id || 0}`]: dataChange?.map((item) => item?.value),
                   },
-                });
+                };
+                if (isPractice) {
+                  savePracticeQuestion(dataSaveApi);
+                } else {
+                  saveAssignmentQuestion(dataSaveApi);
+                }
                 setDataSelected(dataChange);
               }}
               options={[
@@ -91,6 +100,10 @@ const TrueOrFalseQuestion = ({ question, index, setAnswerSubmit }: PropsType) =>
       </div>
     </div>
   );
+};
+
+TrueOrFalseQuestion.defaultProps = {
+  isPractice: false,
 };
 
 export default TrueOrFalseQuestion;

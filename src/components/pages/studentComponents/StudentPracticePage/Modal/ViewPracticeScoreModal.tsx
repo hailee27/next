@@ -2,38 +2,35 @@
 import React, { useEffect } from 'react';
 import { Modal, Spin, Table } from 'antd';
 
-import { useLazyGetAssignmentRankQuery, usePostAssignmentStartMutation } from '@/redux/endpoints/student/assignment';
-import BasicButton from '@/components/common/forms/BasicButton';
+import { ListPracticeRoomType, usePostPracticeStartMutation } from '@/redux/endpoints/student/practice';
 import { handleConvertObjectToArray, handleGetReplaceMessingText } from '@/utils';
+import BasicButton from '@/components/common/forms/BasicButton';
 
 interface PropsType {
   openModal: boolean;
   setOpenModal: (v: boolean) => void;
-  idEdit: number;
+  practiceSelected: ListPracticeRoomType;
 }
 
-const AssignmentRankModal = ({ openModal, setOpenModal, idEdit }: PropsType) => {
-  const [getDetail, { data, isFetching }] = useLazyGetAssignmentRankQuery();
-  const [getList, { data: dataList, isLoading }] = usePostAssignmentStartMutation();
+const ViewPracticeScoreModal = ({ openModal, setOpenModal, practiceSelected }: PropsType) => {
+  const [getList, { data, isLoading }] = usePostPracticeStartMutation();
 
   useEffect(() => {
-    if (idEdit) {
-      getDetail({ assignmentId: idEdit });
+    if (practiceSelected?.id) {
       getList({
-        assignmentId: idEdit,
+        assignmentId: Number(practiceSelected?.id),
+        timeAllow: Number(practiceSelected?.timeAllow),
+        questionCount: Number(practiceSelected?.questionCount),
+        type: Number(practiceSelected?.type),
       });
     }
-  }, [idEdit]);
-
-  const handleCancel = () => {
-    setOpenModal(false);
-  };
+  }, [practiceSelected]);
 
   const tableFormat = [
     {
-      title: 'Answer Count',
-      dataIndex: 'answerCount',
-      render: (answerCount) => <div className="">{answerCount}</div>,
+      title: 'Question Count',
+      dataIndex: 'questionCount',
+      render: (questionCount) => <div className="">{questionCount}</div>,
     },
     {
       title: 'mark',
@@ -42,15 +39,24 @@ const AssignmentRankModal = ({ openModal, setOpenModal, idEdit }: PropsType) => 
     },
   ];
 
+  const handleCancel = () => {
+    setOpenModal(false);
+  };
+
   return (
-    <Modal footer={null} onCancel={handleCancel} open={openModal} title="View Assignment Rank" width={1000}>
-      <Spin spinning={isFetching || isLoading}>
+    <Modal footer={null} onCancel={handleCancel} open={openModal} title="Create Practice" width={800}>
+      <Spin spinning={isLoading}>
         <div className="mb-6">
           <Table
             bordered
             columns={tableFormat as any}
-            dataSource={data?.result || []}
-            loading={isFetching}
+            dataSource={[
+              {
+                questionCount: practiceSelected?.questionCount,
+                mark: data?.result?.response?.mark,
+              },
+            ]}
+            loading={isLoading}
             locale={{
               emptyText: (
                 <div>
@@ -64,7 +70,7 @@ const AssignmentRankModal = ({ openModal, setOpenModal, idEdit }: PropsType) => 
         </div>
 
         <div className="grid grid-cols-1 gap-y-3">
-          {dataList?.result?.questions?.map((item, index) => (
+          {data?.result?.questions?.map((item, index) => (
             <div className="border-b pb-2" key={item?.id}>
               <div className="flex items-center justify-between ">
                 <p className="uppercase text-[13px] font-[700]">question {index + 1}:</p>
@@ -82,7 +88,6 @@ const AssignmentRankModal = ({ openModal, setOpenModal, idEdit }: PropsType) => 
             </div>
           ))}
         </div>
-
         <div className="gap-x-3 flex items-center justify-end mt-2">
           <BasicButton onClick={() => handleCancel()} styleType="rounded">
             Close
@@ -93,4 +98,4 @@ const AssignmentRankModal = ({ openModal, setOpenModal, idEdit }: PropsType) => 
   );
 };
 
-export default AssignmentRankModal;
+export default ViewPracticeScoreModal;

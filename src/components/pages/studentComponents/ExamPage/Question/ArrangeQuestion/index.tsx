@@ -5,21 +5,24 @@ import { QuestionBankType } from '@/redux/endpoints/teacher/questionBank';
 import { handleConvertObjectToArray } from '@/utils';
 import { useExamContext } from '@/context/ExamContext';
 import { AnswerSubmitType, useSaveAssignmentQuestionMutation } from '@/redux/endpoints/student/assignment';
-
-interface PropsType {
-  question: QuestionBankType;
-  index: number;
-  setAnswerSubmit: React.Dispatch<React.SetStateAction<AnswerSubmitType[]>>;
-}
+import { useSavePracticeMutation } from '@/redux/endpoints/student/practice';
 
 export interface SelectType {
   value: number;
   label: string;
 }
 
-const ArrangeQuestion = ({ question, index, setAnswerSubmit }: PropsType) => {
+interface PropsType {
+  question: QuestionBankType;
+  index: number;
+  setAnswerSubmit: React.Dispatch<React.SetStateAction<AnswerSubmitType[]>>;
+  isPractice?: boolean;
+}
+
+const ArrangeQuestion = ({ question, index, setAnswerSubmit, isPractice }: PropsType) => {
   const { assignmentSessionId } = useExamContext();
   const [saveAssignmentQuestion] = useSaveAssignmentQuestionMutation();
+  const [savePracticeQuestion] = useSavePracticeMutation();
 
   const choices = handleConvertObjectToArray(JSON.parse(question?.choices || '{}'));
   const choicesOptions = (choices || [])?.map((item, key) => ({ value: key + 1, label: item || '' }));
@@ -28,12 +31,17 @@ const ArrangeQuestion = ({ question, index, setAnswerSubmit }: PropsType) => {
 
   useEffect(() => {
     if (responseChoose?.length === choicesOptions?.length) {
-      saveAssignmentQuestion({
+      const dataSaveApi = {
         assignmentSessionId,
         answers: {
           [`${question?.id || 0}`]: responseChoose?.map((item) => item?.value),
         },
-      });
+      };
+      if (isPractice) {
+        savePracticeQuestion(dataSaveApi);
+      } else {
+        saveAssignmentQuestion(dataSaveApi);
+      }
       setAnswerSubmit(
         (prev) =>
           prev?.map((item) => {
@@ -104,6 +112,10 @@ const ArrangeQuestion = ({ question, index, setAnswerSubmit }: PropsType) => {
       </div>
     </div>
   );
+};
+
+ArrangeQuestion.defaultProps = {
+  isPractice: false,
 };
 
 export default ArrangeQuestion;

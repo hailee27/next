@@ -85,6 +85,7 @@ export type QuestionBankType = {
   response?: string;
   type: number;
   answer: string | null;
+  isCorrect?: boolean;
 };
 
 export type PostQuestionBankParams = {
