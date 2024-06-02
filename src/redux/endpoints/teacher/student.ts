@@ -53,6 +53,19 @@ export type ListAssignmentStudentType = {
   id: number;
   mark: string;
   answerCount: number;
+  assignment: {
+    id: number;
+    name: string;
+    totalMark: string;
+    timeAllow: number;
+    questionCount: number;
+    timeStart: string;
+    timeEnd: string;
+    class: {
+      id: number;
+      name: string;
+    };
+  };
 };
 
 export type GetListAssignmentStudentResponse = {

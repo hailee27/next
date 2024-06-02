@@ -3,18 +3,18 @@ import { Layout } from 'antd';
 
 import HeaderRender from '@/components/layout/HeaderRender';
 import MainPage from '@/components/layout/MainPage';
-import AssignmentPageComponents from '@/components/pages/teacherComponents/AssignmentPage';
+import TeacherMessageComponents from '@/components/pages/teacherComponents/TeacherMessagePage';
 
 const { Content } = Layout;
 
-const AssignmentPage = () => (
+const TeacherMessage = () => (
   <MainPage>
-    <HeaderRender title="Assignment" />
+    <HeaderRender title="Teacher Message" />
 
     <Content>
-      <AssignmentPageComponents />
+      <TeacherMessageComponents />
     </Content>
   </MainPage>
 );
 
-export default AssignmentPage;
+export default TeacherMessage;

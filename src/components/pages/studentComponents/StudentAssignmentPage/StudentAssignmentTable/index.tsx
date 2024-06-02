@@ -77,13 +77,13 @@ const StudentAssignmentTable = ({ objSearch }: PropsType) => {
       title: 'Time Start',
       width: 200,
       dataIndex: 'timeStart',
-      render: (timeStart) => <div className="">{dayjs(timeStart).format('DD-MM-YYYY HH:ss')}</div>,
+      render: (timeStart) => <div className="">{dayjs(timeStart).format('DD-MM-YYYY HH:mm')}</div>,
     },
     {
       title: 'Time End',
       width: 200,
       dataIndex: 'timeEnd',
-      render: (timeEnd) => <div className="">{dayjs(timeEnd).format('DD-MM-YYYY HH:ss')}</div>,
+      render: (timeEnd) => <div className="">{dayjs(timeEnd).format('DD-MM-YYYY HH:mm')}</div>,
     },
     {
       title: '',
@@ -94,7 +94,7 @@ const StudentAssignmentTable = ({ objSearch }: PropsType) => {
           <BasicPopover
             content={
               <div>
-                {objSearch?.status === 1 && (
+                {objSearch?.status === 1 && dayjs().isAfter(record?.timeStart) && dayjs().isBefore(record?.timeEnd) && (
                   <BasicButton
                     className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
                     onClick={() => {
@@ -114,7 +114,7 @@ const StudentAssignmentTable = ({ objSearch }: PropsType) => {
                     }}
                     styleType="text"
                   >
-                    View Assignment Rank
+                    View Exam Results
                   </BasicButton>
                 )}
               </div>

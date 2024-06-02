@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-console */
 import React, { useEffect } from 'react';
 import { Modal, Spin, Table } from 'antd';
 
@@ -14,12 +15,12 @@ interface PropsType {
 
 const AssignmentRankModal = ({ openModal, setOpenModal, idEdit }: PropsType) => {
   const [getDetail, { data, isFetching }] = useLazyGetAssignmentRankQuery();
-  const [getList, { data: dataList, isLoading }] = usePostAssignmentStartMutation();
+  const [startAssignment, { data: dataList, isLoading }] = usePostAssignmentStartMutation();
 
   useEffect(() => {
     if (idEdit) {
       getDetail({ assignmentId: idEdit });
-      getList({
+      startAssignment({
         assignmentId: idEdit,
       });
     }

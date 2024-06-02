@@ -3,7 +3,7 @@ import { Layout } from 'antd';
 
 import MainPage from '@/components/layout/MainPage';
 import HeaderRender from '@/components/layout/HeaderRender';
-import QuestionBankComponents from '@/components/pages/QuestionBankPage';
+import QuestionBankComponents from '@/components/pages/teacherComponents/QuestionBankPage';
 
 const { Content } = Layout;
 
