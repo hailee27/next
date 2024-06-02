@@ -1,9 +1,9 @@
 import React from 'react';
 import { Layout } from 'antd';
 
-import ClassPageComponents from '@/components/pages/ClassPage';
 import MainPage from '@/components/layout/MainPage';
 import HeaderRender from '@/components/layout/HeaderRender';
+import ClassPageComponents from '@/components/pages/teacherComponents/ClassPage';
 
 const { Content } = Layout;
 

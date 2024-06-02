@@ -3,13 +3,14 @@
 /* eslint-disable max-lines-per-function */
 import React, { useContext, useState } from 'react';
 import { Button, Layout, Menu, Popover } from 'antd';
-import { MenuOutlined } from '@ant-design/icons';
+import { MenuOutlined, NotificationOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { LayoutContext, LayoutContextInterface } from '@/components/pages/context/LayoutContext';
 import { RootState } from '@/redux/store';
 import { logout } from '@/redux/slices/auth.slice';
+import NotificationModal from '@/components/pages/Notification/Modal/NotificationModal';
 
 const { Sider } = Layout;
 
@@ -23,6 +24,7 @@ function PrimaryLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   const [activeMenu, setActiceMenu] = useState(['']);
+  const [openNotification, setOpenNotification] = useState(false);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -88,6 +90,15 @@ function PrimaryLayout({ children }: { children: React.ReactNode }) {
             router.push('/teacher/question-bank');
           },
         },
+        {
+          key: 'item_teacher_message',
+          icon: svgIcon,
+          label: 'Message',
+          authority: ['TEACHER'],
+          onClick: () => {
+            router.push('/teacher/message');
+          },
+        },
       ],
     },
     {
@@ -121,6 +132,15 @@ function PrimaryLayout({ children }: { children: React.ReactNode }) {
           authority: ['STUDENT'],
           onClick: () => {
             router.push('/student/practice');
+          },
+        },
+        {
+          key: 'item_student_message',
+          icon: svgIcon,
+          label: 'Message',
+          authority: ['STUDENT'],
+          onClick: () => {
+            router.push('/student/message');
           },
         },
       ],
@@ -166,13 +186,16 @@ function PrimaryLayout({ children }: { children: React.ReactNode }) {
           />
           {!collapsed ? (
             <div
-              className="cursor-pointer"
+              className="cursor-pointer flex justify-between items-center w-full"
               onClick={() => {
                 router.push('/');
               }}
               role="presentation"
             >
               <div>LOGO</div>
+              <div className="" onClick={() => setOpenNotification(true)} role="presentation">
+                <NotificationOutlined />
+              </div>
             </div>
           ) : null}
         </div>
@@ -233,6 +256,7 @@ function PrimaryLayout({ children }: { children: React.ReactNode }) {
       </Sider>
 
       <Layout style={{ padding: '0 24px 24px', marginLeft: collapsed ? 80 : 200 }}>{children}</Layout>
+      {openNotification && <NotificationModal open={openNotification} setOpen={setOpenNotification} />}
     </Layout>
   );
 }

@@ -88,6 +88,7 @@ const ViewPracticeScoreModal = ({ openModal, setOpenModal, practiceSelected }: P
             </div>
           ))}
         </div>
+
         <div className="gap-x-3 flex items-center justify-end mt-2">
           <BasicButton onClick={() => handleCancel()} styleType="rounded">
             Close
