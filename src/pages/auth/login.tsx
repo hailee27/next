@@ -6,7 +6,6 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
@@ -135,7 +134,7 @@ function LoginPage() {
           <Button fullWidth sx={{ mt: 3, mb: 2 }} type="submit" variant="contained">
             Sign In
           </Button>
-          <Grid container>
+          {/* <Grid container>
             <Grid item xs>
               <Link className="text-sky-600 text-[14px] underline" href="#">
                 Forgot password?
@@ -146,7 +145,7 @@ function LoginPage() {
                 Don't have an account? Sign Up
               </Link>
             </Grid>
-          </Grid>
+          </Grid> */}
         </Box>
       </Box>
       <Copyright sx={{ mt: 8, mb: 4 }} />

@@ -2,6 +2,7 @@
 import { api } from '../../api';
 
 import { MetaDataType } from './class';
+import { CreateUpdateDeleteResponse } from './student';
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -24,8 +25,22 @@ const injectedRtkApi = api.injectEndpoints({
         method: 'GET',
       }),
     }),
+    postTeacherChangePassword: build.mutation<PostTeacherChangePasswordResponse, PostTeacherChangePasswordParams>({
+      query: (params) => ({
+        url: '/teacher/auth/change-password',
+        method: 'POST',
+        body: params,
+      }),
+    }),
   }),
 });
+
+export type PostTeacherChangePasswordResponse = CreateUpdateDeleteResponse;
+
+export type PostTeacherChangePasswordParams = {
+  oldPassword: string;
+  newPassword: string;
+};
 
 export type MessagesType = {
   studentId?: number;
@@ -77,4 +92,5 @@ export const {
   useLazyGetTeacherMessageQuery,
   useGetTeacherUnreadMessageQuery,
   useLazyGetTeacherUnreadMessageQuery,
+  usePostTeacherChangePasswordMutation,
 } = injectedRtkApi;
