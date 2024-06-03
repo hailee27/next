@@ -212,7 +212,11 @@ function PrimaryLayout({ children }: { children: React.ReactNode }) {
               <div
                 className="p-[6px] font-bold cursor-pointer hover:bg-[#F4F6F7]"
                 onClick={() => {
-                  router.push('/my-profile');
+                  if (auth?.teacher?.id) {
+                    router.push('/teacher/my-profile');
+                  } else {
+                    router.push('/student/my-profile');
+                  }
                 }}
                 role="presentation"
               >
