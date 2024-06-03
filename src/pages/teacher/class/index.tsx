@@ -7,7 +7,7 @@ import ClassPageComponents from '@/components/pages/teacherComponents/ClassPage'
 
 const { Content } = Layout;
 
-const ClassPage = () => (
+const TeacherClassPage = () => (
   <MainPage>
     <HeaderRender title="Class" />
 
@@ -17,4 +17,4 @@ const ClassPage = () => (
   </MainPage>
 );
 
-export default ClassPage;
+export default TeacherClassPage;

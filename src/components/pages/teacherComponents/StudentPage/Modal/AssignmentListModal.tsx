@@ -21,6 +21,7 @@ const AssignmentListModal = ({ openModal, setOpenModal, idEdit }: PropsType) => 
   const [getList, { data, isFetching }] = useLazyGetListAssignmentStudentQuery();
   const [openAssignmentDetail, setOpenAssignmentDetail] = useState(false);
   const [assignmentId, setAssignmentId] = useState(0);
+  const [assignmentSessionId, setAssignmentSessionId] = useState(0);
 
   useEffect(() => {
     if (idEdit) {
@@ -77,6 +78,7 @@ const AssignmentListModal = ({ openModal, setOpenModal, idEdit }: PropsType) => 
                   className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
                   onClick={() => {
                     setAssignmentId(record?.assignment?.id);
+                    setAssignmentSessionId(record?.id);
                     setOpenAssignmentDetail(true);
                   }}
                   styleType="text"
@@ -129,6 +131,7 @@ const AssignmentListModal = ({ openModal, setOpenModal, idEdit }: PropsType) => 
       {openAssignmentDetail && (
         <StudentAssignmentDetail
           assignmentId={assignmentId}
+          assignmentSessionId={assignmentSessionId}
           open={openAssignmentDetail}
           setOpen={setOpenAssignmentDetail}
           studentId={idEdit}

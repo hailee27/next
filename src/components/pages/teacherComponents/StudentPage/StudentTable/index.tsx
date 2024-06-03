@@ -210,7 +210,6 @@ const StudentTable = ({ objSearch }: PropsType) => {
           setOpenModal={setOpenAssignmentListModal}
         />
       )}
-      s
     </>
   );
 };
