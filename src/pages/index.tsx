@@ -1,48 +1,21 @@
-import HomePage from '@/components/Home';
+import React from 'react';
+import { useSelector } from 'react-redux';
 
-// export const getServerSideProps = wrapper.getServerSideProps((store) => async () => {
-//   const apiRequest: ListCampaignParams = {
-//     skip: 0,
-//     take: HOME_PAGINATION_PAGE_SIZE,
-//     token: 'user',
-//   };
+import { RootState } from '@/redux/store';
 
-//   const { data: campaignsOrderByViews } = await store.dispatch(
-//     CampaignApi.endpoints.getListCampaign.initiate({
-//       ...apiRequest,
-//       orderBy: JSON.stringify({
-//         totalViews: 'desc',
-//       }),
-//     })
-//   );
+import TeacherClassPage from './teacher/class';
+import StudentClassPage from './student/class';
 
-//   const { data: campaignsOrderByStartTime } = await store.dispatch(
-//     CampaignApi.endpoints.getListCampaign.initiate({
-//       ...apiRequest,
-//       orderBy: JSON.stringify({
-//         startTime: 'desc',
-//       }),
-//     })
-//   );
+const HomePage = () => {
+  const auth = useSelector((state: RootState) => state.auth);
 
-//   const { data: campaignsOrderByTotalPrizeValue } = await store.dispatch(
-//     CampaignApi.endpoints.getListCampaign.initiate({
-//       ...apiRequest,
-//       orderBy: JSON.stringify({
-//         totalPrizeValue: 'desc',
-//       }),
-//     })
-//   );
+  const isTeacher = !!auth?.teacher?.id;
 
-//   return {
-//     props: {
-//       campaignsOrderByViews: campaignsOrderByViews?.campaigns ?? null,
-//       campaignsOrderByStartTime: campaignsOrderByStartTime?.campaigns ?? null,
-//       campaignsOrderByTotalPrizeValue: campaignsOrderByTotalPrizeValue?.campaigns ?? null,
-//     },
-//   };
-// });
+  if (isTeacher) {
+    return <TeacherClassPage />;
+  }
 
-export default function Home() {
-  return <HomePage />;
-}
+  return <StudentClassPage />;
+};
+
+export default HomePage;

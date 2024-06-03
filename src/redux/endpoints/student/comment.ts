@@ -14,6 +14,7 @@ const injectedRtkApi = api.injectEndpoints({
       query: (params) => ({
         url: `/comment/${params?.id}`,
         method: 'PATCH',
+        body: params,
       }),
     }),
     deleteStudentComment: build.mutation<DeleteStudentCommentResponse, DeleteStudentCommentParams>({
@@ -35,6 +36,7 @@ export type PutStudentCommentResponse = any;
 
 export type PutStudentCommentParams = {
   id: number;
+  body: string;
 };
 
 export type PostStudentCommentResponse = any;

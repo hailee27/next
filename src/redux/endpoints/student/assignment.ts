@@ -126,12 +126,30 @@ export type SessionType = {
   assignment: AssignmentType;
 };
 
+export type CommentType = {
+  id: number;
+  body: string;
+  createdAt: string;
+  teacher?: {
+    id: number | string;
+    name: string;
+  } | null;
+  student?: {
+    id: number | string;
+    name: string;
+  } | null;
+};
+
 export type PostAssignmentStartResponse = {
   message: string;
   status: boolean;
   result: {
     session: SessionType;
     questions: QuestionBankType[];
+    response: {
+      id: number;
+    };
+    comments: CommentType[];
   };
 };
 
