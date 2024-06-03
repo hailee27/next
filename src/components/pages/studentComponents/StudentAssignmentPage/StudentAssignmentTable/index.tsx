@@ -146,6 +146,14 @@ const StudentAssignmentTable = ({ objSearch }: PropsType) => {
               </div>
             ),
           }}
+          onRow={(record) => ({
+            onClick: () => {
+              if (objSearch?.status === 3) {
+                setIdEdit(record?.id || 0);
+                setOpenRank(true);
+              }
+            },
+          })}
           pagination={false}
           rowKey="id"
         />
