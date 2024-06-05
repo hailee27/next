@@ -49,7 +49,7 @@ export type MessagesType = {
   teacherName?: string;
   lastMessage: string;
   isRead: boolean;
-  updatedAt: string;
+  updatedAt: string | null;
 };
 
 export type GetTeacherInfoResponse = any;
@@ -61,11 +61,14 @@ export type GetTeacherUnreadMessageResponse = any;
 export type GetTeacherUnreadMessageParams = void;
 
 export type MessageResponseType = {
-  body: string;
   id: number;
+  body: string;
   isRead: boolean;
   createdAt: string;
-  conversation: {
+  student?: {
+    id: number;
+  };
+  teacher?: {
     id: number;
   };
 };

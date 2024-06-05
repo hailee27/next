@@ -18,11 +18,12 @@ import style from './index.module.scss';
 interface PropsType {
   className?: string;
   placeholder?: string;
-  value?: { value: number; label: string };
+  value?: { value: number; label: string } | null;
   onChange?: (i: any) => void;
+  studentIds?: number[];
 }
 
-const BasicSelectStudent: FC<PropsType> = ({ className, placeholder, onChange, value }) => {
+const BasicSelectStudent: FC<PropsType> = ({ className, placeholder, onChange, value, studentIds }) => {
   const { ref: boxInputRef, isComponentVisible, setIsComponentVisible } = useComponentVisible(false);
 
   const [trigger, { data: list, isFetching }] = useLazyGetListStudentQuery();
@@ -162,41 +163,45 @@ const BasicSelectStudent: FC<PropsType> = ({ className, placeholder, onChange, v
               >
                 <InfiniteScroll
                   className="w-full"
-                  dataLength={optionSearch?.length}
+                  dataLength={optionSearch?.filter((item) => !studentIds?.includes(item?.value))?.length}
                   hasMore={hasMore}
                   loader={null}
                   next={fetchMoreData}
                   scrollableTarget="scrollableDiv"
                 >
-                  {optionSearch?.map((i) => {
-                    let contentOrigin = i.label as string;
+                  {optionSearch
+                    ?.filter((item) => !studentIds?.includes(item?.value))
+                    ?.map((i) => {
+                      let contentOrigin = i.label as string;
 
-                    if (inputValue) {
-                      if (contentOrigin.includes(inputValue)) {
-                        contentOrigin = (contentOrigin as any).replaceAll(
-                          `${inputValue}`,
-                          `${inputValue}`.fontcolor('red')
-                        );
+                      if (inputValue) {
+                        if (contentOrigin.includes(inputValue)) {
+                          contentOrigin = (contentOrigin as any).replaceAll(
+                            `${inputValue}`,
+                            `${inputValue}`.fontcolor('red')
+                          );
+                        }
                       }
-                    }
 
-                    return (
-                      <div
-                        className={`px-[16px] w-full py-[8px] hover:bg-[#EDF4FF] ${
-                          i.value?.toString() === value?.value?.toString() ? 'bg-[#EDF4FF]' : ''
-                        } cursor-pointer`}
-                        key={i.value}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onChoiceSearch(i);
-                        }}
-                        role="presentation"
-                      >
-                        <div dangerouslySetInnerHTML={{ __html: contentOrigin || '' }} />
-                      </div>
-                    );
-                  })}
-                  {!optionSearch?.length && <p className="text-center mt-4 font-medium">No data</p>}
+                      return (
+                        <div
+                          className={`px-[16px] w-full py-[8px] hover:bg-[#EDF4FF] ${
+                            i.value?.toString() === value?.value?.toString() ? 'bg-[#EDF4FF]' : ''
+                          } cursor-pointer`}
+                          key={i.value}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onChoiceSearch(i);
+                          }}
+                          role="presentation"
+                        >
+                          <div dangerouslySetInnerHTML={{ __html: contentOrigin || '' }} />
+                        </div>
+                      );
+                    })}
+                  {!optionSearch?.filter((item) => !studentIds?.includes(item?.value))?.length && (
+                    <p className="text-center mt-4 font-medium">No data</p>
+                  )}
                 </InfiniteScroll>
               </div>
             </Spin>
