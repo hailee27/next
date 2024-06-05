@@ -88,7 +88,12 @@ const MessageDetail = ({ teacherChoose, messageToTeacher, listMessage, setListMe
                   {teacherChoose?.name?.slice(0, 2)}
                 </div>
               )}
-              <p className="font-medium">{item?.body}</p>
+
+              <div className="">
+                <p className="font-medium">{item?.body}</p>
+                <p className="text-[10px]">{dayjs(item?.createdAt).fromNow()}</p>
+              </div>
+
               {item?.teacher?.id !== teacherChoose?.id && (
                 <div className="rounded-full h-7 w-7 border flex items-center justify-center uppercase text-[11px] font-bold">
                   ME

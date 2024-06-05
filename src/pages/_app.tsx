@@ -16,6 +16,7 @@ import { NotificationProvider } from '@/context/NotificationContext';
 import { PopUpProvider } from '@/context/PopUpContext';
 import PrimaryLayout from '@/components/layout/PrimaryLayout';
 import AuthGuard from '@/components/common/AuthGuard';
+import { SocketContextProvider } from '@/context/SocketContext';
 
 export type NextPageWithLayout<P = Record<string, never>, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => JSX.Element;
@@ -65,18 +66,20 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
         <PersistGate loading={null} persistor={store.persistorData}>
           <ThemeProvider theme={defaultTheme}>
             <CssBaseline />
-            <NotificationProvider>
-              <main>
-                {/* <ConfigProvider locale={jaJP}> */}
-                <PopUpProvider>
-                  <AuthGuard>
-                    {loading && <Loading />}
-                    {getLayout(<Component {...props} />)}
-                  </AuthGuard>
-                </PopUpProvider>
-                {/* </ConfigProvider> */}
-              </main>
-            </NotificationProvider>
+            <SocketContextProvider>
+              <NotificationProvider>
+                <main>
+                  {/* <ConfigProvider locale={jaJP}> */}
+                  <PopUpProvider>
+                    <AuthGuard>
+                      {loading && <Loading />}
+                      {getLayout(<Component {...props} />)}
+                    </AuthGuard>
+                  </PopUpProvider>
+                  {/* </ConfigProvider> */}
+                </main>
+              </NotificationProvider>
+            </SocketContextProvider>
           </ThemeProvider>
         </PersistGate>
       </Provider>
