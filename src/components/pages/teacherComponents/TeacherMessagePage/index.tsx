@@ -1,16 +1,13 @@
-/* eslint-disable no-console */
 /* eslint-disable import/no-cycle */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { io } from 'socket.io-client';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { UserAddOutlined } from '@ant-design/icons';
 
-import { RootState } from '@/redux/store';
 import { MessageResponseType, MessagesType } from '@/redux/endpoints/teacher/account';
 import { ValueSelect } from '@/redux/endpoints/auth';
+import { useSocketContext } from '@/context/SocketContext';
 
 import MessageDetail from './MessageDetail';
 import AddNewMessageModal from './Modal/AddNewMessageModal';
@@ -23,10 +20,7 @@ export interface StudentType {
 }
 
 const TeacherMessageComponents = () => {
-  const auth = useSelector((state: RootState) => state.auth);
-
-  const socket = io('13.212.100.130:8000', { transports: ['websocket'] });
-  socket.auth = { teacherId: auth?.teacher?.id };
+  const { socket } = useSocketContext();
 
   const [conversations, setConversations] = useState<MessagesType[]>([]);
   const [studentChoose, setStudentChoose] = useState<StudentType>({ id: 0, name: '' });
@@ -137,7 +131,13 @@ const TeacherMessageComponents = () => {
                 <div className="font-semibold">{item?.studentName}</div>
                 <div className="flex gap-x-2">
                   <div className="text-[11px]">{item?.lastMessage}</div>
-                  <div className="text-[11px] ">{dayjs(item?.updatedAt).fromNow()}</div>
+                  <div className="text-[11px] ">
+                    {item?.updatedAt
+                      ? dayjs(item?.updatedAt)
+                          .subtract(7, 'hours')
+                          .fromNow()
+                      : ''}
+                  </div>
                 </div>
               </div>
             </div>

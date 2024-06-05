@@ -1,13 +1,10 @@
-/* eslint-disable no-console */
 /* eslint-disable import/no-cycle */
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { io } from 'socket.io-client';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
-import { RootState } from '@/redux/store';
 import { MessageResponseType, MessagesType } from '@/redux/endpoints/teacher/account';
+import { useSocketContext } from '@/context/SocketContext';
 
 import MessageDetail from './MessageDetail';
 
@@ -18,10 +15,7 @@ export interface TeacherType {
   name: string;
 }
 const StudentMessageComponents = () => {
-  const auth = useSelector((state: RootState) => state.auth);
-
-  const socket = io('13.212.100.130:8000', { transports: ['websocket'] });
-  socket.auth = { studentId: auth?.student?.id };
+  const { socket } = useSocketContext();
 
   const [conversations, setConversations] = useState<MessagesType[]>([]);
   const [teacherChoose, setTeacherChoose] = useState<TeacherType>({ id: 0, name: '' });
@@ -113,7 +107,13 @@ const StudentMessageComponents = () => {
                 <div className="font-semibold">{item?.teacherName}</div>
                 <div className="flex gap-x-2">
                   <div className="text-[11px]">{item?.lastMessage}</div>
-                  <div className="text-[11px] ">{item?.updatedAt ? dayjs(item?.updatedAt).fromNow() : ''}</div>
+                  <div className="text-[11px] ">
+                    {item?.updatedAt
+                      ? dayjs(item?.updatedAt)
+                          .subtract(7, 'hours')
+                          .fromNow()
+                      : ''}
+                  </div>
                 </div>
               </div>
             </div>

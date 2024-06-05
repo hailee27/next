@@ -63,6 +63,20 @@ export type ValueSelect = {
   label: string;
 };
 
+export type NotificationType = {
+  id: number;
+  createdAt: string;
+  body: string;
+  assignment?: {
+    id: number;
+    name: string;
+  };
+  class?: {
+    id: number;
+    name: string;
+  };
+};
+
 export type Person = {
   id: string;
   createdAt: string;

@@ -10,7 +10,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { LayoutContext, LayoutContextInterface } from '@/components/pages/context/LayoutContext';
 import { RootState } from '@/redux/store';
 import { logout } from '@/redux/slices/auth.slice';
-import NotificationModal from '@/components/pages/Notification/Modal/NotificationModal';
+import TeacherNotificationModal from '@/components/pages/Notification/Modal/TeacherNotificationModal';
+import StudentNotificationModal from '@/components/pages/Notification/Modal/StudentNotificationModal';
 
 const { Sider } = Layout;
 
@@ -185,26 +186,30 @@ function PrimaryLayout({ children }: { children: React.ReactNode }) {
             type="text"
           />
           {!collapsed ? (
-            <div
-              className="cursor-pointer flex justify-between items-center w-full"
-              onClick={() => {
-                router.push('/');
-              }}
-              role="presentation"
-            >
-              <div>LOGO</div>
-              <div className="" onClick={() => setOpenNotification(true)} role="presentation">
+            <div className="flex justify-between items-center w-full">
+              <div
+                className="cursor-pointer"
+                onClick={() => {
+                  router.push('/');
+                }}
+                role="presentation"
+              >
+                LOGO
+              </div>
+              <div className="cursor-pointer" onClick={() => setOpenNotification(true)} role="presentation">
                 <NotificationOutlined />
               </div>
             </div>
           ) : null}
         </div>
+
         <Menu
           className="[&_.ant-menu-item]:!ps-[20px] [&_.ant-menu-item]:flex [&_.ant-menu-item]:items-center"
           items={menuItemsRenderChildren}
           selectedKeys={activeMenu}
           style={{ borderRight: 0 }}
         />
+
         <Popover
           arrow={false}
           content={
@@ -260,7 +265,12 @@ function PrimaryLayout({ children }: { children: React.ReactNode }) {
       </Sider>
 
       <Layout style={{ padding: '0 24px 24px', marginLeft: collapsed ? 80 : 200 }}>{children}</Layout>
-      {openNotification && <NotificationModal open={openNotification} setOpen={setOpenNotification} />}
+      {openNotification && auth?.teacher?.id && (
+        <TeacherNotificationModal open={openNotification} setOpen={setOpenNotification} />
+      )}
+      {openNotification && auth?.student?.id && (
+        <StudentNotificationModal open={openNotification} setOpen={setOpenNotification} />
+      )}
     </Layout>
   );
 }
