@@ -58,6 +58,11 @@ export type LoginParams = {
   role: 'student' | 'teacher';
 };
 
+export type ValueSelect = {
+  value: number;
+  label: string;
+};
+
 export type Person = {
   id: string;
   createdAt: string;

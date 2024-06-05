@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
 import { RootState } from '@/redux/store';
-import { MessagesType } from '@/redux/endpoints/teacher/account';
+import { MessageResponseType, MessagesType } from '@/redux/endpoints/teacher/account';
 
 import MessageDetail from './MessageDetail';
 
@@ -21,42 +21,82 @@ const StudentMessageComponents = () => {
   const auth = useSelector((state: RootState) => state.auth);
 
   const socket = io('13.212.100.130:8000', { transports: ['websocket'] });
+  socket.auth = { studentId: auth?.student?.id };
 
   const [conversations, setConversations] = useState<MessagesType[]>([]);
   const [teacherChoose, setTeacherChoose] = useState<TeacherType>({ id: 0, name: '' });
+  const [listMessage, setListMessage] = useState<MessageResponseType[]>([]);
 
   useEffect(() => {
-    socket.auth = { studentId: auth?.student?.id };
-
     socket.emit('get-conversations', { page: 1, limit: 100 });
 
     socket.on('refresh-conversations', (res) => {
-      setConversations(
-        res?.data?.map((item) => ({
-          teacherId: item?.teacher?.id || 1,
-          teacherName: item?.teacher?.name || 'Teacher',
-          lastMessage: item?.body,
-          isRead: item?.isRead,
-          updatedAt: item?.updatedAt,
-        }))
-      );
+      if (res?.data?.length > 0) {
+        setConversations(
+          res?.data?.map((item) => ({
+            teacherId: item?.conversation?.teacher?.id || 1,
+            teacherName: item?.conversation?.teacher?.name || 'Teacher',
+            lastMessage: item?.body,
+            isRead: item?.isRead,
+            updatedAt: item?.updatedAt,
+          }))
+        );
+      } else {
+        setConversations([
+          {
+            teacherId: 1,
+            teacherName: 'Teacher',
+            lastMessage: '',
+            isRead: false,
+            updatedAt: null,
+          },
+        ]);
+      }
     });
 
     socket.on('new-message', (message) => {
-      console.log('New Message', message);
+      setListMessage((prev) => {
+        if (prev?.findIndex((item) => item?.id === message?.id) < 0) {
+          return prev.concat([
+            {
+              id: message?.id,
+              body: message?.body,
+              isRead: true,
+              createdAt: message?.createdAt,
+              teacher: {
+                id: message?.teacher?.id || 0,
+              },
+            },
+          ]);
+        }
+        return prev;
+      });
     });
+
+    // return () => {
+    //   socket.disconnect();
+    // };
   }, []);
 
   const messageToTeacher = (message: string) => {
-    socket.emit('direct-message', {
-      teacherId: teacherChoose?.id,
-      body: message,
-    });
+    if (socket) {
+      socket.emit('direct-message', {
+        teacherId: teacherChoose?.id || 1,
+        body: message,
+      });
+    }
   };
 
+  useEffect(() => {
+    if (listMessage?.length <= 20) {
+      const studentMessageElement = document.getElementById('student_message');
+      (studentMessageElement as HTMLElement).scrollTop = (studentMessageElement as HTMLElement).scrollHeight;
+    }
+  }, [listMessage]);
+
   return (
-    <div className="space-y-[24px] bg-[#fff] rounded flex gap-x-5">
-      <div className="flex flex-col gap-y-5 w-[300px] h-[850px] p-5 overflow-y-auto">
+    <div className="space-y-[24px] bg-[#fff] h-[800px] rounded flex gap-x-5">
+      <div className="flex flex-col gap-y-5 w-[300px] h-[800px] p-5 overflow-y-auto">
         {conversations?.map((item) => (
           <div className="" key={item?.teacherId} role="presentation">
             <div
@@ -73,7 +113,7 @@ const StudentMessageComponents = () => {
                 <div className="font-semibold">{item?.teacherName}</div>
                 <div className="flex gap-x-2">
                   <div className="text-[11px]">{item?.lastMessage}</div>
-                  <div className="text-[11px] ">{dayjs(item?.updatedAt).fromNow()}</div>
+                  <div className="text-[11px] ">{item?.updatedAt ? dayjs(item?.updatedAt).fromNow() : ''}</div>
                 </div>
               </div>
             </div>
@@ -81,9 +121,14 @@ const StudentMessageComponents = () => {
         ))}
       </div>
 
-      <div className="flex-1 pr-6 h-[850px] overflow-y-auto">
+      <div className="flex-1 pr-6 h-[750] overflow-y-auto" id="student_message">
         <div className="">
-          <MessageDetail messageToTeacher={messageToTeacher} teacherChoose={teacherChoose} />
+          <MessageDetail
+            listMessage={listMessage}
+            messageToTeacher={messageToTeacher}
+            setListMessage={setListMessage}
+            teacherChoose={teacherChoose}
+          />
         </div>
       </div>
     </div>
