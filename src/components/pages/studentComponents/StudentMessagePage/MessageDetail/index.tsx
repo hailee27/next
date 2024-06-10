@@ -9,6 +9,7 @@ import { getRandomNumber } from '@/utils';
 import { useLazyGetStudentMessageQuery } from '@/redux/endpoints/student/account';
 import { MessageResponseType } from '@/redux/endpoints/teacher/account';
 import BasicButton from '@/components/common/forms/BasicButton';
+import { useSocketContext } from '@/context/SocketContext';
 
 import { TeacherType } from '..';
 
@@ -22,7 +23,14 @@ interface PropsType {
 const PAGE_SIZE = 20;
 
 const MessageDetail = ({ teacherChoose, messageToTeacher, listMessage, setListMessage }: PropsType) => {
+  const { socket } = useSocketContext();
   const [getMessage, { data, isFetching }] = useLazyGetStudentMessageQuery();
+
+  useEffect(() => {
+    socket.emit('read-message', {
+      teacherId: teacherChoose?.id,
+    });
+  }, [teacherChoose?.id]);
 
   const [message, setMessage] = useState<string>('');
   const [page, setPage] = useState(1);

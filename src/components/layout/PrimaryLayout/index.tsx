@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-lines-per-function */
-import React, { useContext, useState } from 'react';
-import { Button, Layout, Menu, Popover } from 'antd';
+import React, { useContext, useEffect, useState } from 'react';
+import { Button, Image, Layout, Menu, Popover } from 'antd';
 import { MenuOutlined, NotificationOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,13 +12,17 @@ import { RootState } from '@/redux/store';
 import { logout } from '@/redux/slices/auth.slice';
 import TeacherNotificationModal from '@/components/pages/Notification/Modal/TeacherNotificationModal';
 import StudentNotificationModal from '@/components/pages/Notification/Modal/StudentNotificationModal';
+import { useSocketContext } from '@/context/SocketContext';
 
 const { Sider } = Layout;
 
 function PrimaryLayout({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch();
-  const { collapsed, setCollapsed } = useContext<LayoutContextInterface>(LayoutContext);
+
   const auth = useSelector((state: RootState) => state.auth);
+
+  const { collapsed, setCollapsed } = useContext<LayoutContextInterface>(LayoutContext);
+  const { socket } = useSocketContext();
 
   const checkRole = auth?.teacher?.id ? 'TEACHER' : 'STUDENT';
 
@@ -26,6 +30,13 @@ function PrimaryLayout({ children }: { children: React.ReactNode }) {
 
   const [activeMenu, setActiceMenu] = useState(['']);
   const [openNotification, setOpenNotification] = useState(false);
+  const [messageUnRead, setMessageUnRead] = useState(0);
+
+  useEffect(() => {
+    socket.on('count-message-unread', (msg) => {
+      setMessageUnRead(msg?.count);
+    });
+  }, []);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -271,6 +282,34 @@ function PrimaryLayout({ children }: { children: React.ReactNode }) {
       {openNotification && auth?.student?.id && (
         <StudentNotificationModal open={openNotification} setOpen={setOpenNotification} />
       )}
+
+      <div
+        className="fixed bottom-[200px] right-[50px] z-[100] cursor-pointer"
+        onClick={() => {
+          if (auth?.teacher?.id) {
+            router.push('/teacher/message');
+          } else {
+            router.push('/student/message');
+          }
+        }}
+        role="presentation"
+      >
+        <div className="relative flex items-center justify-center w-[40px] h-[40px] border rounded-full">
+          <Image
+            alt="msg"
+            className="rounded-full w-[40px] h-[40px] z-[-1]"
+            height={30}
+            preview={false}
+            src="https://www.pikpng.com/pngl/m/259-2592784_messenger-facebook-messenger-icon-clipart.png"
+            width={30}
+          />
+          {messageUnRead !== 0 && (
+            <div className="absolute top-0 right-0 z-2 w-[15px] rounded-full font-bold text-[#fff] flex items-center justify-center h-[15px] bg-[#f00]">
+              {messageUnRead}
+            </div>
+          )}
+        </div>
+      </div>
     </Layout>
   );
 }
