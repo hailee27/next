@@ -50,6 +50,7 @@ export type MessagesType = {
   lastMessage: string;
   isRead: boolean;
   updatedAt: string | null;
+  createdAt?: string | null;
 };
 
 export type GetTeacherInfoResponse = any;

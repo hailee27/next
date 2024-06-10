@@ -14,7 +14,7 @@ const SocketContext = createContext<any | undefined>(undefined);
 const SocketContextProvider = ({ children }: PropsType) => {
   const auth = useSelector((state: RootState) => state.auth);
 
-  const socket = io('13.212.100.130:8000', { transports: ['websocket'] });
+  const socket = io('https://api.exam.soon.it', { transports: ['websocket'] });
   if (auth?.teacher?.id) {
     socket.auth = { teacherId: auth?.teacher?.id };
   } else {

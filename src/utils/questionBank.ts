@@ -53,7 +53,7 @@ export const handleResponseFromQuestionBankDetail = (response: string, type: num
 
   if (type === 4) {
     return handleConvertArrayToObject(
-      handleConvertObjectToArray(responseConvert)?.map((item, index) => ({ id: index + 1, name: item }))
+      handleConvertObjectToArray(responseConvert?.[0])?.map((item, index) => ({ id: index + 1, name: item }))
     );
   }
 

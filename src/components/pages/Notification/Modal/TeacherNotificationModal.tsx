@@ -1,12 +1,14 @@
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
-import { Drawer } from 'antd';
+import { Button, Drawer } from 'antd';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import dayjs from 'dayjs';
 
 import { useSocketContext } from '@/context/SocketContext';
 import { NotificationType } from '@/redux/endpoints/auth';
 import { MetaDataType } from '@/redux/endpoints/teacher/class';
+
+import TeacherAddNotificationModal from './TeacherAddNotificationModal';
 
 interface PropsType {
   open: boolean;
@@ -19,6 +21,7 @@ const TeacherNotificationModal = ({ open, setOpen }: PropsType) => {
   const [notifications, setNotifications] = useState<NotificationType[]>([]);
   const [metadata, setMetadata] = useState<MetaDataType>({});
   const [page, setPage] = useState(1);
+  const [openAddNotiModal, setOpenAddNotiModal] = useState(false);
 
   useEffect(() => {
     socket.emit('teacher-get-notifications', { page, limit: 100 });
@@ -66,7 +69,11 @@ const TeacherNotificationModal = ({ open, setOpen }: PropsType) => {
   return (
     <div>
       <Drawer closable={false} onClose={onClose} open={open} placement="right" title="Notification">
+        <div className="flex justify-end mb-5">
+          <Button onClick={() => setOpenAddNotiModal(true)}>Send Notification</Button>
+        </div>
         <InfiniteScroll
+          className="flex flex-col gap-y-6"
           dataLength={Number(notifications.length)}
           endMessage={
             <p style={{ textAlign: 'center' }}>
@@ -75,7 +82,7 @@ const TeacherNotificationModal = ({ open, setOpen }: PropsType) => {
           }
           hasMore
           height={700}
-          loader={<h4>Loading...</h4>}
+          loader={<h4>...</h4>}
           next={fetchMore}
         >
           {notifications?.map((item) => (
@@ -86,6 +93,14 @@ const TeacherNotificationModal = ({ open, setOpen }: PropsType) => {
           ))}
         </InfiniteScroll>
       </Drawer>
+
+      {openAddNotiModal && (
+        <TeacherAddNotificationModal
+          openModal={openAddNotiModal}
+          setNotifications={setNotifications}
+          setOpenModal={setOpenAddNotiModal}
+        />
+      )}
     </div>
   );
 };

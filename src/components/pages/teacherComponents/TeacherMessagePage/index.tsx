@@ -87,6 +87,7 @@ const TeacherMessageComponents = () => {
             lastMessage: '',
             isRead: false,
             updatedAt: null,
+            createdAt: null,
           },
         ].concat(prev as any)
       );
@@ -131,13 +132,7 @@ const TeacherMessageComponents = () => {
                 <div className="font-semibold">{item?.studentName}</div>
                 <div className="flex gap-x-2">
                   <div className="text-[11px]">{item?.lastMessage}</div>
-                  <div className="text-[11px] ">
-                    {item?.updatedAt
-                      ? dayjs(item?.updatedAt)
-                          .subtract(7, 'hours')
-                          .fromNow()
-                      : ''}
-                  </div>
+                  <div className="text-[11px] ">{item?.updatedAt ? dayjs(item?.updatedAt).fromNow() : ''}</div>
                 </div>
               </div>
             </div>

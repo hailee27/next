@@ -7,6 +7,7 @@ import dayjs from 'dayjs';
 import { useSocketContext } from '@/context/SocketContext';
 import { MetaDataType } from '@/redux/endpoints/teacher/class';
 import { NotificationType } from '@/redux/endpoints/auth';
+import { getRandomNumber } from '@/utils';
 
 interface PropsType {
   open: boolean;
@@ -21,7 +22,7 @@ const TeacherNotificationModal = ({ open, setOpen }: PropsType) => {
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    socket.emit('student-get-notifications', { page, limit: 50 });
+    socket.emit('student-get-notifications', { page, limit: 100 });
   }, [page]);
 
   useEffect(() => {
@@ -49,7 +50,14 @@ const TeacherNotificationModal = ({ open, setOpen }: PropsType) => {
     });
 
     socket.on('new-notification', (notification) => {
-      console.log('New notification', notification);
+      setNotifications((prev) => {
+        if (prev?.findIndex((item) => item?.body === notification?.body) < 0) {
+          return [{ id: getRandomNumber(), body: notification?.body, createdAt: dayjs().format('YYYY-MM-DD') }].concat(
+            prev
+          );
+        }
+        return prev;
+      });
     });
   }, []);
 
@@ -75,7 +83,7 @@ const TeacherNotificationModal = ({ open, setOpen }: PropsType) => {
           }
           hasMore
           height={700}
-          loader={<h4>Loading...</h4>}
+          loader={<h4>...</h4>}
           next={fetchMore}
         >
           {notifications?.map((item) => (
