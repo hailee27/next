@@ -83,7 +83,7 @@ const TeacherNotificationModal = ({ open, setOpen }: PropsType) => {
           }
           hasMore
           height={700}
-          loader={<h4>...</h4>}
+          loader={<h4>Loading...</h4>}
           next={fetchMore}
         >
           {notifications?.map((item) => (

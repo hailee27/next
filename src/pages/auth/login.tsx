@@ -78,7 +78,7 @@ function LoginPage() {
                   router.push('/student');
                   dispatch(setStudent(value.result.student));
                 }
-                toggleAlert({ content: value.message, type: 'success' });
+                // toggleAlert({ content: value.message, type: 'success' });
                 dispatch(
                   setAuth({
                     accessToken: value.result.token.accessToken,
