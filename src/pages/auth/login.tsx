@@ -13,6 +13,7 @@ import Container from '@mui/material/Container';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
+import { Grid } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import Link from 'next/link';
 
@@ -20,7 +21,6 @@ import { setAuth, setStudent, setTeacher } from '@/redux/slices/auth.slice';
 import { useNotificationContext } from '@/context/NotificationContext';
 import signInSchema from '@/schema/signIn';
 import { useLoginTeacherMutation } from '@/redux/endpoints/auth';
-import { Grid } from '@mui/material';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function Copyright(props: any) {
@@ -137,9 +137,9 @@ function LoginPage() {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link className="text-sky-600 text-[14px] underline" href="#">
+              {/* <Link className="text-sky-600 text-[14px] underline" href="#">
                 Forgot password?
-              </Link>
+              </Link> */}
             </Grid>
             <Grid item>
               <Link className="text-sky-600 text-[14px] underline" href="/auth/sign-up">
