@@ -44,7 +44,7 @@ const ViewPracticeScoreModal = ({ openModal, setOpenModal, practiceSelected }: P
   };
 
   return (
-    <Modal footer={null} onCancel={handleCancel} open={openModal} title="Create Practice" width={800}>
+    <Modal footer={null} onCancel={handleCancel} open={openModal} title="View Practice Score" width={800}>
       <Spin spinning={isLoading}>
         <div className="mb-6">
           <Table

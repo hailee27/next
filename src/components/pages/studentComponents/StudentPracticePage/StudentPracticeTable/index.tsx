@@ -158,6 +158,12 @@ const StudentPracticeTable = ({ objSearch }: PropsType) => {
               </div>
             ),
           }}
+          onRow={(record) => ({
+            onClick: () => {
+              setPracticeSelected(record);
+              setOpenViewScoreModal(true);
+            },
+          })}
           pagination={false}
           rowKey="id"
         />
