@@ -66,7 +66,7 @@ const QuestionBankForm = ({ item, form, index, setFormChange, idEdit, remove }: 
             { value: 1, label: 'Single Answer' },
             { value: 2, label: 'Multiple Answer' },
             { value: 3, label: 'Fill Missing Words' },
-            { value: 4, label: 'True Of False' },
+            { value: 4, label: 'True Or False' },
             { value: 5, label: 'Arrange' },
             { value: 6, label: 'Write An Essay' },
           ]}

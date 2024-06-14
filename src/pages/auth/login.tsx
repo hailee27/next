@@ -76,7 +76,7 @@ function LoginPage() {
                   dispatch(setTeacher(value.result.teacher));
                 }
                 if (value.result.student) {
-                  router.push('/student');
+                  router.push('/student/class');
                   dispatch(setStudent(value.result.student));
                 }
                 // toggleAlert({ content: value.message, type: 'success' });

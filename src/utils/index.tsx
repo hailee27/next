@@ -20,6 +20,9 @@ export const handleConvertArrayToChoicesObject = (value: any) =>
 export const handleGetReplaceMessingText = (text: string) => {
   const replacedText = text.replace(/\{ANSWER_\d\}/g, '___');
 
+  if (replacedText?.length > 500) {
+    return `${replacedText?.slice(0, 500)}...`;
+  }
   return replacedText;
 };
 

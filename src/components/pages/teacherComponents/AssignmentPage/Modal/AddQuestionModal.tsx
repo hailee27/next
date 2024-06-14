@@ -17,9 +17,16 @@ interface PropsType {
   setOpenModal: (v: boolean) => void;
   assignmentId: number;
   getListQuestionPopup: () => void;
+  totalQuestionAllowAdd: number;
 }
 
-const AddQuestionModal = ({ openModal, setOpenModal, assignmentId, getListQuestionPopup }: PropsType) => {
+const AddQuestionModal = ({
+  openModal,
+  setOpenModal,
+  assignmentId,
+  getListQuestionPopup,
+  totalQuestionAllowAdd,
+}: PropsType) => {
   const [getList, { data, isFetching }] = useLazyGetListQuestionBankQuery();
   const [postQuestionToAssignment, { isLoading }] = usePostQuestionAssignmentMutation();
   const [getListQuestion, { data: questionAssignment, isFetching: isFetchingQuestionAssignment }] =
@@ -50,15 +57,19 @@ const AddQuestionModal = ({ openModal, setOpenModal, assignmentId, getListQuesti
   };
 
   const handleAddQuestionToAssignment = () => {
-    postQuestionToAssignment({ assignmentId, questions: questionSelected }).then((res) => {
-      if ((res as unknown as PostQuestionAssignmentResponse)?.data?.status) {
-        message.success('Thêm câu hỏi vào assignment thành công');
-        getListQuestionPopup();
-        handleCancel();
-      } else {
-        message.error((res as unknown as { error: PostQuestionAssignmentResponse })?.error?.data?.message);
-      }
-    });
+    if (questionSelected?.length > totalQuestionAllowAdd) {
+      message.error('Số câu hỏi đã chọn vượt quá số lượng câu hỏi cho phép');
+    } else {
+      postQuestionToAssignment({ assignmentId, questions: questionSelected }).then((res) => {
+        if ((res as unknown as PostQuestionAssignmentResponse)?.data?.status) {
+          message.success('Thêm câu hỏi vào assignment thành công');
+          getListQuestionPopup();
+          handleCancel();
+        } else {
+          message.error((res as unknown as { error: PostQuestionAssignmentResponse })?.error?.data?.message);
+        }
+      });
+    }
   };
 
   const questionAssignmentAdded = questionAssignment?.result?.map((item) => item?.questionBankId);

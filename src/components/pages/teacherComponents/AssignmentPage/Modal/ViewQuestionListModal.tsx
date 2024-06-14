@@ -10,6 +10,7 @@ import {
 } from '@/redux/endpoints/teacher/question';
 
 import AddQuestionModal from './AddQuestionModal';
+import { useLazyGetDetailAssignmentQuery } from '@/redux/endpoints/teacher/assignment';
 
 interface PropsType {
   openModal: boolean;
@@ -21,6 +22,7 @@ const ViewQuestionListModal = ({ openModal, setOpenModal, assignmentId }: PropsT
   const [getList, { data: questionAssignment, isFetching: isFetchingQuestionAssignment }] =
     useLazyGetQuestionAssignmentQuery();
   const [deleteQuestion] = useDeleteQuestionAssignmentMutation();
+  const [getDetail, { data, isFetching }] = useLazyGetDetailAssignmentQuery();
 
   const [openAddQuestion, setOpenAddQuestion] = useState<boolean>(false);
 
@@ -29,6 +31,7 @@ const ViewQuestionListModal = ({ openModal, setOpenModal, assignmentId }: PropsT
       getList({
         assignmentId,
       });
+      getDetail({ id: assignmentId });
     }
   }, [assignmentId, openModal]);
 
@@ -36,20 +39,27 @@ const ViewQuestionListModal = ({ openModal, setOpenModal, assignmentId }: PropsT
     setOpenModal(false);
   };
 
+  const totalMark = Number(data?.result?.assignment?.totalMark);
+
+  console.log('totalMark', totalMark);
+
   return (
     <Modal footer={null} onCancel={handleCancel} open={openModal} title="View Question List" width={800}>
       <Spin spinning={isFetchingQuestionAssignment}>
-        <div className="flex justify-end my-4">
-          <BasicButton
-            className="text-[13px] font-[700] text-[#fff] !bg-[#2F2F2F]"
-            onClick={() => {
-              setOpenAddQuestion(true);
-            }}
-            styleType="rounded"
-          >
-            Add Question
-          </BasicButton>
-        </div>
+        {(questionAssignment?.result || [])?.length < totalMark && (
+          <div className="flex justify-end my-4">
+            <BasicButton
+              className="text-[13px] font-[700] text-[#fff] !bg-[#2F2F2F]"
+              onClick={() => {
+                setOpenAddQuestion(true);
+              }}
+              styleType="rounded"
+            >
+              Add Question
+            </BasicButton>
+          </div>
+        )}
+        <div className="uppercase font-bold mb-4">Maximum number of questions: {totalMark}</div>
         <div className="grid grid-cols-1 gap-y-3">
           {questionAssignment?.result?.map((item, index) => (
             <div className="border-b pb-2" key={item?.id}>
@@ -96,6 +106,7 @@ const ViewQuestionListModal = ({ openModal, setOpenModal, assignmentId }: PropsT
         {openAddQuestion && (
           <AddQuestionModal
             assignmentId={assignmentId}
+            totalQuestionAllowAdd={totalMark - (questionAssignment?.result || [])?.length}
             getListQuestionPopup={() => {
               getList({
                 assignmentId,
