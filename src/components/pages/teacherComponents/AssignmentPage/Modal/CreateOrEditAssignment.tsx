@@ -10,6 +10,8 @@ import {
   usePostAssignmentMutation,
   usePutAssignmentMutation,
 } from '@/redux/endpoints/teacher/assignment';
+import { useSocketContext } from '@/context/SocketContext';
+import { useLazyGetDetailClassQuery } from '@/redux/endpoints/teacher/class';
 
 interface PropsType {
   openModal: boolean;
@@ -20,11 +22,19 @@ interface PropsType {
 }
 
 const CreateOrEditAssignment = ({ openModal, setOpenModal, getList, idEdit, classId }: PropsType) => {
+  const { socket } = useSocketContext();
   const [form] = Form.useForm();
 
   const [postAssignment, { isLoading }] = usePostAssignmentMutation();
   const [putAssignment, { isLoading: isLoadingUpdate }] = usePutAssignmentMutation();
   const [getDetail, { data, isFetching }] = useLazyGetDetailAssignmentQuery();
+  const [getDetailClass, { data: dataClass }] = useLazyGetDetailClassQuery();
+
+  useEffect(() => {
+    if (classId) {
+      getDetailClass({ id: classId });
+    }
+  }, [classId]);
 
   useEffect(() => {
     if (idEdit) {
@@ -89,6 +99,10 @@ const CreateOrEditAssignment = ({ openModal, setOpenModal, getList, idEdit, clas
               }).then((res) => {
                 if ((res as unknown as PostAssignmentResponse)?.data?.status) {
                   message.success('Tạo assignment thành công');
+                  socket.emit('direct-notification', {
+                    classId: classId,
+                    body: `Assignment ${values?.name} được tạo trong class ${dataClass?.result?.name}`,
+                  });
                   handleCancel();
                   getList();
                 } else {
@@ -138,6 +152,7 @@ const CreateOrEditAssignment = ({ openModal, setOpenModal, getList, idEdit, clas
                 const timeAllow = form.getFieldValue('timeAllow');
                 form.setFieldValue('timeEnd', dayjs(e).add(Number(timeAllow), 'minutes'));
               }}
+              minDate={dayjs()}
               placeholder="select time start"
               showTime
             />
