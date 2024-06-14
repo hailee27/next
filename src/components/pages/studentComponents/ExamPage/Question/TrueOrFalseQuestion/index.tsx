@@ -91,7 +91,7 @@ const TrueOrFalseQuestion = ({ question, index, setAnswerSubmit, isPractice }: P
               }}
               options={[
                 { value: 1, label: 'True' },
-                { value: 2, label: 'false' },
+                { value: 2, label: 'False' },
               ]}
               value={dataSelected?.find((item) => item?.index === idex)?.value}
             />

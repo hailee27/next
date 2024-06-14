@@ -107,7 +107,7 @@ const ResponseComponent = ({ questionType, item, form }: PropsType) => {
                     <Radio.Group
                       options={[
                         { value: 1, label: 'True' },
-                        { value: 2, label: 'false' },
+                        { value: 2, label: 'False' },
                       ]}
                     />
                   </Form.Item>
