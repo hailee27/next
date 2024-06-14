@@ -284,7 +284,7 @@ function PrimaryLayout({ children }: { children: React.ReactNode }) {
       )}
 
       <div
-        className="fixed bottom-[200px] right-[50px] z-[100] cursor-pointer"
+        className="fixed bottom-[200px] right-[55px] z-[100] cursor-pointer"
         onClick={() => {
           if (auth?.teacher?.id) {
             router.push('/teacher/message');
