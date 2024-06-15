@@ -1,14 +1,11 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
-import { MoreOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
-import { Table } from 'antd';
+import { Button, Table } from 'antd';
 
 import { StudentGetListClassParams, useLazyStudentGetListClassQuery } from '@/redux/endpoints/student/class';
-import BasicPopover from '@/components/common/BasicPopover';
 import CustomPagination from '@/components/common/CustomPagination';
-import BasicButton from '@/components/common/forms/BasicButton';
 
 import AssignmentAnalysisModal from '../Modal/AssignmentAnalysisModal';
 import CountCompletedModal from '../Modal/CountCompletedModal';
@@ -81,36 +78,26 @@ const StudentClassTable = ({ objSearch }: PropsType) => {
       dataIndex: 'moreAction',
       width: 50,
       render: (_, record) => (
-        <div id="MoreOutlined">
-          <BasicPopover
-            content={
-              <div>
-                <BasicButton
-                  className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
-                  onClick={() => {
-                    setIdEdit(record?.id);
-                    setOpenCountCompleted(true);
-                  }}
-                  styleType="text"
-                >
-                  View Assignment Completed
-                </BasicButton>
-                <BasicButton
-                  className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
-                  onClick={() => {
-                    setIdEdit(record?.id);
-                    setOpenAssignmentAnalysis(true);
-                  }}
-                  styleType="text"
-                >
-                  View Assignment Analysis
-                </BasicButton>
-              </div>
-            }
-            placement="left"
+        <div className="flex items-center gap-x-1">
+          <Button
+            onClick={() => {
+              setIdEdit(record?.id);
+              setOpenCountCompleted(true);
+            }}
+            type="primary"
           >
-            <MoreOutlined />
-          </BasicPopover>
+            Assignment Completed
+          </Button>
+          <Button
+            className="flex items-center"
+            onClick={() => {
+              setIdEdit(record?.id);
+              setOpenAssignmentAnalysis(true);
+            }}
+            type="default"
+          >
+            Assignment Analysis
+          </Button>
         </div>
       ),
     },

@@ -2,11 +2,10 @@
 /* eslint-disable no-console */
 /* eslint-disable max-lines-per-function */
 import React, { useEffect, useState } from 'react';
-import { message, Table } from 'antd';
+import { Button, message, Popconfirm, Table } from 'antd';
 import dayjs from 'dayjs';
-import { MoreOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
-import BasicPopover from '@/components/common/BasicPopover';
 import BasicButton from '@/components/common/forms/BasicButton';
 import {
   AssignmentSearchObj,
@@ -100,48 +99,46 @@ const AssignmentTable = ({ objSearch }: PropsType) => {
       dataIndex: 'moreAction',
       width: 50,
       render: (_, record) => (
-        <div
-          id="MoreOutlined"
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-          role="presentation"
-        >
-          <BasicPopover
-            content={
-              <div>
-                <BasicButton
-                  className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
-                  onClick={() => {
-                    setIdEdit(record?.id);
-                    setOpenCreateOrEditModal(true);
-                  }}
-                  styleType="text"
-                >
-                  Update
-                </BasicButton>
-                <BasicButton
-                  className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
-                  onClick={() => {
-                    deleteAssignment({ id: record?.id }).then((res) => {
-                      if ((res as unknown as DeleteAssignmentResponse)?.data?.status) {
-                        message.success('Xoá assignment thành công');
-                        handleGetFirstPage();
-                      } else {
-                        message.success('Xảy ra lỗi khi xoá assignment');
-                      }
-                    });
-                  }}
-                  styleType="text"
-                >
-                  Delete
-                </BasicButton>
-              </div>
-            }
-            placement="left"
+        <div className="flex items-center gap-x-1">
+          <Button
+            onClick={() => {
+              setIdEdit(record?.id || 0);
+              setOpenViewQuestionList(true);
+            }}
+            type="primary"
           >
-            <MoreOutlined />
-          </BasicPopover>
+            Question List
+          </Button>
+          <Button
+            className="flex items-center"
+            onClick={() => {
+              setIdEdit(record?.id);
+              setOpenCreateOrEditModal(true);
+            }}
+            type="default"
+          >
+            <EditOutlined />
+          </Button>
+          <Popconfirm
+            cancelText="No"
+            okText="Yes"
+            onConfirm={() => {
+              deleteAssignment({ id: record?.id }).then((res) => {
+                if ((res as unknown as DeleteAssignmentResponse)?.data?.status) {
+                  message.success('Xoá assignment thành công');
+                  handleGetFirstPage();
+                } else {
+                  message.success('Xảy ra lỗi khi xoá assignment');
+                }
+              });
+            }}
+            placement="topLeft"
+            title="Are you sure to delete this record?"
+          >
+            <Button className="flex items-center" danger>
+              <DeleteOutlined />
+            </Button>
+          </Popconfirm>
         </div>
       ),
     },
@@ -180,12 +177,6 @@ const AssignmentTable = ({ objSearch }: PropsType) => {
                 </div>
               ),
             }}
-            onRow={(record) => ({
-              onClick: () => {
-                setIdEdit(record?.id || 0);
-                setOpenViewQuestionList(true);
-              },
-            })}
             pagination={false}
             rowKey="id"
           />

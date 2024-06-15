@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import { Modal, Spin, Table } from 'antd';
 
-import { useLazyStudentGetClassAnalysisQuery } from '@/redux/endpoints/student/class';
+import { ClassAnalysisType, useLazyStudentGetClassAnalysisQuery } from '@/redux/endpoints/student/class';
 import BasicButton from '@/components/common/forms/BasicButton';
 
 interface PropsType {
@@ -66,6 +66,23 @@ const AssignmentAnalysisModal = ({ openModal, setOpenModal, idEdit }: PropsType)
     },
   ];
 
+  if ((data?.result as string)?.includes('Không có dữ liệu.')) {
+    return (
+      <Modal footer={null} onCancel={handleCancel} open={openModal} title="View Assignment Analysis" width={1000}>
+        <Spin spinning={isFetching}>
+          <div className="font-bold uppercase my-6">
+            No data. Please complete the assignments to get analysis results
+          </div>
+          <div className="gap-x-3 flex items-center justify-end mt-2">
+            <BasicButton onClick={() => handleCancel()} styleType="rounded">
+              Close
+            </BasicButton>
+          </div>
+        </Spin>
+      </Modal>
+    );
+  }
+
   return (
     <Modal footer={null} onCancel={handleCancel} open={openModal} title="View Assignment Analysis" width={1000}>
       <Spin spinning={isFetching}>
@@ -73,7 +90,7 @@ const AssignmentAnalysisModal = ({ openModal, setOpenModal, idEdit }: PropsType)
           <Table
             bordered
             columns={tableFormat as any}
-            dataSource={data?.result || []}
+            dataSource={(data?.result as ClassAnalysisType[]) || []}
             loading={isFetching}
             locale={{
               emptyText: (

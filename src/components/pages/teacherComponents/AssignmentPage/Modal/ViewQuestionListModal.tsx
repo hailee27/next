@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 import { message, Modal, Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
 
@@ -8,9 +9,9 @@ import {
   useDeleteQuestionAssignmentMutation,
   useLazyGetQuestionAssignmentQuery,
 } from '@/redux/endpoints/teacher/question';
+import { useLazyGetDetailAssignmentQuery } from '@/redux/endpoints/teacher/assignment';
 
 import AddQuestionModal from './AddQuestionModal';
-import { useLazyGetDetailAssignmentQuery } from '@/redux/endpoints/teacher/assignment';
 
 interface PropsType {
   openModal: boolean;
@@ -41,11 +42,9 @@ const ViewQuestionListModal = ({ openModal, setOpenModal, assignmentId }: PropsT
 
   const totalMark = Number(data?.result?.assignment?.totalMark);
 
-  console.log('totalMark', totalMark);
-
   return (
     <Modal footer={null} onCancel={handleCancel} open={openModal} title="View Question List" width={800}>
-      <Spin spinning={isFetchingQuestionAssignment}>
+      <Spin spinning={isFetchingQuestionAssignment || isFetching}>
         {(questionAssignment?.result || [])?.length < totalMark && (
           <div className="flex justify-end my-4">
             <BasicButton
@@ -106,7 +105,6 @@ const ViewQuestionListModal = ({ openModal, setOpenModal, assignmentId }: PropsT
         {openAddQuestion && (
           <AddQuestionModal
             assignmentId={assignmentId}
-            totalQuestionAllowAdd={totalMark - (questionAssignment?.result || [])?.length}
             getListQuestionPopup={() => {
               getList({
                 assignmentId,
@@ -114,6 +112,7 @@ const ViewQuestionListModal = ({ openModal, setOpenModal, assignmentId }: PropsT
             }}
             openModal={openAddQuestion}
             setOpenModal={setOpenAddQuestion}
+            totalQuestionAllowAdd={totalMark - (questionAssignment?.result || [])?.length}
           />
         )}
       </Spin>
