@@ -1,13 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-unsafe-optional-chaining */
-import { Modal, Spin, Table } from 'antd';
+import { Button, Modal, Spin, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
-import { MoreOutlined } from '@ant-design/icons';
 
 import BasicButton from '@/components/common/forms/BasicButton';
 import { useLazyGetListAssignmentStudentQuery } from '@/redux/endpoints/teacher/student';
-import BasicPopover from '@/components/common/BasicPopover';
 
 import StudentAssignmentDetail from './StudentAssignmentDetail';
 
@@ -70,27 +68,17 @@ const AssignmentListModal = ({ openModal, setOpenModal, idEdit }: PropsType) => 
       dataIndex: 'moreAction',
       width: 50,
       render: (_, record) => (
-        <div id="MoreOutlined">
-          <BasicPopover
-            content={
-              <div>
-                <BasicButton
-                  className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
-                  onClick={() => {
-                    setAssignmentId(record?.assignment?.id);
-                    setAssignmentSessionId(record?.id);
-                    setOpenAssignmentDetail(true);
-                  }}
-                  styleType="text"
-                >
-                  View Detail
-                </BasicButton>
-              </div>
-            }
-            placement="left"
+        <div className="flex items-center gap-x-1">
+          <Button
+            onClick={() => {
+              setAssignmentId(record?.assignment?.id);
+              setAssignmentSessionId(record?.id);
+              setOpenAssignmentDetail(true);
+            }}
+            type="primary"
           >
-            <MoreOutlined />
-          </BasicPopover>
+            View Detail
+          </Button>
         </div>
       ),
     },

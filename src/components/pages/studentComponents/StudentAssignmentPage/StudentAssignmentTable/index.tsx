@@ -1,15 +1,12 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
-import { MoreOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
-import { Table } from 'antd';
+import { Button, Table } from 'antd';
 
-import BasicPopover from '@/components/common/BasicPopover';
 import { StudentGetListAssignmentParams, useLazyStudentGetListAssignmentQuery } from '@/redux/endpoints/student/class';
 import CustomPagination from '@/components/common/CustomPagination';
-import BasicButton from '@/components/common/forms/BasicButton';
 
 import AssignmentRankModal from '../Modal/AssignmentRankModal';
 
@@ -90,39 +87,28 @@ const StudentAssignmentTable = ({ objSearch }: PropsType) => {
       dataIndex: 'moreAction',
       width: 50,
       render: (_, record) => (
-        <div id="MoreOutlined">
-          <BasicPopover
-            content={
-              <div>
-                {objSearch?.status === 1 && dayjs().isAfter(record?.timeStart) && dayjs().isBefore(record?.timeEnd) && (
-                  <BasicButton
-                    className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
-                    onClick={() => {
-                      push(`/student/exam/${record?.id}`);
-                    }}
-                    styleType="text"
-                  >
-                    Exam
-                  </BasicButton>
-                )}
-                {objSearch?.status === 3 && (
-                  <BasicButton
-                    className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
-                    onClick={() => {
-                      setIdEdit(record?.id);
-                      setOpenRank(true);
-                    }}
-                    styleType="text"
-                  >
-                    View Exam Results
-                  </BasicButton>
-                )}
-              </div>
-            }
-            placement="left"
-          >
-            <MoreOutlined />
-          </BasicPopover>
+        <div className="flex items-center gap-x-1">
+          {objSearch?.status === 1 && dayjs().isAfter(record?.timeStart) && dayjs().isBefore(record?.timeEnd) && (
+            <Button
+              onClick={() => {
+                push(`/student/exam/${record?.id}`);
+              }}
+              type="primary"
+            >
+              Exam
+            </Button>
+          )}
+          {objSearch?.status === 3 && (
+            <Button
+              onClick={() => {
+                setIdEdit(record?.id);
+                setOpenRank(true);
+              }}
+              type="primary"
+            >
+              Exam Results
+            </Button>
+          )}
         </div>
       ),
     },
@@ -146,14 +132,6 @@ const StudentAssignmentTable = ({ objSearch }: PropsType) => {
               </div>
             ),
           }}
-          onRow={(record) => ({
-            onClick: () => {
-              if (objSearch?.status === 3) {
-                setIdEdit(record?.id || 0);
-                setOpenRank(true);
-              }
-            },
-          })}
           pagination={false}
           rowKey="id"
         />

@@ -39,7 +39,7 @@ export type ClassAnalysisType = {
 export type StudentGetClassAnalysisResponse = {
   status: boolean;
   message: string;
-  result: ClassAnalysisType[];
+  result: ClassAnalysisType[] | string;
 };
 
 export type StudentGetClassAnalysisParams = {

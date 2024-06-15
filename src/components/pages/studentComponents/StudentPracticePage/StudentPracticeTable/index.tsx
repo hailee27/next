@@ -1,16 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
-import { Table } from 'antd';
+import { Button, Table } from 'antd';
 import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
-import { MoreOutlined } from '@ant-design/icons';
 
 import {
   GetListPracticeRoomParams,
   ListPracticeRoomType,
   useLazyGetListPracticeRoomQuery,
 } from '@/redux/endpoints/student/practice';
-import BasicPopover from '@/components/common/BasicPopover';
 import BasicButton from '@/components/common/forms/BasicButton';
 
 import CreatePracticeModal from '../Modal/CreatePracticeModal';
@@ -84,46 +82,36 @@ const StudentPracticeTable = ({ objSearch }: PropsType) => {
       dataIndex: 'moreAction',
       width: 50,
       render: (_, record) => (
-        <div id="MoreOutlined">
-          <BasicPopover
-            content={
-              <div>
-                {record?.status && (
-                  <BasicButton
-                    className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
-                    onClick={() => {
-                      push({
-                        pathname: `/student/practice/${record?.id}`,
-                        query: {
-                          timeAllow: record?.timeAllow,
-                          questionCount: record?.questionCount,
-                          type: record?.type,
-                        },
-                      });
-                    }}
-                    styleType="text"
-                  >
-                    Exam
-                  </BasicButton>
-                )}
-                {!record?.status && (
-                  <BasicButton
-                    className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
-                    onClick={() => {
-                      setPracticeSelected(record);
-                      setOpenViewScoreModal(true);
-                    }}
-                    styleType="text"
-                  >
-                    View Practice Score
-                  </BasicButton>
-                )}
-              </div>
-            }
-            placement="left"
-          >
-            <MoreOutlined />
-          </BasicPopover>
+        <div className="flex items-center gap-x-1">
+          {record?.status && (
+            <Button
+              onClick={() => {
+                push({
+                  pathname: `/student/practice/${record?.id}`,
+                  query: {
+                    timeAllow: record?.timeAllow,
+                    questionCount: record?.questionCount,
+                    type: record?.type,
+                  },
+                });
+              }}
+              type="primary"
+            >
+              Exam
+            </Button>
+          )}
+          {!record?.status && (
+            <Button
+              className="flex items-center"
+              onClick={() => {
+                setPracticeSelected(record);
+                setOpenViewScoreModal(true);
+              }}
+              type="primary"
+            >
+              Practice Score
+            </Button>
+          )}
         </div>
       ),
     },

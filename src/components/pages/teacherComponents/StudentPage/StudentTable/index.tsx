@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
-import { message, Table } from 'antd';
-import { MoreOutlined } from '@ant-design/icons';
+import { Button, message, Popconfirm, Table } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 
-import BasicPopover from '@/components/common/BasicPopover';
 import CustomPagination from '@/components/common/CustomPagination';
 import BasicButton from '@/components/common/forms/BasicButton';
 import {
@@ -101,43 +100,37 @@ const StudentTable = ({ objSearch }: PropsType) => {
       dataIndex: 'moreAction',
       width: 50,
       render: (_, record) => (
-        <div id="MoreOutlined">
-          <BasicPopover
-            content={
-              <div>
-                <BasicButton
-                  className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
-                  onClick={() => {
-                    setIdEdit(record?.id);
-                    setOpenAssignmentListModal(true);
-                  }}
-                  styleType="text"
-                >
-                  View Assignment List
-                </BasicButton>
-
-                <BasicButton
-                  className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
-                  onClick={() => {
-                    deleteStudent({ id: record?.id }).then((res) => {
-                      if ((res as unknown as DeleteStudentResponse)?.data?.status) {
-                        message.success('Xoá học sinh thành công');
-                        handleGetStudent();
-                      } else {
-                        message.success('Xảy ra lỗi khi xoá học sinh');
-                      }
-                    });
-                  }}
-                  styleType="text"
-                >
-                  Delete
-                </BasicButton>
-              </div>
-            }
-            placement="left"
+        <div className="flex items-center gap-x-1">
+          <Button
+            onClick={() => {
+              setIdEdit(record?.id);
+              setOpenAssignmentListModal(true);
+            }}
+            type="primary"
           >
-            <MoreOutlined />
-          </BasicPopover>
+            Assignment List
+          </Button>
+
+          <Popconfirm
+            cancelText="No"
+            okText="Yes"
+            onConfirm={() => {
+              deleteStudent({ id: record?.id }).then((res) => {
+                if ((res as unknown as DeleteStudentResponse)?.data?.status) {
+                  message.success('Xoá học sinh thành công');
+                  handleGetStudent();
+                } else {
+                  message.success('Xảy ra lỗi khi xoá học sinh');
+                }
+              });
+            }}
+            placement="topLeft"
+            title="Are you sure to delete this record?"
+          >
+            <Button className="flex items-center" danger>
+              <DeleteOutlined />
+            </Button>
+          </Popconfirm>
         </div>
       ),
     },

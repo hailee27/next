@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
-import { message, Table } from 'antd';
-import { MoreOutlined } from '@ant-design/icons';
+import { Button, message, Popconfirm, Table } from 'antd';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 
-import BasicPopover from '@/components/common/BasicPopover';
 import CustomPagination from '@/components/common/CustomPagination';
 import BasicButton from '@/components/common/forms/BasicButton';
 import {
@@ -86,42 +85,37 @@ const QuestionBankTable = ({ objSearch }: PropsType) => {
       dataIndex: 'moreAction',
       width: 50,
       render: (_, record) => (
-        <div id="MoreOutlined">
-          <BasicPopover
-            content={
-              <div>
-                <BasicButton
-                  className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
-                  onClick={() => {
-                    setIdEdit(record?.id);
-                    setOpenCreateOrEditModal(true);
-                  }}
-                  styleType="text"
-                >
-                  Update
-                </BasicButton>
-                <BasicButton
-                  className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
-                  onClick={() => {
-                    deleteQuestionBank({ id: record?.id }).then((res) => {
-                      if ((res as unknown as DeleteQuestionBankResponse)?.data?.status) {
-                        message.success('Xoá câu hỏi thành công');
-                        handleGetQuestionBank();
-                      } else {
-                        message.success('Xảy ra lỗi khi xoá câu hỏi');
-                      }
-                    });
-                  }}
-                  styleType="text"
-                >
-                  Delete
-                </BasicButton>
-              </div>
-            }
-            placement="left"
+        <div className="flex items-center gap-x-1">
+          <Button
+            className="flex items-center"
+            onClick={() => {
+              setIdEdit(record?.id);
+              setOpenCreateOrEditModal(true);
+            }}
+            type="default"
           >
-            <MoreOutlined />
-          </BasicPopover>
+            <EditOutlined />
+          </Button>
+          <Popconfirm
+            cancelText="No"
+            okText="Yes"
+            onConfirm={() => {
+              deleteQuestionBank({ id: record?.id }).then((res) => {
+                if ((res as unknown as DeleteQuestionBankResponse)?.data?.status) {
+                  message.success('Xoá câu hỏi thành công');
+                  handleGetQuestionBank();
+                } else {
+                  message.success('Xảy ra lỗi khi xoá câu hỏi');
+                }
+              });
+            }}
+            placement="topLeft"
+            title="Are you sure to delete this record?"
+          >
+            <Button className="flex items-center" danger>
+              <DeleteOutlined />
+            </Button>
+          </Popconfirm>
         </div>
       ),
     },

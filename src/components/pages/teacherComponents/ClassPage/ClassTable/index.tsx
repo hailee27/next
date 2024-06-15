@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
-import { message, Table } from 'antd';
+import { Button, message, Popconfirm, Table } from 'antd';
 import dayjs from 'dayjs';
-import { MoreOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
-import BasicPopover from '@/components/common/BasicPopover';
 import BasicButton from '@/components/common/forms/BasicButton';
 import CustomPagination from '@/components/common/CustomPagination';
 import {
@@ -87,48 +86,46 @@ const ClassTable = ({ objSearch }: PropsType) => {
       dataIndex: 'moreAction',
       width: 50,
       render: (_, record) => (
-        <div
-          id="MoreOutlined"
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-          role="presentation"
-        >
-          <BasicPopover
-            content={
-              <div>
-                <BasicButton
-                  className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
-                  onClick={() => {
-                    setClassIdEdit(record?.id);
-                    setOpenCreateOrEditModal(true);
-                  }}
-                  styleType="text"
-                >
-                  Update
-                </BasicButton>
-                <BasicButton
-                  className="flex flex-col w-full text-[#929292] hover:bg-[rgba(245,245,245,0.6)]"
-                  onClick={() => {
-                    deleteClass({ id: record?.id }).then((res) => {
-                      if ((res as unknown as DeleteClassResponse)?.data?.status) {
-                        message.success('Xoá lớp học thành công');
-                        handleGetClass();
-                      } else {
-                        message.success('Xảy ra lỗi khi xoá lớp học');
-                      }
-                    });
-                  }}
-                  styleType="text"
-                >
-                  Delete
-                </BasicButton>
-              </div>
-            }
-            placement="left"
+        <div className="flex items-center gap-x-1">
+          <Button
+            onClick={() => {
+              setClassIdEdit(record?.id || 0);
+              setOpenViewStudentList(true);
+            }}
+            type="primary"
           >
-            <MoreOutlined />
-          </BasicPopover>
+            Student List
+          </Button>
+          <Button
+            className="flex items-center"
+            onClick={() => {
+              setClassIdEdit(record?.id);
+              setOpenCreateOrEditModal(true);
+            }}
+            type="default"
+          >
+            <EditOutlined />
+          </Button>
+          <Popconfirm
+            cancelText="No"
+            okText="Yes"
+            onConfirm={() => {
+              deleteClass({ id: record?.id }).then((res) => {
+                if ((res as unknown as DeleteClassResponse)?.data?.status) {
+                  message.success('Xoá lớp học thành công');
+                  handleGetClass();
+                } else {
+                  message.success('Xảy ra lỗi khi xoá lớp học');
+                }
+              });
+            }}
+            placement="topLeft"
+            title="Are you sure to delete this record?"
+          >
+            <Button className="flex items-center" danger>
+              <DeleteOutlined />
+            </Button>
+          </Popconfirm>
         </div>
       ),
     },
@@ -165,12 +162,6 @@ const ClassTable = ({ objSearch }: PropsType) => {
                 </div>
               ),
             }}
-            onRow={(record) => ({
-              onClick: () => {
-                setClassIdEdit(record?.id || 0);
-                setOpenViewStudentList(true);
-              },
-            })}
             pagination={false}
             rowKey="id"
           />

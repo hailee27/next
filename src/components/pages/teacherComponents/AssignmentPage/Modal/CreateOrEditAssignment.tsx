@@ -100,7 +100,7 @@ const CreateOrEditAssignment = ({ openModal, setOpenModal, getList, idEdit, clas
                 if ((res as unknown as PostAssignmentResponse)?.data?.status) {
                   message.success('Tạo assignment thành công');
                   socket.emit('direct-notification', {
-                    classId: classId,
+                    classId,
                     body: `Assignment ${values?.name} được tạo trong class ${dataClass?.result?.name}`,
                   });
                   handleCancel();
@@ -148,11 +148,11 @@ const CreateOrEditAssignment = ({ openModal, setOpenModal, getList, idEdit, clas
             <DatePicker
               className="flex-1 w-full"
               format="YYYY-MM-DD HH:mm:ss"
+              minDate={dayjs()}
               onChange={(e) => {
                 const timeAllow = form.getFieldValue('timeAllow');
                 form.setFieldValue('timeEnd', dayjs(e).add(Number(timeAllow), 'minutes'));
               }}
-              minDate={dayjs()}
               placeholder="select time start"
               showTime
             />
