@@ -51,7 +51,9 @@ function SignUpPage() {
                 router.push('/auth/login');
                 toggleAlert({ content: value.message });
               })
-              .catch((error) => toggleAlert({ content: error.message[0], type: 'error' }))
+              .catch((error) => {
+                toggleAlert({ content: error.message?.[0] || error?.data?.message, type: 'error' });
+              })
           )}
         >
           <Controller

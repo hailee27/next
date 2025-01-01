@@ -14,7 +14,7 @@ const SocketContext = createContext<any | undefined>(undefined);
 const SocketContextProvider = ({ children }: PropsType) => {
   const auth = useSelector((state: RootState) => state.auth);
 
-  const socket = io('https://api.exam.soon.it', { transports: ['websocket'] });
+  const socket = io(process.env.NEXT_PUBLIC_API_URL_SOCKET ?? '', { transports: ['websocket'], reconnection: false });
   if (auth?.teacher?.id) {
     socket.auth = { teacherId: auth?.teacher?.id };
   } else {
