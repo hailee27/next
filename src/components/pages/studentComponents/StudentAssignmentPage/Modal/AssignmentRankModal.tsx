@@ -5,6 +5,7 @@ import { Input, Modal, Popover, Spin, Table } from 'antd';
 import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
 import { MoreOutlined, SendOutlined } from '@ant-design/icons';
+import Link from 'next/link';
 
 import {
   CommentType,
@@ -174,6 +175,11 @@ const AssignmentRankModal = ({ openModal, setOpenModal, idEdit }: PropsType) => 
                     </div>
                     <div className="text-[12px]">
                       <p className="">{item?.body}</p>
+                      {item?.upload && (
+                        <Link href={`${process.env.NEXT_PUBLIC_API_URL?.replace('api/v1', '')}${item.upload}`}>
+                          <p className="underline ">{item.upload}</p>
+                        </Link>
+                      )}
                       <p className="">
                         {dayjs(item?.createdAt)
                           .subtract(7, 'hours')

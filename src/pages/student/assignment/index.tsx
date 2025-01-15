@@ -10,7 +10,6 @@ const { Content } = Layout;
 const StudentAssignmentPage = () => (
   <MainPage>
     <HeaderRender title="Assignment" />
-
     <Content>
       <StudentAssignmentComponents />
     </Content>

@@ -63,7 +63,7 @@ const StudentTable = ({ objSearch }: PropsType) => {
       title: 'Name',
       dataIndex: 'name',
       render: (name) => <div className="font-bold">{name}</div>,
-      width: 150,
+      width: 250,
     },
     {
       title: 'Email',

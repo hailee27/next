@@ -138,6 +138,7 @@ export type CommentType = {
     id: number | string;
     name: string;
   } | null;
+  upload?: string;
 };
 
 export type PostAssignmentStartResponse = {

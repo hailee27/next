@@ -4,11 +4,18 @@ import { api } from '../../api';
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
     postTeacherComment: build.mutation<PostTeacherCommentResponse, PostTeacherCommentParams>({
-      query: (params) => ({
-        url: '/teacher/comment',
-        method: 'POST',
-        body: params,
-      }),
+      query: (params) => {
+        const formData = new FormData();
+        formData.append('assignmentSessionId', String(params.assignmentSessionId));
+        formData.append('body', params.body);
+        formData.append('document', params.document);
+
+        return {
+          url: '/teacher/comment',
+          method: 'POST',
+          body: formData,
+        };
+      },
     }),
     putTeacherComment: build.mutation<PutTeacherCommentResponse, PutTeacherCommentParams>({
       query: (params) => ({
@@ -44,6 +51,7 @@ export type PostTeacherCommentResponse = any;
 export type PostTeacherCommentParams = {
   assignmentSessionId: number;
   body: string;
+  document?: any;
 };
 
 export { injectedRtkApi as TeacherCommentApi };

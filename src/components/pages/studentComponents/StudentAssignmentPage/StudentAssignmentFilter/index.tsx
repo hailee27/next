@@ -26,7 +26,7 @@ const StudentAssignmentFilter = ({ onSubmit, additionalButtons }: PropsType) => 
             <BasicStudentSelectClass className="flex-1 h-10" placeholder="Class" />
           </Form.Item>
 
-          <Form.Item name="status" noStyle>
+          <Form.Item initialValue={1} name="status" noStyle>
             <Select
               className="flex-1 h-10"
               options={[

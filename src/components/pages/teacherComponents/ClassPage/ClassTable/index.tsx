@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
-import { Button, message, Popconfirm, Table } from 'antd';
+import { Button, message, Popconfirm, Table, Upload } from 'antd';
 import dayjs from 'dayjs';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, UploadOutlined } from '@ant-design/icons';
 
 import BasicButton from '@/components/common/forms/BasicButton';
 import CustomPagination from '@/components/common/CustomPagination';
@@ -12,6 +12,7 @@ import {
   DeleteClassResponse,
   useDeleteClassMutation,
   useLazyGetListClassQuery,
+  usePostImportStudentsMutation,
 } from '@/redux/endpoints/teacher/class';
 
 import CreateOrEditClass from '../Modal/CreateOrEditClass';
@@ -29,6 +30,16 @@ const ClassTable = ({ objSearch }: PropsType) => {
   const [classIdEdit, setClassIdEdit] = useState(0);
   const [openCreateOrEditModal, setOpenCreateOrEditModal] = useState<boolean>(false);
   const [openViewStudentList, setOpenViewStudentList] = useState<boolean>(false);
+
+  const [postImportStudent] = usePostImportStudentsMutation();
+  const handleImport = ({ id, file }) => {
+    const formData = new FormData();
+    formData.append('classId', id);
+    formData.append('file', file);
+    postImportStudent(formData)
+      .then(() => message.success('Thêm danh sách thành công'))
+      .catch(() => message.error('Thêm danh sách thất bại'));
+  };
 
   const handleGetClass = () => {
     getList({ page: 1, limit: 20 });
@@ -87,6 +98,13 @@ const ClassTable = ({ objSearch }: PropsType) => {
       width: 50,
       render: (_, record) => (
         <div className="flex items-center gap-x-1">
+          <Upload
+            fileList={[]}
+            maxCount={1}
+            onChange={(e) => handleImport({ id: record?.id, file: e.file.originFileObj })}
+          >
+            <Button icon={<UploadOutlined />}>Import</Button>
+          </Upload>
           <Button
             onClick={() => {
               setClassIdEdit(record?.id || 0);

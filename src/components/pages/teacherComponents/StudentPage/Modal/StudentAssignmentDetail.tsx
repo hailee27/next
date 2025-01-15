@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
-import { MoreOutlined, SendOutlined } from '@ant-design/icons';
-import { Input, Modal, Popover, Spin } from 'antd';
+import { MoreOutlined, SendOutlined, UploadOutlined } from '@ant-design/icons';
+import { Button, Input, Modal, Popover, Spin, Upload } from 'antd';
 import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 
@@ -30,6 +31,7 @@ const StudentAssignmentDetail = ({ studentId, assignmentId, assignmentSessionId,
   const [deleteComment, { isLoading: isLoadingDelete }] = useDeleteTeacherCommentMutation();
   const [updateComment, { isLoading: isLoadingComment }] = usePutTeacherCommentMutation();
 
+  const [file, setFile] = useState<any>();
   const [commentList, setCommentList] = useState<CommentType[]>([]);
   const [comment, setComment] = useState<string>('');
   const [commentEdit, setCommentEdit] = useState<string>('');
@@ -187,6 +189,11 @@ const StudentAssignmentDetail = ({ studentId, assignmentId, assignmentSessionId,
               </div>
             </div>
           ))}
+          <div>
+            <Upload data={file} fileList={file} maxCount={1} onChange={(e) => setFile(e.fileList as any)}>
+              <Button icon={<UploadOutlined />}>Click to Upload</Button>
+            </Upload>
+          </div>
           <div className="flex gap-x-5 justify-between items-center">
             <Input
               className="flex-1"
@@ -202,6 +209,7 @@ const StudentAssignmentDetail = ({ studentId, assignmentId, assignmentSessionId,
                     postComment({
                       body: comment,
                       assignmentSessionId,
+                      document: file?.[0]?.originFileObj,
                     }).then((res) => {
                       if ((res as unknown as CreateUpdateDeleteResponse)?.data?.status) {
                         getDetail({
@@ -209,6 +217,7 @@ const StudentAssignmentDetail = ({ studentId, assignmentId, assignmentSessionId,
                           assignmentId,
                         });
                         setComment('');
+                        setFile([]);
                       }
                     });
                   }

@@ -60,6 +60,13 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg,
       }),
     }),
+    postImportStudents: build.mutation({
+      query: (queryArg) => ({
+        url: '/teacher/class/import-students',
+        method: 'POST',
+        body: queryArg,
+      }),
+    }),
   }),
 });
 
@@ -182,4 +189,5 @@ export const {
   useLazyGetListStudentClassQuery,
   usePostAddStudentMutation,
   usePostDeleteStudentMutation,
+  usePostImportStudentsMutation,
 } = injectedRtkApi;
