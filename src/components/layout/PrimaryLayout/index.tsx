@@ -186,16 +186,6 @@ function PrimaryLayout({ children }: { children: React.ReactNode }) {
         trigger={null}
       >
         <div className={`!h-[61px] !p-[20px] border-b flex items-center space-x-3 ${collapsed ? '!pl-[26px]' : ''}`}>
-          <Button
-            icon={<MenuOutlined />}
-            // onClick={() => setCollapsed(!collapsed)}
-            style={{
-              fontSize: '16px',
-              width: 32,
-              height: 32,
-            }}
-            type="text"
-          />
           {!collapsed ? (
             <div className="flex justify-between items-center w-full">
               <div
@@ -205,7 +195,7 @@ function PrimaryLayout({ children }: { children: React.ReactNode }) {
                 }}
                 role="presentation"
               >
-                LOGO
+                <Image preview={false} src="/images/logo.jpeg" width={100} />
               </div>
               <div className="cursor-pointer" onClick={() => setOpenNotification(true)} role="presentation">
                 <NotificationOutlined />
@@ -284,7 +274,7 @@ function PrimaryLayout({ children }: { children: React.ReactNode }) {
       )}
 
       <div
-        className="fixed bottom-[200px] right-[55px] z-[100] cursor-pointer"
+        className="fixed bottom-[20px] right-[40px] z-[100] cursor-pointer"
         onClick={() => {
           if (auth?.teacher?.id) {
             router.push('/teacher/message');
@@ -298,10 +288,10 @@ function PrimaryLayout({ children }: { children: React.ReactNode }) {
           <Image
             alt="msg"
             className="rounded-full w-[40px] h-[40px] z-[-1]"
-            height={30}
+            height={40}
             preview={false}
             src="https://www.pikpng.com/pngl/m/259-2592784_messenger-facebook-messenger-icon-clipart.png"
-            width={30}
+            width={40}
           />
           {messageUnRead !== 0 && (
             <div className="absolute top-0 right-0 z-2 w-[15px] rounded-full font-bold text-[#fff] flex items-center justify-center h-[15px] bg-[#f00]">

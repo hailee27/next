@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { UserAddOutlined } from '@ant-design/icons';
+import { Divider } from 'antd';
 
 import { MessageResponseType, MessagesType } from '@/redux/endpoints/teacher/account';
 import { ValueSelect } from '@/redux/endpoints/auth';
@@ -104,8 +105,8 @@ const TeacherMessageComponents = () => {
 
   return (
     <div className="space-y-[24px] bg-[#fff] h-[800px] rounded flex gap-x-5">
-      <div className="flex flex-col gap-y-4 w-[300px] h-[800px] p-5 overflow-y-auto">
-        <div className="flex items-center justify-end">
+      <div className="flex flex-col gap-y-4 w-[300px] bg-slate-100 h-[800px] p-5 overflow-y-auto">
+        <div className="flex items-center justify-end ">
           <div
             className="border w-8 h-8 rounded-full flex items-center justify-center cursor-pointer"
             onClick={() => {
@@ -116,6 +117,7 @@ const TeacherMessageComponents = () => {
             <UserAddOutlined />
           </div>
         </div>
+        <Divider />
         {conversations?.map((item) => (
           <div className="" key={item?.studentId}>
             <div
